@@ -1,8 +1,10 @@
 import React from "react";
 import { gql } from "@apollo/client";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 // import logo from './logo.svg';
+import { HomePageContainer } from "./pages/home-page/home-page-container";
+import { ExpensesPageContainer } from "./pages/expenses-page/expenses-page-container";
 import "./App.css";
-import { CategoriesListContainer } from "./pages/home-page/home-page-container";
 
 export const QUERY_CATEGORY_LIST = gql`
   query CategoryList {
@@ -15,34 +17,18 @@ export const QUERY_CATEGORY_LIST = gql`
 function App() {
   return (
     <div className="App">
-      {/* bok ljuuu!! */}
       {/* <CategoriesListContainer /> */}
-      <div className="listContainer">
-        <div className="listItem">
-          Expenses
-          <span className="red">3.660,00 kn</span>
-        </div>
-        <div className="listItem">
-          Budget
-          <span className="green">15.000,00 kn</span>
-        </div>
-      </div>
-      <div className="actions">
-        <div className="green">Add expense</div>
-      </div>
+      <Router>
+        <Routes>
+          <Route path="/" element={<HomePageContainer />} />
+          <Route path="/expenses" element={<ExpensesPageContainer />} />
+          {/* <Route exact path="/login" element={<Login />} /> */}
+          {/* <Route path="*" element={<NotFound />} /> */}
+        </Routes>
+      </Router>
+
       {/* <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
       </header> */}
     </div>
   );

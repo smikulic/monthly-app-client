@@ -1,11 +1,4 @@
-.App {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100vh;
-}
-
-.listContainer a {
+/* .listContainer a {
   text-decoration: none;
   color: inherit;
 }
@@ -20,9 +13,9 @@
 
 .listItem:last-child {
   border-top: 0;
-}
+} */
 
-.actions {
+/* .actions {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -37,12 +30,4 @@
   font-size: 20px;
   color: white;
   background-color: #7fb77e;
-}
-
-.red {
-  color: #e64848;
-}
-
-.green {
-  color: #7fb77e;
-}
+} */

@@ -5,15 +5,19 @@ interface Props {
   data: CategoryListQuery;
 }
 
-export const CategoriesList: React.FC<Props> = ({ data }) => (
-  <div>
-    <h3>Categories</h3>
-    <ul>
-      {!!data.categories &&
-        data.categories.map(
-          (category, key) =>
-            !!category && <li key={key}>ha !{category.name})</li>
+export const CategoriesList: React.FC<Props> = ({ data }) => {
+  return (
+    <>
+      <div className="listContainer">
+        {!data.categories.length && (
+          <div className="listItem">Add category &#43;</div>
         )}
-    </ul>
-  </div>
-);
+        {!!data.categories &&
+          data.categories.map(
+            (category, key) =>
+              !!category && <li key={key}>ha !{category.name})</li>
+          )}
+      </div>
+    </>
+  );
+};
