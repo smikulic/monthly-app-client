@@ -1,0 +1,10 @@
+.loginPage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.loginPage input {
+ padding: 6px 12px;
+}
