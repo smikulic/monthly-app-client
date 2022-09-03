@@ -1,7 +1,17 @@
 .header {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  height: 100vh;
-  font-size: 22px;
+  padding: 32px;
+  height: 64px;
+  border: 1px solid rgb(223, 223, 223);
+}
+
+.header .logout {
+  font-size: 14px;
+  color: rgb(76, 115, 255);
+  cursor: pointer;
+}
+.header .logout:hover {
+  text-decoration: underline;
 }

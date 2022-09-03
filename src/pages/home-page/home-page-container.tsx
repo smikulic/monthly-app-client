@@ -1,14 +1,10 @@
-import * as React from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import { AUTH_TOKEN_USER } from "../../constants";
-import "./home-page-container.css";
 
 export const HomePageContainer = () => {
-  const userName = localStorage.getItem(AUTH_TOKEN_USER);
   return (
-    <>
+    <div className="homeContainer">
       <div className="listContainer">
-        Welcome {userName}!
         <Link to="/expenses">
           <div className="listItem">
             Expenses &gt;
@@ -23,6 +19,6 @@ export const HomePageContainer = () => {
       <div className="actions">
         <div className="green">Add expense</div>
       </div>
-    </>
+    </div>
   );
 };

@@ -1,5 +1,5 @@
 import { gql } from "@apollo/client";
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AUTH_TOKEN, AUTH_TOKEN_USER } from "../../constants";
 import { useLoginMutation, useSignupMutation } from "../../generated/graphql";
@@ -27,8 +27,13 @@ export const LOGIN_MUTATION = gql`
   }
 `;
 
-export const LoginPageContainer = () => {
+export const LoginPageContainer = ({
+  setAuthenticated,
+}: {
+  setAuthenticated: Dispatch<SetStateAction<string | null>>;
+}) => {
   const navigate = useNavigate();
+  const [loginLoading, setLoginLoading] = useState<boolean>(false);
   const [formState, setFormState] = useState({
     login: true,
     email: "",
@@ -43,6 +48,8 @@ export const LoginPageContainer = () => {
     onCompleted: ({ login }) => {
       localStorage.setItem(AUTH_TOKEN, login?.token!);
       localStorage.setItem(AUTH_TOKEN_USER, login?.user?.email!);
+      setAuthenticated(login?.token!);
+      setLoginLoading(false);
       navigate("/");
     },
   });
@@ -94,8 +101,18 @@ export const LoginPageContainer = () => {
           />
         </div>
         <div className="actions">
-          <button onClick={formState.login ? loginAction : signupAction}>
-            {formState.login ? "Login" : "Register"}
+          <button
+            onClick={
+              formState.login
+                ? () => {
+                    setLoginLoading(true);
+                    loginAction();
+                  }
+                : signupAction
+            }
+          >
+            {loginLoading && <>...</>}
+            {!loginLoading && <>{formState.login ? "Login" : "Register"}</>}
           </button>
           <p
             onClick={(e) =>

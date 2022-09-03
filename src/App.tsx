@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { gql } from "@apollo/client";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 // import logo from './logo.svg';
@@ -18,20 +18,31 @@ export const QUERY_CATEGORY_LIST = gql`
 `;
 
 function App() {
-  const authToken = localStorage.getItem(AUTH_TOKEN);
+  const [authenticated, setAuthenticated] = useState<string | null>(
+    localStorage.getItem(AUTH_TOKEN)
+  );
 
   return (
     <div className="App">
       {/* <CategoriesListContainer /> */}
       <Router>
-        {/* <Header authToken={authToken} /> */}
+        {authenticated && <Header setAuthenticated={setAuthenticated} />}
         <Routes>
           <Route
             path="/"
-            element={authToken ? <HomePageContainer /> : <LoginPageContainer />}
+            element={
+              authenticated ? (
+                <HomePageContainer />
+              ) : (
+                <LoginPageContainer setAuthenticated={setAuthenticated} />
+              )
+            }
           />
           <Route path="/expenses" element={<ExpensesPageContainer />} />
-          <Route path="/login" element={<LoginPageContainer />} />
+          <Route
+            path="/login"
+            element={<LoginPageContainer setAuthenticated={setAuthenticated} />}
+          />
           {/* <Route path="*" element={<NotFound />} /> */}
         </Routes>
       </Router>

@@ -1,40 +1,29 @@
-import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { Dispatch, SetStateAction } from "react";
+import { useNavigate } from "react-router-dom";
 import { AUTH_TOKEN, AUTH_TOKEN_USER } from "../../constants";
 import "./header.css";
 
-export const Header = ({ authToken }: { authToken: string | null }) => {
+export const Header = ({
+  setAuthenticated,
+}: {
+  setAuthenticated: Dispatch<SetStateAction<string | null>>;
+}) => {
   const navigate = useNavigate();
+  const userName = localStorage.getItem(AUTH_TOKEN_USER)!.split("@")[0];
 
   return (
     <div className="header">
-      <div className="flex flex-fixed black">
-        {authToken && (
-          <div className="flex">
-            <div className="ml1">|</div>
-            <Link to="/create" className="ml1 no-underline black">
-              submit
-            </Link>
-          </div>
-        )}
-      </div>
-      <div className="flex flex-fixed">
-        {authToken ? (
-          <div
-            className="ml1 pointer black"
-            onClick={() => {
-              localStorage.removeItem(AUTH_TOKEN);
-              localStorage.removeItem(AUTH_TOKEN_USER);
-              navigate(`/`);
-            }}
-          >
-            logout
-          </div>
-        ) : (
-          <Link to="/login" className="ml1 no-underline black">
-            login
-          </Link>
-        )}
+      <div>{userName}</div>
+      <div
+        className="logout"
+        onClick={() => {
+          localStorage.removeItem(AUTH_TOKEN);
+          localStorage.removeItem(AUTH_TOKEN_USER);
+          setAuthenticated(null);
+          navigate("/");
+        }}
+      >
+        logout
       </div>
     </div>
   );

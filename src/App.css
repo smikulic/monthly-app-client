@@ -1,8 +1,16 @@
 .App {
+  /* display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh; */
+}
+
+.homeContainer {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 100vh;
+  height: calc(100vh - 64px);
+  /* height: 100vh; */
 }
 
 .listContainer a {
@@ -15,7 +23,7 @@
   justify-content: space-between;
   padding: 32px;
   font-size: 20px;
-  border: 1px solid gainsboro;
+  border: 1px solid rgb(223, 223, 223);
 }
 
 .listItem:last-child {
@@ -37,6 +45,7 @@
   font-size: 20px;
   color: white;
   background-color: #7fb77e;
+  cursor: pointer;
 }
 
 .red {
