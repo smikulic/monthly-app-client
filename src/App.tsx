@@ -7,6 +7,7 @@ import { HomePageContainer } from "./pages/home-page/home-page-container";
 import { ExpensesPageContainer } from "./pages/expenses-page/expenses-page-container";
 import "./App.css";
 import { Header } from "./components/header/header";
+import { AUTH_TOKEN } from "./constants";
 
 export const QUERY_CATEGORY_LIST = gql`
   query CategoryList {
@@ -17,13 +18,18 @@ export const QUERY_CATEGORY_LIST = gql`
 `;
 
 function App() {
+  const authToken = localStorage.getItem(AUTH_TOKEN);
+
   return (
     <div className="App">
       {/* <CategoriesListContainer /> */}
       <Router>
-        <Header />
+        {/* <Header authToken={authToken} /> */}
         <Routes>
-          <Route path="/" element={<HomePageContainer />} />
+          <Route
+            path="/"
+            element={authToken ? <HomePageContainer /> : <LoginPageContainer />}
+          />
           <Route path="/expenses" element={<ExpensesPageContainer />} />
           <Route path="/login" element={<LoginPageContainer />} />
           {/* <Route path="*" element={<NotFound />} /> */}

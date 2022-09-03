@@ -59,75 +59,57 @@ export const LoginPageContainer = () => {
     },
   });
 
-  // const [login]: any = useMutation(LOGIN_MUTATION, {
-  //   variables: {
-  //     email: formState.email,
-  //     password: formState.password,
-  //   },
-  //   onCompleted: ({ login }) => {
-  //     localStorage.setItem(AUTH_TOKEN, login.token);
-  //     navigate("/");
-  //   },
-  // });
-
-  // const [signup]: any = useMutation(SIGNUP_MUTATION, {
-  //   variables: {
-  //     email: formState.email,
-  //     password: formState.password,
-  //   },
-  //   onCompleted: ({ signup }) => {
-  //     localStorage.setItem(AUTH_TOKEN, signup.token);
-  //     navigate("/");
-  //   },
-  // });
-
   return (
     <div className="loginPage">
-      <h4 className="mv3">{formState.login ? "Login" : "Sign Up"}</h4>
-      <div className="flex flex-column">
-        <input
-          value={formState.email}
-          onChange={(e) =>
-            setFormState({
-              ...formState,
-              email: e.target.value,
-            })
-          }
-          type="text"
-          placeholder="Your email address"
-        />
-        <input
-          value={formState.password}
-          onChange={(e) =>
-            setFormState({
-              ...formState,
-              password: e.target.value,
-            })
-          }
-          type="password"
-          placeholder="Choose a safe password"
-        />
-      </div>
-      <div className="flex mt3">
-        <button
-          className="pointer mr2 button"
-          onClick={formState.login ? loginAction : signupAction}
-        >
-          {formState.login ? "login" : "create account"}
-        </button>
-        <button
-          className="pointer button"
-          onClick={(e) =>
-            setFormState({
-              ...formState,
-              login: !formState.login,
-            })
-          }
-        >
-          {formState.login
-            ? "need to create an account?"
-            : "already have an account?"}
-        </button>
+      <h1 className="title">{formState.login ? "Login" : "Sign Up"}</h1>
+      <div className="form">
+        <div className="formField">
+          <label>Email address</label>
+          <input
+            value={formState.email}
+            onChange={(e) =>
+              setFormState({
+                ...formState,
+                email: e.target.value,
+              })
+            }
+            type="text"
+            placeholder="Enter your email"
+          />
+        </div>
+        <div className="formField">
+          <label>Password</label>
+          <input
+            value={formState.password}
+            onChange={(e) =>
+              setFormState({
+                ...formState,
+                password: e.target.value,
+              })
+            }
+            type="password"
+            placeholder={
+              formState.login ? "Enter your password" : "Choose a safe password"
+            }
+          />
+        </div>
+        <div className="actions">
+          <button onClick={formState.login ? loginAction : signupAction}>
+            {formState.login ? "Login" : "Register"}
+          </button>
+          <p
+            onClick={(e) =>
+              setFormState({
+                ...formState,
+                login: !formState.login,
+              })
+            }
+          >
+            {formState.login
+              ? "need to create an account?"
+              : "already have an account?"}
+          </p>
+        </div>
       </div>
     </div>
   );

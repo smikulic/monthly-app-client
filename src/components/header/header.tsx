@@ -3,9 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { AUTH_TOKEN, AUTH_TOKEN_USER } from "../../constants";
 import "./header.css";
 
-export const Header = () => {
+export const Header = ({ authToken }: { authToken: string | null }) => {
   const navigate = useNavigate();
-  const authToken = localStorage.getItem(AUTH_TOKEN);
 
   return (
     <div className="header">
