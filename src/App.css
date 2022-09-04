@@ -23,14 +23,30 @@
   padding: 32px;
   font-size: 20px;
   border: 1px solid rgb(223, 223, 223);
+  border-top: 0;
 }
-
+.listItem.category {
+  padding: 16px 32px;
+}
 .listItem.add {
   cursor: pointer;
 }
-
-.listItem:last-child {
-  border-top: 0;
+.listItem input {
+  padding: 8px 12px;
+  width: 90%;
+  font-size: 16px;
+  border: 1px solid rgb(223, 223, 223);
+  border-radius: 5px;
+}
+.listItem button {
+  padding: 8px 12px;
+  width: 8%;
+  font-size: 16px;
+  color: white;
+  background-color: rgb(76, 115, 255);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 .actions {

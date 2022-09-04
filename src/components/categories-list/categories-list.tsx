@@ -7,6 +7,7 @@ import {
 
 interface Props {
   data: CategoryListQuery;
+  refetchCategories: any;
 }
 
 export const CREATE_CATEGORY_MUTATION = gql`
@@ -17,10 +18,13 @@ export const CREATE_CATEGORY_MUTATION = gql`
   }
 `;
 
-export const CategoriesList: React.FC<Props> = ({ data }) => {
+export const CategoriesList: React.FC<Props> = ({
+  data,
+  refetchCategories,
+}) => {
   const [addCategoryField, setAddCategoryField] = useState(false);
   const [newCategoryName, setCategoryName] = useState("");
-  const [createCategory, { data: createCategoryData, loading, error }] =
+  const [createCategory, { data: createCategoryData, loading }] =
     useCreateCategoryMutation({
       variables: {
         name: newCategoryName,
@@ -28,6 +32,7 @@ export const CategoriesList: React.FC<Props> = ({ data }) => {
       onCompleted: ({ createCategory }) => {
         setAddCategoryField(false);
         setCategoryName("");
+        refetchCategories();
       },
     });
 
@@ -38,14 +43,14 @@ export const CategoriesList: React.FC<Props> = ({ data }) => {
           data.categories.map(
             (category, key) =>
               !!category && (
-                <div key={key} className="listItem">
+                <div key={key} className="listItem category">
                   {category.name}
                 </div>
               )
           )}
         <>
           {addCategoryField && (
-            <div className="listItem">
+            <div className="listItem category">
               <input
                 type="text"
                 onChange={(e) => setCategoryName(e.target.value)}
@@ -57,7 +62,7 @@ export const CategoriesList: React.FC<Props> = ({ data }) => {
           )}
           {!addCategoryField && (
             <div
-              className="listItem add"
+              className="listItem category add"
               onClick={() => setAddCategoryField(true)}
             >
               Add category &#43;
