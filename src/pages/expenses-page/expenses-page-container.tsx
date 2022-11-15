@@ -1,6 +1,16 @@
 import * as React from "react";
-import { useCategoryListQuery } from "../../generated/graphql";
+import { useCategoriesListQuery } from "../../generated/graphql";
 import { CategoriesList } from "../../components/categories-list/categories-list";
+import { gql } from "@apollo/client";
+
+export const GET_CATEGORIES_LIST = gql`
+  query CategoriesList {
+    categories {
+      id
+      name
+    }
+  }
+`;
 
 export const ExpensesPageContainer = () => {
   const {
@@ -8,7 +18,7 @@ export const ExpensesPageContainer = () => {
     error,
     loading,
     refetch: refetchCategories,
-  } = useCategoryListQuery();
+  } = useCategoriesListQuery();
 
   if (loading) {
     return <div>Loading...</div>;
