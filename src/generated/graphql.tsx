@@ -40,6 +40,7 @@ export type Expense = {
 export type Mutation = {
   __typename?: 'Mutation';
   createCategory: Category;
+  deleteCategory: Category;
   login?: Maybe<AuthPayload>;
   signup?: Maybe<AuthPayload>;
 };
@@ -48,6 +49,11 @@ export type Mutation = {
 export type MutationCreateCategoryArgs = {
   icon?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
+};
+
+
+export type MutationDeleteCategoryArgs = {
+  id: Scalars['ID'];
 };
 
 
@@ -112,6 +118,18 @@ export type CreateCategoryMutationVariables = Exact<{
 
 
 export type CreateCategoryMutation = { __typename?: 'Mutation', createCategory: { __typename?: 'Category', name: string } };
+
+export type DeleteCategoryMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type DeleteCategoryMutation = { __typename?: 'Mutation', deleteCategory: { __typename?: 'Category', name: string } };
+
+export type CategoriesListQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CategoriesListQuery = { __typename?: 'Query', categories: Array<{ __typename?: 'Category', id: string, name: string }> };
 
 export type SignupMutationVariables = Exact<{
   email: Scalars['String'];
@@ -197,6 +215,74 @@ export function useCreateCategoryMutation(baseOptions?: Apollo.MutationHookOptio
 export type CreateCategoryMutationHookResult = ReturnType<typeof useCreateCategoryMutation>;
 export type CreateCategoryMutationResult = Apollo.MutationResult<CreateCategoryMutation>;
 export type CreateCategoryMutationOptions = Apollo.BaseMutationOptions<CreateCategoryMutation, CreateCategoryMutationVariables>;
+export const DeleteCategoryDocument = gql`
+    mutation DeleteCategory($id: ID!) {
+  deleteCategory(id: $id) {
+    name
+  }
+}
+    `;
+export type DeleteCategoryMutationFn = Apollo.MutationFunction<DeleteCategoryMutation, DeleteCategoryMutationVariables>;
+
+/**
+ * __useDeleteCategoryMutation__
+ *
+ * To run a mutation, you first call `useDeleteCategoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCategoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteCategoryMutation, { data, loading, error }] = useDeleteCategoryMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteCategoryMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCategoryMutation, DeleteCategoryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteCategoryMutation, DeleteCategoryMutationVariables>(DeleteCategoryDocument, options);
+      }
+export type DeleteCategoryMutationHookResult = ReturnType<typeof useDeleteCategoryMutation>;
+export type DeleteCategoryMutationResult = Apollo.MutationResult<DeleteCategoryMutation>;
+export type DeleteCategoryMutationOptions = Apollo.BaseMutationOptions<DeleteCategoryMutation, DeleteCategoryMutationVariables>;
+export const CategoriesListDocument = gql`
+    query CategoriesList {
+  categories {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __useCategoriesListQuery__
+ *
+ * To run a query within a React component, call `useCategoriesListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCategoriesListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCategoriesListQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCategoriesListQuery(baseOptions?: Apollo.QueryHookOptions<CategoriesListQuery, CategoriesListQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CategoriesListQuery, CategoriesListQueryVariables>(CategoriesListDocument, options);
+      }
+export function useCategoriesListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CategoriesListQuery, CategoriesListQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CategoriesListQuery, CategoriesListQueryVariables>(CategoriesListDocument, options);
+        }
+export type CategoriesListQueryHookResult = ReturnType<typeof useCategoriesListQuery>;
+export type CategoriesListLazyQueryHookResult = ReturnType<typeof useCategoriesListLazyQuery>;
+export type CategoriesListQueryResult = Apollo.QueryResult<CategoriesListQuery, CategoriesListQueryVariables>;
 export const SignupDocument = gql`
     mutation Signup($email: String!, $password: String!) {
   signup(email: $email, password: $password) {

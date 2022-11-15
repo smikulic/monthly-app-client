@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { ToastContainer } from "react-toastify";
 import { gql } from "@apollo/client";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 // import logo from './logo.svg';
@@ -6,6 +7,7 @@ import { LoginPageContainer } from "./pages/login-page/login-page-container";
 import { HomePageContainer } from "./pages/home-page/home-page-container";
 import { ExpensesPageContainer } from "./pages/expenses-page/expenses-page-container";
 import "./App.css";
+import "react-toastify/dist/ReactToastify.min.css";
 import { Header } from "./components/header/header";
 import { AUTH_TOKEN } from "./constants";
 
@@ -50,6 +52,18 @@ function App() {
       {/* <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
       </header> */}
+      <ToastContainer
+        position="bottom-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover={false}
+        theme="colored"
+      />
     </div>
   );
 }

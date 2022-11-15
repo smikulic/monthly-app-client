@@ -21,6 +21,7 @@
   display: flex;
   justify-content: space-between;
   padding: 32px;
+  height: 56px;
   font-size: 20px;
   border: 1px solid rgb(223, 223, 223);
   border-top: 0;
@@ -31,6 +32,19 @@
 .listItem.add {
   cursor: pointer;
 }
+.listItem.addField {
+  height: 64px;
+}
+.listItem.category .remove {
+  display: none;
+  font-size: 14px;
+  line-height: 26px;
+  cursor: pointer;
+}
+.listItem.category:hover .remove {
+  display: block;
+}
+
 .listItem input {
   padding: 8px 12px;
   width: 90%;
