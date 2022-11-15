@@ -44,6 +44,9 @@
 .listItem.category:hover .remove {
   display: block;
 }
+.listItem.category .subcategories {
+  cursor: pointer;
+}
 
 .listItem input {
   padding: 8px 12px;

@@ -73,6 +73,7 @@ export type Query = {
   categories: Array<Category>;
   category: Category;
   me: User;
+  subcategories: Array<Subcategory>;
   user: User;
   users: Array<User>;
 };
@@ -107,10 +108,12 @@ export type User = {
   password: Scalars['String'];
 };
 
-export type CategoryListQueryVariables = Exact<{ [key: string]: never; }>;
+export type CategoryQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
 
 
-export type CategoryListQuery = { __typename?: 'Query', categories: Array<{ __typename?: 'Category', name: string }> };
+export type CategoryQuery = { __typename?: 'Query', category: { __typename?: 'Category', id: string, name: string, subcategories?: Array<{ __typename?: 'Subcategory', name: string } | null> | null } };
 
 export type CreateCategoryMutationVariables = Exact<{
   name: Scalars['String'];
@@ -148,40 +151,45 @@ export type LoginMutationVariables = Exact<{
 export type LoginMutation = { __typename?: 'Mutation', login?: { __typename?: 'AuthPayload', token?: string | null, user?: { __typename?: 'User', email: string } | null } | null };
 
 
-export const CategoryListDocument = gql`
-    query CategoryList {
-  categories {
+export const CategoryDocument = gql`
+    query Category($id: ID!) {
+  category(id: $id) {
+    id
     name
+    subcategories {
+      name
+    }
   }
 }
     `;
 
 /**
- * __useCategoryListQuery__
+ * __useCategoryQuery__
  *
- * To run a query within a React component, call `useCategoryListQuery` and pass it any options that fit your needs.
- * When your component renders, `useCategoryListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useCategoryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCategoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useCategoryListQuery({
+ * const { data, loading, error } = useCategoryQuery({
  *   variables: {
+ *      id: // value for 'id'
  *   },
  * });
  */
-export function useCategoryListQuery(baseOptions?: Apollo.QueryHookOptions<CategoryListQuery, CategoryListQueryVariables>) {
+export function useCategoryQuery(baseOptions: Apollo.QueryHookOptions<CategoryQuery, CategoryQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<CategoryListQuery, CategoryListQueryVariables>(CategoryListDocument, options);
+        return Apollo.useQuery<CategoryQuery, CategoryQueryVariables>(CategoryDocument, options);
       }
-export function useCategoryListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CategoryListQuery, CategoryListQueryVariables>) {
+export function useCategoryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CategoryQuery, CategoryQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<CategoryListQuery, CategoryListQueryVariables>(CategoryListDocument, options);
+          return Apollo.useLazyQuery<CategoryQuery, CategoryQueryVariables>(CategoryDocument, options);
         }
-export type CategoryListQueryHookResult = ReturnType<typeof useCategoryListQuery>;
-export type CategoryListLazyQueryHookResult = ReturnType<typeof useCategoryListLazyQuery>;
-export type CategoryListQueryResult = Apollo.QueryResult<CategoryListQuery, CategoryListQueryVariables>;
+export type CategoryQueryHookResult = ReturnType<typeof useCategoryQuery>;
+export type CategoryLazyQueryHookResult = ReturnType<typeof useCategoryLazyQuery>;
+export type CategoryQueryResult = Apollo.QueryResult<CategoryQuery, CategoryQueryVariables>;
 export const CreateCategoryDocument = gql`
     mutation CreateCategory($name: String!) {
   createCategory(name: $name) {
