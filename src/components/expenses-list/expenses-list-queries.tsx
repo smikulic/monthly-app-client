@@ -9,6 +9,11 @@ export const GET_CATEGORY = gql`
         id
         name
         budgetAmount
+        expenses {
+          id
+          amount
+          date
+        }
       }
     }
   }

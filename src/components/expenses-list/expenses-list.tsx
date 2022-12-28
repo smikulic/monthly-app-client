@@ -14,6 +14,7 @@ interface Props {
 
 export const ExpensesList: React.FC<Props> = ({ data, refetchCategories }) => {
   const [openCategory, setOpenCategory] = useState("");
+  const [openSubcategory, setOpenSubcategory] = useState("");
 
   const [
     getCategory,
@@ -27,6 +28,8 @@ export const ExpensesList: React.FC<Props> = ({ data, refetchCategories }) => {
           if (!category) return null;
           const categoryId = category.id;
           const showSubcategories = openCategory === categoryId;
+
+          console.log({ categoryData });
 
           return (
             <span key={key}>
@@ -62,19 +65,68 @@ export const ExpensesList: React.FC<Props> = ({ data, refetchCategories }) => {
                     categoryData?.category?.subcategories.map(
                       (subcategory: any, subcategoryKey: string) => {
                         if (!subcategory) return null;
+                        const subcategoryId = subcategory.id;
+                        const showExpenses = openSubcategory === subcategoryId;
                         return (
                           <span key={subcategoryKey}>
                             <div className="listItem subcategory">
-                              <div className="categoryTitle">
-                                <span className="iconContainer">
+                              <div
+                                className="categoryTitle"
+                                onClick={() => {
+                                  if (showExpenses) {
+                                    setOpenSubcategory("");
+                                  } else {
+                                    setOpenSubcategory(subcategoryId);
+                                  }
+                                }}
+                              >
+                                {showExpenses ? (
+                                  <span className="iconContainer">
+                                    <HiOutlineChevronDown />
+                                    {subcategory.name}
+                                  </span>
+                                ) : (
+                                  <span className="iconContainer">
+                                    <HiOutlineChevronRight />
+                                    {subcategory.name}
+                                  </span>
+                                )}
+                                {/* <span className="iconContainer">
                                   <HiOutlineChevronRight />
                                   {subcategory.name}
-                                </span>
+                                </span> */}
                               </div>
                               <span className="budgetAmount orange">
                                 {subcategory.budgetAmount} €
                               </span>
                             </div>
+                            {showExpenses && (
+                              <>
+                                {!!categoryData?.category?.subcategories[
+                                  subcategoryKey
+                                ] &&
+                                  categoryData?.category?.subcategories[
+                                    subcategoryKey
+                                  ].expenses.map(
+                                    (expense: any, expenseKey: string) => {
+                                      if (!expense) return null;
+
+                                      return (
+                                        <span key={expenseKey}>
+                                          <div className="listItem subcategory">
+                                            <div className="categoryTitle">
+                                              <span className="iconContainer">
+                                                amount: {expense.amount}
+                                                date: {expense.date}
+                                              </span>
+                                            </div>
+                                          </div>
+                                        </span>
+                                      );
+                                    }
+                                  )}
+                              </>
+                            )}
                           </span>
                         );
                       }
