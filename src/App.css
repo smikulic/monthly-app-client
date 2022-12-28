@@ -30,7 +30,8 @@
 .listItem.category {
   padding: 16px 32px;
 }
-.listItem.category .iconContainer svg {
+.listItem.category .iconContainer svg,
+.listItem.subcategory .iconContainer svg {
   position: relative;
   /* color: rgb(76, 115, 255); */
   color: #277bc0;
@@ -41,6 +42,10 @@
   justify-content: flex-start;
   align-items: center;
   cursor: pointer;
+  opacity: 0.7;
+}
+.listItem.add:hover {
+  opacity: 1;
 }
 .listItem.add svg {
   position: relative;
@@ -51,34 +56,38 @@
 }
 .listItem.addField {
   height: 64px;
+  justify-content: flex-start;
 }
-.listItem.category .remove {
+.listItem.category .remove,
+.listItem.subcategory .remove {
   display: none;
   font-size: 14px;
   line-height: 26px;
   cursor: pointer;
 }
-.listItem.category:hover .remove {
+.listItem.category:hover .remove,
+.listItem.subcategory:hover .remove {
   display: block;
 }
-.listItem.category .categoryTitle {
+.listItem .categoryTitle {
   cursor: pointer;
 }
 .listItem.subcategory {
-  padding: 16px 32px;
+  padding: 16px 48px;
   font-size: 18px;
 }
 
 .listItem input {
+  margin-right: 12px;
   padding: 8px 12px;
-  width: 90%;
+  width: 360px;
   font-size: 16px;
   border: 1px solid rgb(223, 223, 223);
   border-radius: 5px;
 }
 .listItem button {
   padding: 8px 12px;
-  width: 8%;
+  width: 80px;
   font-size: 16px;
   color: white;
   /* background-color: rgb(76, 115, 255); */
@@ -89,8 +98,7 @@
 }
 .listItem button.btnCancel {
   background-color: #ff7777;
-  margin-left: 24px;
-  margin-right: 12px;
+  margin: 0 12px;
 }
 
 .actions {
