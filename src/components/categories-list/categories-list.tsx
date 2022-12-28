@@ -105,6 +105,11 @@ export const CategoriesList: React.FC<Props> = ({
 
   const [deleteCategory, { loading: loadingDeleteCategory }] =
     useDeleteCategoryMutation({
+      onError: () => {
+        toast.error(
+          `You need to remove all subcategories before removing its category!`
+        );
+      },
       onCompleted: ({ deleteCategory }) => {
         toast.success(
           `You have successfully removed ${deleteCategory.name} category!`
