@@ -1,15 +1,30 @@
 .header {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   padding: 32px;
   height: 64px;
   border: 1px solid rgb(223, 223, 223);
 }
 
+.header .iconBack {
+  position: absolute;
+  left: 32px;
+  color: #277bc0;
+  cursor: pointer;
+}
+
+.header .iconBack svg {
+  position: relative;
+  top: 3px;
+  right: 2px;
+}
+
 .header .logout {
+  margin-left: 12px;
   font-size: 14px;
-  color: rgb(76, 115, 255);
+  /* color: rgb(76, 115, 255); */
+  color: #277bc0;
   cursor: pointer;
 }
 .header .logout:hover {

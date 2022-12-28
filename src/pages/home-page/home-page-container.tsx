@@ -7,13 +7,13 @@ export const HomePageContainer = () => {
       <div className="listContainer">
         <Link to="/expenses">
           <div className="listItem">
-            Expenses &gt;
-            <span className="red">3.660,00 kn</span>
+            Expenses
+            <span className="red">3.660,00 € (mock)</span>
           </div>
         </Link>
         <div className="listItem">
-          Budget &gt;
-          <span className="green">15.000,00 kn</span>
+          Budget
+          <span className="green">15.000,00 € (mock)</span>
         </div>
       </div>
       <div className="actions">

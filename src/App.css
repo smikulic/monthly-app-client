@@ -20,6 +20,7 @@
 .listItem {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 32px;
   height: 56px;
   font-size: 20px;
@@ -29,8 +30,24 @@
 .listItem.category {
   padding: 16px 32px;
 }
+.listItem.category .iconContainer svg {
+  position: relative;
+  /* color: rgb(76, 115, 255); */
+  color: #277bc0;
+  top: 4px;
+  right: 4px;
+}
 .listItem.add {
+  justify-content: flex-start;
+  align-items: center;
   cursor: pointer;
+}
+.listItem.add svg {
+  position: relative;
+  color: #7fb77e;
+  top: 2px;
+  right: 4px;
+  font-size: 24px;
 }
 .listItem.addField {
   height: 64px;
@@ -44,8 +61,12 @@
 .listItem.category:hover .remove {
   display: block;
 }
-.listItem.category .subcategories {
+.listItem.category .categoryTitle {
   cursor: pointer;
+}
+.listItem.subcategory {
+  padding: 16px 32px;
+  font-size: 18px;
 }
 
 .listItem input {
@@ -60,10 +81,16 @@
   width: 8%;
   font-size: 16px;
   color: white;
-  background-color: rgb(76, 115, 255);
+  /* background-color: rgb(76, 115, 255); */
+  background-color: #277bc0;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+}
+.listItem button.btnCancel {
+  background-color: #ff7777;
+  margin-left: 24px;
+  margin-right: 12px;
 }
 
 .actions {

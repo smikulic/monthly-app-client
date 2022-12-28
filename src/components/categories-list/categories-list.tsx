@@ -1,6 +1,11 @@
 import { gql, useLazyQuery } from "@apollo/client";
 import React, { useState } from "react";
 import {
+  HiOutlineChevronDown,
+  HiOutlineChevronUp,
+  HiPlusCircle,
+} from "react-icons/hi";
+import {
   CategoriesListQuery,
   useCreateCategoryMutation,
   useDeleteCategoryMutation,
@@ -78,77 +83,88 @@ export const CategoriesList: React.FC<Props> = ({
     });
 
   return (
-    <>
-      <div className="listContainer">
-        {!!data.categories &&
-          data.categories.map((category, key) => {
-            if (!category) return null;
-            const categoryId = category.id;
-            const showSubcategories = openCategory === categoryId;
-            const subcategoriesExist =
-              categoryData?.category?.subcategories.length > 0;
+    <div>
+      {!!data.categories &&
+        data.categories.map((category, key) => {
+          if (!category) return null;
+          const categoryId = category.id;
+          const showSubcategories = openCategory === categoryId;
+          const subcategoriesExist =
+            categoryData?.category?.subcategories.length > 0;
 
-            return (
-              <span key={key}>
-                <div className="listItem category">
-                  <div
-                    className="subcategories"
-                    onClick={() => {
-                      if (showSubcategories) {
-                        setOpenCategory("");
-                      } else {
-                        setOpenCategory(categoryId);
-                        getCategory({ variables: { id: categoryId } });
-                      }
-                    }}
-                  >
-                    {showSubcategories ? (
-                      <>{category.name} &uarr;</>
-                    ) : (
-                      <>{category.name} &darr;</>
-                    )}
-                  </div>
-
-                  <span
-                    className="remove red"
-                    onClick={() =>
-                      deleteCategory({ variables: { id: categoryId } })
+          return (
+            <span key={key}>
+              <div className="listItem category">
+                <div
+                  className="categoryTitle"
+                  onClick={() => {
+                    if (showSubcategories) {
+                      setOpenCategory("");
+                    } else {
+                      setOpenCategory(categoryId);
+                      getCategory({ variables: { id: categoryId } });
                     }
-                  >
-                    {loadingDeleteCategory ? "removing..." : "Remove"}
-                  </span>
+                  }}
+                >
+                  {showSubcategories ? (
+                    <span className="iconContainer">
+                      <HiOutlineChevronUp />
+                      {category.name}
+                    </span>
+                  ) : (
+                    <span className="iconContainer">
+                      <HiOutlineChevronDown />
+                      {category.name}
+                    </span>
+                  )}
                 </div>
-                {showSubcategories && !subcategoriesExist && (
-                  <div>No subcategories!</div>
-                )}
-                {showSubcategories && subcategoriesExist && (
-                  <div>Subcategories!!</div>
-                )}
-              </span>
-            );
-          })}
-        <>
-          {addCategoryField && (
-            <div className="listItem category addField">
-              <input
-                type="text"
-                onChange={(e) => setCategoryName(e.target.value)}
-              />
-              <button onClick={() => createCategory()}>
-                {loading ? "saving..." : "Add"}
-              </button>
-            </div>
-          )}
-          {!addCategoryField && (
-            <div
-              className="listItem category add"
-              onClick={() => setAddCategoryField(true)}
+
+                <span
+                  className="remove red"
+                  onClick={() =>
+                    deleteCategory({ variables: { id: categoryId } })
+                  }
+                >
+                  {loadingDeleteCategory ? "removing..." : "Remove"}
+                </span>
+              </div>
+              {showSubcategories && !subcategoriesExist && (
+                <div className="listItem category">No subcategories!</div>
+              )}
+              {showSubcategories && subcategoriesExist && (
+                <div className="listItem category">Subcategories!!</div>
+              )}
+            </span>
+          );
+        })}
+      <>
+        {addCategoryField && (
+          <div className="listItem category addField">
+            <input
+              type="text"
+              onChange={(e) => setCategoryName(e.target.value)}
+            />
+            <button
+              className="btnCancel"
+              onClick={() => setAddCategoryField(false)}
             >
-              Add category &#43;
-            </div>
-          )}
-        </>
-      </div>
-    </>
+              Cancel
+            </button>
+            <button onClick={() => createCategory()}>
+              {loading ? "saving..." : "Add"}
+            </button>
+          </div>
+        )}
+        {!addCategoryField && (
+          <div
+            className="listItem category add"
+            onClick={() => setAddCategoryField(true)}
+          >
+            <HiPlusCircle />
+            Add category
+          </div>
+        )}
+      </>
+    </div>
   );
 };
