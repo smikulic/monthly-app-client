@@ -1,4 +1,3 @@
-import { gql, useLazyQuery } from "@apollo/client";
 import React, { useState } from "react";
 import {
   HiOutlineChevronRight,
@@ -14,67 +13,17 @@ import {
 } from "../../generated/graphql";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
+import { LoadingInlineSpinner } from "../loading-inline-spinner/loading-inline-spinner";
 
 interface Props {
   data: CategoriesListQuery;
+  loading: boolean;
   refetchCategories: any;
 }
 
-export const GET_CATEGORY = gql`
-  query Category($id: ID!) {
-    category(id: $id) {
-      id
-      name
-      subcategories {
-        id
-        name
-        budgetAmount
-      }
-    }
-  }
-`;
-export const CREATE_CATEGORY_MUTATION = gql`
-  mutation CreateCategory($name: String!) {
-    createCategory(name: $name) {
-      name
-    }
-  }
-`;
-export const DELETE_CATEGORY_MUTATION = gql`
-  mutation DeleteCategory($id: ID!) {
-    deleteCategory(id: $id) {
-      name
-    }
-  }
-`;
-
-export const CREATE_SUBCATEGORY_MUTATION = gql`
-  mutation CreateSubcategory(
-    $categoryId: ID!
-    $name: String!
-    $budgetAmount: Int!
-  ) {
-    createSubcategory(
-      categoryId: $categoryId
-      name: $name
-      budgetAmount: $budgetAmount
-    ) {
-      name
-      budgetAmount
-    }
-  }
-`;
-
-export const DELETE_SUBCATEGORY_MUTATION = gql`
-  mutation DeleteSubcategory($id: ID!) {
-    deleteSubcategory(id: $id) {
-      name
-    }
-  }
-`;
-
 export const CategoriesList: React.FC<Props> = ({
   data,
+  loading,
   refetchCategories,
 }) => {
   const [addCategoryField, setAddCategoryField] = useState(false);
@@ -84,24 +33,20 @@ export const CategoriesList: React.FC<Props> = ({
   const [newSubcategoryName, setSubcategoryName] = useState("");
   const [openCategory, setOpenCategory] = useState("");
 
-  const [getCategory, { data: categoryData, refetch: refetchCategory }] =
-    useLazyQuery(GET_CATEGORY);
-
-  console.log({ categoryData });
-
-  const [createCategory, { loading }] = useCreateCategoryMutation({
-    variables: {
-      name: newCategoryName,
-    },
-    onCompleted: ({ createCategory }) => {
-      setAddCategoryField(false);
-      setCategoryName("");
-      toast.success(
-        `You have successfully created ${createCategory.name} category!`
-      );
-      refetchCategories();
-    },
-  });
+  const [createCategory, { loading: loadingCreateCategory }] =
+    useCreateCategoryMutation({
+      variables: {
+        name: newCategoryName,
+      },
+      onCompleted: ({ createCategory }) => {
+        refetchCategories();
+        setAddCategoryField(false);
+        setCategoryName("");
+        toast.success(
+          `You have successfully created ${createCategory.name} category!`
+        );
+      },
+    });
 
   const [deleteCategory, { loading: loadingDeleteCategory }] =
     useDeleteCategoryMutation({
@@ -111,32 +56,32 @@ export const CategoriesList: React.FC<Props> = ({
         );
       },
       onCompleted: ({ deleteCategory }) => {
+        refetchCategories();
         toast.success(
           `You have successfully removed ${deleteCategory.name} category!`
         );
-        refetchCategories();
       },
     });
 
   const [createSubcategory, { loading: loadingCreateSubcategory }] =
     useCreateSubcategoryMutation({
       onCompleted: ({ createSubcategory }) => {
+        refetchCategories();
         setAddSubcategoryField(false);
         setSubcategoryName("");
         toast.success(
           `You have successfully created ${createSubcategory.name} subcategory!`
         );
-        refetchCategory();
       },
     });
 
   const [deleteSubcategory, { loading: loadingDeleteSubcategory }] =
     useDeleteSubcategoryMutation({
       onCompleted: ({ deleteSubcategory }) => {
+        refetchCategories();
         toast.success(
           `You have successfully removed ${deleteSubcategory.name} subcategory!`
         );
-        refetchCategory();
       },
     });
 
@@ -147,6 +92,14 @@ export const CategoriesList: React.FC<Props> = ({
           if (!category) return null;
           const categoryId = category.id;
           const showSubcategories = openCategory === categoryId;
+          const subcategories = category.subcategories;
+
+          const initialValue = 0;
+          const totalBudgetAmount = subcategories?.reduce(
+            (accumulator, currentValue) =>
+              accumulator + currentValue?.budgetAmount!,
+            initialValue
+          );
 
           return (
             <span key={key}>
@@ -158,7 +111,6 @@ export const CategoriesList: React.FC<Props> = ({
                       setOpenCategory("");
                     } else {
                       setOpenCategory(categoryId);
-                      getCategory({ variables: { id: categoryId } });
                     }
                   }}
                 >
@@ -166,6 +118,7 @@ export const CategoriesList: React.FC<Props> = ({
                     <span className="iconContainer">
                       <HiOutlineChevronDown />
                       {category.name}
+                      {loading && <LoadingInlineSpinner />}
                     </span>
                   ) : (
                     <span className="iconContainer">
@@ -174,48 +127,51 @@ export const CategoriesList: React.FC<Props> = ({
                     </span>
                   )}
                 </div>
-
+                <span className="budgetAmount orange prominent">
+                  {totalBudgetAmount} €
+                </span>
                 <span
                   className="remove red"
                   onClick={() =>
                     deleteCategory({ variables: { id: categoryId } })
                   }
                 >
-                  {loadingDeleteCategory ? "removing..." : "Remove"}
+                  {loadingDeleteCategory || loading ? "removing..." : "Remove"}
                 </span>
               </div>
               {showSubcategories && (
                 <>
-                  {!!categoryData?.category?.subcategories &&
-                    categoryData?.category?.subcategories.map(
-                      (subcategory: any, subcategoryKey: string) => {
-                        if (!subcategory) return null;
-                        return (
-                          <span key={subcategoryKey}>
-                            <div className="listItem subcategory">
-                              <div className="categoryTitle">
-                                <span className="iconContainer">
-                                  <HiOutlineChevronRight />
-                                  {subcategory.name}
-                                </span>
-                              </div>
-                              <span
-                                className="remove red"
-                                onClick={() =>
-                                  deleteSubcategory({
-                                    variables: { id: subcategory.id },
-                                  })
-                                }
-                              >
-                                {loadingDeleteSubcategory
-                                  ? "removing..."
-                                  : "Remove"}
+                  {!!subcategories &&
+                    subcategories.map((subcategory, subcategoryKey) => {
+                      if (!subcategory) return null;
+                      return (
+                        <span key={subcategoryKey}>
+                          <div className="listItem subcategory">
+                            <div className="categoryTitle">
+                              <span className="iconContainer">
+                                <HiOutlineChevronRight />
+                                {subcategory.name}
                               </span>
                             </div>
-                          </span>
-                        );
-                      }
-                    )}
+                            <span className="budgetAmount orange">
+                              {subcategory.budgetAmount} €
+                            </span>
+                            <span
+                              className="remove red"
+                              onClick={() =>
+                                deleteSubcategory({
+                                  variables: { id: subcategory.id },
+                                })
+                              }
+                            >
+                              {loadingDeleteSubcategory || loading
+                                ? "removing..."
+                                : "Remove"}
+                            </span>
+                          </div>
+                        </span>
+                      );
+                    })}
                   <>
                     {addSubcategoryField && (
                       <div className="listItem subcategory addField">
@@ -232,7 +188,7 @@ export const CategoriesList: React.FC<Props> = ({
                           }
                         />
                         <button
-                          className="btnCancel"
+                          className="btnCancel red"
                           onClick={() => setAddSubcategoryField(false)}
                         >
                           Cancel
@@ -248,7 +204,9 @@ export const CategoriesList: React.FC<Props> = ({
                             })
                           }
                         >
-                          {loadingCreateSubcategory ? "saving..." : "Add"}
+                          {loadingCreateSubcategory || loading
+                            ? "saving..."
+                            : "Add"}
                         </button>
                       </div>
                     )}
@@ -276,13 +234,13 @@ export const CategoriesList: React.FC<Props> = ({
               onChange={(e) => setCategoryName(e.target.value)}
             />
             <button
-              className="btnCancel"
+              className="btnCancel red"
               onClick={() => setAddCategoryField(false)}
             >
               Cancel
             </button>
             <button onClick={() => createCategory()}>
-              {loading ? "saving..." : "Add"}
+              {loadingCreateCategory || loading ? "saving..." : "Add"}
             </button>
           </div>
         )}

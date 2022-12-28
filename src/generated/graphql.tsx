@@ -128,7 +128,7 @@ export type CategoryQueryVariables = Exact<{
 }>;
 
 
-export type CategoryQuery = { __typename?: 'Query', category: { __typename?: 'Category', id: string, name: string, subcategories?: Array<{ __typename?: 'Subcategory', name: string } | null> | null } };
+export type CategoryQuery = { __typename?: 'Query', category: { __typename?: 'Category', id: string, name: string, subcategories?: Array<{ __typename?: 'Subcategory', id: string, name: string, budgetAmount?: number | null } | null> | null } };
 
 export type CreateCategoryMutationVariables = Exact<{
   name: Scalars['String'];
@@ -146,12 +146,12 @@ export type DeleteCategoryMutation = { __typename?: 'Mutation', deleteCategory: 
 
 export type CreateSubcategoryMutationVariables = Exact<{
   categoryId: Scalars['ID'];
-  budgetAmount: Scalars['Int'];
   name: Scalars['String'];
+  budgetAmount: Scalars['Int'];
 }>;
 
 
-export type CreateSubcategoryMutation = { __typename?: 'Mutation', createSubcategory: { __typename?: 'Subcategory', budgetAmount?: number | null, name: string } };
+export type CreateSubcategoryMutation = { __typename?: 'Mutation', createSubcategory: { __typename?: 'Subcategory', name: string, budgetAmount?: number | null } };
 
 export type DeleteSubcategoryMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -163,7 +163,7 @@ export type DeleteSubcategoryMutation = { __typename?: 'Mutation', deleteSubcate
 export type CategoriesListQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CategoriesListQuery = { __typename?: 'Query', categories: Array<{ __typename?: 'Category', id: string, name: string }> };
+export type CategoriesListQuery = { __typename?: 'Query', categories: Array<{ __typename?: 'Category', id: string, name: string, subcategories?: Array<{ __typename?: 'Subcategory', id: string, name: string, budgetAmount?: number | null } | null> | null }> };
 
 export type SignupMutationVariables = Exact<{
   email: Scalars['String'];
@@ -188,7 +188,9 @@ export const CategoryDocument = gql`
     id
     name
     subcategories {
+      id
       name
+      budgetAmount
     }
   }
 }
@@ -288,14 +290,14 @@ export type DeleteCategoryMutationHookResult = ReturnType<typeof useDeleteCatego
 export type DeleteCategoryMutationResult = Apollo.MutationResult<DeleteCategoryMutation>;
 export type DeleteCategoryMutationOptions = Apollo.BaseMutationOptions<DeleteCategoryMutation, DeleteCategoryMutationVariables>;
 export const CreateSubcategoryDocument = gql`
-    mutation CreateSubcategory($categoryId: ID!, $budgetAmount: Int!, $name: String!) {
+    mutation CreateSubcategory($categoryId: ID!, $name: String!, $budgetAmount: Int!) {
   createSubcategory(
     categoryId: $categoryId
-    budgetAmount: $budgetAmount
     name: $name
+    budgetAmount: $budgetAmount
   ) {
-    budgetAmount
     name
+    budgetAmount
   }
 }
     `;
@@ -315,8 +317,8 @@ export type CreateSubcategoryMutationFn = Apollo.MutationFunction<CreateSubcateg
  * const [createSubcategoryMutation, { data, loading, error }] = useCreateSubcategoryMutation({
  *   variables: {
  *      categoryId: // value for 'categoryId'
- *      budgetAmount: // value for 'budgetAmount'
  *      name: // value for 'name'
+ *      budgetAmount: // value for 'budgetAmount'
  *   },
  * });
  */
@@ -365,6 +367,11 @@ export const CategoriesListDocument = gql`
   categories {
     id
     name
+    subcategories {
+      id
+      name
+      budgetAmount
+    }
   }
 }
     `;

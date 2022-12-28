@@ -11,10 +11,12 @@ export const HomePageContainer = () => {
             <span className="red">3.660,00 € (mock)</span>
           </div>
         </Link>
-        <div className="listItem">
-          Budget
-          <span className="green">15.000,00 € (mock)</span>
-        </div>
+        <Link to="/categories">
+          <div className="listItem">
+            Categories/Budget
+            <span className="orange">15.000,00 € (mock)</span>
+          </div>
+        </Link>
       </div>
       <div className="actions">
         <div className="green">Add expense</div>

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { ToastContainer } from "react-toastify";
-// import { gql } from "@apollo/client";
+import { Slide, ToastContainer } from "react-toastify";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 // import logo from './logo.svg';
 import { LoginPageContainer } from "./pages/login-page/login-page-container";
@@ -10,14 +9,7 @@ import "./App.css";
 import "react-toastify/dist/ReactToastify.min.css";
 import { Header } from "./components/header/header";
 import { AUTH_TOKEN } from "./constants";
-
-// export const QUERY_CATEGORY_LIST = gql`
-//   query CategoryList {
-//     categories {
-//       name
-//     }
-//   }
-// `;
+import { CategoriesPageContainer } from "./pages/categories-page/categories-page-container";
 
 function App() {
   const [authenticated, setAuthenticated] = useState<string | null>(
@@ -41,6 +33,7 @@ function App() {
             }
           />
           <Route path="/expenses" element={<ExpensesPageContainer />} />
+          <Route path="/categories" element={<CategoriesPageContainer />} />
           <Route
             path="/login"
             element={<LoginPageContainer setAuthenticated={setAuthenticated} />}
@@ -53,8 +46,9 @@ function App() {
         <img src={logo} className="App-logo" alt="logo" />
       </header> */}
       <ToastContainer
+        transition={Slide}
         position="bottom-center"
-        autoClose={3000}
+        autoClose={2500}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick

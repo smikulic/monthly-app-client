@@ -1,9 +1,10 @@
 import * as React from "react";
 import { useCategoriesListQuery } from "../../generated/graphql";
-import { CategoriesList } from "../../components/categories-list/categories-list";
+import { ExpensesList } from "../../components/expenses-list/expenses-list";
 import { gql } from "@apollo/client";
+import { LoadingScreen } from "../../components/loading-screen/loading-screen";
 
-export const GET_CATEGORIES_LIST = gql`
+export const GET_EXPENSES_CATEGORIES_LIST = gql`
   query CategoriesList {
     categories {
       id
@@ -21,12 +22,12 @@ export const ExpensesPageContainer = () => {
   } = useCategoriesListQuery();
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <LoadingScreen />;
   }
 
   if (error || !data) {
     return <div>ERROR</div>;
   }
 
-  return <CategoriesList data={data} refetchCategories={refetchCategories} />;
+  return <ExpensesList data={data} refetchCategories={refetchCategories} />;
 };
