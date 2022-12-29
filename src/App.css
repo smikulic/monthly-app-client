@@ -108,7 +108,7 @@
 .listItem input {
   margin-right: 12px;
   padding: 8px 12px;
-  width: 360px;
+  width: 300px;
   font-size: 16px;
   border: 1px solid rgb(223, 223, 223);
   border-radius: 5px;
@@ -164,4 +164,8 @@
 
 .prominent {
   font-weight: 500;
+}
+
+.customReactSelectInput {
+  font-size: 14px;
 }

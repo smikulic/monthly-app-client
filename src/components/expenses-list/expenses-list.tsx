@@ -1,12 +1,16 @@
 import { useLazyQuery } from "@apollo/client";
 import React, { useState } from "react";
 import { format } from "date-fns";
+import Select from "react-select";
 import {
   HiOutlineChevronRight,
   HiOutlineChevronDown,
   HiPlusCircle,
 } from "react-icons/hi";
-import { CategoriesListQuery } from "../../generated/graphql";
+import {
+  CategoriesListQuery,
+  useCreateExpenseMutation,
+} from "../../generated/graphql";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import { GET_CATEGORY } from "./expenses-list-queries";
@@ -23,26 +27,29 @@ export const ExpensesList: React.FC<Props> = ({ data, refetchCategories }) => {
   const [addExpenseField, setAddExpenseField] = useState(false);
   const [newExpenseAmount, setExpenseAmount] = useState("");
   const [newExpenseDate, setExpenseDate] = useState("");
+  const [newExpenseSubcategoryId, setExpenseSubcategoryId] = useState("");
 
   const [
     getCategory,
     { data: categoryData, refetch: refetchCategory, loading: loadingCategory },
   ] = useLazyQuery(GET_CATEGORY);
 
-  // const [createExpense, { loading: loadingCreateExpense }] =
-  //   useCreateExpenseMutation({
-  //     variables: {
-  //       amount: newExpenseAmount,
-  //       date: newExpenseDate
-  //     },
-  //     onCompleted: ({ createExpense }) => {
-  //       refetchCategories();
-  //       setAddExpenseField(false);
-  //       setExpenseAmount("");
-  //       setExpenseDate("");
-  //       toast.success(`You have successfully created a new expense!`);
-  //     },
-  //   });
+  const [createExpense, { loading: loadingCreateExpense }] =
+    useCreateExpenseMutation({
+      variables: {
+        subcategoryId: newExpenseSubcategoryId,
+        amount: Number(newExpenseAmount),
+        date: String(newExpenseDate),
+      },
+      onCompleted: ({ createExpense }) => {
+        refetchCategory();
+        setAddExpenseField(false);
+        setExpenseAmount("");
+        setExpenseDate("");
+        setExpenseSubcategoryId("");
+        toast.success(`You have successfully created a new expense!`);
+      },
+    });
 
   return (
     <div>
@@ -158,47 +165,64 @@ export const ExpensesList: React.FC<Props> = ({ data, refetchCategories }) => {
                         );
                       }
                     )}
+                  <>
+                    {addExpenseField && (
+                      <div className="listItem category addField">
+                        <input
+                          type="text"
+                          placeholder="Amount"
+                          onChange={(e) => setExpenseAmount(e.target.value)}
+                        />
+                        <input
+                          type="date"
+                          placeholder="Date"
+                          onChange={(e) => setExpenseDate(e.target.value)}
+                        />
+                        <Select
+                          className="customReactSelectInput"
+                          onChange={(selectedOption: any) => {
+                            console.log({ selectedOption });
+                            setExpenseSubcategoryId(selectedOption.value);
+                          }}
+                          options={
+                            !!categoryData?.category?.subcategories &&
+                            categoryData?.category?.subcategories.map(
+                              (subcategory: any) => {
+                                if (!subcategory) return null;
+                                return {
+                                  value: subcategory.id,
+                                  label: subcategory.name,
+                                };
+                              }
+                            )
+                          }
+                        />
+                        <button
+                          className="btnCancel red"
+                          onClick={() => setAddExpenseField(false)}
+                        >
+                          Cancel
+                        </button>
+                        <button onClick={() => createExpense()}>
+                          {loadingCreateExpense ? "saving..." : "Add"}
+                        </button>
+                      </div>
+                    )}
+                    {!addExpenseField && (
+                      <div
+                        className="listItem category add"
+                        onClick={() => setAddExpenseField(true)}
+                      >
+                        <HiPlusCircle />
+                        Add expense
+                      </div>
+                    )}
+                  </>
                 </>
               )}
             </span>
           );
         })}
-      <>
-        {addExpenseField && (
-          <div className="listItem category addField">
-            <input
-              type="text"
-              placeholder="Amount"
-              onChange={(e) => setExpenseAmount(e.target.value)}
-            />
-            <input
-              type="date"
-              placeholder="Date"
-              onChange={(e) => setExpenseDate(e.target.value)}
-            />
-            <button
-              className="btnCancel red"
-              onClick={() => setAddExpenseField(false)}
-            >
-              Cancel
-            </button>
-            <button onClick={() => console.log("createExpense()")}>
-              {/* <button onClick={() => createExpense()}> */}
-              Add
-              {/* {loadingCreateExpense || loading ? "saving..." : "Add"} */}
-            </button>
-          </div>
-        )}
-        {!addExpenseField && (
-          <div
-            className="listItem category add"
-            onClick={() => setAddExpenseField(true)}
-          >
-            <HiPlusCircle />
-            Add expense
-          </div>
-        )}
-      </>
     </div>
   );
 };
