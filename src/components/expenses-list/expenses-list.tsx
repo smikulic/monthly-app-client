@@ -1,5 +1,6 @@
 import { useLazyQuery } from "@apollo/client";
 import React, { useState } from "react";
+import { format } from "date-fns";
 import { HiOutlineChevronRight, HiOutlineChevronDown } from "react-icons/hi";
 import { CategoriesListQuery } from "../../generated/graphql";
 import { toast } from "react-toastify";
@@ -46,7 +47,7 @@ export const ExpensesList: React.FC<Props> = ({ data, refetchCategories }) => {
                   }}
                 >
                   {showSubcategories ? (
-                    <span className="iconContainer">
+                    <span className="iconContainer prominent">
                       <HiOutlineChevronDown />
                       {category.name}
                       {loadingCategory && <LoadingInlineSpinner />}
@@ -81,7 +82,7 @@ export const ExpensesList: React.FC<Props> = ({ data, refetchCategories }) => {
                                 }}
                               >
                                 {showExpenses ? (
-                                  <span className="iconContainer">
+                                  <span className="iconContainer prominent">
                                     <HiOutlineChevronDown />
                                     {subcategory.name}
                                   </span>
@@ -91,10 +92,6 @@ export const ExpensesList: React.FC<Props> = ({ data, refetchCategories }) => {
                                     {subcategory.name}
                                   </span>
                                 )}
-                                {/* <span className="iconContainer">
-                                  <HiOutlineChevronRight />
-                                  {subcategory.name}
-                                </span> */}
                               </div>
                               <span className="budgetAmount orange">
                                 {subcategory.budgetAmount} €
@@ -110,14 +107,22 @@ export const ExpensesList: React.FC<Props> = ({ data, refetchCategories }) => {
                                   ].expenses.map(
                                     (expense: any, expenseKey: string) => {
                                       if (!expense) return null;
+                                      const expenseISODate = Number(
+                                        expense.date
+                                      );
 
                                       return (
                                         <span key={expenseKey}>
-                                          <div className="listItem subcategory">
-                                            <div className="categoryTitle">
-                                              <span className="iconContainer">
-                                                amount: {expense.amount}
-                                                date: {expense.date}
+                                          <div className="listItem expense">
+                                            <div className="expenseFields">
+                                              <span className="expenseField expenseDate">
+                                                {format(
+                                                  expenseISODate,
+                                                  "dd MMM"
+                                                )}
+                                              </span>
+                                              <span className="expenseField expenseAmount red">
+                                                {expense.amount} €
                                               </span>
                                             </div>
                                           </div>

@@ -40,7 +40,6 @@
 .listItem.category .iconContainer svg,
 .listItem.subcategory .iconContainer svg {
   position: relative;
-  /* color: rgb(76, 115, 255); */
   color: #277bc0;
   top: 4px;
   right: 4px;
@@ -80,13 +79,30 @@
   cursor: pointer;
 }
 .listItem.subcategory {
-  padding: 16px 48px;
+  padding: 12px 48px;
   font-size: 18px;
+}
+.listItem.expense {
+  padding: 8px 48px;
+  font-size: 16px;
 }
 .listItem .budgetAmount {
   position: absolute;
   right: 130px;
   font-size: 16px;
+}
+.listItem .expenseAmount {
+  position: absolute;
+  right: 130px;
+}
+
+.expenseFields {
+  display: flex;
+  justify-content: space-between;
+  padding-left: 24px;
+}
+.expenseField {
+  display: flex;
 }
 
 .listItem input {
@@ -102,7 +118,6 @@
   width: 80px;
   font-size: 16px;
   color: white;
-  /* background-color: rgb(76, 115, 255); */
   background-color: #277bc0;
   border: none;
   border-radius: 5px;
@@ -132,7 +147,6 @@
 }
 
 .red {
-  /* color: #e64848; */
   color: #ff7777;
 }
 
@@ -149,5 +163,5 @@
 }
 
 .prominent {
-  font-weight: bold;
+  font-weight: 500;
 }
