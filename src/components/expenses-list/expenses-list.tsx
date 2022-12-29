@@ -1,7 +1,11 @@
 import { useLazyQuery } from "@apollo/client";
 import React, { useState } from "react";
 import { format } from "date-fns";
-import { HiOutlineChevronRight, HiOutlineChevronDown } from "react-icons/hi";
+import {
+  HiOutlineChevronRight,
+  HiOutlineChevronDown,
+  HiPlusCircle,
+} from "react-icons/hi";
 import { CategoriesListQuery } from "../../generated/graphql";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
@@ -16,11 +20,29 @@ interface Props {
 export const ExpensesList: React.FC<Props> = ({ data, refetchCategories }) => {
   const [openCategory, setOpenCategory] = useState("");
   const [openSubcategory, setOpenSubcategory] = useState("");
+  const [addExpenseField, setAddExpenseField] = useState(false);
+  const [newExpenseAmount, setExpenseAmount] = useState("");
+  const [newExpenseDate, setExpenseDate] = useState("");
 
   const [
     getCategory,
     { data: categoryData, refetch: refetchCategory, loading: loadingCategory },
   ] = useLazyQuery(GET_CATEGORY);
+
+  // const [createExpense, { loading: loadingCreateExpense }] =
+  //   useCreateExpenseMutation({
+  //     variables: {
+  //       amount: newExpenseAmount,
+  //       date: newExpenseDate
+  //     },
+  //     onCompleted: ({ createExpense }) => {
+  //       refetchCategories();
+  //       setAddExpenseField(false);
+  //       setExpenseAmount("");
+  //       setExpenseDate("");
+  //       toast.success(`You have successfully created a new expense!`);
+  //     },
+  //   });
 
   return (
     <div>
@@ -141,6 +163,42 @@ export const ExpensesList: React.FC<Props> = ({ data, refetchCategories }) => {
             </span>
           );
         })}
+      <>
+        {addExpenseField && (
+          <div className="listItem category addField">
+            <input
+              type="text"
+              placeholder="Amount"
+              onChange={(e) => setExpenseAmount(e.target.value)}
+            />
+            <input
+              type="date"
+              placeholder="Date"
+              onChange={(e) => setExpenseDate(e.target.value)}
+            />
+            <button
+              className="btnCancel red"
+              onClick={() => setAddExpenseField(false)}
+            >
+              Cancel
+            </button>
+            <button onClick={() => console.log("createExpense()")}>
+              {/* <button onClick={() => createExpense()}> */}
+              Add
+              {/* {loadingCreateExpense || loading ? "saving..." : "Add"} */}
+            </button>
+          </div>
+        )}
+        {!addExpenseField && (
+          <div
+            className="listItem category add"
+            onClick={() => setAddExpenseField(true)}
+          >
+            <HiPlusCircle />
+            Add expense
+          </div>
+        )}
+      </>
     </div>
   );
 };

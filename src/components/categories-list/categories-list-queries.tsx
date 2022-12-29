@@ -31,7 +31,6 @@ export const CREATE_SUBCATEGORY_MUTATION = gql`
     }
   }
 `;
-
 export const DELETE_SUBCATEGORY_MUTATION = gql`
   mutation DeleteSubcategory($id: ID!) {
     deleteSubcategory(id: $id) {

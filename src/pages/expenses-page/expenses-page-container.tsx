@@ -5,7 +5,7 @@ import { gql } from "@apollo/client";
 import { LoadingScreen } from "../../components/loading-screen/loading-screen";
 
 export const GET_EXPENSES_CATEGORIES_LIST = gql`
-  query CategoriesList {
+  query ExpensesCategoriesList {
     categories {
       id
       name
