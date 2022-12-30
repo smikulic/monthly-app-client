@@ -12,6 +12,21 @@
   height: 50vh;
 }
 
+.monthFilter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 48px;
+  font-size: 20px;
+}
+.monthFilter .filterPrev,
+.monthFilter .filterNext {
+  margin: 0 16px;
+  font-size: 26px;
+  color: #277bc0;
+  cursor: pointer;
+}
+
 .homeContainer {
   display: flex;
   flex-direction: column;

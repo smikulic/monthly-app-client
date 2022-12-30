@@ -5,6 +5,8 @@ import Select from "react-select";
 import {
   HiOutlineChevronRight,
   HiOutlineChevronDown,
+  HiOutlineArrowCircleLeft,
+  HiOutlineArrowCircleRight,
   HiPlusCircle,
 } from "react-icons/hi";
 import {
@@ -18,10 +20,15 @@ import { LoadingInlineSpinner } from "../loading-inline-spinner/loading-inline-s
 
 interface Props {
   data: CategoriesListQuery;
+  currentMonth: Date;
   refetchCategories: any;
 }
 
-export const ExpensesList: React.FC<Props> = ({ data, refetchCategories }) => {
+export const ExpensesList: React.FC<Props> = ({
+  data,
+  refetchCategories,
+  currentMonth,
+}) => {
   const [openCategory, setOpenCategory] = useState("");
   const [openSubcategory, setOpenSubcategory] = useState("");
   const [addExpenseField, setAddExpenseField] = useState(false);
@@ -53,6 +60,17 @@ export const ExpensesList: React.FC<Props> = ({ data, refetchCategories }) => {
 
   return (
     <div>
+      <div className="monthFilter">
+        <HiOutlineArrowCircleLeft
+          className="filterPrev"
+          onClick={() => console.log("prev month")}
+        />
+        {format(currentMonth, "MMM yyyy")}
+        <HiOutlineArrowCircleRight
+          className="filterNext"
+          onClick={() => console.log("next month")}
+        />
+      </div>
       {!!data.categories &&
         data.categories.map((category, key) => {
           if (!category) return null;
