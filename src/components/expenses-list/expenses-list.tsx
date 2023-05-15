@@ -79,6 +79,7 @@ export const ExpensesList: React.FC<Props> = ({
             );
 
             setPageDate(modifiedDate);
+            setOpenCategory("");
           }}
         />
         {format(pageDate, "MMM yyyy")}
@@ -94,6 +95,7 @@ export const ExpensesList: React.FC<Props> = ({
             );
 
             setPageDate(modifiedDate);
+            setOpenCategory("");
           }}
         />
       </div>
@@ -150,6 +152,7 @@ export const ExpensesList: React.FC<Props> = ({
                               accumulator + currentValue.amount,
                             0
                           );
+                        const expensesExist = totalSubcategoryExpenses > 0;
 
                         console.log({ subcategory });
                         console.log({ totalSubcategoryExpenses });
@@ -160,21 +163,23 @@ export const ExpensesList: React.FC<Props> = ({
                               <div
                                 className="categoryTitle"
                                 onClick={() => {
-                                  if (showExpenses) {
-                                    setOpenSubcategory("");
-                                  } else {
-                                    setOpenSubcategory(subcategoryId);
+                                  if (expensesExist) {
+                                    if (showExpenses) {
+                                      setOpenSubcategory("");
+                                    } else {
+                                      setOpenSubcategory(subcategoryId);
+                                    }
                                   }
                                 }}
                               >
                                 {showExpenses ? (
                                   <span className="iconContainer prominent">
-                                    <HiOutlineChevronDown />
+                                    {expensesExist && <HiOutlineChevronDown />}
                                     {subcategory.name}
                                   </span>
                                 ) : (
                                   <span className="iconContainer">
-                                    <HiOutlineChevronRight />
+                                    {expensesExist && <HiOutlineChevronRight />}
                                     {subcategory.name}
                                   </span>
                                 )}
@@ -182,7 +187,7 @@ export const ExpensesList: React.FC<Props> = ({
                               <span className="budgetAmount orange">
                                 {subcategory.budgetAmount} €
                               </span>
-                              {totalSubcategoryExpenses > 0 && (
+                              {expensesExist && (
                                 <span className="expenseAmount red">
                                   {totalSubcategoryExpenses} €
                                 </span>

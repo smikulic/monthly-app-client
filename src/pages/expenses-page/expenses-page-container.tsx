@@ -14,6 +14,7 @@ export const GET_EXPENSES_CATEGORIES_LIST = gql`
 `;
 
 export const ExpensesPageContainer = () => {
+  const currentDate = new Date();
   const {
     data,
     error,
@@ -29,10 +30,12 @@ export const ExpensesPageContainer = () => {
     return <div>ERROR</div>;
   }
 
+  console.log({ data });
+
   return (
     <ExpensesList
       data={data}
-      currentDate={new Date()}
+      currentDate={currentDate}
       refetchCategories={refetchCategories}
     />
   );
