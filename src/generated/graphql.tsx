@@ -37,6 +37,10 @@ export type Expense = {
   id: Scalars['ID'];
 };
 
+export type ExpenseFilterInput = {
+  date: Scalars['String'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createCategory: Category;
@@ -98,7 +102,6 @@ export type Query = {
   me: User;
   subcategories: Array<Subcategory>;
   subcategory: Subcategory;
-  subcategoryExpenses: Array<Expense>;
   user: User;
   users: Array<User>;
 };
@@ -125,6 +128,11 @@ export type Subcategory = {
   icon?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   name: Scalars['String'];
+};
+
+
+export type SubcategoryExpensesArgs = {
+  filter?: InputMaybe<ExpenseFilterInput>;
 };
 
 export type User = {
@@ -170,6 +178,7 @@ export type DeleteSubcategoryMutation = { __typename?: 'Mutation', deleteSubcate
 
 export type CategoryQueryVariables = Exact<{
   id: Scalars['ID'];
+  date: Scalars['String'];
 }>;
 
 
@@ -351,7 +360,7 @@ export type DeleteSubcategoryMutationHookResult = ReturnType<typeof useDeleteSub
 export type DeleteSubcategoryMutationResult = Apollo.MutationResult<DeleteSubcategoryMutation>;
 export type DeleteSubcategoryMutationOptions = Apollo.BaseMutationOptions<DeleteSubcategoryMutation, DeleteSubcategoryMutationVariables>;
 export const CategoryDocument = gql`
-    query Category($id: ID!) {
+    query Category($id: ID!, $date: String!) {
   category(id: $id) {
     id
     name
@@ -359,7 +368,7 @@ export const CategoryDocument = gql`
       id
       name
       budgetAmount
-      expenses {
+      expenses(filter: {date: $date}) {
         id
         amount
         date
@@ -382,6 +391,7 @@ export const CategoryDocument = gql`
  * const { data, loading, error } = useCategoryQuery({
  *   variables: {
  *      id: // value for 'id'
+ *      date: // value for 'date'
  *   },
  * });
  */

@@ -29,5 +29,11 @@ export const ExpensesPageContainer = () => {
     return <div>ERROR</div>;
   }
 
-  return <ExpensesList data={data} currentMonth={new Date()} refetchCategories={refetchCategories} />;
+  return (
+    <ExpensesList
+      data={data}
+      currentDate={new Date()}
+      refetchCategories={refetchCategories}
+    />
+  );
 };

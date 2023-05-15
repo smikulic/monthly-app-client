@@ -99,11 +99,12 @@
 }
 .listItem.expense {
   padding: 8px 48px;
+  height: 50px;
   font-size: 16px;
 }
 .listItem .budgetAmount {
   position: absolute;
-  right: 130px;
+  right: 30px;
   font-size: 16px;
 }
 .listItem .expenseAmount {
@@ -183,4 +184,5 @@
 
 .customReactSelectInput {
   font-size: 14px;
+  min-width: 160px;
 }

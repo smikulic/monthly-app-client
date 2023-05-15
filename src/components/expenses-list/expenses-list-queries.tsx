@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
 export const GET_CATEGORY = gql`
-  query Category($id: ID!) {
+  query Category($id: ID!, $date: String!) {
     category(id: $id) {
       id
       name
@@ -9,7 +9,7 @@ export const GET_CATEGORY = gql`
         id
         name
         budgetAmount
-        expenses {
+        expenses(filter: { date: $date }) {
           id
           amount
           date

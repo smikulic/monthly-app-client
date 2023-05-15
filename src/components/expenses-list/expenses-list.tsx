@@ -11,6 +11,7 @@ import {
 } from "react-icons/hi";
 import {
   CategoriesListQuery,
+  Expense,
   useCreateExpenseMutation,
 } from "../../generated/graphql";
 import { toast } from "react-toastify";
@@ -20,14 +21,14 @@ import { LoadingInlineSpinner } from "../loading-inline-spinner/loading-inline-s
 
 interface Props {
   data: CategoriesListQuery;
-  currentMonth: Date;
+  currentDate: Date;
   refetchCategories: any;
 }
 
 export const ExpensesList: React.FC<Props> = ({
   data,
   refetchCategories,
-  currentMonth,
+  currentDate,
 }) => {
   const [openCategory, setOpenCategory] = useState("");
   const [openSubcategory, setOpenSubcategory] = useState("");
@@ -35,6 +36,7 @@ export const ExpensesList: React.FC<Props> = ({
   const [newExpenseAmount, setExpenseAmount] = useState("");
   const [newExpenseDate, setExpenseDate] = useState("");
   const [newExpenseSubcategoryId, setExpenseSubcategoryId] = useState("");
+  const [pageDate, setPageDate] = useState(currentDate);
 
   const [
     getCategory,
@@ -58,17 +60,41 @@ export const ExpensesList: React.FC<Props> = ({
       },
     });
 
+  console.log({ categoryData });
+  console.log({ currentDate });
+  console.log({ pageDate });
+
   return (
     <div>
       <div className="monthFilter">
         <HiOutlineArrowCircleLeft
           className="filterPrev"
-          onClick={() => console.log("prev month")}
+          onClick={() => {
+            console.log("prev month");
+            // Subtract one month (immutable)
+            const modifiedDate = new Date(
+              pageDate.getFullYear(),
+              pageDate.getMonth() - 1,
+              pageDate.getDate()
+            );
+
+            setPageDate(modifiedDate);
+          }}
         />
-        {format(currentMonth, "MMM yyyy")}
+        {format(pageDate, "MMM yyyy")}
         <HiOutlineArrowCircleRight
           className="filterNext"
-          onClick={() => console.log("next month")}
+          onClick={() => {
+            console.log("next month");
+            // Add one month (immutable)
+            const modifiedDate = new Date(
+              pageDate.getFullYear(),
+              pageDate.getMonth() + 1,
+              pageDate.getDate()
+            );
+
+            setPageDate(modifiedDate);
+          }}
         />
       </div>
       {!!data.categories &&
@@ -76,8 +102,6 @@ export const ExpensesList: React.FC<Props> = ({
           if (!category) return null;
           const categoryId = category.id;
           const showSubcategories = openCategory === categoryId;
-
-          console.log({ categoryData });
 
           return (
             <span key={key}>
@@ -89,7 +113,12 @@ export const ExpensesList: React.FC<Props> = ({
                       setOpenCategory("");
                     } else {
                       setOpenCategory(categoryId);
-                      getCategory({ variables: { id: categoryId } });
+                      getCategory({
+                        variables: {
+                          id: categoryId,
+                          date: pageDate,
+                        },
+                      });
                     }
                   }}
                 >
@@ -115,6 +144,16 @@ export const ExpensesList: React.FC<Props> = ({
                         if (!subcategory) return null;
                         const subcategoryId = subcategory.id;
                         const showExpenses = openSubcategory === subcategoryId;
+                        const totalSubcategoryExpenses =
+                          subcategory.expenses.reduce(
+                            (accumulator: number, currentValue: Expense) =>
+                              accumulator + currentValue.amount,
+                            0
+                          );
+
+                        console.log({ subcategory });
+                        console.log({ totalSubcategoryExpenses });
+
                         return (
                           <span key={subcategoryKey}>
                             <div className="listItem subcategory">
@@ -143,6 +182,11 @@ export const ExpensesList: React.FC<Props> = ({
                               <span className="budgetAmount orange">
                                 {subcategory.budgetAmount} €
                               </span>
+                              {totalSubcategoryExpenses > 0 && (
+                                <span className="expenseAmount red">
+                                  {totalSubcategoryExpenses} €
+                                </span>
+                              )}
                             </div>
                             {showExpenses && (
                               <>
@@ -152,7 +196,7 @@ export const ExpensesList: React.FC<Props> = ({
                                   categoryData?.category?.subcategories[
                                     subcategoryKey
                                   ].expenses.map(
-                                    (expense: any, expenseKey: string) => {
+                                    (expense: Expense, expenseKey: string) => {
                                       if (!expense) return null;
                                       const expenseISODate = Number(
                                         expense.date
