@@ -12,8 +12,14 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { AUTH_TOKEN } from "./constants";
 
+const apiUrl =
+  process.env.NODE_ENV === "production"
+    ? "https://monthly-app-8iesq.ondigitalocean.app/api:8080"
+    : "http://localhost:3001";
+
 const httpLink = createHttpLink({
-  uri: "http://localhost:3001",
+  uri: apiUrl,
+  // uri: "http://localhost:3001",
 });
 
 const authLink = setContext((_, { headers }) => {
