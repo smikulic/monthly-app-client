@@ -14,7 +14,7 @@ import { AUTH_TOKEN } from "./constants";
 
 const apiUrl =
   process.env.NODE_ENV === "production"
-    ? "https://monthly-app-8iesq.ondigitalocean.app/api:8080"
+    ? "https://monthly-app-8iesq.ondigitalocean.app:8080/api"
     : "http://localhost:3001";
 
 const httpLink = createHttpLink({
