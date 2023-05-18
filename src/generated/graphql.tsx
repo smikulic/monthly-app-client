@@ -99,6 +99,7 @@ export type Query = {
   __typename?: 'Query';
   categories: Array<Category>;
   category: Category;
+  expenses: Array<Expense>;
   me: User;
   subcategories: Array<Subcategory>;
   subcategory: Subcategory;
@@ -109,6 +110,11 @@ export type Query = {
 
 export type QueryCategoryArgs = {
   id: Scalars['ID'];
+};
+
+
+export type QueryExpensesArgs = {
+  filter?: InputMaybe<ExpenseFilterInput>;
 };
 
 
@@ -145,6 +151,11 @@ export type User = {
   id: Scalars['ID'];
   password: Scalars['String'];
 };
+
+export type CategoriesListQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CategoriesListQuery = { __typename?: 'Query', categories: Array<{ __typename?: 'Category', id: string, name: string, subcategories?: Array<{ __typename?: 'Subcategory', id: string, name: string, budgetAmount?: number | null } | null> | null }> };
 
 export type CreateCategoryMutationVariables = Exact<{
   name: Scalars['String'];
@@ -184,6 +195,13 @@ export type CategoryQueryVariables = Exact<{
 
 export type CategoryQuery = { __typename?: 'Query', category: { __typename?: 'Category', id: string, name: string, subcategories?: Array<{ __typename?: 'Subcategory', id: string, name: string, budgetAmount?: number | null, expenses?: Array<{ __typename?: 'Expense', id: string, amount: number, date: string } | null> | null } | null> | null } };
 
+export type ExpensesListQueryVariables = Exact<{
+  date: Scalars['String'];
+}>;
+
+
+export type ExpensesListQuery = { __typename?: 'Query', expenses: Array<{ __typename?: 'Expense', id: string, amount: number, date: string }> };
+
 export type CreateExpenseMutationVariables = Exact<{
   subcategoryId: Scalars['ID'];
   amount: Scalars['Int'];
@@ -192,11 +210,6 @@ export type CreateExpenseMutationVariables = Exact<{
 
 
 export type CreateExpenseMutation = { __typename?: 'Mutation', createExpense: { __typename?: 'Expense', id: string, amount: number, date: string } };
-
-export type CategoriesListQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type CategoriesListQuery = { __typename?: 'Query', categories: Array<{ __typename?: 'Category', id: string, name: string, subcategories?: Array<{ __typename?: 'Subcategory', id: string, name: string, budgetAmount?: number | null } | null> | null }> };
 
 export type ExpensesCategoriesListQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -220,6 +233,46 @@ export type LoginMutationVariables = Exact<{
 export type LoginMutation = { __typename?: 'Mutation', login?: { __typename?: 'AuthPayload', token?: string | null, user?: { __typename?: 'User', email: string } | null } | null };
 
 
+export const CategoriesListDocument = gql`
+    query CategoriesList {
+  categories {
+    id
+    name
+    subcategories {
+      id
+      name
+      budgetAmount
+    }
+  }
+}
+    `;
+
+/**
+ * __useCategoriesListQuery__
+ *
+ * To run a query within a React component, call `useCategoriesListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCategoriesListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCategoriesListQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCategoriesListQuery(baseOptions?: Apollo.QueryHookOptions<CategoriesListQuery, CategoriesListQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CategoriesListQuery, CategoriesListQueryVariables>(CategoriesListDocument, options);
+      }
+export function useCategoriesListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CategoriesListQuery, CategoriesListQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CategoriesListQuery, CategoriesListQueryVariables>(CategoriesListDocument, options);
+        }
+export type CategoriesListQueryHookResult = ReturnType<typeof useCategoriesListQuery>;
+export type CategoriesListLazyQueryHookResult = ReturnType<typeof useCategoriesListLazyQuery>;
+export type CategoriesListQueryResult = Apollo.QueryResult<CategoriesListQuery, CategoriesListQueryVariables>;
 export const CreateCategoryDocument = gql`
     mutation CreateCategory($name: String!) {
   createCategory(name: $name) {
@@ -406,6 +459,43 @@ export function useCategoryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<C
 export type CategoryQueryHookResult = ReturnType<typeof useCategoryQuery>;
 export type CategoryLazyQueryHookResult = ReturnType<typeof useCategoryLazyQuery>;
 export type CategoryQueryResult = Apollo.QueryResult<CategoryQuery, CategoryQueryVariables>;
+export const ExpensesListDocument = gql`
+    query ExpensesList($date: String!) {
+  expenses(filter: {date: $date}) {
+    id
+    amount
+    date
+  }
+}
+    `;
+
+/**
+ * __useExpensesListQuery__
+ *
+ * To run a query within a React component, call `useExpensesListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useExpensesListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useExpensesListQuery({
+ *   variables: {
+ *      date: // value for 'date'
+ *   },
+ * });
+ */
+export function useExpensesListQuery(baseOptions: Apollo.QueryHookOptions<ExpensesListQuery, ExpensesListQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ExpensesListQuery, ExpensesListQueryVariables>(ExpensesListDocument, options);
+      }
+export function useExpensesListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ExpensesListQuery, ExpensesListQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ExpensesListQuery, ExpensesListQueryVariables>(ExpensesListDocument, options);
+        }
+export type ExpensesListQueryHookResult = ReturnType<typeof useExpensesListQuery>;
+export type ExpensesListLazyQueryHookResult = ReturnType<typeof useExpensesListLazyQuery>;
+export type ExpensesListQueryResult = Apollo.QueryResult<ExpensesListQuery, ExpensesListQueryVariables>;
 export const CreateExpenseDocument = gql`
     mutation CreateExpense($subcategoryId: ID!, $amount: Int!, $date: String!) {
   createExpense(subcategoryId: $subcategoryId, amount: $amount, date: $date) {
@@ -443,46 +533,6 @@ export function useCreateExpenseMutation(baseOptions?: Apollo.MutationHookOption
 export type CreateExpenseMutationHookResult = ReturnType<typeof useCreateExpenseMutation>;
 export type CreateExpenseMutationResult = Apollo.MutationResult<CreateExpenseMutation>;
 export type CreateExpenseMutationOptions = Apollo.BaseMutationOptions<CreateExpenseMutation, CreateExpenseMutationVariables>;
-export const CategoriesListDocument = gql`
-    query CategoriesList {
-  categories {
-    id
-    name
-    subcategories {
-      id
-      name
-      budgetAmount
-    }
-  }
-}
-    `;
-
-/**
- * __useCategoriesListQuery__
- *
- * To run a query within a React component, call `useCategoriesListQuery` and pass it any options that fit your needs.
- * When your component renders, `useCategoriesListQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useCategoriesListQuery({
- *   variables: {
- *   },
- * });
- */
-export function useCategoriesListQuery(baseOptions?: Apollo.QueryHookOptions<CategoriesListQuery, CategoriesListQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<CategoriesListQuery, CategoriesListQueryVariables>(CategoriesListDocument, options);
-      }
-export function useCategoriesListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CategoriesListQuery, CategoriesListQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<CategoriesListQuery, CategoriesListQueryVariables>(CategoriesListDocument, options);
-        }
-export type CategoriesListQueryHookResult = ReturnType<typeof useCategoriesListQuery>;
-export type CategoriesListLazyQueryHookResult = ReturnType<typeof useCategoriesListLazyQuery>;
-export type CategoriesListQueryResult = Apollo.QueryResult<CategoriesListQuery, CategoriesListQueryVariables>;
 export const ExpensesCategoriesListDocument = gql`
     query ExpensesCategoriesList {
   categories {

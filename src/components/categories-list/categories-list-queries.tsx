@@ -1,5 +1,18 @@
 import { gql } from "@apollo/client";
 
+export const GET_CATEGORIES_LIST = gql`
+  query CategoriesList {
+    categories {
+      id
+      name
+      subcategories {
+        id
+        name
+        budgetAmount
+      }
+    }
+  }
+`;
 export const CREATE_CATEGORY_MUTATION = gql`
   mutation CreateCategory($name: String!) {
     createCategory(name: $name) {

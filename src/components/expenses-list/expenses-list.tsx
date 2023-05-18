@@ -5,8 +5,6 @@ import Select from "react-select";
 import {
   HiOutlineChevronRight,
   HiOutlineChevronDown,
-  HiOutlineArrowCircleLeft,
-  HiOutlineArrowCircleRight,
   HiPlusCircle,
 } from "react-icons/hi";
 import {
@@ -18,6 +16,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import { GET_CATEGORY } from "./expenses-list-queries";
 import { LoadingInlineSpinner } from "../loading-inline-spinner/loading-inline-spinner";
+import { Filter } from "../filter/filter";
 
 interface Props {
   data: CategoriesListQuery;
@@ -66,39 +65,28 @@ export const ExpensesList: React.FC<Props> = ({
 
   return (
     <div>
-      <div className="monthFilter">
-        <HiOutlineArrowCircleLeft
-          className="filterPrev"
-          onClick={() => {
-            console.log("prev month");
-            // Subtract one month (immutable)
-            const modifiedDate = new Date(
-              pageDate.getFullYear(),
-              pageDate.getMonth() - 1,
-              pageDate.getDate()
-            );
+      <Filter
+        displayDate={pageDate}
+        onClickPrevious={() => {
+          const previousDate = new Date(
+            pageDate.getFullYear(),
+            pageDate.getMonth() - 1,
+            pageDate.getDate()
+          );
 
-            setPageDate(modifiedDate);
-            setOpenCategory("");
-          }}
-        />
-        {format(pageDate, "MMM yyyy")}
-        <HiOutlineArrowCircleRight
-          className="filterNext"
-          onClick={() => {
-            console.log("next month");
-            // Add one month (immutable)
-            const modifiedDate = new Date(
-              pageDate.getFullYear(),
-              pageDate.getMonth() + 1,
-              pageDate.getDate()
-            );
-
-            setPageDate(modifiedDate);
-            setOpenCategory("");
-          }}
-        />
-      </div>
+          setPageDate(previousDate);
+          setOpenCategory("");
+        }}
+        onClickNext={() => {
+          const nextDate = new Date(
+            pageDate.getFullYear(),
+            pageDate.getMonth() + 1,
+            pageDate.getDate()
+          );
+          setPageDate(nextDate);
+          setOpenCategory("");
+        }}
+      />
       {!!data.categories &&
         data.categories.map((category, key) => {
           if (!category) return null;

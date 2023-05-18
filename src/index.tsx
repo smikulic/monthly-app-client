@@ -19,7 +19,6 @@ const apiUrl =
 
 const httpLink = createHttpLink({
   uri: apiUrl,
-  // uri: "http://localhost:3001",
 });
 
 const authLink = setContext((_, { headers }) => {
@@ -33,7 +32,6 @@ const authLink = setContext((_, { headers }) => {
 });
 
 const client = new ApolloClient({
-  // uri: "http://localhost:3001",
   link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
 });
