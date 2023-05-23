@@ -1,6 +1,5 @@
 import { gql } from "@apollo/client";
 import React, { Dispatch, SetStateAction, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { AUTH_TOKEN, AUTH_TOKEN_USER } from "../../constants";
 import { useLoginMutation, useSignupMutation } from "../../generated/graphql";
 import "./login-page-container.css";
@@ -32,7 +31,6 @@ export const LoginPageContainer = ({
 }: {
   setAuthenticated: Dispatch<SetStateAction<string | null>>;
 }) => {
-  const navigate = useNavigate();
   const [loginLoading, setLoginLoading] = useState<boolean>(false);
   const [formState, setFormState] = useState({
     login: true,
@@ -50,7 +48,7 @@ export const LoginPageContainer = ({
       localStorage.setItem(AUTH_TOKEN_USER, login?.user?.email!);
       setAuthenticated(login?.token!);
       setLoginLoading(false);
-      navigate("/");
+      window.location.replace("/");
     },
   });
 
@@ -62,7 +60,8 @@ export const LoginPageContainer = ({
     onCompleted: ({ signup }) => {
       localStorage.setItem(AUTH_TOKEN, signup?.token!);
       localStorage.setItem(AUTH_TOKEN_USER, signup?.user?.email!);
-      navigate("/");
+      console.log("REGISTER");
+      window.location.replace("/");
     },
   });
 
@@ -123,8 +122,8 @@ export const LoginPageContainer = ({
             }
           >
             {formState.login
-              ? "need to create an account?"
-              : "already have an account?"}
+              ? "need to create an account? click here"
+              : "already have an account? click here"}
           </p>
         </div>
       </div>
