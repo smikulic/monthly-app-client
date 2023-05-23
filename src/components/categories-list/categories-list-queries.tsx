@@ -13,6 +13,7 @@ export const GET_CATEGORIES_LIST = gql`
     }
   }
 `;
+
 export const CREATE_CATEGORY_MUTATION = gql`
   mutation CreateCategory($name: String!) {
     createCategory(name: $name) {

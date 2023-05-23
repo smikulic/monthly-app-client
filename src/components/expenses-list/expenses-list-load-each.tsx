@@ -1,3 +1,4 @@
+import { useLazyQuery } from "@apollo/client";
 import React, { useState } from "react";
 import { format } from "date-fns";
 import Select from "react-select";
@@ -7,36 +8,39 @@ import {
   HiPlusCircle,
 } from "react-icons/hi";
 import {
-  Category,
+  CategoriesListQuery,
   Expense,
   useCreateExpenseMutation,
 } from "../../generated/graphql";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
-import { Subcategory } from "../../generated/graphql";
-import { ProgressBar } from "../progress-bar/progress-bar";
-
-export interface SubcategoryDecoratedWithExpenses extends Subcategory {
-  expenses: Expense[];
-}
-
-export interface CategoryDecoratedWithExpenses extends Category {
-  totalExpenseAmount: number;
-  subcategories: SubcategoryDecoratedWithExpenses[];
-}
+import { GET_CATEGORY } from "./expenses-list-queries";
+import { LoadingInlineSpinner } from "../loading-inline-spinner/loading-inline-spinner";
+import { Filter } from "../filter/filter";
 
 interface Props {
-  data: CategoryDecoratedWithExpenses[];
-  refetchExpenses: () => void;
+  data: CategoriesListQuery;
+  currentDate: Date;
+  refetchCategories: any;
 }
 
-export const ExpensesList: React.FC<Props> = ({ data, refetchExpenses }) => {
+export const ExpensesListLoadEach: React.FC<Props> = ({
+  data,
+  refetchCategories,
+  currentDate,
+}) => {
   const [openCategory, setOpenCategory] = useState("");
   const [openSubcategory, setOpenSubcategory] = useState("");
   const [addExpenseField, setAddExpenseField] = useState(false);
   const [newExpenseAmount, setExpenseAmount] = useState("");
   const [newExpenseDate, setExpenseDate] = useState("");
   const [newExpenseSubcategoryId, setExpenseSubcategoryId] = useState("");
+  const [pageDate, setPageDate] = useState(currentDate);
+
+  const [
+    getCategory,
+    { data: categoryData, refetch: refetchCategory, loading: loadingCategory },
+  ] = useLazyQuery(GET_CATEGORY);
 
   const [createExpense, { loading: loadingCreateExpense }] =
     useCreateExpenseMutation({
@@ -46,7 +50,7 @@ export const ExpensesList: React.FC<Props> = ({ data, refetchExpenses }) => {
         date: String(newExpenseDate),
       },
       onCompleted: ({ createExpense }) => {
-        refetchExpenses();
+        refetchCategory();
         setAddExpenseField(false);
         setExpenseAmount("");
         setExpenseDate("");
@@ -55,10 +59,36 @@ export const ExpensesList: React.FC<Props> = ({ data, refetchExpenses }) => {
       },
     });
 
+  console.log({ categoryData });
+  console.log({ currentDate });
+  console.log({ pageDate });
+
   return (
     <div>
-      {!!data &&
-        data?.map((category: CategoryDecoratedWithExpenses, key: number) => {
+      <Filter
+        displayDate={pageDate}
+        onClickPrevious={() => {
+          const previousDate = new Date(
+            pageDate.getFullYear(),
+            pageDate.getMonth() - 1,
+            pageDate.getDate()
+          );
+
+          setPageDate(previousDate);
+          setOpenCategory("");
+        }}
+        onClickNext={() => {
+          const nextDate = new Date(
+            pageDate.getFullYear(),
+            pageDate.getMonth() + 1,
+            pageDate.getDate()
+          );
+          setPageDate(nextDate);
+          setOpenCategory("");
+        }}
+      />
+      {!!data.categories &&
+        data.categories.map((category, key) => {
           if (!category) return null;
           const categoryId = category.id;
           const showSubcategories = openCategory === categoryId;
@@ -73,6 +103,12 @@ export const ExpensesList: React.FC<Props> = ({ data, refetchExpenses }) => {
                       setOpenCategory("");
                     } else {
                       setOpenCategory(categoryId);
+                      getCategory({
+                        variables: {
+                          id: categoryId,
+                          date: pageDate,
+                        },
+                      });
                     }
                   }}
                 >
@@ -80,6 +116,7 @@ export const ExpensesList: React.FC<Props> = ({ data, refetchExpenses }) => {
                     <span className="iconContainer prominent">
                       <HiOutlineChevronDown />
                       {category.name}
+                      {loadingCategory && <LoadingInlineSpinner />}
                     </span>
                   ) : (
                     <span className="iconContainer">
@@ -88,20 +125,12 @@ export const ExpensesList: React.FC<Props> = ({ data, refetchExpenses }) => {
                     </span>
                   )}
                 </div>
-                {category.totalExpenseAmount > 0 && (
-                  <span className="expenseAmount red">
-                    {category.totalExpenseAmount} €
-                  </span>
-                )}
               </div>
               {showSubcategories && (
                 <>
-                  {!!category?.subcategories &&
-                    category?.subcategories.map(
-                      (
-                        subcategory: SubcategoryDecoratedWithExpenses,
-                        subcategoryKey: number
-                      ) => {
+                  {!!categoryData?.category?.subcategories &&
+                    categoryData?.category?.subcategories.map(
+                      (subcategory: any, subcategoryKey: string) => {
                         if (!subcategory) return null;
                         const subcategoryId = subcategory.id;
                         const showExpenses = openSubcategory === subcategoryId;
@@ -112,6 +141,9 @@ export const ExpensesList: React.FC<Props> = ({ data, refetchExpenses }) => {
                             0
                           );
                         const expensesExist = totalSubcategoryExpenses > 0;
+
+                        console.log({ subcategory });
+                        console.log({ totalSubcategoryExpenses });
 
                         return (
                           <span key={subcategoryKey}>
@@ -132,19 +164,11 @@ export const ExpensesList: React.FC<Props> = ({ data, refetchExpenses }) => {
                                   <span className="iconContainer prominent">
                                     {expensesExist && <HiOutlineChevronDown />}
                                     {subcategory.name}
-                                    <ProgressBar
-                                      value={totalSubcategoryExpenses}
-                                      maxValue={subcategory.budgetAmount || 0}
-                                    />
                                   </span>
                                 ) : (
                                   <span className="iconContainer">
                                     {expensesExist && <HiOutlineChevronRight />}
                                     {subcategory.name}
-                                    <ProgressBar
-                                      value={totalSubcategoryExpenses}
-                                      maxValue={subcategory.budgetAmount || 0}
-                                    />
                                   </span>
                                 )}
                               </div>
@@ -159,11 +183,13 @@ export const ExpensesList: React.FC<Props> = ({ data, refetchExpenses }) => {
                             </div>
                             {showExpenses && (
                               <>
-                                {!!category?.subcategories[subcategoryKey] &&
-                                  category?.subcategories[
+                                {!!categoryData?.category?.subcategories[
+                                  subcategoryKey
+                                ] &&
+                                  categoryData?.category?.subcategories[
                                     subcategoryKey
-                                  ].expenses!.map(
-                                    (expense: Expense, expenseKey: number) => {
+                                  ].expenses.map(
+                                    (expense: Expense, expenseKey: string) => {
                                       if (!expense) return null;
                                       const expenseISODate = Number(
                                         expense.date
@@ -214,14 +240,16 @@ export const ExpensesList: React.FC<Props> = ({ data, refetchExpenses }) => {
                             setExpenseSubcategoryId(selectedOption.value);
                           }}
                           options={
-                            !!category?.subcategories! &&
-                            category?.subcategories.map((subcategory: any) => {
-                              if (!subcategory) return null;
-                              return {
-                                value: subcategory.id,
-                                label: subcategory.name,
-                              };
-                            })
+                            !!categoryData?.category?.subcategories &&
+                            categoryData?.category?.subcategories.map(
+                              (subcategory: any) => {
+                                if (!subcategory) return null;
+                                return {
+                                  value: subcategory.id,
+                                  label: subcategory.name,
+                                };
+                              }
+                            )
                           }
                         />
                         <button

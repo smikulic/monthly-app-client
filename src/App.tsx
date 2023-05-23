@@ -49,7 +49,7 @@ function App() {
         transition={Slide}
         position="bottom-center"
         autoClose={2500}
-        hideProgressBar={false}
+        hideProgressBar={true}
         newestOnTop={false}
         closeOnClick
         rtl={false}

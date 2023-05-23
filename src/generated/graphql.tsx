@@ -35,6 +35,7 @@ export type Expense = {
   amount: Scalars['Int'];
   date: Scalars['String'];
   id: Scalars['ID'];
+  subcategoryId: Scalars['ID'];
 };
 
 export type ExpenseFilterInput = {
@@ -200,7 +201,7 @@ export type ExpensesListQueryVariables = Exact<{
 }>;
 
 
-export type ExpensesListQuery = { __typename?: 'Query', expenses: Array<{ __typename?: 'Expense', id: string, amount: number, date: string }> };
+export type ExpensesListQuery = { __typename?: 'Query', expenses: Array<{ __typename?: 'Expense', id: string, subcategoryId: string, amount: number, date: string }> };
 
 export type CreateExpenseMutationVariables = Exact<{
   subcategoryId: Scalars['ID'];
@@ -463,6 +464,7 @@ export const ExpensesListDocument = gql`
     query ExpensesList($date: String!) {
   expenses(filter: {date: $date}) {
     id
+    subcategoryId
     amount
     date
   }

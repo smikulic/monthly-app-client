@@ -1,42 +1,91 @@
 import * as React from "react";
-import { useCategoriesListQuery } from "../../generated/graphql";
-import { ExpensesList } from "../../components/expenses-list/expenses-list";
-import { gql } from "@apollo/client";
+import { Category, Expense, Maybe, Subcategory } from "../../generated/graphql";
+import {
+  ExpensesList,
+  CategoryDecoratedWithExpenses,
+} from "../../components/expenses-list/expenses-list";
+import { useQuery } from "@apollo/client";
 import { LoadingScreen } from "../../components/loading-screen/loading-screen";
-
-export const GET_EXPENSES_CATEGORIES_LIST = gql`
-  query ExpensesCategoriesList {
-    categories {
-      id
-      name
-    }
-  }
-`;
+import { useState } from "react";
+import { GET_EXPENSES_LIST } from "../../components/expenses-list/expenses-list-queries";
+import { GET_CATEGORIES_LIST } from "../../components/categories-list/categories-list-queries";
+import { Filter } from "../../components/filter/filter";
 
 export const ExpensesPageContainer = () => {
   const currentDate = new Date();
+  const [pageDate, setPageDate] = useState(currentDate);
+
   const {
-    data,
-    error,
-    loading,
-    refetch: refetchCategories,
-  } = useCategoriesListQuery();
+    data: expensesData,
+    loading: loadingExpenses,
+    refetch: refetchExpenses,
+  } = useQuery(GET_EXPENSES_LIST, {
+    variables: {
+      date: pageDate,
+    },
+  });
+  const { data: categoriesData, loading: loadingCategories } =
+    useQuery(GET_CATEGORIES_LIST);
 
-  if (loading) {
-    return <LoadingScreen />;
-  }
+  const categoriesDecoratedWithExpenses: CategoryDecoratedWithExpenses[] =
+    categoriesData?.categories.map((category: Category) => {
+      let totalExpenseAmount = 0;
+      const subcategoriesDecoratedWithExpense = category?.subcategories!.map(
+        (subcategory: Maybe<Subcategory>) => {
+          const foundExpenses = expensesData?.expenses.filter(
+            (expense: Expense) => expense.subcategoryId === subcategory!.id
+          );
 
-  if (error || !data) {
-    return <div>ERROR</div>;
-  }
+          totalExpenseAmount = foundExpenses?.reduce(
+            (accumulator: number, currentValue: Expense) =>
+              accumulator + currentValue.amount,
+            totalExpenseAmount
+          );
 
-  console.log({ data });
+          return {
+            ...subcategory,
+            expenses: foundExpenses,
+          };
+        }
+      );
+
+      return {
+        ...category,
+        subcategories: subcategoriesDecoratedWithExpense,
+        totalExpenseAmount,
+      };
+    });
 
   return (
-    <ExpensesList
-      data={data}
-      currentDate={currentDate}
-      refetchCategories={refetchCategories}
-    />
+    <>
+      <Filter
+        displayDate={pageDate}
+        onClickPrevious={() => {
+          const previousDate = new Date(
+            pageDate.getFullYear(),
+            pageDate.getMonth() - 1,
+            pageDate.getDate()
+          );
+
+          setPageDate(previousDate);
+        }}
+        onClickNext={() => {
+          const nextDate = new Date(
+            pageDate.getFullYear(),
+            pageDate.getMonth() + 1,
+            pageDate.getDate()
+          );
+          setPageDate(nextDate);
+        }}
+      />
+      {loadingExpenses || loadingCategories ? (
+        <LoadingScreen />
+      ) : (
+        <ExpensesList
+          data={categoriesDecoratedWithExpenses}
+          refetchExpenses={refetchExpenses}
+        />
+      )}
+    </>
   );
 };

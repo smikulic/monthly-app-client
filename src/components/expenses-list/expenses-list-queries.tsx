@@ -23,6 +23,7 @@ export const GET_EXPENSES_LIST = gql`
   query ExpensesList($date: String!) {
     expenses(filter: { date: $date }) {
       id
+      subcategoryId
       amount
       date
     }
