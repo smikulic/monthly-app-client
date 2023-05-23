@@ -59,6 +59,7 @@
   border-bottom: 1px solid rgb(223, 223, 223);
 }
 .listItem.category {
+  position: relative;
   padding: 16px 32px;
 }
 .listItem.category .iconContainer svg,
@@ -110,8 +111,9 @@
   cursor: pointer;
 }
 .listItem.subcategory {
+  position: relative;
   padding: 12px 48px;
-  font-size: 18px;
+  font-size: 16px;
 }
 .listItem.expense {
   padding: 8px 48px;
@@ -120,12 +122,21 @@
 }
 .listItem .budgetAmount {
   position: absolute;
+  top: 28px;
   right: 32px;
-  font-size: 16px;
+  font-size: 14px;
 }
 .listItem .expenseAmount {
   position: absolute;
-  right: 96px;
+  top: 10px;
+  /* right: 88px; */
+  right: 32px;
+  font-size: 14px;
+}
+
+.listItem.category .expenseAmount {
+  top: 18px;
+  font-size: 16px;
 }
 
 .expenseFields {

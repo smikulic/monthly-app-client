@@ -112,6 +112,7 @@ export const ExpensesList: React.FC<Props> = ({ data, refetchExpenses }) => {
                             0
                           );
                         const expensesExist = totalSubcategoryExpenses > 0;
+                        const budgetAmount = subcategory.budgetAmount || 0;
 
                         return (
                           <span key={subcategoryKey}>
@@ -134,7 +135,7 @@ export const ExpensesList: React.FC<Props> = ({ data, refetchExpenses }) => {
                                     {subcategory.name}
                                     <ProgressBar
                                       value={totalSubcategoryExpenses}
-                                      maxValue={subcategory.budgetAmount || 0}
+                                      maxValue={budgetAmount}
                                     />
                                   </span>
                                 ) : (
@@ -143,13 +144,13 @@ export const ExpensesList: React.FC<Props> = ({ data, refetchExpenses }) => {
                                     {subcategory.name}
                                     <ProgressBar
                                       value={totalSubcategoryExpenses}
-                                      maxValue={subcategory.budgetAmount || 0}
+                                      maxValue={budgetAmount}
                                     />
                                   </span>
                                 )}
                               </div>
-                              <span className="budgetAmount orange">
-                                {subcategory.budgetAmount} €
+                              <span className="budgetAmount green">
+                                {budgetAmount - totalSubcategoryExpenses} €
                               </span>
                               {expensesExist && (
                                 <span className="expenseAmount red">
