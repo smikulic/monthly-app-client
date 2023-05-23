@@ -1,17 +1,20 @@
 import * as React from "react";
-import { Triangle } from "react-loader-spinner";
+import { Oval } from "react-loader-spinner";
 
 export const LoadingScreen = () => {
   return (
     <div className="loadingScreen">
-      <Triangle
-        height="80"
-        width="80"
+      <Oval
+        height={80}
+        width={80}
         color="#277bc0"
-        ariaLabel="triangle-loading"
         // wrapperStyle={{}}
-        // wrapperClassName=""
+        // wrapperClass=""
         visible={true}
+        ariaLabel="oval-loading"
+        secondaryColor="#277bc0"
+        strokeWidth={2}
+        strokeWidthSecondary={2}
       />
     </div>
   );
