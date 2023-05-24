@@ -16,7 +16,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import { GET_CATEGORY } from "./expenses-list-queries";
 import { LoadingInlineSpinner } from "../loading-inline-spinner/loading-inline-spinner";
-import { Filter } from "../filter/filter";
+import { ActionsBar } from "../actions-bar/actions-bar";
 
 interface Props {
   data: CategoriesListQuery;
@@ -65,7 +65,7 @@ export const ExpensesListLoadEach: React.FC<Props> = ({
 
   return (
     <div>
-      <Filter
+      <ActionsBar
         displayDate={pageDate}
         onClickPrevious={() => {
           const previousDate = new Date(

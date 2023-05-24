@@ -9,7 +9,7 @@ import { LoadingScreen } from "../../components/loading-screen/loading-screen";
 import { useState } from "react";
 import { GET_EXPENSES_LIST } from "../../components/expenses-list/expenses-list-queries";
 import { GET_CATEGORIES_LIST } from "../../components/categories-list/categories-list-queries";
-import { Filter } from "../../components/filter/filter";
+import { ActionsBar } from "../../components/actions-bar/actions-bar";
 
 export const ExpensesPageContainer = () => {
   const currentDate = new Date();
@@ -58,7 +58,7 @@ export const ExpensesPageContainer = () => {
 
   return (
     <>
-      <Filter
+      <ActionsBar
         displayDate={pageDate}
         onClickPrevious={() => {
           const previousDate = new Date(
@@ -84,6 +84,7 @@ export const ExpensesPageContainer = () => {
         <ExpensesList
           data={categoriesDecoratedWithExpenses}
           refetchExpenses={refetchExpenses}
+          currentDate={currentDate}
         />
       )}
     </>

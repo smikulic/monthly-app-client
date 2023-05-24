@@ -22,18 +22,34 @@
   height: 50vh;
 }
 
-.monthFilter {
+.actionsBar {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+}
+.actionsBar .monthFilter {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 48px;
-  font-size: 20px;
 }
 .monthFilter .filterPrev,
 .monthFilter .filterNext {
   margin: 0 16px;
   font-size: 24px;
   color: #277bc0;
+  cursor: pointer;
+}
+
+.action {
+  margin: 0 32px;
+  padding: 12px;
+  text-align: center;
+  background: #277bc0;
+  color: white;
+  border-radius: 5px;
   cursor: pointer;
 }
 
@@ -86,8 +102,10 @@
   font-size: 24px;
 }
 .listItem.addField {
-  height: 64px;
+  height: auto;
+  flex-direction: column;
   justify-content: flex-start;
+  align-items: stretch;
 }
 .listItem.category .remove,
 .listItem.subcategory .remove {
@@ -129,7 +147,6 @@
 .listItem .expenseAmount {
   position: absolute;
   top: 10px;
-  /* right: 88px; */
   right: 32px;
   font-size: 14px;
 }
@@ -149,16 +166,20 @@
 }
 
 .listItem input {
-  margin-right: 12px;
+  margin-bottom: 8px;
   padding: 8px 12px;
-  width: 300px;
+  /* width: 300px; */
   font-size: 16px;
   border: 1px solid rgb(223, 223, 223);
   border-radius: 5px;
 }
+.listItem .buttonsGroup {
+  display: flex;
+}
 .listItem button {
+  margin-top: 8px;
   padding: 8px 12px;
-  width: 80px;
+  width: 100%;
   font-size: 16px;
   color: white;
   background-color: #277bc0;
@@ -168,7 +189,8 @@
 }
 .listItem button.btnCancel {
   background-color: #ff7777;
-  margin: 0 12px;
+  margin-right: 8px;
+  width: 40%;
 }
 
 .red {

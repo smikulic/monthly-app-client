@@ -28,14 +28,21 @@ export interface CategoryDecoratedWithExpenses extends Category {
 interface Props {
   data: CategoryDecoratedWithExpenses[];
   refetchExpenses: () => void;
+  currentDate: Date;
 }
 
-export const ExpensesList: React.FC<Props> = ({ data, refetchExpenses }) => {
+export const ExpensesList: React.FC<Props> = ({
+  data,
+  refetchExpenses,
+  currentDate,
+}) => {
   const [openCategory, setOpenCategory] = useState("");
   const [openSubcategory, setOpenSubcategory] = useState("");
   const [addExpenseField, setAddExpenseField] = useState(false);
   const [newExpenseAmount, setExpenseAmount] = useState("");
-  const [newExpenseDate, setExpenseDate] = useState("");
+  const [newExpenseDate, setExpenseDate] = useState(
+    currentDate.toISOString().split("T")[0]
+  );
   const [newExpenseSubcategoryId, setExpenseSubcategoryId] = useState("");
 
   const [createExpense, { loading: loadingCreateExpense }] =
@@ -206,34 +213,38 @@ export const ExpensesList: React.FC<Props> = ({ data, refetchExpenses }) => {
                         <input
                           type="date"
                           placeholder="Date"
+                          defaultValue={currentDate.toISOString().split("T")[0]}
                           onChange={(e) => setExpenseDate(e.target.value)}
                         />
                         <Select
                           className="customReactSelectInput"
                           onChange={(selectedOption: any) => {
-                            console.log({ selectedOption });
                             setExpenseSubcategoryId(selectedOption.value);
                           }}
                           options={
                             !!category?.subcategories! &&
-                            category?.subcategories.map((subcategory: any) => {
-                              if (!subcategory) return null;
-                              return {
-                                value: subcategory.id,
-                                label: subcategory.name,
-                              };
-                            })
+                            category?.subcategories.map(
+                              (subcategory: Subcategory) => {
+                                if (!subcategory) return null;
+                                return {
+                                  value: subcategory.id,
+                                  label: subcategory.name,
+                                };
+                              }
+                            )
                           }
                         />
-                        <button
-                          className="btnCancel red"
-                          onClick={() => setAddExpenseField(false)}
-                        >
-                          Cancel
-                        </button>
-                        <button onClick={() => createExpense()}>
-                          {loadingCreateExpense ? "saving..." : "Add"}
-                        </button>
+                        <div className="buttonsGroup">
+                          <button
+                            className="btnCancel red"
+                            onClick={() => setAddExpenseField(false)}
+                          >
+                            Cancel
+                          </button>
+                          <button onClick={() => createExpense()}>
+                            {loadingCreateExpense ? "saving..." : "Add"}
+                          </button>
+                        </div>
                       </div>
                     )}
                     {!addExpenseField && (
