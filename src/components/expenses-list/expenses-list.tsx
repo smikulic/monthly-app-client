@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { format } from "date-fns";
 import Select from "react-select";
 import {
@@ -44,6 +44,15 @@ export const ExpensesList: React.FC<Props> = ({
     currentDate.toISOString().split("T")[0]
   );
   const [newExpenseSubcategoryId, setExpenseSubcategoryId] = useState("");
+  const [formInvalid, setFormInvalid] = useState(true);
+
+  useEffect(() => {
+    if (!newExpenseAmount || !newExpenseDate || !newExpenseSubcategoryId) {
+      setFormInvalid(true);
+    } else {
+      setFormInvalid(false);
+    }
+  }, [newExpenseAmount, newExpenseDate, newExpenseSubcategoryId]);
 
   const [createExpense, { loading: loadingCreateExpense }] =
     useCreateExpenseMutation({
@@ -96,7 +105,7 @@ export const ExpensesList: React.FC<Props> = ({
                   )}
                 </div>
                 {category.totalExpenseAmount > 0 && (
-                  <span className="expenseAmount red">
+                  <span className="expenseAmount">
                     {category.totalExpenseAmount} €
                   </span>
                 )}
@@ -120,6 +129,8 @@ export const ExpensesList: React.FC<Props> = ({
                           );
                         const expensesExist = totalSubcategoryExpenses > 0;
                         const budgetAmount = subcategory.budgetAmount || 0;
+                        const budgetExpenseDifference =
+                          budgetAmount - totalSubcategoryExpenses;
 
                         return (
                           <span key={subcategoryKey}>
@@ -156,11 +167,17 @@ export const ExpensesList: React.FC<Props> = ({
                                   </span>
                                 )}
                               </div>
-                              <span className="budgetAmount green">
-                                {budgetAmount - totalSubcategoryExpenses} €
+                              <span
+                                className={
+                                  budgetExpenseDifference > 0
+                                    ? "budgetAmount green"
+                                    : "budgetAmount red"
+                                }
+                              >
+                                {budgetExpenseDifference} €
                               </span>
                               {expensesExist && (
-                                <span className="expenseAmount red">
+                                <span className="expenseAmount">
                                   {totalSubcategoryExpenses} €
                                 </span>
                               )}
@@ -187,7 +204,7 @@ export const ExpensesList: React.FC<Props> = ({
                                                   "dd MMM"
                                                 )}
                                               </span>
-                                              <span className="expenseField expenseAmount red">
+                                              <span className="expenseField expenseAmount">
                                                 {expense.amount} €
                                               </span>
                                             </div>
@@ -241,7 +258,10 @@ export const ExpensesList: React.FC<Props> = ({
                           >
                             Cancel
                           </button>
-                          <button onClick={() => createExpense()}>
+                          <button
+                            disabled={formInvalid}
+                            onClick={() => createExpense()}
+                          >
                             {loadingCreateExpense ? "saving..." : "Add"}
                           </button>
                         </div>

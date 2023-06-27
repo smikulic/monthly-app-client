@@ -34,6 +34,7 @@
   justify-content: center;
   align-items: center;
   height: 48px;
+  color: #181818;
 }
 .monthFilter .filterPrev,
 .monthFilter .filterNext {
@@ -149,6 +150,7 @@
   top: 10px;
   right: 32px;
   font-size: 14px;
+  color: #181818;
 }
 
 .listItem.category .expenseAmount {
@@ -157,9 +159,11 @@
 }
 
 .expenseFields {
+  position: relative;
   display: flex;
   justify-content: space-between;
   padding-left: 24px;
+  width: 100%;
 }
 .expenseField {
   display: flex;
@@ -191,6 +195,10 @@
   background-color: #ff7777;
   margin-right: 8px;
   width: 40%;
+}
+.listItem button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .red {

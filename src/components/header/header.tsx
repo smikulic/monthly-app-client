@@ -18,7 +18,7 @@ export const Header = ({
     <div className="header">
       <div>
         {!isHome && (
-          <span className="iconBack" onClick={() => navigate(-1)}>
+          <span className="iconBack" onClick={() => navigate('/')}>
             <HiOutlineChevronLeft />
             Back
           </span>
