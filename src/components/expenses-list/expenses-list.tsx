@@ -133,9 +133,9 @@ export const ExpensesList: React.FC<Props> = ({
                         const expensesExist = totalSubcategoryExpenses > 0;
                         const budgetAmount = subcategory.budgetAmount || 0;
 
-                        const createdAt = new Date(
-                          subcategory?.createdAt || currentDate
-                        );
+                        const createdAt = new Date(subcategory.createdAt);
+                        console.log({ createdAt });
+                        console.log(subcategory.createdAt)
 
                         const monthsPassed = Math.floor(
                           (currentDate.getFullYear() -

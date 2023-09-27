@@ -58,6 +58,8 @@ export const ExpensesPageContainer = () => {
       };
     });
 
+  console.log(categoriesDecoratedWithExpenses);
+
   return (
     <>
       <ActionsBar
