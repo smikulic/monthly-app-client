@@ -7,6 +7,7 @@ export const GET_CATEGORIES_LIST = gql`
       name
       subcategories {
         id
+        createdAt
         name
         budgetAmount
       }

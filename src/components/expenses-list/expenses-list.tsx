@@ -29,12 +29,14 @@ interface Props {
   data: CategoryDecoratedWithExpenses[];
   refetchExpenses: () => void;
   currentDate: Date;
+  showRolloverBudget: boolean;
 }
 
 export const ExpensesList: React.FC<Props> = ({
   data,
   refetchExpenses,
   currentDate,
+  showRolloverBudget,
 }) => {
   const [openCategory, setOpenCategory] = useState("");
   const [openSubcategory, setOpenSubcategory] = useState("");
@@ -119,6 +121,7 @@ export const ExpensesList: React.FC<Props> = ({
                         subcategoryKey: number
                       ) => {
                         if (!subcategory) return null;
+
                         const subcategoryId = subcategory.id;
                         const showExpenses = openSubcategory === subcategoryId;
                         const totalSubcategoryExpenses =
@@ -129,8 +132,26 @@ export const ExpensesList: React.FC<Props> = ({
                           );
                         const expensesExist = totalSubcategoryExpenses > 0;
                         const budgetAmount = subcategory.budgetAmount || 0;
+
+                        const createdAt = new Date(subcategory.createdAt);
+
+                        const monthsPassed = Math.floor(
+                          (currentDate.getFullYear() -
+                            createdAt.getFullYear()) *
+                            12 +
+                            currentDate.getMonth() -
+                            createdAt.getMonth()
+                        );
+
+                        const rolloverBudget =
+                          monthsPassed * budgetAmount + budgetAmount;
+
+                        const budgetValue = showRolloverBudget
+                          ? rolloverBudget
+                          : budgetAmount;
+
                         const budgetExpenseDifference =
-                          budgetAmount - totalSubcategoryExpenses;
+                          budgetValue - totalSubcategoryExpenses;
 
                         return (
                           <span key={subcategoryKey}>
@@ -153,7 +174,7 @@ export const ExpensesList: React.FC<Props> = ({
                                     {subcategory.name}
                                     <ProgressBar
                                       value={totalSubcategoryExpenses}
-                                      maxValue={budgetAmount}
+                                      maxValue={budgetValue}
                                     />
                                   </span>
                                 ) : (
@@ -162,7 +183,7 @@ export const ExpensesList: React.FC<Props> = ({
                                     {subcategory.name}
                                     <ProgressBar
                                       value={totalSubcategoryExpenses}
-                                      maxValue={budgetAmount}
+                                      maxValue={budgetValue}
                                     />
                                   </span>
                                 )}

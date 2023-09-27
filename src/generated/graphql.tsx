@@ -131,6 +131,7 @@ export type QueryUserArgs = {
 export type Subcategory = {
   __typename?: 'Subcategory';
   budgetAmount?: Maybe<Scalars['Int']>;
+  createdAt: Scalars['Float'];
   expenses?: Maybe<Array<Maybe<Expense>>>;
   icon?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
@@ -156,7 +157,7 @@ export type User = {
 export type CategoriesListQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CategoriesListQuery = { __typename?: 'Query', categories: Array<{ __typename?: 'Category', id: string, name: string, subcategories?: Array<{ __typename?: 'Subcategory', id: string, name: string, budgetAmount?: number | null } | null> | null }> };
+export type CategoriesListQuery = { __typename?: 'Query', categories: Array<{ __typename?: 'Category', id: string, name: string, subcategories?: Array<{ __typename?: 'Subcategory', id: string, createdAt: number, name: string, budgetAmount?: number | null } | null> | null }> };
 
 export type CreateCategoryMutationVariables = Exact<{
   name: Scalars['String'];
@@ -212,11 +213,6 @@ export type CreateExpenseMutationVariables = Exact<{
 
 export type CreateExpenseMutation = { __typename?: 'Mutation', createExpense: { __typename?: 'Expense', id: string, amount: number, date: string } };
 
-export type ExpensesCategoriesListQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type ExpensesCategoriesListQuery = { __typename?: 'Query', categories: Array<{ __typename?: 'Category', id: string, name: string }> };
-
 export type SignupMutationVariables = Exact<{
   email: Scalars['String'];
   password: Scalars['String'];
@@ -241,6 +237,7 @@ export const CategoriesListDocument = gql`
     name
     subcategories {
       id
+      createdAt
       name
       budgetAmount
     }
@@ -535,41 +532,6 @@ export function useCreateExpenseMutation(baseOptions?: Apollo.MutationHookOption
 export type CreateExpenseMutationHookResult = ReturnType<typeof useCreateExpenseMutation>;
 export type CreateExpenseMutationResult = Apollo.MutationResult<CreateExpenseMutation>;
 export type CreateExpenseMutationOptions = Apollo.BaseMutationOptions<CreateExpenseMutation, CreateExpenseMutationVariables>;
-export const ExpensesCategoriesListDocument = gql`
-    query ExpensesCategoriesList {
-  categories {
-    id
-    name
-  }
-}
-    `;
-
-/**
- * __useExpensesCategoriesListQuery__
- *
- * To run a query within a React component, call `useExpensesCategoriesListQuery` and pass it any options that fit your needs.
- * When your component renders, `useExpensesCategoriesListQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useExpensesCategoriesListQuery({
- *   variables: {
- *   },
- * });
- */
-export function useExpensesCategoriesListQuery(baseOptions?: Apollo.QueryHookOptions<ExpensesCategoriesListQuery, ExpensesCategoriesListQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ExpensesCategoriesListQuery, ExpensesCategoriesListQueryVariables>(ExpensesCategoriesListDocument, options);
-      }
-export function useExpensesCategoriesListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ExpensesCategoriesListQuery, ExpensesCategoriesListQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ExpensesCategoriesListQuery, ExpensesCategoriesListQueryVariables>(ExpensesCategoriesListDocument, options);
-        }
-export type ExpensesCategoriesListQueryHookResult = ReturnType<typeof useExpensesCategoriesListQuery>;
-export type ExpensesCategoriesListLazyQueryHookResult = ReturnType<typeof useExpensesCategoriesListLazyQuery>;
-export type ExpensesCategoriesListQueryResult = Apollo.QueryResult<ExpensesCategoriesListQuery, ExpensesCategoriesListQueryVariables>;
 export const SignupDocument = gql`
     mutation Signup($email: String!, $password: String!) {
   signup(email: $email, password: $password) {
