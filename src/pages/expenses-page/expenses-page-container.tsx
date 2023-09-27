@@ -81,12 +81,12 @@ export const ExpensesPageContainer = () => {
         }}
       />
       <div className="actionsBar">
-        Rollover budget
+        Rollover
         <Switch
           onChange={() => setShowRolloverBudget(!showRolloverBudget)}
           checked={showRolloverBudget}
           onColor="#86d3ff"
-          onHandleColor="#2693e6"
+          onHandleColor="#277bc0"
           handleDiameter={30}
           uncheckedIcon={false}
           checkedIcon={false}
@@ -94,8 +94,6 @@ export const ExpensesPageContainer = () => {
           activeBoxShadow="0px 0px 1px 10px rgba(0, 0, 0, 0.2)"
           height={20}
           width={48}
-          // className="react-switch"
-          // id="material-switch"
         />
       </div>
       {loadingExpenses || loadingCategories ? (

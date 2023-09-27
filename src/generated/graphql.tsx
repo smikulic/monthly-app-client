@@ -131,7 +131,7 @@ export type QueryUserArgs = {
 export type Subcategory = {
   __typename?: 'Subcategory';
   budgetAmount?: Maybe<Scalars['Int']>;
-  createdAt: Scalars['Float'];
+  createdAt?: Maybe<Scalars['Float']>;
   expenses?: Maybe<Array<Maybe<Expense>>>;
   icon?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
@@ -157,7 +157,7 @@ export type User = {
 export type CategoriesListQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CategoriesListQuery = { __typename?: 'Query', categories: Array<{ __typename?: 'Category', id: string, name: string, subcategories?: Array<{ __typename?: 'Subcategory', id: string, createdAt: number, name: string, budgetAmount?: number | null } | null> | null }> };
+export type CategoriesListQuery = { __typename?: 'Query', categories: Array<{ __typename?: 'Category', id: string, name: string, subcategories?: Array<{ __typename?: 'Subcategory', id: string, createdAt?: number | null, name: string, budgetAmount?: number | null } | null> | null }> };
 
 export type CreateCategoryMutationVariables = Exact<{
   name: Scalars['String'];
