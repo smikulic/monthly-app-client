@@ -133,7 +133,7 @@ export const ExpensesList: React.FC<Props> = ({
                         const expensesExist = totalSubcategoryExpenses > 0;
                         const budgetAmount = subcategory.budgetAmount || 0;
 
-                        const createdAt = new Date(subcategory.createdAt);
+                        const createdAt = new Date(Number(subcategory.createdAt));
                         console.log({ createdAt });
                         console.log(subcategory.createdAt)
 
