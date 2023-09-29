@@ -146,15 +146,11 @@
   font-size: 16px;
 }
 
-.expenseFields {
+.expenseField {
   position: relative;
   display: flex;
   justify-content: space-between;
   padding-left: 24px;
-  width: 100%;
-}
-.expenseField {
-  display: flex;
 }
 
 .red {
