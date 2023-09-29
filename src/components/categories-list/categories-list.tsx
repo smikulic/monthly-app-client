@@ -55,6 +55,11 @@ export const CategoriesList: React.FC<Props> = ({
   });
 
   const [deleteSubcategory] = useDeleteSubcategoryMutation({
+    onError: () => {
+      toast.error(
+        `You need to remove all subcategory expenses before removing its subcategory!`
+      );
+    },
     onCompleted: ({ deleteSubcategory }) => {
       refetchCategories();
       toast.success(

@@ -1,13 +1,22 @@
 import React, { useState } from "react";
 import { format } from "date-fns";
+import { IconButton, Menu, MenuItem } from "@mui/material";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import { Category, Expense } from "../../generated/graphql";
-import { Subcategory } from "../../generated/graphql";
+import {
+  Category,
+  Subcategory,
+  Expense,
+  useDeleteExpenseMutation,
+} from "../../generated/graphql";
 import { ProgressBar } from "../progress-bar/progress-bar";
 import { AddFormContainer } from "../../shared";
 import { CreateExpenseForm } from "../create-expense-form/create-expense-form";
+import { AnchorActionDropdownElProps } from "../categories-list/categories-list";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
 
 export interface SubcategoryDecoratedWithExpenses extends Subcategory {
   expenses: Expense[];
@@ -31,9 +40,41 @@ export const ExpensesList: React.FC<Props> = ({
   currentDate,
   showRolloverBudget,
 }) => {
+  const [anchorActionDropdownEl, setAnchorActionDropdownEl] =
+    React.useState<AnchorActionDropdownElProps>({});
+
   const [openCategory, setOpenCategory] = useState("");
   const [openSubcategory, setOpenSubcategory] = useState("");
   const [expenseFormVisible, setExpenseFormVisible] = useState(false);
+
+  const [deleteExpense] = useDeleteExpenseMutation({
+    onError: () => {
+      toast.error(`Error while deleting an expense! Please try again.`);
+    },
+    onCompleted: ({ deleteExpense }) => {
+      refetchExpenses();
+      toast.success(
+        `You have successfully removed ${deleteExpense.id} expense!`
+      );
+    },
+  });
+
+  const handleActionsDropdownClick = (
+    event: React.MouseEvent<HTMLElement>,
+    anchorIndex: string
+  ) => {
+    setAnchorActionDropdownEl({
+      ...anchorActionDropdownEl,
+      [anchorIndex]: event.currentTarget,
+    });
+  };
+
+  const handleActionsDropdownClose = (anchorIndex: string) => {
+    setAnchorActionDropdownEl({
+      ...anchorActionDropdownEl,
+      [anchorIndex]: null,
+    });
+  };
 
   return (
     <div>
@@ -194,6 +235,66 @@ export const ExpensesList: React.FC<Props> = ({
                                               {format(expenseISODate, "dd MMM")}{" "}
                                               - {expense.amount} €
                                             </span>
+                                          </div>
+                                          <div className="actions">
+                                            <div>
+                                              <IconButton
+                                                id={`long-menu-icon-${expenseId}`}
+                                                aria-haspopup="true"
+                                                size="small"
+                                                onClick={(event) =>
+                                                  handleActionsDropdownClick(
+                                                    event,
+                                                    expenseId
+                                                  )
+                                                }
+                                              >
+                                                <MoreVertIcon />
+                                              </IconButton>
+                                              <Menu
+                                                id={`long-menu-${expenseId}`}
+                                                anchorEl={
+                                                  anchorActionDropdownEl[
+                                                    expenseId
+                                                  ]
+                                                }
+                                                open={Boolean(
+                                                  anchorActionDropdownEl[
+                                                    expenseId
+                                                  ]
+                                                )}
+                                                onClose={() =>
+                                                  handleActionsDropdownClose(
+                                                    expenseId
+                                                  )
+                                                }
+                                              >
+                                                <MenuItem
+                                                  disabled
+                                                  onClick={() =>
+                                                    handleActionsDropdownClose(
+                                                      expenseId
+                                                    )
+                                                  }
+                                                >
+                                                  Edit
+                                                </MenuItem>
+                                                <MenuItem
+                                                  onClick={() => {
+                                                    deleteExpense({
+                                                      variables: {
+                                                        id: expenseId,
+                                                      },
+                                                    });
+                                                    handleActionsDropdownClose(
+                                                      expenseId
+                                                    );
+                                                  }}
+                                                >
+                                                  Remove
+                                                </MenuItem>
+                                              </Menu>
+                                            </div>
                                           </div>
                                         </div>
                                       </span>
