@@ -1,12 +1,10 @@
 import { useLazyQuery } from "@apollo/client";
 import React, { useState } from "react";
 import { format } from "date-fns";
-import Select from "react-select";
-import {
-  HiOutlineChevronRight,
-  HiOutlineChevronDown,
-  HiPlusCircle,
-} from "react-icons/hi";
+// import Select from "react-select";
+import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import {
   CategoriesListQuery,
   Expense,
@@ -114,13 +112,13 @@ export const ExpensesListLoadEach: React.FC<Props> = ({
                 >
                   {showSubcategories ? (
                     <span className="iconContainer prominent">
-                      <HiOutlineChevronDown />
+                      <ExpandMoreIcon />
                       {category.name}
                       {loadingCategory && <LoadingInlineSpinner />}
                     </span>
                   ) : (
                     <span className="iconContainer">
-                      <HiOutlineChevronRight />
+                      <ChevronRightIcon />
                       {category.name}
                     </span>
                   )}
@@ -162,12 +160,12 @@ export const ExpensesListLoadEach: React.FC<Props> = ({
                               >
                                 {showExpenses ? (
                                   <span className="iconContainer prominent">
-                                    {expensesExist && <HiOutlineChevronDown />}
+                                    {expensesExist && <ExpandMoreIcon />}
                                     {subcategory.name}
                                   </span>
                                 ) : (
                                   <span className="iconContainer">
-                                    {expensesExist && <HiOutlineChevronRight />}
+                                    {expensesExist && <ChevronRightIcon />}
                                     {subcategory.name}
                                   </span>
                                 )}
@@ -233,8 +231,7 @@ export const ExpensesListLoadEach: React.FC<Props> = ({
                           placeholder="Date"
                           onChange={(e) => setExpenseDate(e.target.value)}
                         />
-                        <Select
-                          className="customReactSelectInput"
+                        {/* <Select
                           onChange={(selectedOption: any) => {
                             console.log({ selectedOption });
                             setExpenseSubcategoryId(selectedOption.value);
@@ -251,7 +248,7 @@ export const ExpensesListLoadEach: React.FC<Props> = ({
                               }
                             )
                           }
-                        />
+                        /> */}
                         <button
                           className="btnCancel red"
                           onClick={() => setAddExpenseField(false)}
@@ -268,7 +265,7 @@ export const ExpensesListLoadEach: React.FC<Props> = ({
                         className="listItem category add"
                         onClick={() => setAddExpenseField(true)}
                       >
-                        <HiPlusCircle />
+                        <AddCircleRoundedIcon />
                         Add expense
                       </div>
                     )}

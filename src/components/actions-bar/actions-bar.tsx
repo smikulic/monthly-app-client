@@ -1,5 +1,6 @@
 import React from "react";
-import { HiArrowLeft, HiArrowRight } from "react-icons/hi";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { format } from "date-fns";
 
 export const ActionsBar = ({
@@ -14,9 +15,9 @@ export const ActionsBar = ({
   return (
     <div className="actionsBar noselect">
       <div className="monthFilter">
-        <HiArrowLeft className="filterPrev" onClick={onClickPrevious} />
+        <ChevronLeftIcon onClick={onClickPrevious} />
         {format(displayDate, "MMM yyyy")}
-        <HiArrowRight className="filterNext" onClick={onClickNext} />
+        <ChevronRightIcon onClick={onClickNext} />
       </div>
     </div>
   );

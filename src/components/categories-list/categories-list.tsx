@@ -1,24 +1,31 @@
 import React, { useState } from "react";
-import {
-  HiOutlineChevronRight,
-  HiOutlineChevronDown,
-  HiPlusCircle,
-} from "react-icons/hi";
+import IconButton from "@mui/material/IconButton";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import {
   CategoriesListQuery,
-  useCreateCategoryMutation,
-  useCreateSubcategoryMutation,
   useDeleteCategoryMutation,
   useDeleteSubcategoryMutation,
 } from "../../generated/graphql";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import { LoadingInlineSpinner } from "../loading-inline-spinner/loading-inline-spinner";
+import { CreateCategoryForm } from "../create-category-form/create-category-form";
+import { CreateSubcategoryForm } from "../create-subcategory-form/create-subcategory-form";
+import { AddFormContainer } from "../../shared";
+
+export type AnchorActionDropdownElProps = {
+  [key: string]: null | (EventTarget & HTMLElement);
+};
 
 interface Props {
   data: CategoriesListQuery;
   loading: boolean;
-  refetchCategories: any;
+  refetchCategories: () => Promise<unknown>;
 }
 
 export const CategoriesList: React.FC<Props> = ({
@@ -26,70 +33,59 @@ export const CategoriesList: React.FC<Props> = ({
   loading,
   refetchCategories,
 }) => {
-  const [addCategoryField, setAddCategoryField] = useState(false);
-  const [addSubcategoryField, setAddSubcategoryField] = useState(false);
-  const [newCategoryName, setCategoryName] = useState("");
-  const [newSubcategoryBudgetAmount, setSubcategoryBudgetAmount] = useState(0);
-  const [newSubcategoryName, setSubcategoryName] = useState("");
+  const [anchorActionDropdownEl, setAnchorActionDropdownEl] =
+    React.useState<AnchorActionDropdownElProps>({});
+
+  const [categoryFormVisible, setCategoryFormVisible] = useState(false);
+  const [subcategoryFormVisible, setSubcategoryFormVisible] = useState(false);
   const [openCategory, setOpenCategory] = useState("");
 
-  const [createCategory, { loading: loadingCreateCategory }] =
-    useCreateCategoryMutation({
-      variables: {
-        name: newCategoryName,
-      },
-      onCompleted: ({ createCategory }) => {
-        refetchCategories();
-        setAddCategoryField(false);
-        setCategoryName("");
-        toast.success(
-          `You have successfully created ${createCategory.name} category!`
-        );
-      },
-    });
+  const [deleteCategory] = useDeleteCategoryMutation({
+    onError: () => {
+      toast.error(
+        `You need to remove all subcategories before removing its category!`
+      );
+    },
+    onCompleted: ({ deleteCategory }) => {
+      refetchCategories();
+      toast.success(
+        `You have successfully removed ${deleteCategory.name} category!`
+      );
+    },
+  });
 
-  const [deleteCategory, { loading: loadingDeleteCategory }] =
-    useDeleteCategoryMutation({
-      onError: () => {
-        toast.error(
-          `You need to remove all subcategories before removing its category!`
-        );
-      },
-      onCompleted: ({ deleteCategory }) => {
-        refetchCategories();
-        toast.success(
-          `You have successfully removed ${deleteCategory.name} category!`
-        );
-      },
-    });
+  const [deleteSubcategory] = useDeleteSubcategoryMutation({
+    onCompleted: ({ deleteSubcategory }) => {
+      refetchCategories();
+      toast.success(
+        `You have successfully removed ${deleteSubcategory.name} subcategory!`
+      );
+    },
+  });
 
-  const [createSubcategory, { loading: loadingCreateSubcategory }] =
-    useCreateSubcategoryMutation({
-      onCompleted: ({ createSubcategory }) => {
-        refetchCategories();
-        setAddSubcategoryField(false);
-        setSubcategoryName("");
-        toast.success(
-          `You have successfully created ${createSubcategory.name} subcategory!`
-        );
-      },
+  const handleActionsDropdownClick = (
+    event: React.MouseEvent<HTMLElement>,
+    anchorIndex: string
+  ) => {
+    setAnchorActionDropdownEl({
+      ...anchorActionDropdownEl,
+      [anchorIndex]: event.currentTarget,
     });
+  };
 
-  const [deleteSubcategory, { loading: loadingDeleteSubcategory }] =
-    useDeleteSubcategoryMutation({
-      onCompleted: ({ deleteSubcategory }) => {
-        refetchCategories();
-        toast.success(
-          `You have successfully removed ${deleteSubcategory.name} subcategory!`
-        );
-      },
+  const handleActionsDropdownClose = (anchorIndex: string) => {
+    setAnchorActionDropdownEl({
+      ...anchorActionDropdownEl,
+      [anchorIndex]: null,
     });
+  };
 
   return (
     <div>
       {!!data.categories &&
-        data.categories.map((category, key) => {
+        data.categories.map((category) => {
           if (!category) return null;
+
           const categoryId = category.id;
           const showSubcategories = openCategory === categoryId;
           const subcategories = category.subcategories;
@@ -102,7 +98,7 @@ export const CategoriesList: React.FC<Props> = ({
           );
 
           return (
-            <span key={key}>
+            <React.Fragment key={categoryId}>
               <div className="listItem category">
                 <div
                   className="categoryTitle"
@@ -116,140 +112,167 @@ export const CategoriesList: React.FC<Props> = ({
                 >
                   {showSubcategories ? (
                     <span className="iconContainer">
-                      <HiOutlineChevronDown />
+                      <ExpandMoreIcon />
                       {category.name}
                       {loading && <LoadingInlineSpinner />}
                     </span>
                   ) : (
                     <span className="iconContainer">
-                      <HiOutlineChevronRight />
+                      <ChevronRightIcon />
                       {category.name}
                     </span>
                   )}
                 </div>
-                <span className="budgetAmount orange prominent">
-                  {totalBudgetAmount} €
-                </span>
-                <span
-                  className="remove red"
-                  onClick={() =>
-                    deleteCategory({ variables: { id: categoryId } })
-                  }
-                >
-                  {loadingDeleteCategory || loading ? "removing..." : "Remove"}
-                </span>
+                <div className="categoryDetails">
+                  <div className="categoryAmount prominent">
+                    {totalBudgetAmount} €
+                  </div>
+                  <div>
+                    <IconButton
+                      id={`long-menu-icon-${categoryId}`}
+                      aria-haspopup="true"
+                      size="small"
+                      onClick={(event) =>
+                        handleActionsDropdownClick(event, categoryId)
+                      }
+                    >
+                      <MoreVertIcon />
+                    </IconButton>
+                    <Menu
+                      id={`long-menu-${categoryId}`}
+                      anchorEl={anchorActionDropdownEl[categoryId]}
+                      open={Boolean(anchorActionDropdownEl[categoryId])}
+                      onClose={() => handleActionsDropdownClose(categoryId)}
+                    >
+                      <MenuItem
+                        disabled
+                        onClick={() => handleActionsDropdownClose(categoryId)}
+                      >
+                        Edit
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          deleteCategory({ variables: { id: categoryId } });
+                          handleActionsDropdownClose(categoryId);
+                        }}
+                      >
+                        Remove
+                      </MenuItem>
+                    </Menu>
+                  </div>
+                </div>
               </div>
               {showSubcategories && (
                 <>
                   {!!subcategories &&
-                    subcategories.map((subcategory, subcategoryKey) => {
+                    subcategories.map((subcategory) => {
                       if (!subcategory) return null;
+
+                      const subcategoryId = subcategory.id;
+
                       return (
-                        <span key={subcategoryKey}>
+                        <span key={subcategoryId}>
                           <div className="listItem subcategory">
                             <div className="categoryTitle">
                               <span className="iconContainer">
-                                <HiOutlineChevronRight />
                                 {subcategory.name}
                               </span>
                             </div>
-                            <span className="budgetAmount orange">
-                              {subcategory.budgetAmount} €
-                            </span>
-                            <span
-                              className="remove red"
-                              onClick={() =>
-                                deleteSubcategory({
-                                  variables: { id: subcategory.id },
-                                })
-                              }
-                            >
-                              {loadingDeleteSubcategory || loading
-                                ? "removing..."
-                                : "Remove"}
-                            </span>
+                            <div className="categoryDetails">
+                              <div className="categoryAmount prominent">
+                                {subcategory.budgetAmount} €
+                              </div>
+                              <div>
+                                <IconButton
+                                  id={`long-menu-icon-${subcategoryId}`}
+                                  aria-haspopup="true"
+                                  size="small"
+                                  onClick={(event) =>
+                                    handleActionsDropdownClick(
+                                      event,
+                                      subcategoryId
+                                    )
+                                  }
+                                >
+                                  <MoreVertIcon />
+                                </IconButton>
+                                <Menu
+                                  id={`long-menu-${subcategoryId}`}
+                                  anchorEl={
+                                    anchorActionDropdownEl[subcategoryId]
+                                  }
+                                  open={Boolean(
+                                    anchorActionDropdownEl[subcategoryId]
+                                  )}
+                                  onClose={() =>
+                                    handleActionsDropdownClose(subcategoryId)
+                                  }
+                                >
+                                  <MenuItem
+                                    disabled
+                                    onClick={() =>
+                                      handleActionsDropdownClose(subcategoryId)
+                                    }
+                                  >
+                                    Edit
+                                  </MenuItem>
+                                  <MenuItem
+                                    onClick={() => {
+                                      deleteSubcategory({
+                                        variables: { id: subcategoryId },
+                                      });
+                                      handleActionsDropdownClose(subcategoryId);
+                                    }}
+                                  >
+                                    Remove
+                                  </MenuItem>
+                                </Menu>
+                              </div>
+                            </div>
                           </div>
                         </span>
                       );
                     })}
                   <>
-                    {addSubcategoryField && (
-                      <div className="listItem subcategory addField">
-                        <input
-                          type="text"
-                          placeholder="Subcategory name"
-                          onChange={(e) => setSubcategoryName(e.target.value)}
+                    {subcategoryFormVisible && (
+                      <AddFormContainer>
+                        <CreateSubcategoryForm
+                          categoryId={categoryId}
+                          refetchCategories={refetchCategories}
+                          closeForm={() => setSubcategoryFormVisible(false)}
                         />
-                        <input
-                          type="text"
-                          placeholder="Subcategory budget"
-                          onChange={(e) =>
-                            setSubcategoryBudgetAmount(Number(e.target.value))
-                          }
-                        />
-                        <button
-                          className="btnCancel red"
-                          onClick={() => setAddSubcategoryField(false)}
-                        >
-                          Cancel
-                        </button>
-                        <button
-                          onClick={() =>
-                            createSubcategory({
-                              variables: {
-                                categoryId: categoryId,
-                                budgetAmount: newSubcategoryBudgetAmount,
-                                name: newSubcategoryName,
-                              },
-                            })
-                          }
-                        >
-                          {loadingCreateSubcategory || loading
-                            ? "saving..."
-                            : "Add"}
-                        </button>
-                      </div>
+                      </AddFormContainer>
                     )}
-                    {!addSubcategoryField && (
+                    {!subcategoryFormVisible && (
                       <div
-                        className="listItem category add"
-                        onClick={() => setAddSubcategoryField(true)}
+                        className="listItem subcategory add"
+                        onClick={() => setSubcategoryFormVisible(true)}
                       >
-                        <HiPlusCircle />
+                        <AddCircleRoundedIcon />
                         Add subcategory
                       </div>
                     )}
                   </>
                 </>
               )}
-            </span>
+            </React.Fragment>
           );
         })}
       <>
-        {addCategoryField && (
-          <div className="listItem category addField">
-            <input
-              type="text"
-              placeholder="Category name"
-              onChange={(e) => setCategoryName(e.target.value)}
+        {categoryFormVisible && (
+          <AddFormContainer>
+            <CreateCategoryForm
+              refetchCategories={refetchCategories}
+              closeForm={() => setCategoryFormVisible(false)}
             />
-            <button
-              className="btnCancel red"
-              onClick={() => setAddCategoryField(false)}
-            >
-              Cancel
-            </button>
-            <button onClick={() => createCategory()}>
-              {loadingCreateCategory || loading ? "saving..." : "Add"}
-            </button>
-          </div>
+          </AddFormContainer>
         )}
-        {!addCategoryField && (
+        {!categoryFormVisible && (
           <div
             className="listItem category add"
-            onClick={() => setAddCategoryField(true)}
+            onClick={() => setCategoryFormVisible(true)}
           >
-            <HiPlusCircle />
+            <AddCircleRoundedIcon />
             Add category
           </div>
         )}

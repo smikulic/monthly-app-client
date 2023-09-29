@@ -1,5 +1,7 @@
 import * as React from "react";
-import Switch from "react-switch";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Switch from "@mui/material/Switch";
 import { Category, Expense, Maybe, Subcategory } from "../../generated/graphql";
 import {
   ExpensesList,
@@ -58,8 +60,6 @@ export const ExpensesPageContainer = () => {
       };
     });
 
-  console.log(categoriesDecoratedWithExpenses);
-
   return (
     <>
       <ActionsBar
@@ -83,20 +83,17 @@ export const ExpensesPageContainer = () => {
         }}
       />
       <div className="actionsBar">
-        Rollover
-        <Switch
-          onChange={() => setShowRolloverBudget(!showRolloverBudget)}
-          checked={showRolloverBudget}
-          onColor="#86d3ff"
-          onHandleColor="#277bc0"
-          handleDiameter={30}
-          uncheckedIcon={false}
-          checkedIcon={false}
-          boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
-          activeBoxShadow="0px 0px 1px 10px rgba(0, 0, 0, 0.2)"
-          height={20}
-          width={48}
-        />
+        <FormGroup>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={showRolloverBudget}
+                onChange={() => setShowRolloverBudget(!showRolloverBudget)}
+              />
+            }
+            label="rollover"
+          />
+        </FormGroup>
       </div>
       {loadingExpenses || loadingCategories ? (
         <LoadingScreen />
