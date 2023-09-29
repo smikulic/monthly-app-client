@@ -1,7 +1,7 @@
 import { useLazyQuery } from "@apollo/client";
 import React, { useState } from "react";
 import { format } from "date-fns";
-import Select from "react-select";
+// import Select from "react-select";
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
@@ -231,8 +231,7 @@ export const ExpensesListLoadEach: React.FC<Props> = ({
                           placeholder="Date"
                           onChange={(e) => setExpenseDate(e.target.value)}
                         />
-                        <Select
-                          className="customReactSelectInput"
+                        {/* <Select
                           onChange={(selectedOption: any) => {
                             console.log({ selectedOption });
                             setExpenseSubcategoryId(selectedOption.value);
@@ -249,7 +248,7 @@ export const ExpensesListLoadEach: React.FC<Props> = ({
                               }
                             )
                           }
-                        />
+                        /> */}
                         <button
                           className="btnCancel red"
                           onClick={() => setAddExpenseField(false)}

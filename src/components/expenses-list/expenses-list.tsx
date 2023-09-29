@@ -1,18 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { format } from "date-fns";
-import Select from "react-select";
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import {
-  Category,
-  Expense,
-  useCreateExpenseMutation,
-} from "../../generated/graphql";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.min.css";
+import { Category, Expense } from "../../generated/graphql";
 import { Subcategory } from "../../generated/graphql";
 import { ProgressBar } from "../progress-bar/progress-bar";
+import { AddFormContainer } from "../../shared";
+import { CreateExpenseForm } from "../create-expense-form/create-expense-form";
 
 export interface SubcategoryDecoratedWithExpenses extends Subcategory {
   expenses: Expense[];
@@ -25,7 +20,7 @@ export interface CategoryDecoratedWithExpenses extends Category {
 
 interface Props {
   data: CategoryDecoratedWithExpenses[];
-  refetchExpenses: () => void;
+  refetchExpenses: () => Promise<unknown>;
   currentDate: Date;
   showRolloverBudget: boolean;
 }
@@ -38,38 +33,7 @@ export const ExpensesList: React.FC<Props> = ({
 }) => {
   const [openCategory, setOpenCategory] = useState("");
   const [openSubcategory, setOpenSubcategory] = useState("");
-  const [addExpenseField, setAddExpenseField] = useState(false);
-  const [newExpenseAmount, setExpenseAmount] = useState("");
-  const [newExpenseDate, setExpenseDate] = useState(
-    currentDate.toISOString().split("T")[0]
-  );
-  const [newExpenseSubcategoryId, setExpenseSubcategoryId] = useState("");
-  const [formInvalid, setFormInvalid] = useState(true);
-
-  useEffect(() => {
-    if (!newExpenseAmount || !newExpenseDate || !newExpenseSubcategoryId) {
-      setFormInvalid(true);
-    } else {
-      setFormInvalid(false);
-    }
-  }, [newExpenseAmount, newExpenseDate, newExpenseSubcategoryId]);
-
-  const [createExpense, { loading: loadingCreateExpense }] =
-    useCreateExpenseMutation({
-      variables: {
-        subcategoryId: newExpenseSubcategoryId,
-        amount: Number(newExpenseAmount),
-        date: String(newExpenseDate),
-      },
-      onCompleted: ({ createExpense }) => {
-        refetchExpenses();
-        setAddExpenseField(false);
-        setExpenseAmount("");
-        setExpenseDate(currentDate.toISOString().split("T")[0]);
-        setExpenseSubcategoryId("");
-        toast.success(`You have successfully created a new expense!`);
-      },
-    });
+  const [expenseFormVisible, setExpenseFormVisible] = useState(false);
 
   return (
     <div>
@@ -242,58 +206,20 @@ export const ExpensesList: React.FC<Props> = ({
                       }
                     )}
                   <>
-                    {addExpenseField && (
-                      <div className="listItem category addField">
-                        <input
-                          type="text"
-                          placeholder="Amount"
-                          onChange={(e) => setExpenseAmount(e.target.value)}
+                    {expenseFormVisible && (
+                      <AddFormContainer>
+                        <CreateExpenseForm
+                          subcategories={category?.subcategories}
+                          currentDate={currentDate}
+                          refetchExpenses={refetchExpenses}
+                          closeForm={() => setExpenseFormVisible(false)}
                         />
-                        <input
-                          type="date"
-                          placeholder="Date"
-                          defaultValue={currentDate.toISOString().split("T")[0]}
-                          onChange={(e) => setExpenseDate(e.target.value)}
-                        />
-                        <Select
-                          className="customReactSelectInput"
-                          onChange={(selectedOption: any) => {
-                            setExpenseSubcategoryId(selectedOption.value);
-                          }}
-                          options={
-                            !!category?.subcategories! &&
-                            category?.subcategories.map(
-                              (subcategory: Subcategory) => {
-                                if (!subcategory) return null;
-                                return {
-                                  value: subcategory.id,
-                                  label: subcategory.name,
-                                };
-                              }
-                            )
-                          }
-                        />
-                        <div className="buttonsGroup">
-                          <button
-                            className="btn btnCancel red"
-                            onClick={() => setAddExpenseField(false)}
-                          >
-                            Cancel
-                          </button>
-                          <button
-                            className="btn"
-                            disabled={formInvalid}
-                            onClick={() => createExpense()}
-                          >
-                            {loadingCreateExpense ? "saving..." : "Add"}
-                          </button>
-                        </div>
-                      </div>
+                      </AddFormContainer>
                     )}
-                    {!addExpenseField && (
+                    {!expenseFormVisible && (
                       <div
                         className="listItem subcategory add"
-                        onClick={() => setAddExpenseField(true)}
+                        onClick={() => setExpenseFormVisible(true)}
                       >
                         <AddCircleRoundedIcon />
                         Add expense

@@ -1,41 +1,40 @@
 import { useQuery } from "@apollo/client";
 import React, { useState } from "react";
-import Select from "react-select";
 import { GET_CATEGORIES_LIST } from "../../components/categories-list/categories-list-queries";
 import {
   Category,
   Expense,
-  useCreateExpenseMutation,
+  // useCreateExpenseMutation,
 } from "../../generated/graphql";
 import { LoadingScreen } from "../../components/loading-screen/loading-screen";
 import { HomePage } from "../../components/home-page/home-page";
 import { GET_EXPENSES_LIST } from "../../components/expenses-list/expenses-list-queries";
 import { ActionsBar } from "../../components/actions-bar/actions-bar";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 
 export const HomePageContainer = () => {
   const currentDate = new Date();
   const [pageDate, setPageDate] = useState(currentDate);
-  const [expenseFormOpen, toggleExpenseFormOpen] = useState(false);
-  const [newExpenseAmount, setExpenseAmount] = useState("");
-  const [newExpenseDate, setExpenseDate] = useState("");
-  const [newExpenseSubcategoryId, setExpenseSubcategoryId] = useState("");
+  // const [expenseFormOpen, toggleExpenseFormOpen] = useState(false);
+  // const [newExpenseAmount, setExpenseAmount] = useState("");
+  // const [newExpenseDate, setExpenseDate] = useState("");
+  // const [newExpenseSubcategoryId, setExpenseSubcategoryId] = useState("");
 
-  const [createExpense, { loading: loadingCreateExpense }] =
-    useCreateExpenseMutation({
-      variables: {
-        subcategoryId: newExpenseSubcategoryId,
-        amount: Number(newExpenseAmount),
-        date: String(newExpenseDate),
-      },
-      onCompleted: ({ createExpense }) => {
-        toggleExpenseFormOpen(false);
-        setExpenseAmount("");
-        setExpenseDate("");
-        setExpenseSubcategoryId("");
-        toast.success(`You have successfully created a new expense!`);
-      },
-    });
+  // const [createExpense, { loading: loadingCreateExpense }] =
+  //   useCreateExpenseMutation({
+  //     variables: {
+  //       subcategoryId: newExpenseSubcategoryId,
+  //       amount: Number(newExpenseAmount),
+  //       date: String(newExpenseDate),
+  //     },
+  //     onCompleted: ({ createExpense }) => {
+  //       toggleExpenseFormOpen(false);
+  //       setExpenseAmount("");
+  //       setExpenseDate("");
+  //       setExpenseSubcategoryId("");
+  //       toast.success(`You have successfully created a new expense!`);
+  //     },
+  //   });
 
   const { data: expensesData, loading: loadingExpenses } = useQuery(
     GET_EXPENSES_LIST,
@@ -97,7 +96,7 @@ export const HomePageContainer = () => {
       >
         Add expense
       </div> */}
-      {expenseFormOpen && (
+      {/* {expenseFormOpen && (
         <div>
           <div className="listItem addField">
             <input
@@ -111,7 +110,6 @@ export const HomePageContainer = () => {
               onChange={(e) => setExpenseDate(e.target.value)}
             />
             <Select
-              className="customReactSelectInput"
               onChange={(selectedOption: any) => {
                 console.log({ selectedOption });
                 // setExpenseSubcategoryId(selectedOption.value);
@@ -139,12 +137,12 @@ export const HomePageContainer = () => {
                 toast.success(`You have successfully created a new expense!`)
               }
             >
-              {/* <button onClick={() => createExpense()}> */}
+              <button onClick={() => createExpense()}>
               {loadingCreateExpense ? "saving..." : "Add"}
             </button>
           </div>
         </div>
-      )}
+      )} */}
       {loadingExpenses || loadingCategories ? (
         <LoadingScreen />
       ) : (

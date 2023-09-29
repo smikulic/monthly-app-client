@@ -14,8 +14,9 @@ import {
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import { LoadingInlineSpinner } from "../loading-inline-spinner/loading-inline-spinner";
-import { AddCategoryForm } from "../add-category-form/add-category-form";
-import { AddSubcategoryForm } from "../add-subcategory-form/add-subcategory-form";
+import { CreateCategoryForm } from "../create-category-form/create-category-form";
+import { CreateSubcategoryForm } from "../create-subcategory-form/create-subcategory-form";
+import { AddFormContainer } from "../../shared";
 
 export type AnchorActionDropdownElProps = {
   [key: string]: null | (EventTarget & HTMLElement);
@@ -35,8 +36,8 @@ export const CategoriesList: React.FC<Props> = ({
   const [anchorActionDropdownEl, setAnchorActionDropdownEl] =
     React.useState<AnchorActionDropdownElProps>({});
 
-  const [addCategoryField, setAddCategoryField] = useState(false);
-  const [addSubcategoryField, setAddSubcategoryField] = useState(false);
+  const [categoryFormVisible, setCategoryFormVisible] = useState(false);
+  const [subcategoryFormVisible, setSubcategoryFormVisible] = useState(false);
   const [openCategory, setOpenCategory] = useState("");
 
   const [deleteCategory] = useDeleteCategoryMutation({
@@ -233,17 +234,19 @@ export const CategoriesList: React.FC<Props> = ({
                       );
                     })}
                   <>
-                    {addSubcategoryField && (
-                      <AddSubcategoryForm
-                        categoryId={categoryId}
-                        refetchCategories={refetchCategories}
-                        closeForm={() => setAddSubcategoryField(false)}
-                      />
+                    {subcategoryFormVisible && (
+                      <AddFormContainer>
+                        <CreateSubcategoryForm
+                          categoryId={categoryId}
+                          refetchCategories={refetchCategories}
+                          closeForm={() => setSubcategoryFormVisible(false)}
+                        />
+                      </AddFormContainer>
                     )}
-                    {!addSubcategoryField && (
+                    {!subcategoryFormVisible && (
                       <div
                         className="listItem subcategory add"
-                        onClick={() => setAddSubcategoryField(true)}
+                        onClick={() => setSubcategoryFormVisible(true)}
                       >
                         <AddCircleRoundedIcon />
                         Add subcategory
@@ -256,16 +259,18 @@ export const CategoriesList: React.FC<Props> = ({
           );
         })}
       <>
-        {addCategoryField && (
-          <AddCategoryForm
-            refetchCategories={refetchCategories}
-            closeForm={() => setAddCategoryField(false)}
-          />
+        {categoryFormVisible && (
+          <AddFormContainer>
+            <CreateCategoryForm
+              refetchCategories={refetchCategories}
+              closeForm={() => setCategoryFormVisible(false)}
+            />
+          </AddFormContainer>
         )}
-        {!addCategoryField && (
+        {!categoryFormVisible && (
           <div
             className="listItem category add"
-            onClick={() => setAddCategoryField(true)}
+            onClick={() => setCategoryFormVisible(true)}
           >
             <AddCircleRoundedIcon />
             Add category
