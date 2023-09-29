@@ -1,6 +1,6 @@
 import React, { Dispatch, SetStateAction } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { HiOutlineChevronLeft } from "react-icons/hi";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { AUTH_TOKEN, AUTH_TOKEN_USER } from "../../constants";
 import "./header.css";
 
@@ -18,8 +18,8 @@ export const Header = ({
     <div className="header">
       <div>
         {!isHome && (
-          <span className="iconBack" onClick={() => navigate('/')}>
-            <HiOutlineChevronLeft />
+          <span className="iconBack" onClick={() => navigate("/")}>
+            <ChevronLeftIcon />
             Back
           </span>
         )}

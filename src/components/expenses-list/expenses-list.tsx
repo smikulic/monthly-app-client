@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { format } from "date-fns";
 import Select from "react-select";
-import {
-  HiOutlineChevronRight,
-  HiOutlineChevronDown,
-  HiPlusCircle,
-} from "react-icons/hi";
+import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import {
   Category,
   Expense,
@@ -67,7 +65,7 @@ export const ExpensesList: React.FC<Props> = ({
         refetchExpenses();
         setAddExpenseField(false);
         setExpenseAmount("");
-        setExpenseDate("");
+        setExpenseDate(currentDate.toISOString().split("T")[0]);
         setExpenseSubcategoryId("");
         toast.success(`You have successfully created a new expense!`);
       },
@@ -76,13 +74,16 @@ export const ExpensesList: React.FC<Props> = ({
   return (
     <div>
       {!!data &&
-        data?.map((category: CategoryDecoratedWithExpenses, key: number) => {
+        data?.map((category: CategoryDecoratedWithExpenses) => {
           if (!category) return null;
+
           const categoryId = category.id;
           const showSubcategories = openCategory === categoryId;
 
+          const availableSubcategories = category.subcategories.length > 0;
+
           return (
-            <span key={key}>
+            <React.Fragment key={categoryId}>
               <div className="listItem category">
                 <div
                   className="categoryTitle"
@@ -96,12 +97,12 @@ export const ExpensesList: React.FC<Props> = ({
                 >
                   {showSubcategories ? (
                     <span className="iconContainer prominent">
-                      <HiOutlineChevronDown />
+                      <ExpandMoreIcon />
                       {category.name}
                     </span>
                   ) : (
                     <span className="iconContainer">
-                      <HiOutlineChevronRight />
+                      {availableSubcategories && <ChevronRightIcon />}
                       {category.name}
                     </span>
                   )}
@@ -133,9 +134,9 @@ export const ExpensesList: React.FC<Props> = ({
                         const expensesExist = totalSubcategoryExpenses > 0;
                         const budgetAmount = subcategory.budgetAmount || 0;
 
-                        const createdAt = new Date(Number(subcategory.createdAt));
-                        console.log({ createdAt });
-                        console.log(subcategory.createdAt)
+                        const createdAt = new Date(
+                          Number(subcategory.createdAt)
+                        );
 
                         const monthsPassed = Math.floor(
                           (currentDate.getFullYear() -
@@ -156,7 +157,7 @@ export const ExpensesList: React.FC<Props> = ({
                           budgetValue - totalSubcategoryExpenses;
 
                         return (
-                          <span key={subcategoryKey}>
+                          <span key={subcategoryId}>
                             <div className="listItem subcategory">
                               <div
                                 className="categoryTitle"
@@ -171,23 +172,27 @@ export const ExpensesList: React.FC<Props> = ({
                                 }}
                               >
                                 {showExpenses ? (
-                                  <span className="iconContainer prominent">
-                                    {expensesExist && <HiOutlineChevronDown />}
-                                    {subcategory.name}
+                                  <>
+                                    <span className="iconContainer prominent">
+                                      {expensesExist && <ExpandMoreIcon />}
+                                      {subcategory.name}
+                                    </span>
                                     <ProgressBar
                                       value={totalSubcategoryExpenses}
                                       maxValue={budgetValue}
                                     />
-                                  </span>
+                                  </>
                                 ) : (
-                                  <span className="iconContainer">
-                                    {expensesExist && <HiOutlineChevronRight />}
-                                    {subcategory.name}
+                                  <>
+                                    <span className="iconContainer">
+                                      {expensesExist && <ChevronRightIcon />}
+                                      {subcategory.name}
+                                    </span>
                                     <ProgressBar
                                       value={totalSubcategoryExpenses}
                                       maxValue={budgetValue}
                                     />
-                                  </span>
+                                  </>
                                 )}
                               </div>
                               <span
@@ -210,32 +215,26 @@ export const ExpensesList: React.FC<Props> = ({
                                 {!!category?.subcategories[subcategoryKey] &&
                                   category?.subcategories[
                                     subcategoryKey
-                                  ].expenses!.map(
-                                    (expense: Expense, expenseKey: number) => {
-                                      if (!expense) return null;
-                                      const expenseISODate = Number(
-                                        expense.date
-                                      );
+                                  ].expenses!.map((expense: Expense) => {
+                                    if (!expense) return null;
 
-                                      return (
-                                        <span key={expenseKey}>
-                                          <div className="listItem expense">
-                                            <div className="expenseFields">
-                                              <span className="expenseField expenseDate">
-                                                {format(
-                                                  expenseISODate,
-                                                  "dd MMM"
-                                                )}
-                                              </span>
-                                              <span className="expenseField expenseAmount">
-                                                {expense.amount} €
-                                              </span>
-                                            </div>
+                                    const expenseId = expense.id;
+                                    const expenseISODate = Number(expense.date);
+
+                                    return (
+                                      <span key={expenseId}>
+                                        <div className="listItem expense">
+                                          <div className="expenseFields">
+                                            <span className="expenseField expenseDate">
+                                              {subcategory.name} -{" "}
+                                              {format(expenseISODate, "dd MMM")}{" "}
+                                              - {expense.amount} €
+                                            </span>
                                           </div>
-                                        </span>
-                                      );
-                                    }
-                                  )}
+                                        </div>
+                                      </span>
+                                    );
+                                  })}
                               </>
                             )}
                           </span>
@@ -276,12 +275,13 @@ export const ExpensesList: React.FC<Props> = ({
                         />
                         <div className="buttonsGroup">
                           <button
-                            className="btnCancel red"
+                            className="btn btnCancel red"
                             onClick={() => setAddExpenseField(false)}
                           >
                             Cancel
                           </button>
                           <button
+                            className="btn"
                             disabled={formInvalid}
                             onClick={() => createExpense()}
                           >
@@ -292,17 +292,17 @@ export const ExpensesList: React.FC<Props> = ({
                     )}
                     {!addExpenseField && (
                       <div
-                        className="listItem category add"
+                        className="listItem subcategory add"
                         onClick={() => setAddExpenseField(true)}
                       >
-                        <HiPlusCircle />
+                        <AddCircleRoundedIcon />
                         Add expense
                       </div>
                     )}
                   </>
                 </>
               )}
-            </span>
+            </React.Fragment>
           );
         })}
     </div>

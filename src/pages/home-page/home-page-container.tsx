@@ -37,8 +37,6 @@ export const HomePageContainer = () => {
       },
     });
 
-  console.log({ expenseFormOpen });
-
   const { data: expensesData, loading: loadingExpenses } = useQuery(
     GET_EXPENSES_LIST,
     {
@@ -130,12 +128,13 @@ export const HomePageContainer = () => {
               // }
             />
             <button
-              className="btnCancel red"
+              className="btn btnCancel red"
               onClick={() => toggleExpenseFormOpen(false)}
             >
               Cancel
             </button>
             <button
+              className="btn"
               onClick={() =>
                 toast.success(`You have successfully created a new expense!`)
               }

@@ -10,14 +10,10 @@
 .header .iconBack {
   position: absolute;
   left: 32px;
+  display: flex;
+  align-items: center;
   color: #277bc0;
   cursor: pointer;
-}
-
-.header .iconBack svg {
-  position: relative;
-  top: 3px;
-  right: 2px;
 }
 
 .header .logout {
