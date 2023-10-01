@@ -145,9 +145,7 @@ export const CategoriesList: React.FC<Props> = ({
                     return (
                       <span key={subcategoryId}>
                         <div className="listItem subcategory">
-                          <div className="categoryTitle">
-                            {subcategory.name}
-                          </div>
+                          <ListItemHeader title={subcategory.name} />
                           <div className="categoryDetails">
                             <div className="categoryAmount">
                               {subcategory.budgetAmount} €

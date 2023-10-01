@@ -3,6 +3,10 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { styled } from "@mui/material/styles";
 
+const ListItemHeaderStyled = styled("div")({
+  cursor: "pointer",
+});
+
 const IconStyled = styled("div")({
   display: "flex",
   alignItems: "center",
@@ -14,9 +18,9 @@ const IconStyled = styled("div")({
 
 interface Props {
   title: string;
-  showExpand: boolean;
-  showCollapse: boolean;
-  onToggleExpand: () => void;
+  showExpand?: boolean;
+  showCollapse?: boolean;
+  onToggleExpand?: () => void;
 }
 
 export const ListItemHeader: React.FC<Props> = ({
@@ -26,12 +30,21 @@ export const ListItemHeader: React.FC<Props> = ({
   onToggleExpand,
 }) => {
   return (
-    <div className="categoryTitle" onClick={onToggleExpand}>
-      <IconStyled>
-        {showExpand && <ExpandMoreIcon />}
-        {showCollapse && <ChevronRightIcon />}
-        {title}
-      </IconStyled>
-    </div>
+    <>
+      {onToggleExpand && (
+        <ListItemHeaderStyled onClick={onToggleExpand}>
+          <IconStyled>
+            {showExpand && <ExpandMoreIcon />}
+            {showCollapse && <ChevronRightIcon />}
+            {title}
+          </IconStyled>
+        </ListItemHeaderStyled>
+      )}
+      {!onToggleExpand && (
+        <ListItemHeaderStyled>
+          <IconStyled>{title}</IconStyled>
+        </ListItemHeaderStyled>
+      )}
+    </>
   );
 };
