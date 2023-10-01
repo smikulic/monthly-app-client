@@ -1,12 +1,9 @@
 import React, { useState } from "react";
-import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
 import { Category, Subcategory, Expense } from "../../generated/graphql";
 import { ProgressBar } from "../progress-bar/progress-bar";
-import { AddFormStyled } from "../../shared";
-import { CreateExpenseForm } from "../create-expense-form/create-expense-form";
 import { ExpandedExpenses } from "../expanded-expenses/expanded-expenses";
 import { ListItemHeader } from "../list-item-header/list-item-header";
-import { ListAddField } from "../list-add-field/list-add-field";
+import { CreateExpenseForm } from "../create-expense-form/create-expense-form";
 
 export interface SubcategoryDecoratedWithExpenses extends Subcategory {
   expenses: Expense[];
@@ -32,7 +29,6 @@ export const ExpensesList: React.FC<Props> = ({
 }) => {
   const [openCategory, setOpenCategory] = useState("");
   const [openSubcategory, setOpenSubcategory] = useState("");
-  const [expenseFormVisible, setExpenseFormVisible] = useState(false);
 
   return (
     <div>
@@ -165,24 +161,12 @@ export const ExpensesList: React.FC<Props> = ({
                         );
                       }
                     )}
-                  <>
-                    {expenseFormVisible && (
-                      <AddFormStyled>
-                        <CreateExpenseForm
-                          subcategories={category?.subcategories}
-                          currentDate={currentDate}
-                          refetchExpenses={refetchExpenses}
-                          closeForm={() => setExpenseFormVisible(false)}
-                        />
-                      </AddFormStyled>
-                    )}
-                    {!expenseFormVisible && (
-                      <ListAddField
-                        text="Add expense"
-                        onClick={() => setExpenseFormVisible(true)}
-                      />
-                    )}
-                  </>
+
+                  <CreateExpenseForm
+                    subcategories={category?.subcategories}
+                    currentDate={currentDate}
+                    refetchExpenses={refetchExpenses}
+                  />
                 </>
               )}
             </React.Fragment>
