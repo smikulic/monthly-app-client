@@ -16,6 +16,7 @@ import { CreateSubcategoryForm } from "../create-subcategory-form/create-subcate
 import { AddFormStyled } from "../../shared";
 import { useActionDropdown } from "../../hooks/useActionDropdown";
 import { ListItemHeader } from "../list-item-header/list-item-header";
+import { ListAddField } from "../list-add-field/list-add-field";
 
 interface Props {
   data: CategoriesListQuery;
@@ -210,13 +211,12 @@ export const CategoriesList: React.FC<Props> = ({
                     </AddFormStyled>
                   )}
                   {!subcategoryFormVisible && (
-                    <div
-                      className="listItem subcategory add"
+                    <ListAddField
+                      text="Add subcategory"
                       onClick={() => setSubcategoryFormVisible(true)}
-                    >
-                      <AddCircleRoundedIcon />
-                      Add subcategory
-                    </div>
+                      fontSize="small"
+                      indent
+                    />
                   )}
                 </>
               </>
@@ -234,13 +234,10 @@ export const CategoriesList: React.FC<Props> = ({
           </AddFormStyled>
         )}
         {!categoryFormVisible && (
-          <div
-            className="listItem category add"
+          <ListAddField
+            text="Add category"
             onClick={() => setCategoryFormVisible(true)}
-          >
-            <AddCircleRoundedIcon />
-            Add category
-          </div>
+          />
         )}
       </>
     </div>

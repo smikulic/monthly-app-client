@@ -6,6 +6,7 @@ import { AddFormStyled } from "../../shared";
 import { CreateExpenseForm } from "../create-expense-form/create-expense-form";
 import { ExpandedExpenses } from "../expanded-expenses/expanded-expenses";
 import { ListItemHeader } from "../list-item-header/list-item-header";
+import { ListAddField } from "../list-add-field/list-add-field";
 
 export interface SubcategoryDecoratedWithExpenses extends Subcategory {
   expenses: Expense[];
@@ -176,13 +177,10 @@ export const ExpensesList: React.FC<Props> = ({
                       </AddFormStyled>
                     )}
                     {!expenseFormVisible && (
-                      <div
-                        className="listItem subcategory add"
+                      <ListAddField
+                        text="Add expense"
                         onClick={() => setExpenseFormVisible(true)}
-                      >
-                        <AddCircleRoundedIcon />
-                        Add expense
-                      </div>
+                      />
                     )}
                   </>
                 </>

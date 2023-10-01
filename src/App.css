@@ -47,26 +47,6 @@
   position: relative;
   padding: 16px 32px;
 }
-
-.listItem.add {
-  justify-content: flex-start;
-  align-items: center;
-  cursor: pointer;
-  opacity: 0.7;
-}
-.listItem.add:hover {
-  opacity: 1;
-}
-.listItem.add svg {
-  position: relative;
-  color: #7fb77e;
-  top: 2px;
-  right: 4px;
-  font-size: 24px;
-}
-.listItem.subcategory.add {
-  padding-left: 56px;
-}
 .listItem .categoryDetails {
   display: flex;
   align-items: center;
