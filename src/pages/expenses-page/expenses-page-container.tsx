@@ -1,7 +1,4 @@
-import * as React from "react";
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Switch from "@mui/material/Switch";
+import React, { useState } from "react";
 import { Category, Expense, Maybe, Subcategory } from "../../generated/graphql";
 import {
   ExpensesList,
@@ -9,7 +6,6 @@ import {
 } from "../../components/expenses-list/expenses-list";
 import { useQuery } from "@apollo/client";
 import { LoadingScreen } from "../../components/loading-screen/loading-screen";
-import { useState } from "react";
 import { GET_EXPENSES_LIST } from "../../components/expenses-list/expenses-list-queries";
 import { GET_CATEGORIES_LIST } from "../../components/categories-list/categories-list-queries";
 import { ActionsBar } from "../../components/actions-bar/actions-bar";
@@ -81,20 +77,9 @@ export const ExpensesPageContainer = () => {
           );
           setPageDate(nextDate);
         }}
+        showRollover={showRolloverBudget}
+        toggleRollover={() => setShowRolloverBudget(!showRolloverBudget)}
       />
-      <div className="actionsBar">
-        <FormGroup>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={showRolloverBudget}
-                onChange={() => setShowRolloverBudget(!showRolloverBudget)}
-              />
-            }
-            label="rollover"
-          />
-        </FormGroup>
-      </div>
       {loadingExpenses || loadingCategories ? (
         <LoadingScreen />
       ) : (

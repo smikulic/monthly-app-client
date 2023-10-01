@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { Category, Subcategory, Expense } from "../../generated/graphql";
 import { ProgressBar } from "../progress-bar/progress-bar";
-import { AddFormContainer } from "../../shared";
+import { AddFormStyled } from "../../shared";
 import { CreateExpenseForm } from "../create-expense-form/create-expense-form";
 import { ExpandedExpenses } from "../expanded-expenses/expanded-expenses";
+import { ListItemHeader } from "../list-item-header/list-item-header";
 
 export interface SubcategoryDecoratedWithExpenses extends Subcategory {
   expenses: Expense[];
@@ -43,33 +42,25 @@ export const ExpensesList: React.FC<Props> = ({
           const categoryId = category.id;
           const showSubcategories = openCategory === categoryId;
 
-          const availableSubcategories = category.subcategories.length > 0;
+          const subcategoriesExist = category.subcategories.length > 0;
 
           return (
             <React.Fragment key={categoryId}>
               <div className="listItem category">
-                <div
-                  className="categoryTitle"
-                  onClick={() => {
-                    if (showSubcategories) {
-                      setOpenCategory("");
-                    } else {
-                      setOpenCategory(categoryId);
+                <ListItemHeader
+                  title={category.name}
+                  showExpand={!showSubcategories && subcategoriesExist}
+                  showCollapse={showSubcategories && subcategoriesExist}
+                  onToggleExpand={() => {
+                    if (subcategoriesExist) {
+                      if (showSubcategories) {
+                        setOpenCategory("");
+                      } else {
+                        setOpenCategory(categoryId);
+                      }
                     }
                   }}
-                >
-                  {showSubcategories ? (
-                    <span className="iconContainer prominent">
-                      <ExpandMoreIcon />
-                      {category.name}
-                    </span>
-                  ) : (
-                    <span className="iconContainer">
-                      {availableSubcategories && <ChevronRightIcon />}
-                      {category.name}
-                    </span>
-                  )}
-                </div>
+                />
                 {category.totalExpenseAmount > 0 && (
                   <span className="expenseAmount">
                     {category.totalExpenseAmount} €
@@ -125,9 +116,11 @@ export const ExpensesList: React.FC<Props> = ({
                         return (
                           <span key={subcategoryId}>
                             <div className="listItem subcategory">
-                              <div
-                                className="categoryTitle"
-                                onClick={() => {
+                              <ListItemHeader
+                                title={subcategory.name}
+                                showExpand={!showExpenses && expensesExist}
+                                showCollapse={showExpenses && expensesExist}
+                                onToggleExpand={() => {
                                   if (expensesExist) {
                                     if (showExpenses) {
                                       setOpenSubcategory("");
@@ -136,31 +129,7 @@ export const ExpensesList: React.FC<Props> = ({
                                     }
                                   }
                                 }}
-                              >
-                                {showExpenses ? (
-                                  <>
-                                    <span className="iconContainer prominent">
-                                      {expensesExist && <ExpandMoreIcon />}
-                                      {subcategory.name}
-                                    </span>
-                                    <ProgressBar
-                                      value={totalSubcategoryExpenses}
-                                      maxValue={budgetValue}
-                                    />
-                                  </>
-                                ) : (
-                                  <>
-                                    <span className="iconContainer">
-                                      {expensesExist && <ChevronRightIcon />}
-                                      {subcategory.name}
-                                    </span>
-                                    <ProgressBar
-                                      value={totalSubcategoryExpenses}
-                                      maxValue={budgetValue}
-                                    />
-                                  </>
-                                )}
-                              </div>
+                              />
                               <span
                                 className={
                                   budgetExpenseDifference > 0
@@ -175,6 +144,10 @@ export const ExpensesList: React.FC<Props> = ({
                                   {totalSubcategoryExpenses} €
                                 </span>
                               )}
+                              <ProgressBar
+                                value={totalSubcategoryExpenses}
+                                maxValue={budgetValue}
+                              />
                             </div>
                             {showExpenses && (
                               <>
@@ -193,14 +166,14 @@ export const ExpensesList: React.FC<Props> = ({
                     )}
                   <>
                     {expenseFormVisible && (
-                      <AddFormContainer>
+                      <AddFormStyled>
                         <CreateExpenseForm
                           subcategories={category?.subcategories}
                           currentDate={currentDate}
                           refetchExpenses={refetchExpenses}
                           closeForm={() => setExpenseFormVisible(false)}
                         />
-                      </AddFormContainer>
+                      </AddFormStyled>
                     )}
                     {!expenseFormVisible && (
                       <div

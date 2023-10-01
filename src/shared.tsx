@@ -1,6 +1,6 @@
 import { styled } from "@mui/material/styles";
 
-export const AddFormContainer = styled("div")({
+export const AddFormStyled = styled("div")({
   display: "flex",
   flexDirection: "column",
   justifyContent: "flex-start",

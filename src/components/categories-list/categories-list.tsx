@@ -4,8 +4,6 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import {
   CategoriesListQuery,
   useDeleteCategoryMutation,
@@ -13,14 +11,11 @@ import {
 } from "../../generated/graphql";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
-import { LoadingInlineSpinner } from "../loading-inline-spinner/loading-inline-spinner";
 import { CreateCategoryForm } from "../create-category-form/create-category-form";
 import { CreateSubcategoryForm } from "../create-subcategory-form/create-subcategory-form";
-import { AddFormContainer } from "../../shared";
-
-export type AnchorActionDropdownElProps = {
-  [key: string]: null | (EventTarget & HTMLElement);
-};
+import { AddFormStyled } from "../../shared";
+import { useActionDropdown } from "../../hooks/useActionDropdown";
+import { ListItemHeader } from "../list-item-header/list-item-header";
 
 interface Props {
   data: CategoriesListQuery;
@@ -33,8 +28,11 @@ export const CategoriesList: React.FC<Props> = ({
   loading,
   refetchCategories,
 }) => {
-  const [anchorActionDropdownEl, setAnchorActionDropdownEl] =
-    React.useState<AnchorActionDropdownElProps>({});
+  const {
+    anchorActionDropdownEl,
+    handleActionsDropdownClick,
+    handleActionsDropdownClose,
+  } = useActionDropdown();
 
   const [categoryFormVisible, setCategoryFormVisible] = useState(false);
   const [subcategoryFormVisible, setSubcategoryFormVisible] = useState(false);
@@ -68,209 +66,172 @@ export const CategoriesList: React.FC<Props> = ({
     },
   });
 
-  const handleActionsDropdownClick = (
-    event: React.MouseEvent<HTMLElement>,
-    anchorIndex: string
-  ) => {
-    setAnchorActionDropdownEl({
-      ...anchorActionDropdownEl,
-      [anchorIndex]: event.currentTarget,
-    });
-  };
-
-  const handleActionsDropdownClose = (anchorIndex: string) => {
-    setAnchorActionDropdownEl({
-      ...anchorActionDropdownEl,
-      [anchorIndex]: null,
-    });
-  };
-
   return (
     <div>
-      {!!data.categories &&
-        data.categories.map((category) => {
-          if (!category) return null;
+      {data.categories.map((category) => {
+        if (!category) return null;
 
-          const categoryId = category.id;
-          const showSubcategories = openCategory === categoryId;
-          const subcategories = category.subcategories;
+        const categoryId = category.id;
+        const showSubcategories = openCategory === categoryId;
+        const subcategories = category.subcategories;
 
-          const initialValue = 0;
-          const totalBudgetAmount = subcategories?.reduce(
-            (accumulator, currentValue) =>
-              accumulator + currentValue?.budgetAmount!,
-            initialValue
-          );
+        const initialValue = 0;
+        const totalBudgetAmount = subcategories?.reduce(
+          (accumulator, currentValue) =>
+            accumulator + currentValue?.budgetAmount!,
+          initialValue
+        );
 
-          return (
-            <React.Fragment key={categoryId}>
-              <div className="listItem category">
-                <div
-                  className="categoryTitle"
-                  onClick={() => {
-                    if (showSubcategories) {
-                      setOpenCategory("");
-                    } else {
-                      setOpenCategory(categoryId);
+        return (
+          <React.Fragment key={categoryId}>
+            <div className="listItem category">
+              <ListItemHeader
+                title={category.name}
+                showExpand={!showSubcategories}
+                showCollapse={showSubcategories}
+                onToggleExpand={() => {
+                  if (showSubcategories) {
+                    setOpenCategory("");
+                  } else {
+                    setOpenCategory(categoryId);
+                  }
+                }}
+              />
+              <div className="categoryDetails">
+                <div className="categoryAmount">{totalBudgetAmount} €</div>
+                <div>
+                  <IconButton
+                    id={`long-menu-icon-${categoryId}`}
+                    aria-haspopup="true"
+                    size="small"
+                    onClick={(event) =>
+                      handleActionsDropdownClick(event, categoryId)
                     }
-                  }}
-                >
-                  {showSubcategories ? (
-                    <span className="iconContainer">
-                      <ExpandMoreIcon />
-                      {category.name}
-                      {loading && <LoadingInlineSpinner />}
-                    </span>
-                  ) : (
-                    <span className="iconContainer">
-                      <ChevronRightIcon />
-                      {category.name}
-                    </span>
-                  )}
-                </div>
-                <div className="categoryDetails">
-                  <div className="categoryAmount prominent">
-                    {totalBudgetAmount} €
-                  </div>
-                  <div>
-                    <IconButton
-                      id={`long-menu-icon-${categoryId}`}
-                      aria-haspopup="true"
-                      size="small"
-                      onClick={(event) =>
-                        handleActionsDropdownClick(event, categoryId)
-                      }
+                  >
+                    <MoreVertIcon />
+                  </IconButton>
+                  <Menu
+                    id={`long-menu-${categoryId}`}
+                    anchorEl={anchorActionDropdownEl[categoryId]}
+                    open={Boolean(anchorActionDropdownEl[categoryId])}
+                    onClose={() => handleActionsDropdownClose(categoryId)}
+                  >
+                    <MenuItem
+                      disabled
+                      onClick={() => handleActionsDropdownClose(categoryId)}
                     >
-                      <MoreVertIcon />
-                    </IconButton>
-                    <Menu
-                      id={`long-menu-${categoryId}`}
-                      anchorEl={anchorActionDropdownEl[categoryId]}
-                      open={Boolean(anchorActionDropdownEl[categoryId])}
-                      onClose={() => handleActionsDropdownClose(categoryId)}
+                      Edit
+                    </MenuItem>
+                    <MenuItem
+                      onClick={() => {
+                        deleteCategory({ variables: { id: categoryId } });
+                        handleActionsDropdownClose(categoryId);
+                      }}
                     >
-                      <MenuItem
-                        disabled
-                        onClick={() => handleActionsDropdownClose(categoryId)}
-                      >
-                        Edit
-                      </MenuItem>
-                      <MenuItem
-                        onClick={() => {
-                          deleteCategory({ variables: { id: categoryId } });
-                          handleActionsDropdownClose(categoryId);
-                        }}
-                      >
-                        Remove
-                      </MenuItem>
-                    </Menu>
-                  </div>
+                      Remove
+                    </MenuItem>
+                  </Menu>
                 </div>
               </div>
-              {showSubcategories && (
-                <>
-                  {!!subcategories &&
-                    subcategories.map((subcategory) => {
-                      if (!subcategory) return null;
+            </div>
+            {showSubcategories && (
+              <>
+                {!!subcategories &&
+                  subcategories.map((subcategory) => {
+                    if (!subcategory) return null;
 
-                      const subcategoryId = subcategory.id;
+                    const subcategoryId = subcategory.id;
 
-                      return (
-                        <span key={subcategoryId}>
-                          <div className="listItem subcategory">
-                            <div className="categoryTitle">
-                              <span className="iconContainer">
-                                {subcategory.name}
-                              </span>
+                    return (
+                      <span key={subcategoryId}>
+                        <div className="listItem subcategory">
+                          <ListItemHeader title={subcategory.name} />
+                          <div className="categoryDetails">
+                            <div className="categoryAmount">
+                              {subcategory.budgetAmount} €
                             </div>
-                            <div className="categoryDetails">
-                              <div className="categoryAmount prominent">
-                                {subcategory.budgetAmount} €
-                              </div>
-                              <div>
-                                <IconButton
-                                  id={`long-menu-icon-${subcategoryId}`}
-                                  aria-haspopup="true"
-                                  size="small"
-                                  onClick={(event) =>
-                                    handleActionsDropdownClick(
-                                      event,
-                                      subcategoryId
-                                    )
-                                  }
-                                >
-                                  <MoreVertIcon />
-                                </IconButton>
-                                <Menu
-                                  id={`long-menu-${subcategoryId}`}
-                                  anchorEl={
-                                    anchorActionDropdownEl[subcategoryId]
-                                  }
-                                  open={Boolean(
-                                    anchorActionDropdownEl[subcategoryId]
-                                  )}
-                                  onClose={() =>
+                            <div>
+                              <IconButton
+                                id={`long-menu-icon-${subcategoryId}`}
+                                aria-haspopup="true"
+                                size="small"
+                                onClick={(event) =>
+                                  handleActionsDropdownClick(
+                                    event,
+                                    subcategoryId
+                                  )
+                                }
+                              >
+                                <MoreVertIcon />
+                              </IconButton>
+                              <Menu
+                                id={`long-menu-${subcategoryId}`}
+                                anchorEl={anchorActionDropdownEl[subcategoryId]}
+                                open={Boolean(
+                                  anchorActionDropdownEl[subcategoryId]
+                                )}
+                                onClose={() =>
+                                  handleActionsDropdownClose(subcategoryId)
+                                }
+                              >
+                                <MenuItem
+                                  disabled
+                                  onClick={() =>
                                     handleActionsDropdownClose(subcategoryId)
                                   }
                                 >
-                                  <MenuItem
-                                    disabled
-                                    onClick={() =>
-                                      handleActionsDropdownClose(subcategoryId)
-                                    }
-                                  >
-                                    Edit
-                                  </MenuItem>
-                                  <MenuItem
-                                    onClick={() => {
-                                      deleteSubcategory({
-                                        variables: { id: subcategoryId },
-                                      });
-                                      handleActionsDropdownClose(subcategoryId);
-                                    }}
-                                  >
-                                    Remove
-                                  </MenuItem>
-                                </Menu>
-                              </div>
+                                  Edit
+                                </MenuItem>
+                                <MenuItem
+                                  onClick={() => {
+                                    deleteSubcategory({
+                                      variables: { id: subcategoryId },
+                                    });
+                                    handleActionsDropdownClose(subcategoryId);
+                                  }}
+                                >
+                                  Remove
+                                </MenuItem>
+                              </Menu>
                             </div>
                           </div>
-                        </span>
-                      );
-                    })}
-                  <>
-                    {subcategoryFormVisible && (
-                      <AddFormContainer>
-                        <CreateSubcategoryForm
-                          categoryId={categoryId}
-                          refetchCategories={refetchCategories}
-                          closeForm={() => setSubcategoryFormVisible(false)}
-                        />
-                      </AddFormContainer>
-                    )}
-                    {!subcategoryFormVisible && (
-                      <div
-                        className="listItem subcategory add"
-                        onClick={() => setSubcategoryFormVisible(true)}
-                      >
-                        <AddCircleRoundedIcon />
-                        Add subcategory
-                      </div>
-                    )}
-                  </>
+                        </div>
+                      </span>
+                    );
+                  })}
+                <>
+                  {subcategoryFormVisible && (
+                    <AddFormStyled>
+                      <CreateSubcategoryForm
+                        categoryId={categoryId}
+                        refetchCategories={refetchCategories}
+                        closeForm={() => setSubcategoryFormVisible(false)}
+                      />
+                    </AddFormStyled>
+                  )}
+                  {!subcategoryFormVisible && (
+                    <div
+                      className="listItem subcategory add"
+                      onClick={() => setSubcategoryFormVisible(true)}
+                    >
+                      <AddCircleRoundedIcon />
+                      Add subcategory
+                    </div>
+                  )}
                 </>
-              )}
-            </React.Fragment>
-          );
-        })}
+              </>
+            )}
+          </React.Fragment>
+        );
+      })}
       <>
         {categoryFormVisible && (
-          <AddFormContainer>
+          <AddFormStyled>
             <CreateCategoryForm
               refetchCategories={refetchCategories}
               closeForm={() => setCategoryFormVisible(false)}
             />
-          </AddFormContainer>
+          </AddFormStyled>
         )}
         {!categoryFormVisible && (
           <div
