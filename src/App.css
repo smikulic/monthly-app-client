@@ -5,41 +5,11 @@
   height: 100vh; */
 }
 
-.noselect {
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none; /* Safari */
-  -khtml-user-select: none; /* Konqueror HTML */
-  -moz-user-select: none; /* Old versions of Firefox */
-  -ms-user-select: none; /* Internet Explorer/Edge */
-  user-select: none; /* Non-prefixed version, currently
-                                  supported by Chrome, Edge, Opera and Firefox */
-}
-
 .loadingScreen {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 50vh;
-}
-
-.actionsBar {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  font-size: 18px;
-}
-.actionsBar .monthFilter {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 48px;
-  width: 160px;
-  color: #181818;
-}
-.actionsBar .monthFilter svg {
-  color: #277bc0;
-  cursor: pointer;
 }
 
 .action {
@@ -77,15 +47,7 @@
   position: relative;
   padding: 16px 32px;
 }
-.listItem.category .iconContainer,
-.listItem.subcategory .iconContainer {
-  display: flex;
-  align-items: center;
-}
-.listItem.category .iconContainer svg,
-.listItem.subcategory .iconContainer svg {
-  color: #277bc0;
-}
+
 .listItem.add {
   justify-content: flex-start;
   align-items: center;
@@ -169,18 +131,17 @@
   color: #277bc0;
 }
 
-.prominent {
-  font-weight: 500;
-}
-
 .progress-bar {
-  position: relative;
-  top: 4px;
-  width: 220px;
-  height: 8px;
+  position: absolute;
+  left: 0;
+  /* top: 47px; */
+  width: 100%;
+  height: 52px;
   background-color: #7fb77e;
-  border-radius: 10px;
+  /* border-radius: 4px; */
   overflow: hidden;
+  opacity: 0.1;
+  z-index: -1;
 }
 
 .progress-bar__fill {

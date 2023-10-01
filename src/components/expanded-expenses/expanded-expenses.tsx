@@ -2,10 +2,10 @@ import React from "react";
 import { format } from "date-fns";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { Expense, useDeleteExpenseMutation } from "../../generated/graphql";
-import { AnchorActionDropdownElProps } from "../categories-list/categories-list";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
+import { Expense, useDeleteExpenseMutation } from "../../generated/graphql";
+import { useActionDropdown } from "../../hooks/useActionDropdown";
 
 interface Props {
   expenses: Expense[];
@@ -18,8 +18,11 @@ export const ExpandedExpenses: React.FC<Props> = ({
   subcategoryName,
   refetchExpenses,
 }) => {
-  const [anchorActionDropdownEl, setAnchorActionDropdownEl] =
-    React.useState<AnchorActionDropdownElProps>({});
+  const {
+    anchorActionDropdownEl,
+    handleActionsDropdownClick,
+    handleActionsDropdownClose,
+  } = useActionDropdown();
 
   const [deleteExpense] = useDeleteExpenseMutation({
     onError: () => {
@@ -32,23 +35,6 @@ export const ExpandedExpenses: React.FC<Props> = ({
       );
     },
   });
-
-  const handleActionsDropdownClick = (
-    event: React.MouseEvent<HTMLElement>,
-    anchorIndex: string
-  ) => {
-    setAnchorActionDropdownEl({
-      ...anchorActionDropdownEl,
-      [anchorIndex]: event.currentTarget,
-    });
-  };
-
-  const handleActionsDropdownClose = (anchorIndex: string) => {
-    setAnchorActionDropdownEl({
-      ...anchorActionDropdownEl,
-      [anchorIndex]: null,
-    });
-  };
 
   return (
     <>

@@ -57,10 +57,6 @@ export const ExpensesListLoadEach: React.FC<Props> = ({
       },
     });
 
-  console.log({ categoryData });
-  console.log({ currentDate });
-  console.log({ pageDate });
-
   return (
     <div>
       <ActionsBar
@@ -111,7 +107,7 @@ export const ExpensesListLoadEach: React.FC<Props> = ({
                   }}
                 >
                   {showSubcategories ? (
-                    <span className="iconContainer prominent">
+                    <span className="iconContainer">
                       <ExpandMoreIcon />
                       {category.name}
                       {loadingCategory && <LoadingInlineSpinner />}
@@ -159,7 +155,7 @@ export const ExpensesListLoadEach: React.FC<Props> = ({
                                 }}
                               >
                                 {showExpenses ? (
-                                  <span className="iconContainer prominent">
+                                  <span className="iconContainer">
                                     {expensesExist && <ExpandMoreIcon />}
                                     {subcategory.name}
                                   </span>
