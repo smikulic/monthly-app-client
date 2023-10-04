@@ -136,11 +136,11 @@ export const ExpensesList: React.FC<Props> = ({
                               >
                                 {budgetExpenseDifference} €
                               </span>
-                              {expensesExist && (
-                                <span className="expenseAmount">
-                                  {totalSubcategoryExpenses} €
-                                </span>
-                              )}
+
+                              <span className="expenseAmount">
+                                {totalSubcategoryExpenses} €
+                              </span>
+
                               <ProgressBar
                                 value={totalSubcategoryExpenses}
                                 maxValue={budgetValue}

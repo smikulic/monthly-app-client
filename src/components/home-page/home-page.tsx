@@ -1,17 +1,42 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Box from "@mui/material/Box";
+import { styled } from "@mui/material/styles";
+import { LineChart } from "@mui/x-charts/LineChart";
 import { formatAmount } from "../../utils/format";
+
+// .listContainer a {
+//   text-decoration: none;
+//   color: inherit;
+// }
+
+const HomeContainerStyled = styled("div")({
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "space-between",
+
+  "& a": {
+    textDecoration: "none",
+    color: "inherit",
+  },
+});
 
 export const HomePage = ({
   totalExpensesAmount,
   totalBudgetAmount,
+  chartExpensesData,
+  pageDate,
 }: {
   totalExpensesAmount: number;
   totalBudgetAmount: number;
+  chartExpensesData: number[];
+  pageDate: Date;
 }) => {
+  const selectedYear = pageDate.getFullYear();
+
   return (
-    <div className="homeContainer">
-      <div className="listContainer">
+    <HomeContainerStyled>
+      <Box>
         <Link to="/expenses">
           <div className="listItem">
             Expenses
@@ -24,7 +49,48 @@ export const HomePage = ({
             <span className="orange">{formatAmount(totalBudgetAmount)}</span>
           </div>
         </Link>
-      </div>
-    </div>
+      </Box>
+
+      <br />
+
+      <Box>
+        <LineChart
+          xAxis={[
+            {
+              id: "yearOverview",
+              data: [
+                "Jan",
+                "Feb",
+                "Mar",
+                "Apr",
+                "May",
+                "Jun",
+                "Jul",
+                "Aug",
+                "Sep",
+                "Oct",
+                "Nov",
+                "Dec",
+              ],
+              scaleType: "band",
+              label: `${selectedYear}`,
+            },
+          ]}
+          series={[
+            {
+              data: chartExpensesData,
+              label: "Expenses",
+              color: "#ff7777",
+            },
+            {
+              data: new Array(12).fill(totalBudgetAmount),
+              label: "Budget",
+              color: "#ffb200",
+            },
+          ]}
+          height={300}
+        />
+      </Box>
+    </HomeContainerStyled>
   );
 };

@@ -106,6 +106,7 @@ export type Query = {
   __typename?: 'Query';
   categories: Array<Category>;
   category: Category;
+  chartExpenses: Array<Scalars['Int']>;
   expenses: Array<Expense>;
   me: User;
   subcategories: Array<Subcategory>;
@@ -117,6 +118,11 @@ export type Query = {
 
 export type QueryCategoryArgs = {
   id: Scalars['ID'];
+};
+
+
+export type QueryChartExpensesArgs = {
+  filter?: InputMaybe<ExpenseFilterInput>;
 };
 
 
@@ -209,6 +215,13 @@ export type ExpensesListQueryVariables = Exact<{
 
 
 export type ExpensesListQuery = { __typename?: 'Query', expenses: Array<{ __typename?: 'Expense', id: string, subcategoryId: string, amount: number, date: string }> };
+
+export type ChartExpensesListQueryVariables = Exact<{
+  date: Scalars['String'];
+}>;
+
+
+export type ChartExpensesListQuery = { __typename?: 'Query', chartExpenses: Array<number> };
 
 export type CreateExpenseMutationVariables = Exact<{
   subcategoryId: Scalars['ID'];
@@ -508,6 +521,39 @@ export function useExpensesListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type ExpensesListQueryHookResult = ReturnType<typeof useExpensesListQuery>;
 export type ExpensesListLazyQueryHookResult = ReturnType<typeof useExpensesListLazyQuery>;
 export type ExpensesListQueryResult = Apollo.QueryResult<ExpensesListQuery, ExpensesListQueryVariables>;
+export const ChartExpensesListDocument = gql`
+    query ChartExpensesList($date: String!) {
+  chartExpenses(filter: {date: $date})
+}
+    `;
+
+/**
+ * __useChartExpensesListQuery__
+ *
+ * To run a query within a React component, call `useChartExpensesListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useChartExpensesListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useChartExpensesListQuery({
+ *   variables: {
+ *      date: // value for 'date'
+ *   },
+ * });
+ */
+export function useChartExpensesListQuery(baseOptions: Apollo.QueryHookOptions<ChartExpensesListQuery, ChartExpensesListQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ChartExpensesListQuery, ChartExpensesListQueryVariables>(ChartExpensesListDocument, options);
+      }
+export function useChartExpensesListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ChartExpensesListQuery, ChartExpensesListQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ChartExpensesListQuery, ChartExpensesListQueryVariables>(ChartExpensesListDocument, options);
+        }
+export type ChartExpensesListQueryHookResult = ReturnType<typeof useChartExpensesListQuery>;
+export type ChartExpensesListLazyQueryHookResult = ReturnType<typeof useChartExpensesListLazyQuery>;
+export type ChartExpensesListQueryResult = Apollo.QueryResult<ChartExpensesListQuery, ChartExpensesListQueryVariables>;
 export const CreateExpenseDocument = gql`
     mutation CreateExpense($subcategoryId: ID!, $amount: Int!, $date: String!) {
   createExpense(subcategoryId: $subcategoryId, amount: $amount, date: $date) {

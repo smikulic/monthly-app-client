@@ -30,6 +30,12 @@ export const GET_EXPENSES_LIST = gql`
   }
 `;
 
+export const GET_CHART_EXPENSES_LIST = gql`
+  query ChartExpensesList($date: String!) {
+    chartExpenses(filter: { date: $date })
+  }
+`;
+
 export const CREATE_EXPENSE_MUTATION = gql`
   mutation CreateExpense($subcategoryId: ID!, $amount: Int!, $date: String!) {
     createExpense(subcategoryId: $subcategoryId, amount: $amount, date: $date) {

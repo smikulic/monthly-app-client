@@ -8,7 +8,10 @@ import {
 } from "../../generated/graphql";
 import { LoadingScreen } from "../../components/loading-screen/loading-screen";
 import { HomePage } from "../../components/home-page/home-page";
-import { GET_EXPENSES_LIST } from "../../components/expenses-list/expenses-list-queries";
+import {
+  GET_CHART_EXPENSES_LIST,
+  GET_EXPENSES_LIST,
+} from "../../components/expenses-list/expenses-list-queries";
 import { ActionsBar } from "../../components/actions-bar/actions-bar";
 // import { toast } from "react-toastify";
 
@@ -38,6 +41,14 @@ export const HomePageContainer = () => {
 
   const { data: expensesData, loading: loadingExpenses } = useQuery(
     GET_EXPENSES_LIST,
+    {
+      variables: {
+        date: pageDate,
+      },
+    }
+  );
+  const { data: chartExpensesData, loading: loadingChartExpenses } = useQuery(
+    GET_CHART_EXPENSES_LIST,
     {
       variables: {
         date: pageDate,
@@ -143,12 +154,14 @@ export const HomePageContainer = () => {
           </div>
         </div>
       )} */}
-      {loadingExpenses || loadingCategories ? (
+      {loadingExpenses || loadingChartExpenses || loadingCategories ? (
         <LoadingScreen />
       ) : (
         <HomePage
           totalExpensesAmount={totalExpensesAmount}
           totalBudgetAmount={totalBudgetAmount}
+          chartExpensesData={chartExpensesData.chartExpenses}
+          pageDate={pageDate}
         />
       )}
     </>
