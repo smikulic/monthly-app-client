@@ -52,13 +52,14 @@ export const ExpenseFormFields: React.FC<Props> = ({
   }, [newExpenseAmount, newExpenseDate, newExpenseSubcategoryId]);
 
   return (
-    <>
+    <Stack spacing={1}>
       <TextField
         required
         id="amount"
         label="Amount"
         size="small"
-        margin="normal"
+        margin="none"
+        autoComplete="off"
         onChange={(e) => setExpenseAmount(e.target.value)}
       />
       <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -72,8 +73,10 @@ export const ExpenseFormFields: React.FC<Props> = ({
       <FormControl size="small" margin="dense">
         <InputLabel>Subcategory</InputLabel>
         <Select
+          required
           id="subcategory"
           label="Subcategory"
+          margin="none"
           value={newExpenseSubcategoryId}
           onChange={(e: SelectChangeEvent) => {
             setExpenseSubcategoryId(e.target.value);
@@ -95,6 +98,7 @@ export const ExpenseFormFields: React.FC<Props> = ({
           Cancel
         </Button>
         <Button
+          fullWidth
           variant="contained"
           disabled={formInvalid}
           onClick={() =>
@@ -110,6 +114,6 @@ export const ExpenseFormFields: React.FC<Props> = ({
           {loading ? "saving..." : "Create"}
         </Button>
       </Stack>
-    </>
+    </Stack>
   );
 };

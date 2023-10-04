@@ -102,7 +102,6 @@ export const HomePageContainer = () => {
         }}
       />
       {/* <div
-        className="action"
         onClick={() => toggleExpenseFormOpen(!expenseFormOpen)}
       >
         Add expense

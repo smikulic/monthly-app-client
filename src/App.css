@@ -1,37 +1,8 @@
-.App {
-  /* display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100vh; */
-}
-
 .loadingScreen {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 50vh;
-}
-
-.action {
-  margin: 0 32px;
-  padding: 12px;
-  text-align: center;
-  background: #277bc0;
-  color: white;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.homeContainer {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  /* height: calc(100vh - 64px); this can be used if we wanna add a bottom positioned row - Add expense etc. */
-}
-
-.listContainer a {
-  text-decoration: none;
-  color: inherit;
 }
 
 .listItem {

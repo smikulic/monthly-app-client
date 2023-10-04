@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Slide, ToastContainer } from "react-toastify";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 // import logo from './logo.svg';
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { LoginPageContainer } from "./pages/login-page/login-page-container";
 import { HomePageContainer } from "./pages/home-page/home-page-container";
 import { ExpensesPageContainer } from "./pages/expenses-page/expenses-page-container";
@@ -11,6 +12,20 @@ import { Header } from "./components/header/header";
 import { AUTH_TOKEN } from "./constants";
 import { CategoriesPageContainer } from "./pages/categories-page/categories-page-container";
 
+const muiTheme = createTheme({
+  palette: {
+    // light: will be calculated from palette.primary.main,
+    // dark: will be calculated from palette.primary.main,
+    // contrastText: will be calculated to contrast with palette.primary.main
+    primary: {
+      main: "#277bc0",
+    },
+    warning: {
+      main: "#ffb200",
+    },
+  },
+});
+
 function App() {
   const [authenticated, setAuthenticated] = useState<string | null>(
     localStorage.getItem(AUTH_TOKEN)
@@ -18,46 +33,50 @@ function App() {
 
   return (
     <div className="App">
-      {/* <CategoriesListContainer /> */}
-      <Router>
-        {authenticated && <Header setAuthenticated={setAuthenticated} />}
-        <Routes>
-          <Route
-            path="/"
-            element={
-              authenticated ? (
-                <HomePageContainer />
-              ) : (
+      <ThemeProvider theme={muiTheme}>
+        {/* <CategoriesListContainer /> */}
+        <Router>
+          {authenticated && <Header setAuthenticated={setAuthenticated} />}
+          <Routes>
+            <Route
+              path="/"
+              element={
+                authenticated ? (
+                  <HomePageContainer />
+                ) : (
+                  <LoginPageContainer setAuthenticated={setAuthenticated} />
+                )
+              }
+            />
+            <Route path="/expenses" element={<ExpensesPageContainer />} />
+            <Route path="/categories" element={<CategoriesPageContainer />} />
+            <Route
+              path="/login"
+              element={
                 <LoginPageContainer setAuthenticated={setAuthenticated} />
-              )
-            }
-          />
-          <Route path="/expenses" element={<ExpensesPageContainer />} />
-          <Route path="/categories" element={<CategoriesPageContainer />} />
-          <Route
-            path="/login"
-            element={<LoginPageContainer setAuthenticated={setAuthenticated} />}
-          />
-          {/* <Route path="*" element={<NotFound />} /> */}
-        </Routes>
-      </Router>
+              }
+            />
+            {/* <Route path="*" element={<NotFound />} /> */}
+          </Routes>
+        </Router>
 
-      {/* <header className="App-header">
+        {/* <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
       </header> */}
-      <ToastContainer
-        transition={Slide}
-        position="bottom-center"
-        autoClose={2500}
-        hideProgressBar={true}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover={false}
-        theme="colored"
-      />
+        <ToastContainer
+          transition={Slide}
+          position="bottom-center"
+          autoClose={2500}
+          hideProgressBar={true}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover={false}
+          theme="colored"
+        />
+      </ThemeProvider>
     </div>
   );
 }

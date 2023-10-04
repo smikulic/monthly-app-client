@@ -5,11 +5,6 @@ import { styled } from "@mui/material/styles";
 import { LineChart } from "@mui/x-charts/LineChart";
 import { formatAmount } from "../../utils/format";
 
-// .listContainer a {
-//   text-decoration: none;
-//   color: inherit;
-// }
-
 const HomeContainerStyled = styled("div")({
   display: "flex",
   flexDirection: "column",

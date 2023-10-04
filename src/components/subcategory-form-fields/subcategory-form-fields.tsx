@@ -41,13 +41,14 @@ export const SubcategoryFormFields: React.FC<Props> = ({
   }, [newSubcategoryName, newSubcategoryBudgetAmount]);
 
   return (
-    <>
+    <Stack spacing={1}>
       <TextField
         required
         id="subcategoryName"
         label="Subcategory name"
         size="small"
-        margin="dense"
+        margin="none"
+        autoComplete="off"
         onChange={(e) => setSubcategoryName(e.target.value)}
       />
       <TextField
@@ -55,16 +56,17 @@ export const SubcategoryFormFields: React.FC<Props> = ({
         id="subcategoryBudget"
         label="Subcategory budget"
         size="small"
-        margin="dense"
+        margin="none"
+        autoComplete="off"
         onChange={(e) => setSubcategoryBudgetAmount(Number(e.target.value))}
       />
 
-      <br />
       <Stack spacing={1} direction="row">
         <Button variant="outlined" color="warning" onClick={closeForm}>
           Cancel
         </Button>
         <Button
+          fullWidth
           variant="contained"
           disabled={formInvalid}
           onClick={() =>
@@ -80,6 +82,6 @@ export const SubcategoryFormFields: React.FC<Props> = ({
           {loading ? "saving..." : "Create"}
         </Button>
       </Stack>
-    </>
+    </Stack>
   );
 };
