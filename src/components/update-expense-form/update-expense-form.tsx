@@ -17,6 +17,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 
 interface Props {
+  open: boolean;
   formData: Expense;
   subcategories: Subcategory[];
   closeForm: () => void;
@@ -24,6 +25,7 @@ interface Props {
 }
 
 export const UpdateExpenseForm: React.FC<Props> = ({
+  open,
   formData,
   subcategories,
   closeForm,
@@ -61,6 +63,7 @@ export const UpdateExpenseForm: React.FC<Props> = ({
 
   return (
     <FormDialog
+      open={open}
       title="Update expense"
       disabled={formInvalid}
       formActionText="Save"

@@ -9,12 +9,14 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 
 interface Props {
+  open: boolean;
   formData: Subcategory;
   closeForm: () => void;
   refetch: () => Promise<unknown>;
 }
 
 export const UpdateSubcategoryForm: React.FC<Props> = ({
+  open,
   formData,
   closeForm,
   refetch,
@@ -47,6 +49,7 @@ export const UpdateSubcategoryForm: React.FC<Props> = ({
 
   return (
     <FormDialog
+      open={open}
       title="Update subcategory"
       disabled={formInvalid}
       formActionText="Save"

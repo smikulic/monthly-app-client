@@ -4,7 +4,6 @@ import { ProgressBar } from "../progress-bar/progress-bar";
 import { ExpandedExpenses } from "../expanded-expenses/expanded-expenses";
 import { ListItemHeader } from "../list-item-header/list-item-header";
 import { CreateExpenseForm } from "../create-expense-form/create-expense-form";
-import Dialog from "@mui/material/Dialog";
 import { UpdateExpenseForm } from "../update-expense-form/update-expense-form";
 import { ListAddField } from "../list-add-field/list-add-field";
 
@@ -177,34 +176,22 @@ export const ExpensesList: React.FC<Props> = ({
                   />
 
                   {createModalExpense && (
-                    <Dialog
-                      fullWidth
-                      maxWidth="sm"
+                    <CreateExpenseForm
                       open={createModalExpense}
-                      onClose={() => setCreateModalExpense(false)}
-                    >
-                      <CreateExpenseForm
-                        subcategories={category?.subcategories}
-                        currentDate={currentDate}
-                        closeForm={() => setCreateModalExpense(false)}
-                        refetch={refetchExpenses}
-                      />
-                    </Dialog>
+                      subcategories={category?.subcategories}
+                      currentDate={currentDate}
+                      closeForm={() => setCreateModalExpense(false)}
+                      refetch={refetchExpenses}
+                    />
                   )}
                   {updateModalExpense && (
-                    <Dialog
-                      fullWidth
-                      maxWidth="sm"
+                    <UpdateExpenseForm
                       open={Boolean(updateModalExpense)}
-                      onClose={() => setUpdateModalExpense(null)}
-                    >
-                      <UpdateExpenseForm
-                        formData={updateModalExpense}
-                        subcategories={category?.subcategories}
-                        closeForm={() => setUpdateModalExpense(null)}
-                        refetch={refetchExpenses}
-                      />
-                    </Dialog>
+                      formData={updateModalExpense}
+                      subcategories={category?.subcategories}
+                      closeForm={() => setUpdateModalExpense(null)}
+                      refetch={refetchExpenses}
+                    />
                   )}
                 </>
               )}

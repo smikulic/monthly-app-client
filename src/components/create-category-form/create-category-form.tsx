@@ -6,11 +6,16 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 
 interface Props {
+  open: boolean;
   closeForm: () => void;
   refetch: () => Promise<unknown>;
 }
 
-export const CreateCategoryForm: React.FC<Props> = ({ closeForm, refetch }) => {
+export const CreateCategoryForm: React.FC<Props> = ({
+  open,
+  closeForm,
+  refetch,
+}) => {
   const [formInvalid, setFormInvalid] = useState(true);
   const [categoryName, setCategoryName] = useState("");
 
@@ -35,6 +40,7 @@ export const CreateCategoryForm: React.FC<Props> = ({ closeForm, refetch }) => {
 
   return (
     <FormDialog
+      open={open}
       title="Create category"
       disabled={formInvalid}
       formActionText="Create"

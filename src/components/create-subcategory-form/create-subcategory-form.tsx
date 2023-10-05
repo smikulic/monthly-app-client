@@ -6,12 +6,14 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 
 interface Props {
+  open: boolean;
   categoryId: string;
   closeForm: () => void;
   refetch: () => Promise<unknown>;
 }
 
 export const CreateSubcategoryForm: React.FC<Props> = ({
+  open,
   categoryId,
   closeForm,
   refetch,
@@ -42,6 +44,7 @@ export const CreateSubcategoryForm: React.FC<Props> = ({
 
   return (
     <FormDialog
+      open={open}
       title="Create subcategory"
       disabled={formInvalid}
       formActionText="Create"

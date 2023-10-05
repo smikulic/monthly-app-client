@@ -6,8 +6,10 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
 
 interface Props {
+  open: boolean;
   title: string;
   disabled: boolean;
   children: ReactNode;
@@ -17,6 +19,7 @@ interface Props {
 }
 
 export const FormDialog: React.FC<Props> = ({
+  open,
   title,
   disabled,
   children,
@@ -25,7 +28,7 @@ export const FormDialog: React.FC<Props> = ({
   closeForm,
 }) => {
   return (
-    <>
+    <Dialog fullWidth maxWidth="sm" open={open} onClose={closeForm}>
       <DialogTitle>{title}</DialogTitle>
       <IconButton
         onClick={closeForm}
@@ -54,6 +57,6 @@ export const FormDialog: React.FC<Props> = ({
           {formActionText}
         </Button>
       </DialogActions>
-    </>
+    </Dialog>
   );
 };
