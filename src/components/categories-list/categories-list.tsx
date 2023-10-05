@@ -3,7 +3,6 @@ import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import Dialog from "@mui/material/Dialog";
 import {
   CategoriesListQuery,
   Category,
@@ -230,59 +229,35 @@ export const CategoriesList: React.FC<Props> = ({
       />
 
       {createModalCategory && (
-        <Dialog
-          fullWidth
-          maxWidth="sm"
+        <CreateCategoryForm
           open={createModalCategory}
-          onClose={() => setCreateModalCategory(false)}
-        >
-          <CreateCategoryForm
-            closeForm={() => setCreateModalCategory(false)}
-            refetch={refetchCategories}
-          />
-        </Dialog>
+          closeForm={() => setCreateModalCategory(false)}
+          refetch={refetchCategories}
+        />
       )}
       {createModalSubcategory && (
-        <Dialog
-          fullWidth
-          maxWidth="sm"
+        <CreateSubcategoryForm
           open={Boolean(createModalSubcategory)}
-          onClose={() => setCreateModalSubcategory(null)}
-        >
-          <CreateSubcategoryForm
-            categoryId={createModalSubcategory}
-            closeForm={() => setCreateModalSubcategory(null)}
-            refetch={refetchCategories}
-          />
-        </Dialog>
+          categoryId={createModalSubcategory}
+          closeForm={() => setCreateModalSubcategory(null)}
+          refetch={refetchCategories}
+        />
       )}
       {updateModalCategory && (
-        <Dialog
-          fullWidth
-          maxWidth="sm"
+        <UpdateCategoryForm
           open={Boolean(updateModalCategory)}
-          onClose={() => setUpdateModalCategory(null)}
-        >
-          <UpdateCategoryForm
-            formData={updateModalCategory}
-            closeForm={() => setUpdateModalCategory(null)}
-            refetch={refetchCategories}
-          />
-        </Dialog>
+          formData={updateModalCategory}
+          closeForm={() => setUpdateModalCategory(null)}
+          refetch={refetchCategories}
+        />
       )}
       {updateModalSubcategory && (
-        <Dialog
-          fullWidth
-          maxWidth="sm"
+        <UpdateSubcategoryForm
           open={Boolean(updateModalSubcategory)}
-          onClose={() => setUpdateModalSubcategory(null)}
-        >
-          <UpdateSubcategoryForm
-            formData={updateModalSubcategory}
-            closeForm={() => setUpdateModalSubcategory(null)}
-            refetch={refetchCategories}
-          />
-        </Dialog>
+          formData={updateModalSubcategory}
+          closeForm={() => setUpdateModalSubcategory(null)}
+          refetch={refetchCategories}
+        />
       )}
     </div>
   );
