@@ -40,7 +40,9 @@ export const UpdateExpenseForm: React.FC<Props> = ({
   const [formInvalid, setFormInvalid] = useState(true);
   const [expenseAmount, setExpenseAmount] = useState(formData.amount);
   const [expenseDate, setExpenseDate] = useState(formExpenseDate);
-  const [expenseSubcategoryId, setExpenseSubcategoryId] = useState("");
+  const [expenseSubcategoryId, setExpenseSubcategoryId] = useState(
+    formData.subcategoryId
+  );
 
   const [updateExpense] = useUpdateExpenseMutation({
     onCompleted: ({ updateExpense }) => {
