@@ -19,6 +19,7 @@ import { CreateSubcategoryForm } from "../create-subcategory-form/create-subcate
 import { CreateCategoryForm } from "../create-category-form/create-category-form";
 import { UpdateCategoryForm } from "../update-category-form/update-category-form";
 import { UpdateSubcategoryForm } from "../update-subcategory-form/update-subcategory-form";
+import { ListAddField } from "../list-add-field/list-add-field";
 
 interface Props {
   data: CategoriesListQuery;
@@ -38,6 +39,10 @@ export const CategoriesList: React.FC<Props> = ({
   } = useActionDropdown();
 
   const [openCategory, setOpenCategory] = useState("");
+  const [createModalCategory, setCreateModalCategory] = React.useState(false);
+  const [createModalSubcategory, setCreateModalSubcategory] = React.useState<
+    string | null
+  >(null);
   const [updateModalCategory, setUpdateModalCategory] =
     React.useState<Category | null>(null);
   const [updateModalSubcategory, setUpdateModalSubcategory] =
@@ -207,9 +212,11 @@ export const CategoriesList: React.FC<Props> = ({
                     );
                   })}
 
-                <CreateSubcategoryForm
-                  categoryId={categoryId}
-                  refetchCategories={refetchCategories}
+                <ListAddField
+                  text="Add subcategory"
+                  onClick={() => setCreateModalSubcategory(categoryId)}
+                  fontSize="small"
+                  indent
                 />
               </>
             )}
@@ -217,12 +224,42 @@ export const CategoriesList: React.FC<Props> = ({
         );
       })}
 
-      <CreateCategoryForm refetchCategories={refetchCategories} />
+      <ListAddField
+        text="Add category"
+        onClick={() => setCreateModalCategory(true)}
+      />
 
+      {createModalCategory && (
+        <Dialog
+          fullWidth
+          maxWidth="sm"
+          open={createModalCategory}
+          onClose={() => setCreateModalCategory(false)}
+        >
+          <CreateCategoryForm
+            closeForm={() => setCreateModalCategory(false)}
+            refetch={refetchCategories}
+          />
+        </Dialog>
+      )}
+      {createModalSubcategory && (
+        <Dialog
+          fullWidth
+          maxWidth="sm"
+          open={Boolean(createModalSubcategory)}
+          onClose={() => setCreateModalSubcategory(null)}
+        >
+          <CreateSubcategoryForm
+            categoryId={createModalSubcategory}
+            closeForm={() => setCreateModalSubcategory(null)}
+            refetch={refetchCategories}
+          />
+        </Dialog>
+      )}
       {updateModalCategory && (
         <Dialog
           fullWidth
-          maxWidth="md"
+          maxWidth="sm"
           open={Boolean(updateModalCategory)}
           onClose={() => setUpdateModalCategory(null)}
         >
@@ -236,7 +273,7 @@ export const CategoriesList: React.FC<Props> = ({
       {updateModalSubcategory && (
         <Dialog
           fullWidth
-          maxWidth="md"
+          maxWidth="sm"
           open={Boolean(updateModalSubcategory)}
           onClose={() => setUpdateModalSubcategory(null)}
         >

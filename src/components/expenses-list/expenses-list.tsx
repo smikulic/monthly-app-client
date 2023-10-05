@@ -178,7 +178,7 @@ export const ExpensesList: React.FC<Props> = ({
                   {updateModalExpense && (
                     <Dialog
                       fullWidth
-                      maxWidth="md"
+                      maxWidth="sm"
                       open={Boolean(updateModalExpense)}
                       onClose={() => setUpdateModalExpense(null)}
                     >
