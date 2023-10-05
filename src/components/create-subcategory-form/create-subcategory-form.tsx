@@ -1,13 +1,7 @@
 import React, { useEffect, useState } from "react";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
-import Stack from "@mui/material/Stack";
-import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { useCreateSubcategoryMutation } from "../../generated/graphql";
+import { FormDialog } from "../form-dialog/form-dialog";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 
@@ -47,62 +41,39 @@ export const CreateSubcategoryForm: React.FC<Props> = ({
   }, [subcategoryName, subcategoryBudget]);
 
   return (
-    <>
-      <DialogTitle>Create subcategory</DialogTitle>
-      <IconButton
-        onClick={closeForm}
-        sx={{
-          position: "absolute",
-          right: 8,
-          top: 8,
-          color: (theme) => theme.palette.grey[500],
-        }}
-      >
-        <CloseIcon />
-      </IconButton>
-      <DialogContent>
-        <Stack spacing={1}>
-          <TextField
-            required
-            id="subcategoryName"
-            label="Subcategory name"
-            size="small"
-            margin="none"
-            autoComplete="off"
-            onChange={(e) => setSubcategoryName(e.target.value)}
-          />
-          <TextField
-            required
-            id="subcategoryBudget"
-            label="Subcategory budget"
-            size="small"
-            margin="none"
-            autoComplete="off"
-            onChange={(e) => setSubcategoryBudget(Number(e.target.value))}
-          />
-        </Stack>
-      </DialogContent>
-      <DialogActions sx={{ padding: "0 24px 16px 24px" }}>
-        <Button variant="outlined" color="warning" onClick={closeForm}>
-          Cancel
-        </Button>
-        <Button
-          fullWidth
-          variant="contained"
-          disabled={formInvalid}
-          onClick={() =>
-            createSubcategory({
-              variables: {
-                categoryId,
-                budgetAmount: subcategoryBudget,
-                name: subcategoryName,
-              },
-            })
-          }
-        >
-          Create
-        </Button>
-      </DialogActions>
-    </>
+    <FormDialog
+      title="Create subcategory"
+      disabled={formInvalid}
+      formActionText="Create"
+      closeForm={closeForm}
+      formAction={() =>
+        createSubcategory({
+          variables: {
+            categoryId,
+            budgetAmount: subcategoryBudget,
+            name: subcategoryName,
+          },
+        })
+      }
+    >
+      <TextField
+        required
+        id="subcategoryName"
+        label="Subcategory name"
+        size="small"
+        margin="none"
+        autoComplete="off"
+        onChange={(e) => setSubcategoryName(e.target.value)}
+      />
+      <TextField
+        required
+        id="subcategoryBudget"
+        label="Subcategory budget"
+        size="small"
+        margin="none"
+        autoComplete="off"
+        onChange={(e) => setSubcategoryBudget(Number(e.target.value))}
+      />
+    </FormDialog>
   );
 };
