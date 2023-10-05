@@ -1,5 +1,6 @@
 import { styled } from "@mui/material/styles";
 
+/* Deprecated - it was used as a inline form wrapper */
 export const AddFormStyled = styled("div")({
   display: "flex",
   flexDirection: "column",

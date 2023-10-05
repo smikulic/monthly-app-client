@@ -6,6 +6,7 @@ import { ListItemHeader } from "../list-item-header/list-item-header";
 import { CreateExpenseForm } from "../create-expense-form/create-expense-form";
 import Dialog from "@mui/material/Dialog";
 import { UpdateExpenseForm } from "../update-expense-form/update-expense-form";
+import { ListAddField } from "../list-add-field/list-add-field";
 
 export interface SubcategoryDecoratedWithExpenses extends Subcategory {
   expenses: Expense[];
@@ -31,6 +32,7 @@ export const ExpensesList: React.FC<Props> = ({
 }) => {
   const [openCategory, setOpenCategory] = useState("");
   const [openSubcategory, setOpenSubcategory] = useState("");
+  const [createModalExpense, setCreateModalExpense] = React.useState(false);
   const [updateModalExpense, setUpdateModalExpense] =
     React.useState<Expense | null>(null);
 
@@ -169,12 +171,26 @@ export const ExpensesList: React.FC<Props> = ({
                       }
                     )}
 
-                  <CreateExpenseForm
-                    subcategories={category?.subcategories}
-                    currentDate={currentDate}
-                    refetchExpenses={refetchExpenses}
+                  <ListAddField
+                    text="Add expense"
+                    onClick={() => setCreateModalExpense(true)}
                   />
 
+                  {createModalExpense && (
+                    <Dialog
+                      fullWidth
+                      maxWidth="sm"
+                      open={createModalExpense}
+                      onClose={() => setCreateModalExpense(false)}
+                    >
+                      <CreateExpenseForm
+                        subcategories={category?.subcategories}
+                        currentDate={currentDate}
+                        closeForm={() => setCreateModalExpense(false)}
+                        refetch={refetchExpenses}
+                      />
+                    </Dialog>
+                  )}
                   {updateModalExpense && (
                     <Dialog
                       fullWidth
