@@ -45,7 +45,25 @@ export const CREATE_EXPENSE_MUTATION = gql`
     }
   }
 `;
-
+export const UPDATE_EXPENSE_MUTATION = gql`
+  mutation UpdateExpense(
+    $id: ID!
+    $subcategoryId: ID!
+    $amount: Int!
+    $date: String!
+  ) {
+    updateExpense(
+      id: $id
+      subcategoryId: $subcategoryId
+      amount: $amount
+      date: $date
+    ) {
+      id
+      amount
+      date
+    }
+  }
+`;
 export const DELETE_EXPENSE_MUTATION = gql`
   mutation DeleteExpense($id: ID!) {
     deleteExpense(id: $id) {

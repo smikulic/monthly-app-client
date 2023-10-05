@@ -4,6 +4,8 @@ import { ProgressBar } from "../progress-bar/progress-bar";
 import { ExpandedExpenses } from "../expanded-expenses/expanded-expenses";
 import { ListItemHeader } from "../list-item-header/list-item-header";
 import { CreateExpenseForm } from "../create-expense-form/create-expense-form";
+import Dialog from "@mui/material/Dialog";
+import { UpdateExpenseForm } from "../update-expense-form/update-expense-form";
 
 export interface SubcategoryDecoratedWithExpenses extends Subcategory {
   expenses: Expense[];
@@ -29,6 +31,8 @@ export const ExpensesList: React.FC<Props> = ({
 }) => {
   const [openCategory, setOpenCategory] = useState("");
   const [openSubcategory, setOpenSubcategory] = useState("");
+  const [updateModalExpense, setUpdateModalExpense] =
+    React.useState<Expense | null>(null);
 
   return (
     <div>
@@ -151,6 +155,9 @@ export const ExpensesList: React.FC<Props> = ({
                                 {!!subcategorySelected && (
                                   <ExpandedExpenses
                                     expenses={subcategorySelected.expenses}
+                                    setUpdateModalExpense={(expense: Expense) =>
+                                      setUpdateModalExpense(expense)
+                                    }
                                     subcategoryName={subcategory.name}
                                     refetchExpenses={refetchExpenses}
                                   />
@@ -167,6 +174,22 @@ export const ExpensesList: React.FC<Props> = ({
                     currentDate={currentDate}
                     refetchExpenses={refetchExpenses}
                   />
+
+                  {updateModalExpense && (
+                    <Dialog
+                      fullWidth
+                      maxWidth="md"
+                      open={Boolean(updateModalExpense)}
+                      onClose={() => setUpdateModalExpense(null)}
+                    >
+                      <UpdateExpenseForm
+                        formData={updateModalExpense}
+                        subcategories={category?.subcategories}
+                        closeForm={() => setUpdateModalExpense(null)}
+                        refetch={refetchExpenses}
+                      />
+                    </Dialog>
+                  )}
                 </>
               )}
             </React.Fragment>

@@ -52,6 +52,9 @@ export type Mutation = {
   deleteSubcategory: Subcategory;
   login?: Maybe<AuthPayload>;
   signup?: Maybe<AuthPayload>;
+  updateCategory: Category;
+  updateExpense: Expense;
+  updateSubcategory: Subcategory;
 };
 
 
@@ -100,6 +103,28 @@ export type MutationLoginArgs = {
 export type MutationSignupArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
+};
+
+
+export type MutationUpdateCategoryArgs = {
+  icon?: InputMaybe<Scalars['String']>;
+  id: Scalars['ID'];
+  name: Scalars['String'];
+};
+
+
+export type MutationUpdateExpenseArgs = {
+  amount: Scalars['Int'];
+  date: Scalars['String'];
+  id: Scalars['ID'];
+  subcategoryId: Scalars['ID'];
+};
+
+
+export type MutationUpdateSubcategoryArgs = {
+  budgetAmount: Scalars['Int'];
+  id: Scalars['ID'];
+  name: Scalars['String'];
 };
 
 export type Query = {
@@ -178,6 +203,14 @@ export type CreateCategoryMutationVariables = Exact<{
 
 export type CreateCategoryMutation = { __typename?: 'Mutation', createCategory: { __typename?: 'Category', name: string } };
 
+export type UpdateCategoryMutationVariables = Exact<{
+  id: Scalars['ID'];
+  name: Scalars['String'];
+}>;
+
+
+export type UpdateCategoryMutation = { __typename?: 'Mutation', updateCategory: { __typename?: 'Category', name: string } };
+
 export type DeleteCategoryMutationVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -193,6 +226,15 @@ export type CreateSubcategoryMutationVariables = Exact<{
 
 
 export type CreateSubcategoryMutation = { __typename?: 'Mutation', createSubcategory: { __typename?: 'Subcategory', name: string, budgetAmount?: number | null } };
+
+export type UpdateSubcategoryMutationVariables = Exact<{
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  budgetAmount: Scalars['Int'];
+}>;
+
+
+export type UpdateSubcategoryMutation = { __typename?: 'Mutation', updateSubcategory: { __typename?: 'Subcategory', name: string, budgetAmount?: number | null } };
 
 export type DeleteSubcategoryMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -231,6 +273,16 @@ export type CreateExpenseMutationVariables = Exact<{
 
 
 export type CreateExpenseMutation = { __typename?: 'Mutation', createExpense: { __typename?: 'Expense', id: string, amount: number, date: string } };
+
+export type UpdateExpenseMutationVariables = Exact<{
+  id: Scalars['ID'];
+  subcategoryId: Scalars['ID'];
+  amount: Scalars['Int'];
+  date: Scalars['String'];
+}>;
+
+
+export type UpdateExpenseMutation = { __typename?: 'Mutation', updateExpense: { __typename?: 'Expense', id: string, amount: number, date: string } };
 
 export type DeleteExpenseMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -330,6 +382,40 @@ export function useCreateCategoryMutation(baseOptions?: Apollo.MutationHookOptio
 export type CreateCategoryMutationHookResult = ReturnType<typeof useCreateCategoryMutation>;
 export type CreateCategoryMutationResult = Apollo.MutationResult<CreateCategoryMutation>;
 export type CreateCategoryMutationOptions = Apollo.BaseMutationOptions<CreateCategoryMutation, CreateCategoryMutationVariables>;
+export const UpdateCategoryDocument = gql`
+    mutation UpdateCategory($id: ID!, $name: String!) {
+  updateCategory(id: $id, name: $name) {
+    name
+  }
+}
+    `;
+export type UpdateCategoryMutationFn = Apollo.MutationFunction<UpdateCategoryMutation, UpdateCategoryMutationVariables>;
+
+/**
+ * __useUpdateCategoryMutation__
+ *
+ * To run a mutation, you first call `useUpdateCategoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateCategoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateCategoryMutation, { data, loading, error }] = useUpdateCategoryMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useUpdateCategoryMutation(baseOptions?: Apollo.MutationHookOptions<UpdateCategoryMutation, UpdateCategoryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateCategoryMutation, UpdateCategoryMutationVariables>(UpdateCategoryDocument, options);
+      }
+export type UpdateCategoryMutationHookResult = ReturnType<typeof useUpdateCategoryMutation>;
+export type UpdateCategoryMutationResult = Apollo.MutationResult<UpdateCategoryMutation>;
+export type UpdateCategoryMutationOptions = Apollo.BaseMutationOptions<UpdateCategoryMutation, UpdateCategoryMutationVariables>;
 export const DeleteCategoryDocument = gql`
     mutation DeleteCategory($id: ID!) {
   deleteCategory(id: $id) {
@@ -403,6 +489,42 @@ export function useCreateSubcategoryMutation(baseOptions?: Apollo.MutationHookOp
 export type CreateSubcategoryMutationHookResult = ReturnType<typeof useCreateSubcategoryMutation>;
 export type CreateSubcategoryMutationResult = Apollo.MutationResult<CreateSubcategoryMutation>;
 export type CreateSubcategoryMutationOptions = Apollo.BaseMutationOptions<CreateSubcategoryMutation, CreateSubcategoryMutationVariables>;
+export const UpdateSubcategoryDocument = gql`
+    mutation UpdateSubcategory($id: ID!, $name: String!, $budgetAmount: Int!) {
+  updateSubcategory(id: $id, name: $name, budgetAmount: $budgetAmount) {
+    name
+    budgetAmount
+  }
+}
+    `;
+export type UpdateSubcategoryMutationFn = Apollo.MutationFunction<UpdateSubcategoryMutation, UpdateSubcategoryMutationVariables>;
+
+/**
+ * __useUpdateSubcategoryMutation__
+ *
+ * To run a mutation, you first call `useUpdateSubcategoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateSubcategoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateSubcategoryMutation, { data, loading, error }] = useUpdateSubcategoryMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      name: // value for 'name'
+ *      budgetAmount: // value for 'budgetAmount'
+ *   },
+ * });
+ */
+export function useUpdateSubcategoryMutation(baseOptions?: Apollo.MutationHookOptions<UpdateSubcategoryMutation, UpdateSubcategoryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateSubcategoryMutation, UpdateSubcategoryMutationVariables>(UpdateSubcategoryDocument, options);
+      }
+export type UpdateSubcategoryMutationHookResult = ReturnType<typeof useUpdateSubcategoryMutation>;
+export type UpdateSubcategoryMutationResult = Apollo.MutationResult<UpdateSubcategoryMutation>;
+export type UpdateSubcategoryMutationOptions = Apollo.BaseMutationOptions<UpdateSubcategoryMutation, UpdateSubcategoryMutationVariables>;
 export const DeleteSubcategoryDocument = gql`
     mutation DeleteSubcategory($id: ID!) {
   deleteSubcategory(id: $id) {
@@ -591,6 +713,49 @@ export function useCreateExpenseMutation(baseOptions?: Apollo.MutationHookOption
 export type CreateExpenseMutationHookResult = ReturnType<typeof useCreateExpenseMutation>;
 export type CreateExpenseMutationResult = Apollo.MutationResult<CreateExpenseMutation>;
 export type CreateExpenseMutationOptions = Apollo.BaseMutationOptions<CreateExpenseMutation, CreateExpenseMutationVariables>;
+export const UpdateExpenseDocument = gql`
+    mutation UpdateExpense($id: ID!, $subcategoryId: ID!, $amount: Int!, $date: String!) {
+  updateExpense(
+    id: $id
+    subcategoryId: $subcategoryId
+    amount: $amount
+    date: $date
+  ) {
+    id
+    amount
+    date
+  }
+}
+    `;
+export type UpdateExpenseMutationFn = Apollo.MutationFunction<UpdateExpenseMutation, UpdateExpenseMutationVariables>;
+
+/**
+ * __useUpdateExpenseMutation__
+ *
+ * To run a mutation, you first call `useUpdateExpenseMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateExpenseMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateExpenseMutation, { data, loading, error }] = useUpdateExpenseMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      subcategoryId: // value for 'subcategoryId'
+ *      amount: // value for 'amount'
+ *      date: // value for 'date'
+ *   },
+ * });
+ */
+export function useUpdateExpenseMutation(baseOptions?: Apollo.MutationHookOptions<UpdateExpenseMutation, UpdateExpenseMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateExpenseMutation, UpdateExpenseMutationVariables>(UpdateExpenseDocument, options);
+      }
+export type UpdateExpenseMutationHookResult = ReturnType<typeof useUpdateExpenseMutation>;
+export type UpdateExpenseMutationResult = Apollo.MutationResult<UpdateExpenseMutation>;
+export type UpdateExpenseMutationOptions = Apollo.BaseMutationOptions<UpdateExpenseMutation, UpdateExpenseMutationVariables>;
 export const DeleteExpenseDocument = gql`
     mutation DeleteExpense($id: ID!) {
   deleteExpense(id: $id) {

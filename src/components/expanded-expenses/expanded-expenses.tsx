@@ -10,12 +10,14 @@ import { useActionDropdown } from "../../hooks/useActionDropdown";
 interface Props {
   expenses: Expense[];
   subcategoryName: string;
+  setUpdateModalExpense: (expense: Expense) => void;
   refetchExpenses: () => Promise<unknown>;
 }
 
 export const ExpandedExpenses: React.FC<Props> = ({
   expenses,
   subcategoryName,
+  setUpdateModalExpense,
   refetchExpenses,
 }) => {
   const {
@@ -70,8 +72,10 @@ export const ExpandedExpenses: React.FC<Props> = ({
                     onClose={() => handleActionsDropdownClose(expenseId)}
                   >
                     <MenuItem
-                      disabled
-                      onClick={() => handleActionsDropdownClose(expenseId)}
+                      onClick={() => {
+                        setUpdateModalExpense(expense);
+                        handleActionsDropdownClose(expenseId);
+                      }}
                     >
                       Edit
                     </MenuItem>

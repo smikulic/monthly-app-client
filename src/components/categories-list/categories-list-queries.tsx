@@ -22,6 +22,13 @@ export const CREATE_CATEGORY_MUTATION = gql`
     }
   }
 `;
+export const UPDATE_CATEGORY_MUTATION = gql`
+  mutation UpdateCategory($id: ID!, $name: String!) {
+    updateCategory(id: $id, name: $name) {
+      name
+    }
+  }
+`;
 export const DELETE_CATEGORY_MUTATION = gql`
   mutation DeleteCategory($id: ID!) {
     deleteCategory(id: $id) {
@@ -41,6 +48,14 @@ export const CREATE_SUBCATEGORY_MUTATION = gql`
       name: $name
       budgetAmount: $budgetAmount
     ) {
+      name
+      budgetAmount
+    }
+  }
+`;
+export const UPDATE_SUBCATEGORY_MUTATION = gql`
+  mutation UpdateSubcategory($id: ID!, $name: String!, $budgetAmount: Int!) {
+    updateSubcategory(id: $id, name: $name, budgetAmount: $budgetAmount) {
       name
       budgetAmount
     }

@@ -3,8 +3,11 @@ import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import Dialog from "@mui/material/Dialog";
 import {
   CategoriesListQuery,
+  Category,
+  Subcategory,
   useDeleteCategoryMutation,
   useDeleteSubcategoryMutation,
 } from "../../generated/graphql";
@@ -14,6 +17,8 @@ import { useActionDropdown } from "../../hooks/useActionDropdown";
 import { ListItemHeader } from "../list-item-header/list-item-header";
 import { CreateSubcategoryForm } from "../create-subcategory-form/create-subcategory-form";
 import { CreateCategoryForm } from "../create-category-form/create-category-form";
+import { UpdateCategoryForm } from "../update-category-form/update-category-form";
+import { UpdateSubcategoryForm } from "../update-subcategory-form/update-subcategory-form";
 
 interface Props {
   data: CategoriesListQuery;
@@ -33,6 +38,10 @@ export const CategoriesList: React.FC<Props> = ({
   } = useActionDropdown();
 
   const [openCategory, setOpenCategory] = useState("");
+  const [updateModalCategory, setUpdateModalCategory] =
+    React.useState<Category | null>(null);
+  const [updateModalSubcategory, setUpdateModalSubcategory] =
+    React.useState<Subcategory | null>(null);
 
   const [deleteCategory] = useDeleteCategoryMutation({
     onError: () => {
@@ -64,7 +73,7 @@ export const CategoriesList: React.FC<Props> = ({
 
   return (
     <div>
-      {data.categories.map((category) => {
+      {data.categories.map((category: Category) => {
         if (!category) return null;
 
         const categoryId = category.id;
@@ -113,8 +122,10 @@ export const CategoriesList: React.FC<Props> = ({
                     onClose={() => handleActionsDropdownClose(categoryId)}
                   >
                     <MenuItem
-                      disabled
-                      onClick={() => handleActionsDropdownClose(categoryId)}
+                      onClick={() => {
+                        setUpdateModalCategory(category);
+                        handleActionsDropdownClose(categoryId);
+                      }}
                     >
                       Edit
                     </MenuItem>
@@ -171,10 +182,10 @@ export const CategoriesList: React.FC<Props> = ({
                                 }
                               >
                                 <MenuItem
-                                  disabled
-                                  onClick={() =>
-                                    handleActionsDropdownClose(subcategoryId)
-                                  }
+                                  onClick={() => {
+                                    setUpdateModalSubcategory(subcategory);
+                                    handleActionsDropdownClose(subcategoryId);
+                                  }}
                                 >
                                   Edit
                                 </MenuItem>
@@ -207,6 +218,35 @@ export const CategoriesList: React.FC<Props> = ({
       })}
 
       <CreateCategoryForm refetchCategories={refetchCategories} />
+
+      {updateModalCategory && (
+        <Dialog
+          fullWidth
+          maxWidth="md"
+          open={Boolean(updateModalCategory)}
+          onClose={() => setUpdateModalCategory(null)}
+        >
+          <UpdateCategoryForm
+            formData={updateModalCategory}
+            closeForm={() => setUpdateModalCategory(null)}
+            refetch={refetchCategories}
+          />
+        </Dialog>
+      )}
+      {updateModalSubcategory && (
+        <Dialog
+          fullWidth
+          maxWidth="md"
+          open={Boolean(updateModalSubcategory)}
+          onClose={() => setUpdateModalSubcategory(null)}
+        >
+          <UpdateSubcategoryForm
+            formData={updateModalSubcategory}
+            closeForm={() => setUpdateModalSubcategory(null)}
+            refetch={refetchCategories}
+          />
+        </Dialog>
+      )}
     </div>
   );
 };

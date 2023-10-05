@@ -26,6 +26,7 @@ export const SubcategoryFormFields: React.FC<Props> = ({
       refetchCategories();
       closeForm();
       setSubcategoryName("");
+      setSubcategoryBudgetAmount(0);
       toast.success(
         `You have successfully created ${createSubcategory.name} subcategory!`
       );
