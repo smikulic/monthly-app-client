@@ -44,7 +44,6 @@
   width: 100%;
   font-size: 16px;
   color: white;
-  /* background-color: rgb(76, 115, 255); */
   background-color: #277bc0;
   border: none;
   border-radius: 5px;
@@ -52,4 +51,9 @@
 }
 .loginPage .form .actions button:hover {
   opacity: 0.8;
+}
+
+.loginPage .link {
+  color: #277bc0;
+  cursor: pointer;
 }

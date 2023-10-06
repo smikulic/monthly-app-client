@@ -1,5 +1,6 @@
 import { gql } from "@apollo/client";
 import React, { Dispatch, SetStateAction, useState } from "react";
+import { toast } from "react-toastify";
 import { AUTH_TOKEN, AUTH_TOKEN_USER } from "../../constants";
 import { useLoginMutation, useSignupMutation } from "../../generated/graphql";
 import "./login-page-container.css";
@@ -31,7 +32,6 @@ export const LoginPageContainer = ({
 }: {
   setAuthenticated: Dispatch<SetStateAction<string | null>>;
 }) => {
-  const [loginLoading, setLoginLoading] = useState<boolean>(false);
   const [formState, setFormState] = useState({
     login: true,
     email: "",
@@ -43,11 +43,13 @@ export const LoginPageContainer = ({
       email: formState.email,
       password: formState.password,
     },
+    onError: (error) => {
+      toast.error(error.message);
+    },
     onCompleted: ({ login }) => {
       localStorage.setItem(AUTH_TOKEN, login?.token!);
       localStorage.setItem(AUTH_TOKEN_USER, login?.user?.email!);
       setAuthenticated(login?.token!);
-      setLoginLoading(false);
       window.location.replace("/");
     },
   });
@@ -56,6 +58,9 @@ export const LoginPageContainer = ({
     variables: {
       email: formState.email,
       password: formState.password,
+    },
+    onError: (error) => {
+      toast.error(error.message);
     },
     onCompleted: ({ signup }) => {
       localStorage.setItem(AUTH_TOKEN, signup?.token!);
@@ -104,14 +109,12 @@ export const LoginPageContainer = ({
             onClick={
               formState.login
                 ? () => {
-                    setLoginLoading(true);
                     loginAction();
                   }
                 : signupAction
             }
           >
-            {loginLoading && <>...</>}
-            {!loginLoading && <>{formState.login ? "Login" : "Register"}</>}
+            {formState.login ? "Login" : "Register"}
           </button>
           <p
             onClick={(e) =>
@@ -121,9 +124,21 @@ export const LoginPageContainer = ({
               })
             }
           >
-            {formState.login
-              ? "need to create an account? click here"
-              : "already have an account? click here"}
+            {formState.login && (
+              <>
+                need to create an account? register{" "}
+                <span className="link">here</span>
+              </>
+            )}
+            {!formState.login && (
+              <>
+                already have an account? login{" "}
+                <span className="link">here</span>
+              </>
+            )}
+            {/* {formState.login
+              ? "need to create an account? register here"
+              : "already have an account? login here"} */}
           </p>
         </div>
       </div>

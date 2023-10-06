@@ -11,7 +11,6 @@ import {
   useDeleteSubcategoryMutation,
 } from "../../generated/graphql";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.min.css";
 import { useActionDropdown } from "../../hooks/useActionDropdown";
 import { ListItemHeader } from "../list-item-header/list-item-header";
 import { CreateSubcategoryForm } from "../create-subcategory-form/create-subcategory-form";

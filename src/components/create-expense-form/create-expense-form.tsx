@@ -7,11 +7,10 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { toast } from "react-toastify";
 import { Subcategory, useCreateExpenseMutation } from "../../generated/graphql";
 import { SubcategoryDecoratedWithExpenses } from "../expenses-list/expenses-list";
 import { FormDialog } from "../form-dialog/form-dialog";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.min.css";
 
 interface Props {
   open: boolean;

@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
+import { toast } from "react-toastify";
 import { useCreateSubcategoryMutation } from "../../generated/graphql";
 import { FormDialog } from "../form-dialog/form-dialog";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.min.css";
 
 interface Props {
   open: boolean;
