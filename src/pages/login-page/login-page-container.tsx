@@ -2,7 +2,11 @@ import { gql } from "@apollo/client";
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { toast } from "react-toastify";
 import { AUTH_TOKEN, AUTH_TOKEN_USER } from "../../constants";
-import { useLoginMutation, useSignupMutation } from "../../generated/graphql";
+import {
+  useLoginMutation,
+  useResetPasswordRequestMutation,
+  useSignupMutation,
+} from "../../generated/graphql";
 import "./login-page-container.css";
 
 export const SIGNUP_MUTATION = gql`
@@ -27,6 +31,14 @@ export const LOGIN_MUTATION = gql`
   }
 `;
 
+export const RESET_PASSWORD_REQUEST_MUTATION = gql`
+  mutation ResetPasswordRequest($email: String!) {
+    resetPasswordRequest(email: $email) {
+      email
+    }
+  }
+`;
+
 export const LoginPageContainer = ({
   setAuthenticated,
 }: {
@@ -34,6 +46,7 @@ export const LoginPageContainer = ({
 }) => {
   const [formState, setFormState] = useState({
     login: true,
+    passwordReset: false,
     email: "",
     password: "",
   });
@@ -70,78 +83,129 @@ export const LoginPageContainer = ({
     },
   });
 
+  const [resetPasswordRequestAction]: any = useResetPasswordRequestMutation({
+    variables: {
+      email: formState.email,
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+    onCompleted: ({ resetPasswordRequest }) => {
+      console.log({ resetPasswordRequest });
+      toast.success("Email with reset password instructions is sent!");
+    },
+  });
+
   return (
     <div className="loginPage">
-      <h1 className="title">{formState.login ? "Login" : "Sign Up"}</h1>
-      <div className="form">
-        <div className="formField">
-          <label>Email address</label>
-          <input
-            value={formState.email}
-            onChange={(e) =>
-              setFormState({
-                ...formState,
-                email: e.target.value,
-              })
-            }
-            type="text"
-            placeholder="Enter your email"
-          />
-        </div>
-        <div className="formField">
-          <label>Password</label>
-          <input
-            value={formState.password}
-            onChange={(e) =>
-              setFormState({
-                ...formState,
-                password: e.target.value,
-              })
-            }
-            type="password"
-            placeholder={
-              formState.login ? "Enter your password" : "Choose a safe password"
-            }
-          />
-        </div>
-        <div className="actions">
-          <button
-            onClick={
-              formState.login
-                ? () => {
-                    loginAction();
+      {!formState.passwordReset && (
+        <>
+          <h1 className="title">{formState.login ? "Login" : "Sign Up"}</h1>
+          <div className="form">
+            <div className="formField">
+              <label>Email address</label>
+              <input
+                value={formState.email}
+                onChange={(e) =>
+                  setFormState({ ...formState, email: e.target.value })
+                }
+                type="text"
+                placeholder="Enter your email"
+              />
+            </div>
+            <div className="formField">
+              <label>Password</label>
+              <input
+                value={formState.password}
+                onChange={(e) =>
+                  setFormState({ ...formState, password: e.target.value })
+                }
+                type="password"
+                placeholder={
+                  formState.login
+                    ? "Enter your password"
+                    : "Choose a safe password"
+                }
+              />
+            </div>
+            <div className="actions">
+              <button
+                onClick={formState.login ? () => loginAction() : signupAction}
+              >
+                {formState.login ? "Login" : "Register"}
+              </button>
+
+              <br />
+              {formState.login && (
+                <div
+                  onClick={(e) => setFormState({ ...formState, login: false })}
+                >
+                  need to create an account? register{" "}
+                  <span className="link">here</span>
+                </div>
+              )}
+              {!formState.login && (
+                <div
+                  onClick={(e) => setFormState({ ...formState, login: true })}
+                >
+                  already have an account? login{" "}
+                  <span className="link">here</span>
+                </div>
+              )}
+
+              <br />
+              <div>
+                Forgot your password? reset{" "}
+                <span
+                  className="link"
+                  onClick={() =>
+                    setFormState({ ...formState, passwordReset: true })
                   }
-                : signupAction
-            }
-          >
-            {formState.login ? "Login" : "Register"}
-          </button>
-          <p
-            onClick={(e) =>
-              setFormState({
-                ...formState,
-                login: !formState.login,
-              })
-            }
-          >
-            {formState.login && (
-              <>
-                need to create an account? register{" "}
-                <span className="link">here</span>
-              </>
-            )}
-            {!formState.login && (
-              <>
-                already have an account? login{" "}
-                <span className="link">here</span>
-              </>
-            )}
-            {/* {formState.login
-              ? "need to create an account? register here"
-              : "already have an account? login here"} */}
-          </p>
-        </div>
-      </div>
+                >
+                  here
+                </span>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+
+      {formState.passwordReset && (
+        <>
+          <h1 className="title">Forgot Your Password?</h1>
+          <div className="form">
+            <div className="formField">
+              <label>Email address</label>
+              <input
+                value={formState.email}
+                onChange={(e) =>
+                  setFormState({ ...formState, email: e.target.value })
+                }
+                type="text"
+                placeholder="Enter your email"
+              />
+            </div>
+            <div className="actions">
+              <button onClick={resetPasswordRequestAction}>
+                Send reset instructions
+              </button>
+
+              <br />
+              <div
+                onClick={(e) =>
+                  setFormState({
+                    ...formState,
+                    login: true,
+                    passwordReset: false,
+                  })
+                }
+              >
+                back to <span className="link">Login page</span>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

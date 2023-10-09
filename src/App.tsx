@@ -11,6 +11,7 @@ import "react-toastify/dist/ReactToastify.min.css";
 import { Header } from "./components/header/header";
 import { AUTH_TOKEN } from "./constants";
 import { CategoriesPageContainer } from "./pages/categories-page/categories-page-container";
+import { ResetPasswordPageContainer } from "./pages/reset-password-page/reset-password-page-container";
 
 const muiTheme = createTheme({
   palette: {
@@ -55,6 +56,10 @@ function App() {
               element={
                 <LoginPageContainer setAuthenticated={setAuthenticated} />
               }
+            />
+            <Route
+              path="/reset-password"
+              element={<ResetPasswordPageContainer />}
             />
             {/* <Route path="*" element={<NotFound />} /> */}
           </Routes>
