@@ -35,7 +35,6 @@ function App() {
   return (
     <div className="App">
       <ThemeProvider theme={muiTheme}>
-        {/* <CategoriesListContainer /> */}
         <Router>
           {authenticated && <Header setAuthenticated={setAuthenticated} />}
           <Routes>

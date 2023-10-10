@@ -26,55 +26,11 @@
   font-size: 16px;
   color: #ffb200;
 }
-.listItem.subcategory {
-  position: relative;
-  height: 52px;
-  padding: 8px 32px 8px 56px;
-  font-size: 16px;
-}
-.listItem.expense {
-  padding: 8px 18px 8px 56px;
-  height: 48px;
-  font-size: 15px;
-}
-.listItem .budgetAmount {
-  position: absolute;
-  top: 28px;
-  right: 32px;
-  font-size: 14px;
-}
-.listItem .expenseAmount {
-  position: absolute;
-  top: 10px;
-  right: 32px;
-  font-size: 14px;
-  color: #181818;
-}
-
-.listItem.category .expenseAmount {
-  top: 18px;
-  font-size: 16px;
-}
-
-.expenseField {
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  padding-left: 24px;
-}
 
 .red {
   color: #ff7777;
 }
 
-.green {
-  color: #7fb77e;
-}
-
 .orange {
   color: #ffb200;
-}
-
-.blue {
-  color: #277bc0;
 }
