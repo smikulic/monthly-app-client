@@ -12,6 +12,7 @@ import { Header } from "./components/header/header";
 import { AUTH_TOKEN } from "./constants";
 import { CategoriesPageContainer } from "./pages/categories-page/categories-page-container";
 import { ResetPasswordPageContainer } from "./pages/reset-password-page/reset-password-page-container";
+import { WelcomePageContainer } from "./pages/welcome-page/welcome-page-container";
 
 const muiTheme = createTheme({
   palette: {
@@ -41,11 +42,7 @@ function App() {
             <Route
               path="/"
               element={
-                authenticated ? (
-                  <HomePageContainer />
-                ) : (
-                  <LoginPageContainer setAuthenticated={setAuthenticated} />
-                )
+                authenticated ? <HomePageContainer /> : <WelcomePageContainer />
               }
             />
             <Route path="/expenses" element={<ExpensesPageContainer />} />

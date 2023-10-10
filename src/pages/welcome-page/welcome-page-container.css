@@ -1,0 +1,88 @@
+.welcomePage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.oval-wrapper {
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  vertical-align: middle;
+  overflow: hidden;
+  z-index: -1;
+}
+.oval-wrapper svg {
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.welcome-header {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.button-start {
+  margin: 24px;
+  padding: 16px 32px;
+  font-size: 18px;
+  text-decoration: none;
+  color: white;
+  background: #277bc0;
+  border: 1px solid #277bc0;
+  border-radius: 25px;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+.button-start:hover,
+.button-start:active,
+.button-start:focus {
+  color: #277bc0;
+  background: white;
+  text-decoration: none;
+}
+
+.welcome-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 60%;
+}
+
+.welcome-content .title {
+  margin: 0 0 4rem 0;
+  line-height: 58px;
+  font-size: 60px;
+  text-align: left;
+}
+/* .welcome-content .title span:nth-child(1) {
+  color: #7afac5;
+} */
+.welcome-content .title span:nth-child(3) {
+  color: #277bc0;
+  /* color: #277bc0; */
+}
+
+.feature-box {
+  position: relative;
+  padding: 2rem 16px;
+  width: 100%;
+  text-align: center;
+}
+.feature-box-title {
+  margin: 0;
+  margin-bottom: 14px;
+  font-size: 22px;
+}
+.feature-box-description {
+  margin: 0;
+  font-size: 18px;
+}
