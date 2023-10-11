@@ -53,7 +53,7 @@ export const ResetPasswordPageContainer = () => {
           <button onClick={resetPasswordAction}>Reset</button>
 
           <br />
-          <div onClick={() => window.location.replace("/login")}>
+          <div onClick={() => window.location.replace("/app")}>
             then return back to <span className="link">Login page</span>
           </div>
         </div>

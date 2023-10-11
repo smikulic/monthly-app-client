@@ -32,27 +32,29 @@ function App() {
   const [authenticated, setAuthenticated] = useState<string | null>(
     localStorage.getItem(AUTH_TOKEN)
   );
+  const isWelcomePage = window.location.pathname === "/";
 
   return (
     <div className="App">
       <ThemeProvider theme={muiTheme}>
         <Router>
-          {authenticated && <Header setAuthenticated={setAuthenticated} />}
+          {authenticated && !isWelcomePage && (
+            <Header setAuthenticated={setAuthenticated} />
+          )}
           <Routes>
+            <Route path="/" element={<WelcomePageContainer />} />
             <Route
-              path="/"
+              path="/app"
               element={
-                authenticated ? <HomePageContainer /> : <WelcomePageContainer />
+                authenticated ? (
+                  <HomePageContainer />
+                ) : (
+                  <LoginPageContainer setAuthenticated={setAuthenticated} />
+                )
               }
             />
             <Route path="/expenses" element={<ExpensesPageContainer />} />
             <Route path="/categories" element={<CategoriesPageContainer />} />
-            <Route
-              path="/login"
-              element={
-                <LoginPageContainer setAuthenticated={setAuthenticated} />
-              }
-            />
             <Route
               path="/reset-password"
               element={<ResetPasswordPageContainer />}

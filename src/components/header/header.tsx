@@ -12,13 +12,13 @@ export const Header = ({
   const navigate = useNavigate();
   const location = useLocation();
   const userName = localStorage.getItem(AUTH_TOKEN_USER)!.split("@")[0];
-  const isHome = location.pathname === "/";
+  const isHome = location.pathname === "/app";
 
   return (
     <div className="header">
       <div>
         {!isHome && (
-          <span className="iconBack" onClick={() => navigate("/")}>
+          <span className="iconBack" onClick={() => navigate("/app")}>
             <ChevronLeftIcon />
             Back
           </span>
@@ -31,7 +31,7 @@ export const Header = ({
           localStorage.removeItem(AUTH_TOKEN);
           localStorage.removeItem(AUTH_TOKEN_USER);
           setAuthenticated(null);
-          navigate("/");
+          navigate("/app");
         }}
       >
         logout

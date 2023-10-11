@@ -20,7 +20,7 @@ export const WelcomePageContainer = () => {
         </svg>
       </div>
       <div className="welcome-header">
-        <Link to="/login" className="button-start">
+        <Link to="/app" className="button-start">
           Sign In
         </Link>
       </div>
@@ -61,11 +61,11 @@ export const WelcomePageContainer = () => {
             </p>
           </span>
         </div>
-        <div className="feature-box">
-          <Link to="/login" className="button-start">
-            Get Started
-          </Link>
-        </div>
+
+        <br />
+        <Link to="/app" className="button-start">
+          Get Started
+        </Link>
       </div>
     </div>
   );
