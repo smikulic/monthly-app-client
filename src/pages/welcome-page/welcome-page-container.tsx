@@ -9,13 +9,15 @@ export const WelcomePageContainer = () => {
         <svg viewBox="400 0 500 500" preserveAspectRatio="xMinYMin meet">
           <path
             d="M0,290 C170,240 900,0 1000,140 L1000,00 L0,0 Z"
-            style={{ stroke: "none", fill: "#277bc0", opacity: "0.5" }}
-            // style={{ stroke: "none", fill: "#46eaa6", opacity: "0.7" }}
+            // style={{ stroke: "none", fill: "#277bc0", opacity: "0.5" }}
+            // original green: 41efcd
+            // original red: ffb6bd
+            style={{ stroke: "none", fill: "#46eaa6", opacity: "0.7" }}
           />
           <path
             d="M0,220 C170,220 750,0 1000,140 L1000,00 L0,0 Z"
-            style={{ stroke: "none", fill: "#c8e4fc", opacity: "0.4" }}
-            // style={{ stroke: "none", fill: "#96fcd2", opacity: "0.6" }}
+            // style={{ stroke: "none", fill: "#c8e4fc", opacity: "0.4" }}
+            style={{ stroke: "none", fill: "#96fcd2", opacity: "0.6" }}
           />
         </svg>
       </div>

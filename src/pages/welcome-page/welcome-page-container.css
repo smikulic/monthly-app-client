@@ -34,9 +34,9 @@
   padding: 16px 32px;
   font-size: 18px;
   text-decoration: none;
-  color: white;
-  background: #277bc0;
-  border: 1px solid #277bc0;
+  color: #fff;
+  background: #03d17c;
+  border: 1px solid #41efcd;
   border-radius: 25px;
   transition: all 0.2s ease-in-out;
   cursor: pointer;
@@ -44,7 +44,7 @@
 .button-start:hover,
 .button-start:active,
 .button-start:focus {
-  color: #277bc0;
+  color: #41efcd;
   background: white;
   text-decoration: none;
 }
@@ -63,12 +63,9 @@
   font-size: 60px;
   text-align: left;
 }
-/* .welcome-content .title span:nth-child(1) {
-  color: #7afac5;
-} */
+
 .welcome-content .title span:nth-child(3) {
-  color: #277bc0;
-  /* color: #277bc0; */
+  color: #f199c0;
 }
 
 .feature-box {

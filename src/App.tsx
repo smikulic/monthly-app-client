@@ -21,10 +21,10 @@ const muiTheme = createTheme({
     // dark: will be calculated from palette.primary.main,
     // contrastText: will be calculated to contrast with palette.primary.main
     primary: {
-      main: "#277bc0",
+      main: "#41efcd",
     },
     warning: {
-      main: "#ffb200",
+      main: "#eec22f",
     },
   },
 });
@@ -119,6 +119,7 @@ function App() {
           hideProgressBar={true}
           newestOnTop={false}
           closeOnClick
+          closeButton={false}
           rtl={false}
           pauseOnFocusLoss
           draggable

@@ -9,20 +9,27 @@
 
 .header .iconBack {
   position: absolute;
+  top: 12px;
   left: 32px;
   display: flex;
   align-items: center;
-  color: #277bc0;
+  padding: 8px 16px;
+  color: #41efcd;
+  border: 1px solid #41efcd;
+  border-radius: 5px;
   cursor: pointer;
 }
 
 .header .logout {
-  margin-left: 12px;
-  font-size: 14px;
-  /* color: rgb(76, 115, 255); */
-  color: #277bc0;
+  margin-left: 16px;
+  padding: 8px 16px;
+  font-size: 16px;
+  color: #41efcd;
+  border: 1px solid #41efcd;
+  border-radius: 5px;
   cursor: pointer;
 }
+.header .iconBack:hover,
 .header .logout:hover {
-  text-decoration: underline;
+  color: black;
 }

@@ -101,7 +101,7 @@ export const ExpensesList: React.FC<Props> = ({
                     )}
 
                   <ListAddField
-                    text="Add expense"
+                    text={`Add ${category.name} expense`}
                     onClick={() => setCreateModalExpense(true)}
                   />
 

@@ -80,7 +80,7 @@ export const HomePage = ({
             {
               data: new Array(12).fill(totalBudgetAmount),
               label: "Budget",
-              color: "#ffb200",
+              color: "#eec22f",
             },
           ]}
           height={300}

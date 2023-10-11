@@ -21,12 +21,17 @@ const MonthPaginationStyled = styled("div")({
   justifyContent: "space-between",
   alignItems: "center",
   fontSize: "18px",
-  width: "148px",
+  width: "158px",
   color: "#181818",
 
   "& svg": {
-    color: "#277bc0",
+    color: "#41efcd",
+    border: "1px solid #41efcd",
+    borderRadius: "5px",
     cursor: "pointer",
+  },
+  "& svg:hover": {
+    color: "black",
   },
 });
 
@@ -46,9 +51,9 @@ export const ActionsBar = ({
   return (
     <ActionsBarStyled>
       <MonthPaginationStyled>
-        <ChevronLeftIcon onClick={onClickPrevious} />
+        <ChevronLeftIcon fontSize="large" onClick={onClickPrevious} />
         {format(displayDate, "MMM yyyy")}
-        <ChevronRightIcon onClick={onClickNext} />
+        <ChevronRightIcon fontSize="large" onClick={onClickNext} />
       </MonthPaginationStyled>
 
       {toggleRollover && (

@@ -10,7 +10,7 @@ const ProgressBarStyled = styled("div")({
   left: "0",
   width: "100%",
   height: "52px",
-  backgroundColor: "#7fb77e",
+  backgroundColor: "#41efcd",
   overflow: "hidden",
   opacity: "0.1",
   zIndex: "-1",
@@ -20,7 +20,7 @@ const ProgressBarInnerStyled = styled("div")<ProgressBarInnerStyledProps>(
   ({ width }) => ({
     width: `${width || 0}%`,
     height: "100%",
-    backgroundColor: "#ff7777",
+    backgroundColor: "#ffb6bd",
     transition: "width 0.3s ease-in-out",
   })
 );
