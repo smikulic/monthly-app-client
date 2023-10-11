@@ -40,9 +40,9 @@ export const RESET_PASSWORD_REQUEST_MUTATION = gql`
 `;
 
 export const LoginPageContainer = ({
-  setAuthenticated,
+  setToken,
 }: {
-  setAuthenticated: Dispatch<SetStateAction<string | null>>;
+  setToken: Dispatch<SetStateAction<string | null>>;
 }) => {
   const [formState, setFormState] = useState({
     login: true,
@@ -62,7 +62,7 @@ export const LoginPageContainer = ({
     onCompleted: ({ login }) => {
       localStorage.setItem(AUTH_TOKEN, login?.token!);
       localStorage.setItem(AUTH_TOKEN_USER, login?.user?.email!);
-      setAuthenticated(login?.token!);
+      setToken(login?.token!);
       window.location.replace("/app");
     },
   });
