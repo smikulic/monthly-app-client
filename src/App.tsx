@@ -21,7 +21,6 @@ const muiTheme = createTheme({
     // dark: will be calculated from palette.primary.main,
     // contrastText: will be calculated to contrast with palette.primary.main
     primary: {
-      // main: "#277bc0",
       main: "#41efcd",
     },
     warning: {

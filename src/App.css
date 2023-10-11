@@ -42,5 +42,5 @@
 
   --toastify-color-error: #ff7777;
   --toastify-text-color-error: #000;
-  --toastify-icon-color-error: var(--toastify-color-error);
+  --toastify-icon-color-error: #000;
 }
