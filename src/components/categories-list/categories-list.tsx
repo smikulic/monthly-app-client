@@ -211,7 +211,7 @@ export const CategoriesList: React.FC<Props> = ({
                   })}
 
                 <ListAddField
-                  text="Add subcategory"
+                  text={`Add ${category.name} subcategory`}
                   onClick={() => setCreateModalSubcategory(categoryId)}
                   fontSize="small"
                   indent

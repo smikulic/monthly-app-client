@@ -24,7 +24,7 @@
 }
 .listItem .categoryDetails .categoryAmount {
   font-size: 16px;
-  color: #ffb200;
+  color: #eec22f;
 }
 
 .red {
@@ -32,5 +32,15 @@
 }
 
 .orange {
-  color: #ffb200;
+  color: #eec22f;
+}
+
+:root {
+  --toastify-color-success: #41efcd;
+  --toastify-text-color-success: #000;
+  --toastify-icon-color-success: #000;
+
+  --toastify-color-error: #ff7777;
+  --toastify-text-color-error: #000;
+  --toastify-icon-color-error: var(--toastify-color-error);
 }

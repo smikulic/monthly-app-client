@@ -12,18 +12,24 @@ const ListAddFieldStyled = styled("div")<ListAddFieldStyledProps>(
     display: "flex",
     justifyContent: "flex-start",
     alignItems: "center",
-    height: "52px",
+    height: "48px",
     position: "relative",
-    padding: indent ? "16px 32px 16px 56px" : "16px 32px",
-    fontSize: fontSize === "small" ? "16px" : "20px",
+    margin: indent ? "12px 12px 12px 48px" : "12px",
+    padding: "14px 32px",
+    fontSize: fontSize === "small" ? "16px" : "18px",
     borderBottom: "1px solid rgb(223, 223, 223)",
+
+    color: "black",
+    border: "1px solid black",
+    borderRadius: "5px",
+
     cursor: "pointer",
     opacity: "0.7",
 
     "& svg": {
       position: "relative",
-      color: "#7fb77e",
-      right: "4px",
+      color: "black",
+      right: "6px",
       fontSize: fontSize === "small" ? "20px" : "24px",
     },
     "&:hover": {

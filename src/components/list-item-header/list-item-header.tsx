@@ -12,7 +12,7 @@ const IconStyled = styled("div")({
   alignItems: "center",
 
   "& svg": {
-    color: "#277bc0",
+    color: "#000",
   },
 });
 
