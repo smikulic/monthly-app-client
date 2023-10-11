@@ -5,9 +5,9 @@ import { AUTH_TOKEN, AUTH_TOKEN_USER } from "../../constants";
 import "./header.css";
 
 export const Header = ({
-  setAuthenticated,
+  setToken,
 }: {
-  setAuthenticated: Dispatch<SetStateAction<string | null>>;
+  setToken: Dispatch<SetStateAction<string | null>>;
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -30,7 +30,7 @@ export const Header = ({
         onClick={() => {
           localStorage.removeItem(AUTH_TOKEN);
           localStorage.removeItem(AUTH_TOKEN_USER);
-          setAuthenticated(null);
+          setToken(null);
           navigate("/app");
         }}
       >

@@ -32,13 +32,13 @@ export const HomePage = ({
   return (
     <HomeContainerStyled>
       <Box>
-        <Link to="/expenses">
+        <Link to="/app/expenses">
           <div className="listItem">
             Expenses
             <span className="red">{formatAmount(totalExpensesAmount)}</span>
           </div>
         </Link>
-        <Link to="/categories">
+        <Link to="/app/categories">
           <div className="listItem">
             Categories/Budget
             <span className="orange">{formatAmount(totalBudgetAmount)}</span>

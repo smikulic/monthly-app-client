@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { useResetPasswordMutation } from "../../generated/graphql";
 import "../login-page/login-page-container.css";
-import { useQuery } from "../../hooks/useQuery";
+import { useParamsQuery } from "../../hooks/useParamsQuery";
 
 export const RESET_PASSWORD_MUTATION = gql`
   mutation ResetPassword($token: String!, $password: String!) {
@@ -14,7 +14,7 @@ export const RESET_PASSWORD_MUTATION = gql`
 `;
 
 export const ResetPasswordPageContainer = () => {
-  const query = useQuery();
+  const query = useParamsQuery();
 
   const [formState, setFormState] = useState({
     password: "",
