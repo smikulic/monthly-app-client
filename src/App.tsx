@@ -12,11 +12,13 @@ import { LoginPageContainer } from "./pages/login-page/login-page-container";
 import { HomePageContainer } from "./pages/home-page/home-page-container";
 import { ExpensesPageContainer } from "./pages/expenses-page/expenses-page-container";
 import { Header } from "./components/header/header";
+import { Footer } from "./components/footer/footer";
 import { AUTH_TOKEN, AUTH_TOKEN_USER } from "./constants";
 import { CategoriesPageContainer } from "./pages/categories-page/categories-page-container";
 import { ResetPasswordPageContainer } from "./pages/reset-password-page/reset-password-page-container";
 import { WelcomePageContainer } from "./pages/welcome-page/welcome-page-container";
 import { handleLogout } from "./utils/handleLogout";
+import { FooterPaddingStyled } from "./shared";
 
 const muiTheme = createTheme({
   palette: {
@@ -89,7 +91,10 @@ function App() {
                   element={
                     <>
                       <Header onLogout={handleLogout} />
-                      <Outlet />
+                      <FooterPaddingStyled>
+                        <Outlet />
+                      </FooterPaddingStyled>
+                      <Footer />
                     </>
                   }
                 >

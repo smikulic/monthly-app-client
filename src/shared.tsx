@@ -35,3 +35,7 @@ export const ProminentButtonStyled = styled("div")({
     color: " #41efcd",
   },
 });
+
+export const FooterPaddingStyled = styled("div")({
+  marginBottom: "56px",
+});

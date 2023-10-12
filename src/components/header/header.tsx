@@ -20,7 +20,7 @@ export const Header = ({ onLogout }: { onLogout: () => void }) => {
       {!isHome && (
         <BackButtonStyled onClick={() => navigate("/app")}>
           <ChevronLeftIcon />
-          Back
+          back
         </BackButtonStyled>
       )}
       {userName}
