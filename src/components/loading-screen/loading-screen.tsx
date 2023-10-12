@@ -1,21 +1,20 @@
 import * as React from "react";
 import { Oval } from "react-loader-spinner";
+import { LoadingScreenStyled } from "./loading-screen-style";
 
 export const LoadingScreen = () => {
   return (
-    <div className="loadingScreen">
+    <LoadingScreenStyled>
       <Oval
         height={80}
         width={80}
-        color="#277bc0"
-        // wrapperStyle={{}}
-        // wrapperClass=""
+        color="#41efcd"
         visible={true}
         ariaLabel="oval-loading"
-        secondaryColor="#277bc0"
+        secondaryColor="#41efcd"
         strokeWidth={2}
         strokeWidthSecondary={2}
       />
-    </div>
+    </LoadingScreenStyled>
   );
 };

@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import { Slide, ToastContainer } from "react-toastify";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Outlet,
+} from "react-router-dom";
 import { gql, ServerError, useQuery } from "@apollo/client";
-// import logo from './logo.svg';
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { LoginPageContainer } from "./pages/login-page/login-page-container";
 import { HomePageContainer } from "./pages/home-page/home-page-container";
@@ -12,8 +16,7 @@ import { AUTH_TOKEN, AUTH_TOKEN_USER } from "./constants";
 import { CategoriesPageContainer } from "./pages/categories-page/categories-page-container";
 import { ResetPasswordPageContainer } from "./pages/reset-password-page/reset-password-page-container";
 import { WelcomePageContainer } from "./pages/welcome-page/welcome-page-container";
-import "./App.css";
-import "react-toastify/dist/ReactToastify.min.css";
+import { handleLogout } from "./utils/handleLogout";
 
 const muiTheme = createTheme({
   palette: {
@@ -53,15 +56,12 @@ function App() {
     const errorMessage = serverError.result.errors[0].message;
 
     if (errorMessage.includes("invalid token")) {
-      localStorage.removeItem(AUTH_TOKEN);
-      localStorage.removeItem(AUTH_TOKEN_USER);
-      window.location.replace("/app");
+      handleLogout();
     }
   }
 
   if (token && !localStorage.getItem(AUTH_TOKEN_USER)) {
-    localStorage.removeItem(AUTH_TOKEN);
-    window.location.replace("/app");
+    handleLogout();
   }
 
   return (
@@ -70,48 +70,49 @@ function App() {
         <Router>
           <Routes>
             <Route path="/" element={<WelcomePageContainer />} />
-            <Route
-              path="/app"
-              element={
-                token ? (
-                  <>
-                    <Header setToken={setToken} />
-                    <HomePageContainer />
-                  </>
-                ) : (
-                  <LoginPageContainer setToken={setToken} />
-                )
-              }
-            />
-            <Route
-              path="/app/expenses"
-              element={
-                <>
-                  <Header setToken={setToken} />
-                  <ExpensesPageContainer />
-                </>
-              }
-            />
-            <Route
-              path="/app/categories"
-              element={
-                <>
-                  <Header setToken={setToken} />
-                  <CategoriesPageContainer />
-                </>
-              }
-            />
+
             <Route
               path="/reset-password"
               element={<ResetPasswordPageContainer />}
             />
-            {/* <Route path="*" element={<NotFound />} /> */}
+
+            {!token && (
+              <Route
+                path="/app"
+                element={<LoginPageContainer setToken={setToken} />}
+              />
+            )}
+
+            {token && (
+              <>
+                <Route
+                  element={
+                    <>
+                      <Header onLogout={handleLogout} />
+                      <Outlet />
+                    </>
+                  }
+                >
+                  <Route path="/app" element={<HomePageContainer />} />
+                  <Route
+                    path="/app/expenses"
+                    element={<ExpensesPageContainer />}
+                  />
+                  <Route
+                    path="/app/categories"
+                    element={<CategoriesPageContainer />}
+                  />
+                </Route>
+              </>
+            )}
+
+            <Route
+              path="*"
+              element={<LoginPageContainer setToken={setToken} />}
+            />
           </Routes>
         </Router>
 
-        {/* <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-      </header> */}
         <ToastContainer
           transition={Slide}
           position="bottom-center"

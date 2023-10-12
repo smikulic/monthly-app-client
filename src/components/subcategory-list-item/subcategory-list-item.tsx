@@ -1,19 +1,11 @@
 import React, { useState } from "react";
-import { styled } from "@mui/material/styles";
 import { Expense } from "../../generated/graphql";
 import { ExpandedExpenses } from "../expanded-expenses/expanded-expenses";
 import { ListItemHeader } from "../list-item-header/list-item-header";
 import { getRolloverBudget } from "../../utils/getRolloverBudget";
 import { ListItemDetails } from "../list-item-details/list-item-details";
 import { SubcategoryDecoratedWithExpenses } from "../expenses-list/expenses-list";
-import { ListItemStyled } from "../../shared";
-
-const SubcategoryListItemStyled = styled(ListItemStyled)({
-  position: "relative",
-  height: "52px",
-  padding: "8px 32px 8px 56px",
-  fontSize: "16px",
-});
+import { SubcategoryListItemStyled } from "../../shared";
 
 interface Props {
   subcategory: SubcategoryDecoratedWithExpenses;

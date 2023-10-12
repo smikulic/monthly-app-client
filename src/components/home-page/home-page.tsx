@@ -1,20 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
-import { styled } from "@mui/material/styles";
 import { LineChart } from "@mui/x-charts/LineChart";
 import { formatAmount } from "../../utils/format";
-
-const HomeContainerStyled = styled("div")({
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "space-between",
-
-  "& a": {
-    textDecoration: "none",
-    color: "inherit",
-  },
-});
+import { months } from "../../constants";
+import { HomeContainerStyled } from "./home-page-style";
+import { MainListItemStyled } from "../../shared";
 
 export const HomePage = ({
   totalExpensesAmount,
@@ -33,16 +24,16 @@ export const HomePage = ({
     <HomeContainerStyled>
       <Box>
         <Link to="/app/expenses">
-          <div className="listItem">
+          <MainListItemStyled>
             Expenses
             <span className="red">{formatAmount(totalExpensesAmount)}</span>
-          </div>
+          </MainListItemStyled>
         </Link>
         <Link to="/app/categories">
-          <div className="listItem">
+          <MainListItemStyled>
             Categories/Budget
             <span className="orange">{formatAmount(totalBudgetAmount)}</span>
-          </div>
+          </MainListItemStyled>
         </Link>
       </Box>
 
@@ -53,20 +44,7 @@ export const HomePage = ({
           xAxis={[
             {
               id: "yearOverview",
-              data: [
-                "Jan",
-                "Feb",
-                "Mar",
-                "Apr",
-                "May",
-                "Jun",
-                "Jul",
-                "Aug",
-                "Sep",
-                "Oct",
-                "Nov",
-                "Dec",
-              ],
+              data: months,
               scaleType: "band",
               label: `${selectedYear}`,
             },
