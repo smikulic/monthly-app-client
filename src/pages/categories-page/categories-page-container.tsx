@@ -1,4 +1,5 @@
 import * as React from "react";
+import * as Sentry from "@sentry/react";
 import { useCategoriesListQuery } from "../../generated/graphql";
 import { CategoriesList } from "../../components/categories-list/categories-list";
 import { LoadingScreen } from "../../components/loading-screen/loading-screen";
@@ -21,5 +22,9 @@ export const CategoriesPageContainer = () => {
     return <div>ERROR</div>;
   }
 
-  return <CategoriesList data={data} refetchCategories={refetchCategories} />;
+  return (
+    <Sentry.ErrorBoundary fallback={<p>An error has occurred</p>}>
+      <CategoriesList data={data} refetchCategories={refetchCategories} />
+    </Sentry.ErrorBoundary>
+  );
 };

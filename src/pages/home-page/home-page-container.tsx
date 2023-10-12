@@ -1,5 +1,6 @@
-import { useQuery } from "@apollo/client";
 import React, { useState } from "react";
+import { useQuery } from "@apollo/client";
+import * as Sentry from "@sentry/react";
 import { GET_CATEGORIES_LIST } from "../../components/categories-list/categories-list-queries";
 import { Category, Expense } from "../../generated/graphql";
 import { LoadingScreen } from "../../components/loading-screen/loading-screen";
@@ -56,7 +57,7 @@ export const HomePageContainer = () => {
     );
 
   return (
-    <>
+    <Sentry.ErrorBoundary fallback={<p>An error has occurred</p>}>
       <ActionsBar
         displayDate={pageDate}
         onClickPrevious={() => {
@@ -87,6 +88,6 @@ export const HomePageContainer = () => {
           pageDate={pageDate}
         />
       )}
-    </>
+    </Sentry.ErrorBoundary>
   );
 };

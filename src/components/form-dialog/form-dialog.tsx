@@ -1,12 +1,24 @@
 import React, { ReactNode } from "react";
-import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
+import Slide from "@mui/material/Slide";
+import { TransitionProps } from "@mui/material/transitions";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+
+const Transition = React.forwardRef(function Transition(
+  props: TransitionProps & {
+    children: React.ReactElement;
+  },
+  ref: React.Ref<unknown>
+) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 interface Props {
   open: boolean;
@@ -28,35 +40,33 @@ export const FormDialog: React.FC<Props> = ({
   closeForm,
 }) => {
   return (
-    <Dialog fullWidth maxWidth="sm" open={open} onClose={closeForm}>
-      <DialogTitle>{title}</DialogTitle>
-      <IconButton
-        onClick={closeForm}
-        sx={{
-          position: "absolute",
-          right: 8,
-          top: 8,
-          color: (theme) => theme.palette.grey[500],
-        }}
-      >
-        <CloseIcon />
-      </IconButton>
+    <Dialog
+      fullScreen
+      open={open}
+      onClose={closeForm}
+      TransitionComponent={Transition}
+    >
+      <AppBar sx={{ position: "relative" }}>
+        <Toolbar>
+          <IconButton
+            edge="start"
+            color="inherit"
+            onClick={closeForm}
+            aria-label="close"
+          >
+            <CloseIcon />
+          </IconButton>
+          <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+            {title}
+          </Typography>
+          <Button autoFocus color="inherit" onClick={formAction}>
+            {formActionText}
+          </Button>
+        </Toolbar>
+      </AppBar>
       <DialogContent>
         <Stack spacing={1}>{children}</Stack>
       </DialogContent>
-      <DialogActions sx={{ padding: "0 24px 16px 24px" }}>
-        <Button variant="outlined" color="warning" onClick={closeForm}>
-          Cancel
-        </Button>
-        <Button
-          fullWidth
-          variant="contained"
-          disabled={disabled}
-          onClick={formAction}
-        >
-          {formActionText}
-        </Button>
-      </DialogActions>
     </Dialog>
   );
 };

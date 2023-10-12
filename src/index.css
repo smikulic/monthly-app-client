@@ -28,9 +28,7 @@ code {
 :root {
   --toastify-color-success: #41efcd !important;
   --toastify-text-color-success: #000 !important;
-  --toastify-icon-color-success: #000 !important;
 
   --toastify-color-error: #ff7777 !important;
   --toastify-text-color-error: #000 !important;
-  --toastify-icon-color-error: #000 !important;
 }
