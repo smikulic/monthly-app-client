@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import * as Sentry from "@sentry/react";
 import { Category, Expense, Maybe, Subcategory } from "../../generated/graphql";
 import {
   ExpensesList,
@@ -57,7 +58,7 @@ export const ExpensesPageContainer = () => {
     });
 
   return (
-    <>
+    <Sentry.ErrorBoundary fallback={<p>An error has occurred</p>}>
       <ActionsBar
         displayDate={pageDate}
         onClickPrevious={() => {
@@ -90,6 +91,6 @@ export const ExpensesPageContainer = () => {
           showRolloverBudget={showRolloverBudget}
         />
       )}
-    </>
+    </Sentry.ErrorBoundary>
   );
 };
