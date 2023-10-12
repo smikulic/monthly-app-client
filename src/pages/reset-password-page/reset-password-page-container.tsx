@@ -2,8 +2,8 @@ import { gql } from "@apollo/client";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { useResetPasswordMutation } from "../../generated/graphql";
-import "../login-page/login-page-container.css";
 import { useParamsQuery } from "../../hooks/useParamsQuery";
+import "../login-page/login-page-container.css";
 
 export const RESET_PASSWORD_MUTATION = gql`
   mutation ResetPassword($token: String!, $password: String!) {
@@ -29,7 +29,6 @@ export const ResetPasswordPageContainer = () => {
       toast.error(error.message);
     },
     onCompleted: ({ resetPassword }) => {
-      console.log({ resetPassword });
       toast.success("You have successfully reset your password!");
     },
   });

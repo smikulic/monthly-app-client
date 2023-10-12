@@ -18,16 +18,19 @@ import { CreateCategoryForm } from "../create-category-form/create-category-form
 import { UpdateCategoryForm } from "../update-category-form/update-category-form";
 import { UpdateSubcategoryForm } from "../update-subcategory-form/update-subcategory-form";
 import { ListAddField } from "../list-add-field/list-add-field";
+import { MainListItemStyled, SubcategoryListItemStyled } from "../../shared";
+import {
+  CategoryAmountStyled,
+  CategoryDetailsStyled,
+} from "./categories-list-style";
 
 interface Props {
   data: CategoriesListQuery;
-  loading: boolean;
   refetchCategories: () => Promise<unknown>;
 }
 
 export const CategoriesList: React.FC<Props> = ({
   data,
-  loading,
   refetchCategories,
 }) => {
   const {
@@ -92,7 +95,7 @@ export const CategoriesList: React.FC<Props> = ({
 
         return (
           <React.Fragment key={categoryId}>
-            <div className="listItem category">
+            <MainListItemStyled>
               <ListItemHeader
                 title={category.name}
                 showExpand={!showSubcategories}
@@ -105,8 +108,10 @@ export const CategoriesList: React.FC<Props> = ({
                   }
                 }}
               />
-              <div className="categoryDetails">
-                <div className="categoryAmount">{totalBudgetAmount} €</div>
+              <CategoryDetailsStyled>
+                <CategoryAmountStyled>
+                  {totalBudgetAmount} €
+                </CategoryAmountStyled>
                 <div>
                   <IconButton
                     id={`long-menu-icon-${categoryId}`}
@@ -142,8 +147,8 @@ export const CategoriesList: React.FC<Props> = ({
                     </MenuItem>
                   </Menu>
                 </div>
-              </div>
-            </div>
+              </CategoryDetailsStyled>
+            </MainListItemStyled>
             {showSubcategories && (
               <>
                 {!!subcategories &&
@@ -154,12 +159,12 @@ export const CategoriesList: React.FC<Props> = ({
 
                     return (
                       <span key={subcategoryId}>
-                        <div className="listItem subcategory">
+                        <SubcategoryListItemStyled>
                           <ListItemHeader title={subcategory.name} />
-                          <div className="categoryDetails">
-                            <div className="categoryAmount">
+                          <CategoryDetailsStyled>
+                            <CategoryAmountStyled>
                               {subcategory.budgetAmount} €
-                            </div>
+                            </CategoryAmountStyled>
                             <div>
                               <IconButton
                                 id={`long-menu-icon-${subcategoryId}`}
@@ -204,8 +209,8 @@ export const CategoriesList: React.FC<Props> = ({
                                 </MenuItem>
                               </Menu>
                             </div>
-                          </div>
-                        </div>
+                          </CategoryDetailsStyled>
+                        </SubcategoryListItemStyled>
                       </span>
                     );
                   })}

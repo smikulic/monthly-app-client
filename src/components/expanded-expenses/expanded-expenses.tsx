@@ -1,25 +1,14 @@
 import React from "react";
 import { format } from "date-fns";
-import { styled } from "@mui/material/styles";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.min.css";
 import { Expense, useDeleteExpenseMutation } from "../../generated/graphql";
 import { useActionDropdown } from "../../hooks/useActionDropdown";
-import { ListItemStyled } from "../../shared";
-
-const ExpenseListItemStyled = styled(ListItemStyled)({
-  height: "48px",
-  padding: "8px 18px 8px 56px",
-  fontSize: "15px",
-});
-const ExpenseFieldStyled = styled("div")({
-  position: "relative",
-  display: "flex",
-  justifyContent: "space-between",
-  paddingLeft: "24px",
-});
+import {
+  ExpenseFieldStyled,
+  ExpenseListItemStyled,
+} from "./expanded-expenses-style";
 
 interface Props {
   expenses: Expense[];

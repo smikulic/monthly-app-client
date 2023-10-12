@@ -14,28 +14,14 @@ export const HomePageContainer = () => {
   const currentDate = new Date();
   const [pageDate, setPageDate] = useState(currentDate);
 
-  const {
-    data: expensesData,
-    loading: loadingExpenses,
-    // error: expensesError,
-  } = useQuery(GET_EXPENSES_LIST, {
-    variables: {
-      date: pageDate,
-    },
-  });
-
-  // if (expensesError?.networkError) {
-  //   const serverError = expensesError.networkError as ServerError;
-  //   const errorMessage = serverError.result.errors[0].message;
-
-  //   if (errorMessage.includes("invalid token")) {
-  //     console.log("Invalid token. Re-authenticate!");
-  //     localStorage.removeItem(AUTH_TOKEN);
-  //     localStorage.removeItem(AUTH_TOKEN_USER);
-  //     setToken(null);
-  //     navigate("/app");
-  //   }
-  // }
+  const { data: expensesData, loading: loadingExpenses } = useQuery(
+    GET_EXPENSES_LIST,
+    {
+      variables: {
+        date: pageDate,
+      },
+    }
+  );
 
   const { data: chartExpensesData, loading: loadingChartExpenses } = useQuery(
     GET_CHART_EXPENSES_LIST,

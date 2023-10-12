@@ -8,6 +8,7 @@ import {
   InMemoryCache,
 } from "@apollo/client";
 import "./index.css";
+import "react-toastify/dist/ReactToastify.min.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { AUTH_TOKEN } from "./constants";

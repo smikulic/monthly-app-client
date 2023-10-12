@@ -1,20 +1,7 @@
 import React from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import { styled } from "@mui/material/styles";
-
-const ListItemHeaderStyled = styled("div")({
-  cursor: "pointer",
-});
-
-const IconStyled = styled("div")({
-  display: "flex",
-  alignItems: "center",
-
-  "& svg": {
-    color: "#000",
-  },
-});
+import { IconStyled, ListItemHeaderStyled } from "./list-item-header-style";
 
 interface Props {
   title: string;

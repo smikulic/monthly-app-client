@@ -16,3 +16,21 @@ code {
 * {
   box-sizing: border-box;
 }
+
+.red {
+  color: #ff7777;
+}
+
+.orange {
+  color: #eec22f;
+}
+
+:root {
+  --toastify-color-success: #41efcd !important;
+  --toastify-text-color-success: #000 !important;
+  --toastify-icon-color-success: #000 !important;
+
+  --toastify-color-error: #ff7777 !important;
+  --toastify-text-color-error: #000 !important;
+  --toastify-icon-color-error: #000 !important;
+}

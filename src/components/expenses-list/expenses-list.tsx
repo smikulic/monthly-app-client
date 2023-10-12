@@ -6,6 +6,7 @@ import { UpdateExpenseForm } from "../update-expense-form/update-expense-form";
 import { ListAddField } from "../list-add-field/list-add-field";
 import { ListItemDetails } from "../list-item-details/list-item-details";
 import { SubcategoryListItem } from "../subcategory-list-item/subcategory-list-item";
+import { MainListItemStyled } from "../../shared";
 
 export interface SubcategoryDecoratedWithExpenses extends Subcategory {
   expenses: Expense[];
@@ -37,9 +38,9 @@ export const ExpensesList: React.FC<Props> = ({
   return (
     <div>
       {data.length === 0 && (
-        <div className="listItem category">
+        <MainListItemStyled>
           Create a category and subcategory before adding an expense
-        </div>
+        </MainListItemStyled>
       )}
       {data.length > 0 &&
         data.map((category: CategoryDecoratedWithExpenses) => {
@@ -52,7 +53,7 @@ export const ExpensesList: React.FC<Props> = ({
 
           return (
             <React.Fragment key={categoryId}>
-              <div className="listItem category">
+              <MainListItemStyled>
                 <ListItemHeader
                   title={category.name}
                   showExpand={!showSubcategories && subcategoriesExist}
@@ -70,7 +71,7 @@ export const ExpensesList: React.FC<Props> = ({
                 {category.totalExpenseAmount > 0 && (
                   <ListItemDetails expenseValue={category.totalExpenseAmount} />
                 )}
-              </div>
+              </MainListItemStyled>
               {showSubcategories && (
                 <>
                   {subcategoriesExist &&

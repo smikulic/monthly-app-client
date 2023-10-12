@@ -21,11 +21,5 @@ export const CategoriesPageContainer = () => {
     return <div>ERROR</div>;
   }
 
-  return (
-    <CategoriesList
-      data={data}
-      loading={loading}
-      refetchCategories={refetchCategories}
-    />
-  );
+  return <CategoriesList data={data} refetchCategories={refetchCategories} />;
 };

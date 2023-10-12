@@ -1,39 +1,11 @@
 import React from "react";
+import { format } from "date-fns";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import { format } from "date-fns";
-import { styled } from "@mui/material/styles";
+import Switch from "@mui/material/Switch";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import Switch from "@mui/material/Switch";
-
-const ActionsBarStyled = styled("div")({
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-  padding: "0 32px",
-  height: "56px",
-  fontSize: "18px",
-});
-
-const MonthPaginationStyled = styled("div")({
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-  fontSize: "18px",
-  width: "158px",
-  color: "#181818",
-
-  "& svg": {
-    color: "#41efcd",
-    border: "1px solid #41efcd",
-    borderRadius: "5px",
-    cursor: "pointer",
-  },
-  "& svg:hover": {
-    color: "black",
-  },
-});
+import { ActionsBarStyled, MonthPaginationStyled } from "./actions-bar-style";
 
 export const ActionsBar = ({
   displayDate,
