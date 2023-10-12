@@ -121,6 +121,7 @@ function App() {
           newestOnTop={false}
           closeOnClick
           closeButton={false}
+          icon={false}
           rtl={false}
           pauseOnFocusLoss
           draggable
