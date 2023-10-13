@@ -63,7 +63,7 @@ export const UpdateExpenseForm: React.FC<Props> = ({
   return (
     <FormDialog
       open={open}
-      title="Update expense"
+      title="Expense"
       disabled={formInvalid}
       formActionText="Save"
       closeForm={closeForm}

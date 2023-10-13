@@ -45,7 +45,7 @@ export const CreateSubcategoryForm: React.FC<Props> = ({
   return (
     <FormDialog
       open={open}
-      title="Create subcategory"
+      title="Subcategory"
       disabled={formInvalid}
       formActionText="Create"
       closeForm={closeForm}
@@ -62,7 +62,7 @@ export const CreateSubcategoryForm: React.FC<Props> = ({
       <TextField
         required
         id="subcategoryName"
-        label="Subcategory name"
+        label="Name"
         size="small"
         margin="none"
         autoComplete="off"
@@ -71,7 +71,7 @@ export const CreateSubcategoryForm: React.FC<Props> = ({
       <TextField
         required
         id="subcategoryBudget"
-        label="Subcategory budget"
+        label="Budget"
         size="small"
         margin="none"
         autoComplete="off"
@@ -83,7 +83,7 @@ export const CreateSubcategoryForm: React.FC<Props> = ({
         "Uber" subcategories.
       </Alert>
       <Alert severity="info">
-        <strong>Subcategory budget: </strong> is used to calculate rollover.
+        <strong>Budget: </strong> is used to calculate rollover.
         <br />
         A rollover budget is when the subcategory budget rollover into the next
         month. This means you could start the month in the negative if you have

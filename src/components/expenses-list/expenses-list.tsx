@@ -7,31 +7,27 @@ import { ListAddField } from "../list-add-field/list-add-field";
 import { ListItemDetails } from "../list-item-details/list-item-details";
 import { SubcategoryListItem } from "../subcategory-list-item/subcategory-list-item";
 import { MainListItemStyled } from "../../shared";
-import Alert from "@mui/material/Alert";
-import AlertTitle from "@mui/material/AlertTitle";
 
 export interface SubcategoryDecoratedWithExpenses extends Subcategory {
   expenses: Expense[];
 }
 
 export interface CategoryDecoratedWithExpenses extends Category {
-  totalExpenseAmount: number;
   subcategories: SubcategoryDecoratedWithExpenses[];
+  totalExpenseAmount: number;
 }
 
 interface Props {
-  data: CategoryDecoratedWithExpenses[];
-  totalSubcategories: number;
   currentDate: Date;
   showRolloverBudget: boolean;
+  categoriesDecoratedWithExpenses: CategoryDecoratedWithExpenses[];
   refetchExpenses: () => Promise<unknown>;
 }
 
 export const ExpensesList: React.FC<Props> = ({
-  data,
-  totalSubcategories,
   currentDate,
   showRolloverBudget,
+  categoriesDecoratedWithExpenses,
   refetchExpenses,
 }) => {
   const [openCategory, setOpenCategory] = useState("");
@@ -41,26 +37,10 @@ export const ExpensesList: React.FC<Props> = ({
 
   return (
     <div>
-      {totalSubcategories === 0 && (
-        <>
-          <Alert severity="info">
-            <AlertTitle>
-              Create a category and subcategory to enable adding an expense.
-            </AlertTitle>
-            <strong>Example:</strong> "Food" can be category, "Groceries" and
-            "Restaurant" subcategories.
-            <br />
-            Or to keep it simple, just create a subcategory "all"
-          </Alert>
-        </>
-      )}
-      {totalSubcategories > 0 &&
-        data.map((category: CategoryDecoratedWithExpenses) => {
-          if (!category) return null;
-
+      {categoriesDecoratedWithExpenses.map(
+        (category: CategoryDecoratedWithExpenses) => {
           const categoryId = category.id;
           const showSubcategories = openCategory === categoryId;
-
           const subcategoriesExist = category.subcategories.length > 0;
 
           return (
@@ -114,7 +94,7 @@ export const ExpensesList: React.FC<Props> = ({
                     )}
 
                   <ListAddField
-                    text={`Add ${category.name} expense`}
+                    text={`Add expense for "${category.name}"`}
                     onClick={() => setCreateModalExpense(true)}
                   />
 
@@ -140,7 +120,8 @@ export const ExpensesList: React.FC<Props> = ({
               )}
             </React.Fragment>
           );
-        })}
+        }
+      )}
     </div>
   );
 };

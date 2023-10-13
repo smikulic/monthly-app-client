@@ -55,7 +55,7 @@ export const CreateExpenseForm: React.FC<Props> = ({
   return (
     <FormDialog
       open={open}
-      title="Create expense"
+      title="Expense"
       disabled={formInvalid}
       formActionText="Create"
       closeForm={closeForm}

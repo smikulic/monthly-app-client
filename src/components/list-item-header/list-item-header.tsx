@@ -2,6 +2,7 @@ import React from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { IconStyled, ListItemHeaderStyled } from "./list-item-header-style";
+import Typography from "@mui/material/Typography";
 
 interface Props {
   title: string;
@@ -23,13 +24,15 @@ export const ListItemHeader: React.FC<Props> = ({
           <IconStyled>
             {showExpand && <ExpandMoreIcon />}
             {showCollapse && <ChevronRightIcon />}
-            {title}
+            <Typography noWrap>{title}</Typography>
           </IconStyled>
         </ListItemHeaderStyled>
       )}
       {!onToggleExpand && (
         <ListItemHeaderStyled>
-          <IconStyled>{title}</IconStyled>
+          <IconStyled>
+            <Typography noWrap>{title}</Typography>
+          </IconStyled>
         </ListItemHeaderStyled>
       )}
     </>

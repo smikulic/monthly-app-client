@@ -1,6 +1,7 @@
 import React from "react";
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
 import { ListAddFieldStyled } from "./list-add-field-style";
+import { Typography } from "@mui/material";
 
 interface Props {
   text: string;
@@ -18,7 +19,7 @@ export const ListAddField: React.FC<Props> = ({
   return (
     <ListAddFieldStyled indent={indent} fontSize={fontSize} onClick={onClick}>
       <AddCircleRoundedIcon />
-      {text}
+      <Typography noWrap>{text}</Typography>
     </ListAddFieldStyled>
   );
 };
