@@ -136,6 +136,7 @@ export type MutationUpdateExpenseArgs = {
 
 export type MutationUpdateSubcategoryArgs = {
   budgetAmount: Scalars['Int'];
+  categoryId: Scalars['ID'];
   id: Scalars['ID'];
   name: Scalars['String'];
 };
@@ -186,6 +187,7 @@ export type QueryUserArgs = {
 export type Subcategory = {
   __typename?: 'Subcategory';
   budgetAmount?: Maybe<Scalars['Int']>;
+  categoryId: Scalars['ID'];
   createdAt: Scalars['String'];
   expenses?: Maybe<Array<Maybe<Expense>>>;
   icon?: Maybe<Scalars['String']>;
@@ -217,7 +219,7 @@ export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', email: 
 export type CategoriesListQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CategoriesListQuery = { __typename?: 'Query', categories: Array<{ __typename?: 'Category', id: string, name: string, subcategories?: Array<{ __typename?: 'Subcategory', id: string, createdAt: string, name: string, budgetAmount?: number | null } | null> | null }> };
+export type CategoriesListQuery = { __typename?: 'Query', categories: Array<{ __typename?: 'Category', id: string, name: string, subcategories?: Array<{ __typename?: 'Subcategory', id: string, categoryId: string, createdAt: string, name: string, budgetAmount?: number | null } | null> | null }> };
 
 export type CreateCategoryMutationVariables = Exact<{
   name: Scalars['String'];
@@ -248,16 +250,17 @@ export type CreateSubcategoryMutationVariables = Exact<{
 }>;
 
 
-export type CreateSubcategoryMutation = { __typename?: 'Mutation', createSubcategory: { __typename?: 'Subcategory', name: string, budgetAmount?: number | null } };
+export type CreateSubcategoryMutation = { __typename?: 'Mutation', createSubcategory: { __typename?: 'Subcategory', id: string, categoryId: string, name: string, budgetAmount?: number | null } };
 
 export type UpdateSubcategoryMutationVariables = Exact<{
   id: Scalars['ID'];
+  categoryId: Scalars['ID'];
   name: Scalars['String'];
   budgetAmount: Scalars['Int'];
 }>;
 
 
-export type UpdateSubcategoryMutation = { __typename?: 'Mutation', updateSubcategory: { __typename?: 'Subcategory', name: string, budgetAmount?: number | null } };
+export type UpdateSubcategoryMutation = { __typename?: 'Mutation', updateSubcategory: { __typename?: 'Subcategory', id: string, categoryId: string, name: string, budgetAmount?: number | null } };
 
 export type DeleteSubcategoryMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -387,6 +390,7 @@ export const CategoriesListDocument = gql`
     name
     subcategories {
       id
+      categoryId
       createdAt
       name
       budgetAmount
@@ -528,6 +532,8 @@ export const CreateSubcategoryDocument = gql`
     name: $name
     budgetAmount: $budgetAmount
   ) {
+    id
+    categoryId
     name
     budgetAmount
   }
@@ -562,8 +568,15 @@ export type CreateSubcategoryMutationHookResult = ReturnType<typeof useCreateSub
 export type CreateSubcategoryMutationResult = Apollo.MutationResult<CreateSubcategoryMutation>;
 export type CreateSubcategoryMutationOptions = Apollo.BaseMutationOptions<CreateSubcategoryMutation, CreateSubcategoryMutationVariables>;
 export const UpdateSubcategoryDocument = gql`
-    mutation UpdateSubcategory($id: ID!, $name: String!, $budgetAmount: Int!) {
-  updateSubcategory(id: $id, name: $name, budgetAmount: $budgetAmount) {
+    mutation UpdateSubcategory($id: ID!, $categoryId: ID!, $name: String!, $budgetAmount: Int!) {
+  updateSubcategory(
+    id: $id
+    categoryId: $categoryId
+    name: $name
+    budgetAmount: $budgetAmount
+  ) {
+    id
+    categoryId
     name
     budgetAmount
   }
@@ -585,6 +598,7 @@ export type UpdateSubcategoryMutationFn = Apollo.MutationFunction<UpdateSubcateg
  * const [updateSubcategoryMutation, { data, loading, error }] = useUpdateSubcategoryMutation({
  *   variables: {
  *      id: // value for 'id'
+ *      categoryId: // value for 'categoryId'
  *      name: // value for 'name'
  *      budgetAmount: // value for 'budgetAmount'
  *   },

@@ -2,15 +2,21 @@ import React, { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import { toast } from "react-toastify";
 import {
+  Category,
   Subcategory,
   useUpdateSubcategoryMutation,
 } from "../../generated/graphql";
 import { FormDialog } from "../form-dialog/form-dialog";
 import Alert from "@mui/material/Alert";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
 
 interface Props {
   open: boolean;
   formData: Subcategory;
+  categories: Category[];
   closeForm: () => void;
   refetch: () => Promise<unknown>;
 }
@@ -18,6 +24,7 @@ interface Props {
 export const UpdateSubcategoryForm: React.FC<Props> = ({
   open,
   formData,
+  categories,
   closeForm,
   refetch,
 }) => {
@@ -26,6 +33,7 @@ export const UpdateSubcategoryForm: React.FC<Props> = ({
   const [subcategoryBudget, setSubcategoryBudget] = useState(
     formData.budgetAmount
   );
+  const [categoryId, setCategoryId] = useState(formData.categoryId);
 
   const [updateSubcategory] = useUpdateSubcategoryMutation({
     onCompleted: ({ updateSubcategory }) => {
@@ -33,6 +41,7 @@ export const UpdateSubcategoryForm: React.FC<Props> = ({
       closeForm();
       setSubcategoryName("");
       setSubcategoryBudget(0);
+      setCategoryId("");
       toast.success(
         `You have successfully updated ${updateSubcategory.name} subcategory!`
       );
@@ -58,12 +67,35 @@ export const UpdateSubcategoryForm: React.FC<Props> = ({
         updateSubcategory({
           variables: {
             id: formData.id,
+            categoryId,
             name: subcategoryName,
             budgetAmount: Number(subcategoryBudget),
           },
         })
       }
     >
+      <FormControl size="small" margin="dense">
+        <InputLabel>Category</InputLabel>
+        <Select
+          required
+          id="category"
+          label="Category"
+          margin="none"
+          value={categoryId}
+          onChange={(e: SelectChangeEvent) => {
+            setCategoryId(e.target.value);
+          }}
+        >
+          {categories.map((category: Category) => {
+            const categoryId = category.id;
+            return (
+              <MenuItem key={categoryId} value={categoryId}>
+                {category.name}
+              </MenuItem>
+            );
+          })}
+        </Select>
+      </FormControl>
       <TextField
         required
         id="subcategoryName"
