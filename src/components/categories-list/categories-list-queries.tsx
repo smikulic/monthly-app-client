@@ -7,6 +7,7 @@ export const GET_CATEGORIES_LIST = gql`
       name
       subcategories {
         id
+        categoryId
         createdAt
         name
         budgetAmount
@@ -48,14 +49,28 @@ export const CREATE_SUBCATEGORY_MUTATION = gql`
       name: $name
       budgetAmount: $budgetAmount
     ) {
+      id
+      categoryId
       name
       budgetAmount
     }
   }
 `;
 export const UPDATE_SUBCATEGORY_MUTATION = gql`
-  mutation UpdateSubcategory($id: ID!, $name: String!, $budgetAmount: Int!) {
-    updateSubcategory(id: $id, name: $name, budgetAmount: $budgetAmount) {
+  mutation UpdateSubcategory(
+    $id: ID!
+    $categoryId: ID!
+    $name: String!
+    $budgetAmount: Int!
+  ) {
+    updateSubcategory(
+      id: $id
+      categoryId: $categoryId
+      name: $name
+      budgetAmount: $budgetAmount
+    ) {
+      id
+      categoryId
       name
       budgetAmount
     }
