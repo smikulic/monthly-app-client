@@ -43,6 +43,8 @@ export const GET_USER_ME = gql`
 `;
 
 function App() {
+  const currentDate = new Date();
+  const [pageDate, setPageDate] = useState(currentDate);
   const [token, setToken] = useState<string | null>(
     localStorage.getItem(AUTH_TOKEN)
   );
@@ -65,6 +67,24 @@ function App() {
   if (token && !localStorage.getItem(AUTH_TOKEN_USER)) {
     handleLogout();
   }
+
+  const onClickNext = () => {
+    const nextDate = new Date(
+      pageDate.getFullYear(),
+      pageDate.getMonth() + 1,
+      pageDate.getDate()
+    );
+    setPageDate(nextDate);
+  };
+
+  const onClickPrevious = () => {
+    const previousDate = new Date(
+      pageDate.getFullYear(),
+      pageDate.getMonth() - 1,
+      pageDate.getDate()
+    );
+    setPageDate(previousDate);
+  };
 
   return (
     <div className="App">
@@ -98,10 +118,25 @@ function App() {
                     </>
                   }
                 >
-                  <Route path="/app" element={<HomePageContainer />} />
+                  <Route
+                    path="/app"
+                    element={
+                      <HomePageContainer
+                        pageDate={pageDate}
+                        onClickNext={onClickNext}
+                        onClickPrevious={onClickPrevious}
+                      />
+                    }
+                  />
                   <Route
                     path="/app/expenses"
-                    element={<ExpensesPageContainer />}
+                    element={
+                      <ExpensesPageContainer
+                        pageDate={pageDate}
+                        onClickNext={onClickNext}
+                        onClickPrevious={onClickPrevious}
+                      />
+                    }
                   />
                   <Route
                     path="/app/categories"

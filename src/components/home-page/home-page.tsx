@@ -6,16 +6,19 @@ import { formatAmount } from "../../utils/format";
 import { months } from "../../constants";
 import { HomeContainerStyled } from "./home-page-style";
 import { MainListItemStyled } from "../../shared";
+import { LoadingScreen } from "../loading-screen/loading-screen";
 
 export const HomePage = ({
   totalExpensesAmount,
   totalBudgetAmount,
   chartExpensesData,
+  loadingChartExpenses,
   pageDate,
 }: {
   totalExpensesAmount: number;
   totalBudgetAmount: number;
   chartExpensesData: number[];
+  loadingChartExpenses: boolean;
   pageDate: Date;
 }) => {
   const selectedYear = pageDate.getFullYear();
@@ -40,29 +43,32 @@ export const HomePage = ({
       <br />
 
       <Box>
-        <LineChart
-          xAxis={[
-            {
-              id: "yearOverview",
-              data: months,
-              scaleType: "band",
-              label: `${selectedYear}`,
-            },
-          ]}
-          series={[
-            {
-              data: chartExpensesData,
-              label: "Expenses",
-              color: "#ff7777",
-            },
-            {
-              data: new Array(12).fill(totalBudgetAmount),
-              label: "Budget",
-              color: "#eec22f",
-            },
-          ]}
-          height={300}
-        />
+        {loadingChartExpenses && <LoadingScreen />}
+        {!loadingChartExpenses && chartExpensesData && (
+          <LineChart
+            xAxis={[
+              {
+                id: "yearOverview",
+                data: months,
+                scaleType: "band",
+                label: `${selectedYear}`,
+              },
+            ]}
+            series={[
+              {
+                data: chartExpensesData,
+                label: "Expenses",
+                color: "#ff7777",
+              },
+              {
+                data: new Array(12).fill(totalBudgetAmount),
+                label: "Budget",
+                color: "#eec22f",
+              },
+            ]}
+            height={300}
+          />
+        )}
       </Box>
     </HomeContainerStyled>
   );

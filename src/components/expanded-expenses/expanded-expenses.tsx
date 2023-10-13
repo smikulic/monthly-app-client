@@ -9,6 +9,7 @@ import {
   ExpenseFieldStyled,
   ExpenseListItemStyled,
 } from "./expanded-expenses-style";
+import { useApolloClient } from "@apollo/client";
 
 interface Props {
   expenses: Expense[];
@@ -23,6 +24,8 @@ export const ExpandedExpenses: React.FC<Props> = ({
   setUpdateModalExpense,
   refetchExpenses,
 }) => {
+  const client = useApolloClient();
+
   const {
     anchorActionDropdownEl,
     handleActionsDropdownClick,
@@ -35,6 +38,12 @@ export const ExpandedExpenses: React.FC<Props> = ({
     },
     onCompleted: ({ deleteExpense }) => {
       refetchExpenses();
+
+      // Clear chartExpenses cache so that we don't have to refetch everytime on state change,
+      // but only when expense data changes
+      client.cache.evict({ id: "ROOT_QUERY", fieldName: "chartExpenses" });
+      client.cache.gc();
+
       toast.success(
         `You have successfully removed ${deleteExpense.id} expense!`
       );
