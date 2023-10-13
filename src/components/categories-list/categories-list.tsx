@@ -25,6 +25,7 @@ import {
   CategoryDetailsStyled,
 } from "./categories-list-style";
 import Button from "@mui/material/Button";
+import { ListAddField } from "../list-add-field/list-add-field";
 
 interface Props {
   data: CategoriesListQuery;
@@ -43,8 +44,9 @@ export const CategoriesList: React.FC<Props> = ({
 
   const [openCategory, setOpenCategory] = useState("");
   const [createModalCategory, setCreateModalCategory] = React.useState(false);
-  const [createModalSubcategory, setCreateModalSubcategory] =
-    React.useState(false);
+  const [createModalSubcategory, setCreateModalSubcategory] = React.useState<
+    string | null
+  >(null);
   const [updateModalCategory, setUpdateModalCategory] =
     React.useState<Category | null>(null);
   const [updateModalSubcategory, setUpdateModalSubcategory] =
@@ -98,14 +100,6 @@ export const CategoriesList: React.FC<Props> = ({
       {data.categories.length > 0 && (
         <>
           <CategoriesActionsBarStyled>
-            <Button
-              sx={{ mr: 2 }}
-              variant="contained"
-              endIcon={<AddCircleRoundedIcon />}
-              onClick={() => setCreateModalSubcategory(true)}
-            >
-              Add subcategory
-            </Button>
             <Button
               variant="contained"
               endIcon={<AddCircleRoundedIcon />}
@@ -256,6 +250,11 @@ export const CategoriesList: React.FC<Props> = ({
                           </span>
                         );
                       })}
+
+                    <ListAddField
+                      text={`Add ${category.name} subcategory`}
+                      onClick={() => setCreateModalSubcategory(category.id)}
+                    />
                   </>
                 )}
               </React.Fragment>
@@ -272,8 +271,8 @@ export const CategoriesList: React.FC<Props> = ({
           {createModalSubcategory && (
             <CreateSubcategoryForm
               open={Boolean(createModalSubcategory)}
-              categories={data.categories}
-              closeForm={() => setCreateModalSubcategory(false)}
+              categoryId={createModalSubcategory}
+              closeForm={() => setCreateModalSubcategory(null)}
               refetch={refetchCategories}
             />
           )}

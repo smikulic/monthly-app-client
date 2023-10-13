@@ -1,34 +1,26 @@
 import React, { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import { toast } from "react-toastify";
-import {
-  Category,
-  useCreateSubcategoryMutation,
-} from "../../generated/graphql";
+import { useCreateSubcategoryMutation } from "../../generated/graphql";
 import { FormDialog } from "../form-dialog/form-dialog";
 import Alert from "@mui/material/Alert";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
 
 interface Props {
   open: boolean;
-  categories: Category[];
+  categoryId: string;
   closeForm: () => void;
   refetch: () => Promise<unknown>;
 }
 
 export const CreateSubcategoryForm: React.FC<Props> = ({
   open,
-  categories,
+  categoryId,
   closeForm,
   refetch,
 }) => {
   const [formInvalid, setFormInvalid] = useState(true);
   const [subcategoryBudget, setSubcategoryBudget] = useState(0);
   const [subcategoryName, setSubcategoryName] = useState("");
-  const [categoryId, setCategoryId] = useState("");
 
   const [createSubcategory] = useCreateSubcategoryMutation({
     onCompleted: ({ createSubcategory }) => {
@@ -36,7 +28,6 @@ export const CreateSubcategoryForm: React.FC<Props> = ({
       closeForm();
       setSubcategoryName("");
       setSubcategoryBudget(0);
-      setCategoryId("");
       toast.success(
         `You have successfully created ${createSubcategory.name} subcategory!`
       );
@@ -68,28 +59,6 @@ export const CreateSubcategoryForm: React.FC<Props> = ({
         })
       }
     >
-      <FormControl size="small" margin="dense">
-        <InputLabel>Category</InputLabel>
-        <Select
-          required
-          id="category"
-          label="Category"
-          margin="none"
-          value={categoryId}
-          onChange={(e: SelectChangeEvent) => {
-            setCategoryId(e.target.value);
-          }}
-        >
-          {categories.map((category: Category) => {
-            const categoryId = category.id;
-            return (
-              <MenuItem key={categoryId} value={categoryId}>
-                {category.name}
-              </MenuItem>
-            );
-          })}
-        </Select>
-      </FormControl>
       <TextField
         required
         id="subcategoryName"
