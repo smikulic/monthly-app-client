@@ -28,11 +28,14 @@ export const ExpensesPageContainer = () => {
   const { data: categoriesData, loading: loadingCategories } =
     useQuery(GET_CATEGORIES_LIST);
 
+  let totalSubcategories = 0;
   const categoriesDecoratedWithExpenses: CategoryDecoratedWithExpenses[] =
     categoriesData?.categories.map((category: Category) => {
       let totalExpenseAmount = 0;
       const subcategoriesDecoratedWithExpense = category?.subcategories!.map(
         (subcategory: Maybe<Subcategory>) => {
+          totalSubcategories += 1;
+
           const foundExpenses = expensesData?.expenses.filter(
             (expense: Expense) => expense.subcategoryId === subcategory!.id
           );
@@ -86,6 +89,7 @@ export const ExpensesPageContainer = () => {
       ) : (
         <ExpensesList
           data={categoriesDecoratedWithExpenses}
+          totalSubcategories={totalSubcategories}
           refetchExpenses={refetchExpenses}
           currentDate={currentDate}
           showRolloverBudget={showRolloverBudget}

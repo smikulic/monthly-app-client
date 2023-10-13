@@ -6,6 +6,7 @@ import {
   useUpdateSubcategoryMutation,
 } from "../../generated/graphql";
 import { FormDialog } from "../form-dialog/form-dialog";
+import Alert from "@mui/material/Alert";
 
 interface Props {
   open: boolean;
@@ -83,6 +84,13 @@ export const UpdateSubcategoryForm: React.FC<Props> = ({
         value={subcategoryBudget}
         onChange={(e) => setSubcategoryBudget(Number(e.target.value))}
       />
+
+      <Alert severity="warning">
+        <strong>Subcategory budget: </strong> is used to calculate rollover.
+        <br />
+        It starts from the month of subcategory creation - and changing it
+        changes the rollover too!
+      </Alert>
     </FormDialog>
   );
 };

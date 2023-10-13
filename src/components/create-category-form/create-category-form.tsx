@@ -3,6 +3,7 @@ import TextField from "@mui/material/TextField";
 import { toast } from "react-toastify";
 import { useCreateCategoryMutation } from "../../generated/graphql";
 import { FormDialog } from "../form-dialog/form-dialog";
+import Alert from "@mui/material/Alert";
 
 interface Props {
   open: boolean;
@@ -61,6 +62,11 @@ export const CreateCategoryForm: React.FC<Props> = ({
         autoComplete="off"
         onChange={(e) => setCategoryName(e.target.value)}
       />
+
+      <Alert severity="info">
+        <strong>Tip:</strong> Good categories can be very abstract, such as
+        "Food", "Entertainment", "Home", "Transport", etc.
+      </Alert>
     </FormDialog>
   );
 };

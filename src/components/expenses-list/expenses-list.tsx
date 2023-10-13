@@ -7,6 +7,8 @@ import { ListAddField } from "../list-add-field/list-add-field";
 import { ListItemDetails } from "../list-item-details/list-item-details";
 import { SubcategoryListItem } from "../subcategory-list-item/subcategory-list-item";
 import { MainListItemStyled } from "../../shared";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
 
 export interface SubcategoryDecoratedWithExpenses extends Subcategory {
   expenses: Expense[];
@@ -19,6 +21,7 @@ export interface CategoryDecoratedWithExpenses extends Category {
 
 interface Props {
   data: CategoryDecoratedWithExpenses[];
+  totalSubcategories: number;
   currentDate: Date;
   showRolloverBudget: boolean;
   refetchExpenses: () => Promise<unknown>;
@@ -26,6 +29,7 @@ interface Props {
 
 export const ExpensesList: React.FC<Props> = ({
   data,
+  totalSubcategories,
   currentDate,
   showRolloverBudget,
   refetchExpenses,
@@ -37,12 +41,20 @@ export const ExpensesList: React.FC<Props> = ({
 
   return (
     <div>
-      {data.length === 0 && (
-        <MainListItemStyled>
-          Create a category and subcategory before adding an expense
-        </MainListItemStyled>
+      {totalSubcategories === 0 && (
+        <>
+          <Alert severity="info">
+            <AlertTitle>
+              Create a category and subcategory to enable adding an expense.
+            </AlertTitle>
+            <strong>Example:</strong> "Food" can be category, "Groceries" and
+            "Restaurant" subcategories.
+            <br />
+            Or to keep it simple, just create a subcategory "all"
+          </Alert>
+        </>
       )}
-      {data.length > 0 &&
+      {totalSubcategories > 0 &&
         data.map((category: CategoryDecoratedWithExpenses) => {
           if (!category) return null;
 

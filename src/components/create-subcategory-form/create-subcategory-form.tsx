@@ -3,6 +3,7 @@ import TextField from "@mui/material/TextField";
 import { toast } from "react-toastify";
 import { useCreateSubcategoryMutation } from "../../generated/graphql";
 import { FormDialog } from "../form-dialog/form-dialog";
+import Alert from "@mui/material/Alert";
 
 interface Props {
   open: boolean;
@@ -76,6 +77,24 @@ export const CreateSubcategoryForm: React.FC<Props> = ({
         autoComplete="off"
         onChange={(e) => setSubcategoryBudget(Number(e.target.value))}
       />
+
+      <Alert severity="info">
+        <strong>Example:</strong> "Transport" category can have "Bike", "Car",
+        "Uber" subcategories.
+      </Alert>
+      <Alert severity="info">
+        <strong>Subcategory budget: </strong> is used to calculate rollover.
+        <br />
+        A rollover budget is when the subcategory budget rollover into the next
+        month. This means you could start the month in the negative if you have
+        overspent, or start with the positive if you underspent. This allows you
+        to plan ahead for expenses and savings.
+        <br />
+        <strong>
+          It starts from the month of subcategory creation - and changing it
+          changes the rollover too!
+        </strong>
+      </Alert>
     </FormDialog>
   );
 };
