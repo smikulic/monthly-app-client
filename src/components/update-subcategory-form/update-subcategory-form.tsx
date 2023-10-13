@@ -59,7 +59,7 @@ export const UpdateSubcategoryForm: React.FC<Props> = ({
   return (
     <FormDialog
       open={open}
-      title="Update subcategory"
+      title="Subcategory"
       disabled={formInvalid}
       formActionText="Save"
       closeForm={closeForm}
@@ -99,7 +99,7 @@ export const UpdateSubcategoryForm: React.FC<Props> = ({
       <TextField
         required
         id="subcategoryName"
-        label="Subcategory name"
+        label="Name"
         size="small"
         margin="none"
         autoComplete="off"
@@ -109,7 +109,7 @@ export const UpdateSubcategoryForm: React.FC<Props> = ({
       <TextField
         required
         id="subcategoryBudget"
-        label="Subcategory budget"
+        label="Budget"
         size="small"
         margin="none"
         autoComplete="off"
@@ -118,7 +118,7 @@ export const UpdateSubcategoryForm: React.FC<Props> = ({
       />
 
       <Alert severity="warning">
-        <strong>Subcategory budget: </strong> is used to calculate rollover.
+        <strong>Budget: </strong> is used to calculate rollover.
         <br />
         It starts from the month of subcategory creation - and changing it
         changes the rollover too!

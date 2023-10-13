@@ -14,6 +14,7 @@ import {
   useUpdateExpenseMutation,
 } from "../../generated/graphql";
 import { FormDialog } from "../form-dialog/form-dialog";
+import { useApolloClient } from "@apollo/client";
 
 interface Props {
   open: boolean;
@@ -30,6 +31,8 @@ export const UpdateExpenseForm: React.FC<Props> = ({
   closeForm,
   refetch,
 }) => {
+  const client = useApolloClient();
+
   const formExpenseDate = new Date(parseInt(formData.date, 10));
 
   const [formInvalid, setFormInvalid] = useState(true);
@@ -46,6 +49,12 @@ export const UpdateExpenseForm: React.FC<Props> = ({
       setExpenseSubcategoryId("");
       setExpenseDate(new Date());
       setExpenseAmount(0);
+
+      // Clear chartExpenses cache so that we don't have to refetch everytime on state change,
+      // but only when expense data changes
+      client.cache.evict({ id: "ROOT_QUERY", fieldName: "chartExpenses" });
+      client.cache.gc();
+
       toast.success(
         `You have successfully updated ${updateExpense.id} expense!`
       );
@@ -63,7 +72,7 @@ export const UpdateExpenseForm: React.FC<Props> = ({
   return (
     <FormDialog
       open={open}
-      title="Update expense"
+      title="Expense"
       disabled={formInvalid}
       formActionText="Save"
       closeForm={closeForm}

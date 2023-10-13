@@ -4,6 +4,7 @@ import {
   BudgetAmountStyled,
   ExpenseAmountStyled,
 } from "./list-item-details-style";
+import { formatAmount } from "../../utils/format";
 
 interface Props {
   expenseValue: number;
@@ -18,12 +19,12 @@ export const ListItemDetails: React.FC<Props> = ({
     <>
       {budgetValue && (
         <BudgetAmountStyled positive={budgetValue - expenseValue > 0}>
-          {budgetValue - expenseValue} €
+          {formatAmount(budgetValue - expenseValue)}
         </BudgetAmountStyled>
       )}
 
       <ExpenseAmountStyled prominent={!budgetValue}>
-        {expenseValue} €
+        {formatAmount(expenseValue)}
       </ExpenseAmountStyled>
 
       {budgetValue && (

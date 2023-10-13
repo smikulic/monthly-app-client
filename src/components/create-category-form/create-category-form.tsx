@@ -41,7 +41,7 @@ export const CreateCategoryForm: React.FC<Props> = ({
   return (
     <FormDialog
       open={open}
-      title="Create category"
+      title="Category"
       disabled={formInvalid}
       formActionText="Create"
       closeForm={closeForm}
@@ -56,7 +56,7 @@ export const CreateCategoryForm: React.FC<Props> = ({
       <TextField
         required
         id="categoryName"
-        label="Category name"
+        label="Name"
         size="small"
         margin="none"
         autoComplete="off"

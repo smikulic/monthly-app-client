@@ -42,7 +42,7 @@ export const UpdateCategoryForm: React.FC<Props> = ({
   return (
     <FormDialog
       open={open}
-      title="Update category"
+      title="Category"
       disabled={formInvalid}
       formActionText="Save"
       closeForm={closeForm}
@@ -58,7 +58,7 @@ export const UpdateCategoryForm: React.FC<Props> = ({
       <TextField
         required
         id="categoryName"
-        label="Category name"
+        label="Name"
         size="small"
         margin="none"
         autoComplete="off"

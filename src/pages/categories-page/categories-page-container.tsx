@@ -1,30 +1,76 @@
 import * as React from "react";
-import * as Sentry from "@sentry/react";
+import Button from "@mui/material/Button";
+import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
 import { useCategoriesListQuery } from "../../generated/graphql";
 import { CategoriesList } from "../../components/categories-list/categories-list";
-import { LoadingScreen } from "../../components/loading-screen/loading-screen";
+import { ActionsBar } from "../../components/actions-bar/actions-bar";
+import { CreateCategoryForm } from "../../components/create-category-form/create-category-form";
+import { MainListItemStyled } from "../../shared";
+import { PageContainer } from "../../components/page-container/page-container";
 
 export const CategoriesPageContainer = () => {
+  const [createModalCategory, setCreateModalCategory] = React.useState(false);
+
   const {
-    data,
-    error,
-    loading,
+    data: categoriesData,
+    error: errorCategories,
+    loading: loadingCategories,
     refetch: refetchCategories,
-  } = useCategoriesListQuery({
-    notifyOnNetworkStatusChange: true,
-  });
+  } = useCategoriesListQuery();
 
-  if (!data && loading) {
-    return <LoadingScreen />;
-  }
-
-  if (error || !data) {
-    return <div>ERROR</div>;
-  }
+  const categories = categoriesData?.categories;
+  const dataAvailable = Boolean(
+    !loadingCategories &&
+      !errorCategories &&
+      categories &&
+      categories.length > 0
+  );
+  const noDataAvailable = Boolean(
+    !loadingCategories &&
+      !errorCategories &&
+      (!categories || categories.length === 0)
+  );
 
   return (
-    <Sentry.ErrorBoundary fallback={<p>An error has occurred</p>}>
-      <CategoriesList data={data} refetchCategories={refetchCategories} />
-    </Sentry.ErrorBoundary>
+    <PageContainer
+      loading={loadingCategories}
+      actionsBarComponent={
+        <ActionsBar>
+          {/* Empty span to push button to the right */}
+          <span></span>
+          <Button
+            variant="contained"
+            endIcon={<AddCircleRoundedIcon />}
+            onClick={() => setCreateModalCategory(true)}
+          >
+            Add category
+          </Button>
+          {createModalCategory && (
+            <CreateCategoryForm
+              open={createModalCategory}
+              closeForm={() => setCreateModalCategory(false)}
+              refetch={refetchCategories}
+            />
+          )}
+        </ActionsBar>
+      }
+      dataAvailableComponent={
+        <>
+          {dataAvailable && (
+            <CategoriesList
+              categories={categories!}
+              refetchCategories={refetchCategories}
+            />
+          )}
+        </>
+      }
+      noDataAvailableComponent={
+        <>
+          {noDataAvailable && (
+            <MainListItemStyled>No categories</MainListItemStyled>
+          )}
+        </>
+      }
+    />
   );
 };

@@ -1,93 +1,90 @@
-import React, { useState } from "react";
+import React from "react";
 import { useQuery } from "@apollo/client";
-import * as Sentry from "@sentry/react";
 import { GET_CATEGORIES_LIST } from "../../components/categories-list/categories-list-queries";
-import { Category, Expense } from "../../generated/graphql";
-import { LoadingScreen } from "../../components/loading-screen/loading-screen";
 import { HomePage } from "../../components/home-page/home-page";
 import {
   GET_CHART_EXPENSES_LIST,
   GET_EXPENSES_LIST,
 } from "../../components/expenses-list/expenses-list-queries";
 import { ActionsBar } from "../../components/actions-bar/actions-bar";
+import { getChartData } from "../../utils/getChartData";
+import { PageContainer } from "../../components/page-container/page-container";
 
-export const HomePageContainer = () => {
-  const currentDate = new Date();
-  const [pageDate, setPageDate] = useState(currentDate);
+export const HomePageContainer = ({
+  pageDate,
+  onClickNext,
+  onClickPrevious,
+}: {
+  pageDate: Date;
+  onClickNext: () => void;
+  onClickPrevious: () => void;
+}) => {
+  const {
+    data: expensesData,
+    error: errorExpenses,
+    loading: loadingExpenses,
+  } = useQuery(GET_EXPENSES_LIST, { variables: { date: pageDate } });
+  const {
+    data: chartExpensesData,
+    error: errorChartExpenses,
+    loading: loadingChartExpenses,
+  } = useQuery(GET_CHART_EXPENSES_LIST, {
+    variables: { date: pageDate },
+  });
+  const {
+    data: categoriesData,
+    error: errorCategories,
+    loading: loadingCategories,
+  } = useQuery(GET_CATEGORIES_LIST);
 
-  const { data: expensesData, loading: loadingExpenses } = useQuery(
-    GET_EXPENSES_LIST,
-    {
-      variables: {
-        date: pageDate,
-      },
-    }
-  );
+  const { totalExpensesAmount, totalBudgetAmount } = getChartData({
+    categories: categoriesData?.categories,
+    expenses: expensesData?.expenses,
+  });
 
-  const { data: chartExpensesData, loading: loadingChartExpenses } = useQuery(
-    GET_CHART_EXPENSES_LIST,
-    {
-      variables: {
-        date: pageDate,
-      },
-    }
-  );
-  const { data: categoriesData, loading: loadingCategories } =
-    useQuery(GET_CATEGORIES_LIST);
-
-  const totalExpensesAmount = expensesData?.expenses.reduce(
-    (accumulator: number, currentValue: Expense) =>
-      accumulator + currentValue.amount,
-    0
-  );
-
-  const totalBudgetAmount = categoriesData?.categories
-    ?.map((category: Category) => {
-      const totalSubcategoryExpenses = category?.subcategories?.reduce(
-        (accumulator: number, currentValue: any) =>
-          accumulator + currentValue.budgetAmount,
-        0
-      );
-
-      return totalSubcategoryExpenses;
-    })
-    .reduce(
-      (accumulator: number, currentValue: number) => accumulator + currentValue,
-      0
-    );
+  const noLoading = !loadingExpenses && !loadingCategories;
+  const noErrors = !errorExpenses && !errorChartExpenses && !errorCategories;
+  const dataAvailable =
+    noLoading && noErrors && chartExpensesData?.chartExpenses;
+  const noDataAvailable =
+    noLoading && noErrors && !chartExpensesData?.chartExpenses;
 
   return (
-    <Sentry.ErrorBoundary fallback={<p>An error has occurred</p>}>
-      <ActionsBar
-        displayDate={pageDate}
-        onClickPrevious={() => {
-          const previousDate = new Date(
-            pageDate.getFullYear(),
-            pageDate.getMonth() - 1,
-            pageDate.getDate()
-          );
-
-          setPageDate(previousDate);
-        }}
-        onClickNext={() => {
-          const nextDate = new Date(
-            pageDate.getFullYear(),
-            pageDate.getMonth() + 1,
-            pageDate.getDate()
-          );
-          setPageDate(nextDate);
-        }}
-      />
-      {loadingExpenses || loadingChartExpenses || loadingCategories ? (
-        <LoadingScreen />
-      ) : (
-        <HomePage
-          totalExpensesAmount={totalExpensesAmount}
-          totalBudgetAmount={totalBudgetAmount}
-          chartExpensesData={chartExpensesData.chartExpenses}
-          pageDate={pageDate}
+    <PageContainer
+      loading={loadingExpenses || loadingCategories}
+      actionsBarComponent={
+        <ActionsBar
+          displayDate={pageDate}
+          onClickNext={onClickNext}
+          onClickPrevious={onClickPrevious}
         />
-      )}
-    </Sentry.ErrorBoundary>
+      }
+      dataAvailableComponent={
+        <>
+          {dataAvailable && (
+            <HomePage
+              totalExpensesAmount={totalExpensesAmount}
+              totalBudgetAmount={totalBudgetAmount}
+              chartExpensesData={chartExpensesData?.chartExpenses}
+              loadingChartExpenses={loadingChartExpenses}
+              pageDate={pageDate}
+            />
+          )}
+        </>
+      }
+      noDataAvailableComponent={
+        <>
+          {noDataAvailable && (
+            <HomePage
+              totalExpensesAmount={0}
+              totalBudgetAmount={0}
+              chartExpensesData={new Array(12).fill(0)}
+              loadingChartExpenses={loadingChartExpenses}
+              pageDate={pageDate}
+            />
+          )}
+        </>
+      }
+    />
   );
 };
