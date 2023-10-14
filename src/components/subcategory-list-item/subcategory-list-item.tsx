@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { getMonth, getYear } from "date-fns";
 import { Expense } from "../../generated/graphql";
 import { ExpandedExpenses } from "../expanded-expenses/expanded-expenses";
 import { ListItemHeader } from "../list-item-header/list-item-header";
@@ -35,12 +36,18 @@ export const SubcategoryListItem: React.FC<Props> = ({
   );
   const expensesExist = totalSubcategoryExpenses > 0;
   const budgetAmount = subcategory.budgetAmount || 0;
+  const budgetStartDate = new Date(Number(subcategory.createdAt));
   const rolloverBudgetAmount = getRolloverBudget({
     currentDate,
-    createdAt: subcategory.createdAt,
+    budgetStartDate,
     budgetAmount,
   });
   const budgetValue = showRolloverBudget ? rolloverBudgetAmount : budgetAmount;
+
+  const isCurrentDateMonthAfterOrEqual =
+    getYear(currentDate) > getYear(budgetStartDate) ||
+    (getYear(currentDate) === getYear(budgetStartDate) &&
+      getMonth(currentDate) >= getMonth(budgetStartDate));
 
   return (
     <>
@@ -59,9 +66,10 @@ export const SubcategoryListItem: React.FC<Props> = ({
             }
           }}
         />
+
         <ListItemDetails
           expenseValue={totalSubcategoryExpenses}
-          budgetValue={budgetValue}
+          budgetValue={isCurrentDateMonthAfterOrEqual ? budgetValue : undefined}
         />
       </SubcategoryListItemStyled>
       {showExpenses && (

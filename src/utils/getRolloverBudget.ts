@@ -1,18 +1,16 @@
 export const getRolloverBudget = ({
   currentDate,
-  createdAt,
+  budgetStartDate,
   budgetAmount,
 }: {
   currentDate: Date;
-  createdAt: string;
+  budgetStartDate: Date;
   budgetAmount: number;
 }) => {
-  const budgetStart = new Date(Number(createdAt));
-
   const monthsPassed = Math.floor(
-    (currentDate.getFullYear() - budgetStart.getFullYear()) * 12 +
+    (currentDate.getFullYear() - budgetStartDate.getFullYear()) * 12 +
       currentDate.getMonth() -
-      budgetStart.getMonth()
+      budgetStartDate.getMonth()
   );
 
   const rolloverBudget = monthsPassed * budgetAmount + budgetAmount;

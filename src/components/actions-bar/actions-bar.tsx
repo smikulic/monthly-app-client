@@ -9,14 +9,14 @@ import { ActionsBarStyled, MonthPaginationStyled } from "./actions-bar-style";
 
 export const ActionsBar = ({
   children,
-  displayDate,
+  pageDate,
   showRollover,
   toggleRollover,
   onClickPrevious,
   onClickNext,
 }: {
   children?: ReactNode;
-  displayDate?: Date;
+  pageDate?: Date;
   onClickPrevious?: () => void;
   onClickNext?: () => void;
   showRollover?: boolean;
@@ -27,10 +27,10 @@ export const ActionsBar = ({
       {children && children}
       {!children && (
         <>
-          {displayDate && onClickPrevious && onClickNext && (
+          {pageDate && onClickPrevious && onClickNext && (
             <MonthPaginationStyled>
               <ChevronLeftIcon fontSize="large" onClick={onClickPrevious} />
-              {format(displayDate, "MMM yyyy")}
+              {format(pageDate, "MMM yyyy")}
               <ChevronRightIcon fontSize="large" onClick={onClickNext} />
             </MonthPaginationStyled>
           )}

@@ -18,12 +18,14 @@ export interface CategoryDecoratedWithExpenses extends Category {
 }
 
 interface Props {
+  pageDate: Date;
   showRolloverBudget: boolean;
   categoriesDecoratedWithExpenses: CategoryDecoratedWithExpenses[];
   refetchExpenses: () => Promise<unknown>;
 }
 
 export const ExpensesList: React.FC<Props> = ({
+  pageDate,
   showRolloverBudget,
   categoriesDecoratedWithExpenses,
   refetchExpenses,
@@ -80,7 +82,7 @@ export const ExpensesList: React.FC<Props> = ({
                             key={subcategory.id}
                             subcategory={subcategory}
                             subcategorySelected={subcategorySelected}
-                            currentDate={new Date()}
+                            currentDate={pageDate}
                             showRolloverBudget={showRolloverBudget}
                             refetchExpenses={refetchExpenses}
                             setUpdateModalExpense={(expense: Expense) =>
@@ -100,7 +102,7 @@ export const ExpensesList: React.FC<Props> = ({
                     <CreateExpenseForm
                       open={createModalExpense}
                       subcategories={category?.subcategories}
-                      currentDate={new Date()}
+                      currentDate={pageDate}
                       closeForm={() => setCreateModalExpense(false)}
                       refetch={refetchExpenses}
                     />

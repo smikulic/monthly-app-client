@@ -2,7 +2,9 @@ import { getRolloverBudget } from "./getRolloverBudget";
 
 describe("getRolloverBudget", () => {
   const budgetAmount = 100;
-  const budgetCreated = "1696953636180"; // Oct 10th, 2023, 18h (CEST)
+  const budgetStartDate = new Date(
+    "Wed Oct 10 2023 10:00:00 GMT+0200 (Central European Summer Time)"
+  );
 
   describe("when we are still in a current month", () => {
     const currentDate = new Date(
@@ -10,7 +12,7 @@ describe("getRolloverBudget", () => {
     );
     const rolloverBudget = getRolloverBudget({
       currentDate,
-      createdAt: budgetCreated,
+      budgetStartDate,
       budgetAmount,
     });
 
@@ -25,7 +27,7 @@ describe("getRolloverBudget", () => {
     );
     const rolloverBudget = getRolloverBudget({
       currentDate,
-      createdAt: budgetCreated,
+      budgetStartDate,
       budgetAmount,
     });
 
@@ -40,7 +42,7 @@ describe("getRolloverBudget", () => {
     );
     const rolloverBudget = getRolloverBudget({
       currentDate,
-      createdAt: budgetCreated,
+      budgetStartDate,
       budgetAmount,
     });
 

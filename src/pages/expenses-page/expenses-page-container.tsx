@@ -59,7 +59,7 @@ export const ExpensesPageContainer = ({
       loading={loadingExpenses || loadingCategories}
       actionsBarComponent={
         <ActionsBar
-          displayDate={pageDate}
+          pageDate={pageDate}
           onClickNext={onClickNext}
           onClickPrevious={onClickPrevious}
           showRollover={showRolloverBudget}
@@ -70,6 +70,7 @@ export const ExpensesPageContainer = ({
         <>
           {dataAvailable && (
             <ExpensesList
+              pageDate={pageDate}
               showRolloverBudget={showRolloverBudget}
               categoriesDecoratedWithExpenses={categoriesDecoratedWithExpenses}
               refetchExpenses={refetchExpenses}
