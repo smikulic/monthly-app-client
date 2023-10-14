@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import { toast } from "react-toastify";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useCreateSubcategoryMutation } from "../../generated/graphql";
 import { FormDialog } from "../form-dialog/form-dialog";
 import Alert from "@mui/material/Alert";
@@ -21,13 +24,16 @@ export const CreateSubcategoryForm: React.FC<Props> = ({
   const [formInvalid, setFormInvalid] = useState(true);
   const [subcategoryBudget, setSubcategoryBudget] = useState(0);
   const [subcategoryName, setSubcategoryName] = useState("");
+  const [subcategoryRolloverDate, setSubcategoryRolloverDate] = useState(
+    new Date()
+  );
 
   const [createSubcategory] = useCreateSubcategoryMutation({
     onCompleted: ({ createSubcategory }) => {
       refetch();
       closeForm();
-      setSubcategoryName("");
       setSubcategoryBudget(0);
+      setSubcategoryName("");
       toast.success(
         `You have successfully created ${createSubcategory.name} subcategory!`
       );
@@ -55,6 +61,7 @@ export const CreateSubcategoryForm: React.FC<Props> = ({
             categoryId,
             budgetAmount: subcategoryBudget,
             name: subcategoryName,
+            rolloverDate: String(subcategoryRolloverDate),
           },
         })
       }
@@ -77,23 +84,31 @@ export const CreateSubcategoryForm: React.FC<Props> = ({
         autoComplete="off"
         onChange={(e) => setSubcategoryBudget(Number(e.target.value))}
       />
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <DatePicker
+          label="Rollover Date"
+          value={subcategoryRolloverDate}
+          onChange={(newValue) =>
+            newValue ? setSubcategoryRolloverDate(newValue) : null
+          }
+        />
+      </LocalizationProvider>
 
       <Alert severity="info">
         <strong>Example:</strong> "Transport" category can have "Bike", "Car",
         "Uber" subcategories.
       </Alert>
       <Alert severity="info">
-        <strong>Budget: </strong> is used to calculate rollover.
+        <strong>Budget: </strong> is used to calculate rollover and changing it
+        changes the rollover value as well!
         <br />
-        A rollover budget is when the subcategory budget rollover into the next
-        month. This means you could start the month in the negative if you have
+        <strong>Rollover</strong> is when the subcategory budget accumulates
+        into the next month.
+        <br />
+        This means you could start the month in the negative if you have
         overspent, or start with the positive if you underspent. This allows you
         to plan ahead for expenses and savings.
         <br />
-        <strong>
-          It starts from the month of subcategory creation - and changing it
-          changes the rollover too!
-        </strong>
       </Alert>
     </FormDialog>
   );

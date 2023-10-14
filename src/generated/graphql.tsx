@@ -78,6 +78,7 @@ export type MutationCreateSubcategoryArgs = {
   categoryId: Scalars['ID'];
   icon?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
+  rolloverDate?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -139,6 +140,7 @@ export type MutationUpdateSubcategoryArgs = {
   categoryId: Scalars['ID'];
   id: Scalars['ID'];
   name: Scalars['String'];
+  rolloverDate?: InputMaybe<Scalars['String']>;
 };
 
 export type PasswordResetRequestPayload = {
@@ -193,6 +195,7 @@ export type Subcategory = {
   icon?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   name: Scalars['String'];
+  rolloverDate: Scalars['String'];
 };
 
 
@@ -219,7 +222,7 @@ export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', email: 
 export type CategoriesListQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CategoriesListQuery = { __typename?: 'Query', categories: Array<{ __typename?: 'Category', id: string, name: string, subcategories?: Array<{ __typename?: 'Subcategory', id: string, categoryId: string, createdAt: string, name: string, budgetAmount?: number | null } | null> | null }> };
+export type CategoriesListQuery = { __typename?: 'Query', categories: Array<{ __typename?: 'Category', id: string, name: string, subcategories?: Array<{ __typename?: 'Subcategory', id: string, categoryId: string, createdAt: string, rolloverDate: string, name: string, budgetAmount?: number | null } | null> | null }> };
 
 export type CreateCategoryMutationVariables = Exact<{
   name: Scalars['String'];
@@ -247,6 +250,7 @@ export type CreateSubcategoryMutationVariables = Exact<{
   categoryId: Scalars['ID'];
   name: Scalars['String'];
   budgetAmount: Scalars['Int'];
+  rolloverDate: Scalars['String'];
 }>;
 
 
@@ -257,6 +261,7 @@ export type UpdateSubcategoryMutationVariables = Exact<{
   categoryId: Scalars['ID'];
   name: Scalars['String'];
   budgetAmount: Scalars['Int'];
+  rolloverDate: Scalars['String'];
 }>;
 
 
@@ -392,6 +397,7 @@ export const CategoriesListDocument = gql`
       id
       categoryId
       createdAt
+      rolloverDate
       name
       budgetAmount
     }
@@ -526,11 +532,12 @@ export type DeleteCategoryMutationHookResult = ReturnType<typeof useDeleteCatego
 export type DeleteCategoryMutationResult = Apollo.MutationResult<DeleteCategoryMutation>;
 export type DeleteCategoryMutationOptions = Apollo.BaseMutationOptions<DeleteCategoryMutation, DeleteCategoryMutationVariables>;
 export const CreateSubcategoryDocument = gql`
-    mutation CreateSubcategory($categoryId: ID!, $name: String!, $budgetAmount: Int!) {
+    mutation CreateSubcategory($categoryId: ID!, $name: String!, $budgetAmount: Int!, $rolloverDate: String!) {
   createSubcategory(
     categoryId: $categoryId
     name: $name
     budgetAmount: $budgetAmount
+    rolloverDate: $rolloverDate
   ) {
     id
     categoryId
@@ -557,6 +564,7 @@ export type CreateSubcategoryMutationFn = Apollo.MutationFunction<CreateSubcateg
  *      categoryId: // value for 'categoryId'
  *      name: // value for 'name'
  *      budgetAmount: // value for 'budgetAmount'
+ *      rolloverDate: // value for 'rolloverDate'
  *   },
  * });
  */
@@ -568,12 +576,13 @@ export type CreateSubcategoryMutationHookResult = ReturnType<typeof useCreateSub
 export type CreateSubcategoryMutationResult = Apollo.MutationResult<CreateSubcategoryMutation>;
 export type CreateSubcategoryMutationOptions = Apollo.BaseMutationOptions<CreateSubcategoryMutation, CreateSubcategoryMutationVariables>;
 export const UpdateSubcategoryDocument = gql`
-    mutation UpdateSubcategory($id: ID!, $categoryId: ID!, $name: String!, $budgetAmount: Int!) {
+    mutation UpdateSubcategory($id: ID!, $categoryId: ID!, $name: String!, $budgetAmount: Int!, $rolloverDate: String!) {
   updateSubcategory(
     id: $id
     categoryId: $categoryId
     name: $name
     budgetAmount: $budgetAmount
+    rolloverDate: $rolloverDate
   ) {
     id
     categoryId
@@ -601,6 +610,7 @@ export type UpdateSubcategoryMutationFn = Apollo.MutationFunction<UpdateSubcateg
  *      categoryId: // value for 'categoryId'
  *      name: // value for 'name'
  *      budgetAmount: // value for 'budgetAmount'
+ *      rolloverDate: // value for 'rolloverDate'
  *   },
  * });
  */

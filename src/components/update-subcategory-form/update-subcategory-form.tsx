@@ -7,11 +7,14 @@ import {
   useUpdateSubcategoryMutation,
 } from "../../generated/graphql";
 import { FormDialog } from "../form-dialog/form-dialog";
-import Alert from "@mui/material/Alert";
+// import Alert from "@mui/material/Alert";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 interface Props {
   open: boolean;
@@ -28,11 +31,15 @@ export const UpdateSubcategoryForm: React.FC<Props> = ({
   closeForm,
   refetch,
 }) => {
+  const formRolloverDate = new Date(parseInt(formData.rolloverDate, 10));
+
   const [formInvalid, setFormInvalid] = useState(true);
   const [subcategoryName, setSubcategoryName] = useState(formData.name);
   const [subcategoryBudget, setSubcategoryBudget] = useState(
     formData.budgetAmount
   );
+  const [subcategoryRolloverDate, setSubcategoryRolloverDate] =
+    useState(formRolloverDate);
   const [categoryId, setCategoryId] = useState(formData.categoryId);
 
   const [updateSubcategory] = useUpdateSubcategoryMutation({
@@ -70,6 +77,7 @@ export const UpdateSubcategoryForm: React.FC<Props> = ({
             categoryId,
             name: subcategoryName,
             budgetAmount: Number(subcategoryBudget),
+            rolloverDate: String(subcategoryRolloverDate),
           },
         })
       }
@@ -116,13 +124,22 @@ export const UpdateSubcategoryForm: React.FC<Props> = ({
         value={subcategoryBudget}
         onChange={(e) => setSubcategoryBudget(Number(e.target.value))}
       />
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <DatePicker
+          label="Rollover Date"
+          value={subcategoryRolloverDate}
+          onChange={(newValue) =>
+            newValue ? setSubcategoryRolloverDate(newValue) : null
+          }
+        />
+      </LocalizationProvider>
 
-      <Alert severity="warning">
+      {/* <Alert severity="warning">
         <strong>Budget: </strong> is used to calculate rollover.
         <br />
         It starts from the month of subcategory creation - and changing it
         changes the rollover too!
-      </Alert>
+      </Alert> */}
     </FormDialog>
   );
 };

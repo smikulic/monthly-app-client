@@ -36,7 +36,7 @@ export const SubcategoryListItem: React.FC<Props> = ({
   );
   const expensesExist = totalSubcategoryExpenses > 0;
   const budgetAmount = subcategory.budgetAmount || 0;
-  const budgetStartDate = new Date(Number(subcategory.createdAt));
+  const budgetStartDate = new Date(Number(subcategory.rolloverDate));
   const rolloverBudgetAmount = getRolloverBudget({
     currentDate,
     budgetStartDate,

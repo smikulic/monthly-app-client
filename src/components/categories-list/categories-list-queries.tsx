@@ -9,6 +9,7 @@ export const GET_CATEGORIES_LIST = gql`
         id
         categoryId
         createdAt
+        rolloverDate
         name
         budgetAmount
       }
@@ -43,11 +44,13 @@ export const CREATE_SUBCATEGORY_MUTATION = gql`
     $categoryId: ID!
     $name: String!
     $budgetAmount: Int!
+    $rolloverDate: String!
   ) {
     createSubcategory(
       categoryId: $categoryId
       name: $name
       budgetAmount: $budgetAmount
+      rolloverDate: $rolloverDate
     ) {
       id
       categoryId
@@ -62,12 +65,14 @@ export const UPDATE_SUBCATEGORY_MUTATION = gql`
     $categoryId: ID!
     $name: String!
     $budgetAmount: Int!
+    $rolloverDate: String!
   ) {
     updateSubcategory(
       id: $id
       categoryId: $categoryId
       name: $name
       budgetAmount: $budgetAmount
+      rolloverDate: $rolloverDate
     ) {
       id
       categoryId
