@@ -54,7 +54,7 @@ export const HomePageContainer = ({
       loading={loadingExpenses || loadingCategories}
       actionsBarComponent={
         <ActionsBar
-          displayDate={pageDate}
+          pageDate={pageDate}
           onClickNext={onClickNext}
           onClickPrevious={onClickPrevious}
         />

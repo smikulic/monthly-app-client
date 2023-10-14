@@ -68,6 +68,8 @@ export const WelcomePageContainer = () => {
         <Link to="/app" className="button-start">
           Get Started
         </Link>
+        <br />
+        <br />
       </div>
     </div>
   );
