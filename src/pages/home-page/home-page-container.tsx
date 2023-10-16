@@ -44,14 +44,13 @@ export const HomePageContainer = ({
 
   const noLoading = !loadingExpenses && !loadingCategories;
   const noErrors = !errorExpenses && !errorChartExpenses && !errorCategories;
-  const dataAvailable =
-    noLoading && noErrors && chartExpensesData?.chartExpenses;
   const noDataAvailable =
     noLoading && noErrors && !chartExpensesData?.chartExpenses;
 
   return (
     <PageContainer
       loading={loadingExpenses || loadingCategories}
+      noData={noDataAvailable}
       actionsBarComponent={
         <ActionsBar
           pageDate={pageDate}
@@ -60,30 +59,22 @@ export const HomePageContainer = ({
         />
       }
       dataAvailableComponent={
-        <>
-          {dataAvailable && (
-            <HomePage
-              totalExpensesAmount={totalExpensesAmount}
-              totalBudgetAmount={totalBudgetAmount}
-              chartExpensesData={chartExpensesData?.chartExpenses}
-              loadingChartExpenses={loadingChartExpenses}
-              pageDate={pageDate}
-            />
-          )}
-        </>
+        <HomePage
+          totalExpensesAmount={totalExpensesAmount}
+          totalBudgetAmount={totalBudgetAmount}
+          chartExpensesData={chartExpensesData?.chartExpenses}
+          loadingChartExpenses={loadingChartExpenses}
+          pageDate={pageDate}
+        />
       }
       noDataAvailableComponent={
-        <>
-          {noDataAvailable && (
-            <HomePage
-              totalExpensesAmount={0}
-              totalBudgetAmount={0}
-              chartExpensesData={new Array(12).fill(0)}
-              loadingChartExpenses={loadingChartExpenses}
-              pageDate={pageDate}
-            />
-          )}
-        </>
+        <HomePage
+          totalExpensesAmount={0}
+          totalBudgetAmount={0}
+          chartExpensesData={new Array(12).fill(0)}
+          loadingChartExpenses={loadingChartExpenses}
+          pageDate={pageDate}
+        />
       }
     />
   );

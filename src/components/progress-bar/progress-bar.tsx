@@ -17,7 +17,10 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
 
   return (
     <ProgressBarStyled>
-      <ProgressBarInnerStyled width={progress} />
+      <ProgressBarInnerStyled
+        data-testid="progress-bar-inner"
+        width={progress}
+      />
     </ProgressBarStyled>
   );
 };

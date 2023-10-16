@@ -4,11 +4,13 @@ import { LoadingScreen } from "../../components/loading-screen/loading-screen";
 
 export const PageContainer = ({
   loading,
+  noData,
   actionsBarComponent,
   dataAvailableComponent,
   noDataAvailableComponent,
 }: {
   loading: boolean;
+  noData: boolean;
   actionsBarComponent: ReactNode;
   dataAvailableComponent: ReactNode;
   noDataAvailableComponent: ReactNode;
@@ -22,10 +24,10 @@ export const PageContainer = ({
       {loading && <LoadingScreen />}
 
       {/* data not available state */}
-      {noDataAvailableComponent}
+      {!loading && noData && noDataAvailableComponent}
 
       {/* data available state */}
-      {dataAvailableComponent}
+      {!loading && !noData && dataAvailableComponent}
     </Sentry.ErrorBoundary>
   );
 };

@@ -1,4 +1,4 @@
-import { Category, Expense, Subcategory } from "../generated/graphql";
+import { Category, Expense } from "../generated/graphql";
 
 export const getChartData = ({
   expenses,
@@ -20,26 +20,13 @@ export const getChartData = ({
     0
   );
 
-  const totalBudgetAmount = categories
-    .map((category: Category) => {
-      const subcategories = category.subcategories as Subcategory[];
-
-      if (!subcategories) {
-        return 0;
-      }
-
-      const totalSubcategoryExpenses = subcategories.reduce(
-        (accumulator: number, currentValue: Subcategory) =>
-          accumulator + (currentValue.budgetAmount || 0),
-        0
-      );
-
-      return totalSubcategoryExpenses;
-    })
-    .reduce(
-      (accumulator: number, currentValue: number) => accumulator + currentValue,
+  const totalBudgetAmount = categories.reduce((acc, category) => {
+    const subcategoryTotal = (category.subcategories || []).reduce(
+      (subAcc, subcategory) => subAcc + (subcategory?.budgetAmount || 0),
       0
     );
+    return acc + subcategoryTotal;
+  }, 0);
 
   return {
     totalExpensesAmount,

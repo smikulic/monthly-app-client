@@ -51,7 +51,8 @@
       "src/generated",
       "src/reportWebVitals.ts",
       "src/shared.ts",
-      "-style"
+      "-style",
+      "-queries"
     ]
   },
   "browserslist": {
