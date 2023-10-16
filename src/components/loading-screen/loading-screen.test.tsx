@@ -7,7 +7,7 @@ describe("<LoadingScreen />", () => {
     render(<LoadingScreen />);
 
     // Verifying the spinner by its aria label
-    const spinnerElement = screen.getByLabelText("oval-loading");
+    const spinnerElement = screen.getByTestId("loading-screen");
     expect(spinnerElement).toBeInTheDocument();
   });
 });
