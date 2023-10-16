@@ -20,7 +20,7 @@ describe("<PageContainer />", () => {
     );
 
     expect(screen.getByText("Actions")).toBeInTheDocument();
-    expect(screen.getByLabelText("oval-loading")).toBeInTheDocument();
+    expect(screen.getByTestId("loading-screen")).toBeInTheDocument();
     expect(screen.queryByText("Data Available")).not.toBeInTheDocument();
     expect(screen.queryByText("No Data")).not.toBeInTheDocument();
   });
@@ -42,9 +42,6 @@ describe("<PageContainer />", () => {
   });
 
   it("displays no data available state", () => {
-    // Modify the rendering to pass only noDataAvailableComponent or modify the component's logic to make this test meaningful.
-    // For now, we're just assuming that all components are passed and the noDataAvailableComponent will be shown anyway.
-
     render(
       <PageContainer
         loading={false}
