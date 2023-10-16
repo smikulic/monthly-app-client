@@ -44,11 +44,6 @@ export const ExpensesPageContainer = ({
 
   const noLoading = !loadingExpenses && !loadingCategories;
   const noErrors = !errorExpenses && !errorCategories;
-  const dataAvailable =
-    noLoading &&
-    noErrors &&
-    categoriesDecoratedWithExpenses &&
-    totalSubcategories > 0;
   const noDataAvailable =
     noLoading &&
     noErrors &&
@@ -57,6 +52,7 @@ export const ExpensesPageContainer = ({
   return (
     <PageContainer
       loading={loadingExpenses || loadingCategories}
+      noData={noDataAvailable}
       actionsBarComponent={
         <ActionsBar
           pageDate={pageDate}
@@ -67,31 +63,23 @@ export const ExpensesPageContainer = ({
         />
       }
       dataAvailableComponent={
-        <>
-          {dataAvailable && (
-            <ExpensesList
-              pageDate={pageDate}
-              showRolloverBudget={showRolloverBudget}
-              categoriesDecoratedWithExpenses={categoriesDecoratedWithExpenses}
-              refetchExpenses={refetchExpenses}
-            />
-          )}
-        </>
+        <ExpensesList
+          pageDate={pageDate}
+          showRolloverBudget={showRolloverBudget}
+          categoriesDecoratedWithExpenses={categoriesDecoratedWithExpenses}
+          refetchExpenses={refetchExpenses}
+        />
       }
       noDataAvailableComponent={
-        <>
-          {noDataAvailable && (
-            <Alert severity="info">
-              <AlertTitle>
-                Create a category and subcategory to enable adding an expense.
-              </AlertTitle>
-              <strong>Example:</strong> "Food" can be category, "Groceries" and
-              "Restaurant" subcategories.
-              <br />
-              Or to keep it simple, just create a subcategory "all"
-            </Alert>
-          )}
-        </>
+        <Alert severity="info">
+          <AlertTitle>
+            Create a category and subcategory to enable adding an expense.
+          </AlertTitle>
+          <strong>Example:</strong> "Food" can be category, "Groceries" and
+          "Restaurant" subcategories.
+          <br />
+          Or to keep it simple, just create a subcategory "all"
+        </Alert>
       }
     />
   );

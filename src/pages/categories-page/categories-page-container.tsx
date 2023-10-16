@@ -19,12 +19,6 @@ export const CategoriesPageContainer = () => {
   } = useCategoriesListQuery();
 
   const categories = categoriesData?.categories;
-  const dataAvailable = Boolean(
-    !loadingCategories &&
-      !errorCategories &&
-      categories &&
-      categories.length > 0
-  );
   const noDataAvailable = Boolean(
     !loadingCategories &&
       !errorCategories &&
@@ -34,6 +28,7 @@ export const CategoriesPageContainer = () => {
   return (
     <PageContainer
       loading={loadingCategories}
+      noData={noDataAvailable}
       actionsBarComponent={
         <ActionsBar>
           {/* Empty span to push button to the right */}
@@ -55,21 +50,13 @@ export const CategoriesPageContainer = () => {
         </ActionsBar>
       }
       dataAvailableComponent={
-        <>
-          {dataAvailable && (
-            <CategoriesList
-              categories={categories!}
-              refetchCategories={refetchCategories}
-            />
-          )}
-        </>
+        <CategoriesList
+          categories={categories!}
+          refetchCategories={refetchCategories}
+        />
       }
       noDataAvailableComponent={
-        <>
-          {noDataAvailable && (
-            <MainListItemStyled>No categories</MainListItemStyled>
-          )}
-        </>
+        <MainListItemStyled>No categories</MainListItemStyled>
       }
     />
   );
