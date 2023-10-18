@@ -59,7 +59,12 @@ export const FormDialog: React.FC<Props> = ({
           <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
             {title}
           </Typography>
-          <Button autoFocus color="inherit" onClick={formAction}>
+          <Button
+            autoFocus
+            color="inherit"
+            onClick={formAction}
+            disabled={disabled}
+          >
             {formActionText}
           </Button>
         </Toolbar>
