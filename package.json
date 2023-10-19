@@ -17,7 +17,7 @@
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^27.5.2",
     "@types/node": "^16.11.56",
-    "@types/react": "^18.0.17",
+    "@types/react": "^18.2.23",
     "@types/react-dom": "^18.0.6",
     "accounting": "^0.4.1",
     "date-fns": "^2.29.3",
