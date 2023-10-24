@@ -6,15 +6,17 @@ import { formatAmount } from "../../utils/format";
 import { months } from "../../constants";
 import { HomeContainerStyled } from "./home-page-style";
 import { MainListItemStyled } from "../../shared";
-import { LoadingScreen } from "../loading-screen/loading-screen";
+import { Skeleton } from "@mui/material";
 
 export const HomePage = ({
+  loading,
   totalExpensesAmount,
   totalBudgetAmount,
   chartExpensesData,
   loadingChartExpenses,
   pageDate,
 }: {
+  loading: boolean;
   totalExpensesAmount: number;
   totalBudgetAmount: number;
   chartExpensesData: number[];
@@ -28,22 +30,46 @@ export const HomePage = ({
       <Box>
         <Link to="/app/expenses">
           <MainListItemStyled>
-            Expenses
-            <span className="red">{formatAmount(totalExpensesAmount)}</span>
+            {loading ? (
+              <>
+                <Skeleton animation="wave" width={200} height={20} />
+                <span className="red">
+                  <Skeleton animation="wave" width={60} height={20} />
+                </span>
+              </>
+            ) : (
+              <>
+                Expenses
+                <span className="red">{formatAmount(totalExpensesAmount)}</span>
+              </>
+            )}
           </MainListItemStyled>
         </Link>
         <Link to="/app/categories">
           <MainListItemStyled>
-            Categories/Budget
-            <span className="orange">{formatAmount(totalBudgetAmount)}</span>
+            {loading ? (
+              <>
+                <Skeleton animation="wave" width={200} height={20} />
+                <span className="orange">
+                  <Skeleton animation="wave" width={60} height={20} />
+                </span>
+              </>
+            ) : (
+              <>
+                Categories/Budget
+                <span className="orange">
+                  {formatAmount(totalBudgetAmount)}
+                </span>
+              </>
+            )}
           </MainListItemStyled>
         </Link>
       </Box>
 
       <br />
 
-      <Box>
-        {loadingChartExpenses && <LoadingScreen />}
+      <Box sx={{ padding: "20px" }}>
+        {loadingChartExpenses && <Skeleton animation="wave" height={300} />}
         {!loadingChartExpenses && chartExpensesData && (
           <LineChart
             xAxis={[
