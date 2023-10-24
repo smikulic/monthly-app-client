@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import ProductDemoImg from "../../assets/product-demo.png";
 import "./welcome-page-container.css";
 
 export const WelcomePageContainer = () => {
@@ -27,11 +28,18 @@ export const WelcomePageContainer = () => {
         </Link>
       </div>
       <div className="welcome-content">
-        <h1 className="title">
-          <span>A new way to </span>
-          <br />
-          <span>track your savings!</span>
-        </h1>
+        <div className="headline">
+          <h1 className="title">
+            <span>A new way to </span>
+            <br />
+            <span>track your savings!</span>
+          </h1>
+          <img
+            className="product-demo-image"
+            src={ProductDemoImg}
+            alt="Monthly Product Demo"
+          />
+        </div>
 
         <div className="feature-box">
           <span>
