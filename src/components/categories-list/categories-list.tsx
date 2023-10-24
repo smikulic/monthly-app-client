@@ -22,13 +22,16 @@ import {
 } from "./categories-list-style";
 import { ListAddField } from "../list-add-field/list-add-field";
 import { formatAmount } from "../../utils/format";
+import { Skeleton } from "@mui/material";
 
 interface Props {
-  categories: Category[];
+  loading: boolean;
+  categories?: Category[];
   refetchCategories: () => Promise<unknown>;
 }
 
 export const CategoriesList: React.FC<Props> = ({
+  loading,
   categories,
   refetchCategories,
 }) => {
@@ -77,7 +80,32 @@ export const CategoriesList: React.FC<Props> = ({
 
   return (
     <div>
-      {categories.map((category: Category) => {
+      {loading && (
+        <>
+          <MainListItemStyled>
+            <Skeleton animation="wave" width={200} height={20} />
+            <CategoryDetailsStyled>
+              <Skeleton animation="wave" width={60} height={20} />
+            </CategoryDetailsStyled>
+          </MainListItemStyled>
+          <MainListItemStyled>
+            <Skeleton animation="wave" width={200} height={20} />
+            <CategoryDetailsStyled>
+              <Skeleton animation="wave" width={60} height={20} />
+            </CategoryDetailsStyled>
+          </MainListItemStyled>
+          <MainListItemStyled>
+            <Skeleton animation="wave" width={200} height={20} />
+            <CategoryDetailsStyled>
+              <Skeleton animation="wave" width={60} height={20} />
+            </CategoryDetailsStyled>
+          </MainListItemStyled>
+        </>
+      )}
+      {categories?.length === 0 && (
+        <MainListItemStyled>No categories</MainListItemStyled>
+      )}
+      {categories?.map((category: Category) => {
         const categoryId = category.id;
         const showSubcategories = openCategory === categoryId;
         const subcategories = category.subcategories;
@@ -241,7 +269,7 @@ export const CategoriesList: React.FC<Props> = ({
         <UpdateSubcategoryForm
           open={Boolean(updateModalSubcategory)}
           formData={updateModalSubcategory}
-          categories={categories}
+          categories={categories!}
           closeForm={() => setUpdateModalSubcategory(null)}
           refetch={refetchCategories}
         />
