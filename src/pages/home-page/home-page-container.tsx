@@ -37,6 +37,9 @@ export const HomePageContainer = ({
     expenses: expensesData?.expenses,
   });
 
+  // TODO: Replace this with actual data from API
+  const totalSavingGoalsAmount = 0;
+
   return (
     <Sentry.ErrorBoundary fallback={<p>An error has occurred</p>}>
       <ActionsBar
@@ -48,6 +51,7 @@ export const HomePageContainer = ({
         loading={loadingExpenses || loadingCategories}
         totalExpensesAmount={totalExpensesAmount}
         totalBudgetAmount={totalBudgetAmount}
+        totalSavingGoalsAmount={totalSavingGoalsAmount}
         chartExpensesData={chartExpensesData?.chartExpenses}
         loadingChartExpenses={loadingChartExpenses}
         pageDate={pageDate}

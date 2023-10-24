@@ -8,15 +8,16 @@ import {
 } from "react-router-dom";
 import { gql, ServerError, useQuery } from "@apollo/client";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { WelcomePageContainer } from "./pages/welcome-page/welcome-page-container";
 import { LoginPageContainer } from "./pages/login-page/login-page-container";
+import { ResetPasswordPageContainer } from "./pages/reset-password-page/reset-password-page-container";
 import { HomePageContainer } from "./pages/home-page/home-page-container";
 import { ExpensesPageContainer } from "./pages/expenses-page/expenses-page-container";
+import { CategoriesPageContainer } from "./pages/categories-page/categories-page-container";
+import { SavingGoalsPageContainer } from "./pages/saving-goals-page/saving-goals-page-container";
 import { Header } from "./components/header/header";
 import { Footer } from "./components/footer/footer";
 import { AUTH_TOKEN, AUTH_TOKEN_USER } from "./constants";
-import { CategoriesPageContainer } from "./pages/categories-page/categories-page-container";
-import { ResetPasswordPageContainer } from "./pages/reset-password-page/reset-password-page-container";
-import { WelcomePageContainer } from "./pages/welcome-page/welcome-page-container";
 import { handleLogout } from "./utils/handleLogout";
 import { FooterPaddingStyled } from "./shared";
 
@@ -141,6 +142,10 @@ function App() {
                   <Route
                     path="/app/categories"
                     element={<CategoriesPageContainer />}
+                  />
+                  <Route
+                    path="/app/saving-goals"
+                    element={<SavingGoalsPageContainer />}
                   />
                 </Route>
               </>

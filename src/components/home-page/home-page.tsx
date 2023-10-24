@@ -1,17 +1,19 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import Box from "@mui/material/Box";
 import { LineChart } from "@mui/x-charts/LineChart";
+import { Skeleton } from "@mui/material";
 import { formatAmount } from "../../utils/format";
 import { months } from "../../constants";
 import { HomeContainerStyled } from "./home-page-style";
 import { MainListItemStyled } from "../../shared";
-import { Skeleton } from "@mui/material";
 
 export const HomePage = ({
   loading,
   totalExpensesAmount,
   totalBudgetAmount,
+  totalSavingGoalsAmount,
   chartExpensesData,
   loadingChartExpenses,
   pageDate,
@@ -19,6 +21,7 @@ export const HomePage = ({
   loading: boolean;
   totalExpensesAmount: number;
   totalBudgetAmount: number;
+  totalSavingGoalsAmount: number;
   chartExpensesData: number[];
   loadingChartExpenses: boolean;
   pageDate: Date;
@@ -39,7 +42,9 @@ export const HomePage = ({
               </>
             ) : (
               <>
-                Expenses
+                <Box sx={{ display: "flex" }}>
+                  Expenses <ChevronRightIcon />
+                </Box>
                 <span className="red">{formatAmount(totalExpensesAmount)}</span>
               </>
             )}
@@ -56,10 +61,31 @@ export const HomePage = ({
               </>
             ) : (
               <>
-                Categories/Budget
+                <Box sx={{ display: "flex" }}>
+                  Categories/Budget <ChevronRightIcon />
+                </Box>
                 <span className="orange">
                   {formatAmount(totalBudgetAmount)}
                 </span>
+              </>
+            )}
+          </MainListItemStyled>
+        </Link>
+        <Link to="/app/saving-goals">
+          <MainListItemStyled>
+            {loading ? (
+              <>
+                <Skeleton animation="wave" width={200} height={20} />
+                <span>
+                  <Skeleton animation="wave" width={60} height={20} />
+                </span>
+              </>
+            ) : (
+              <>
+                <Box sx={{ display: "flex" }}>
+                  Saving Goals <ChevronRightIcon />
+                </Box>
+                <span>{formatAmount(totalSavingGoalsAmount)}</span>
               </>
             )}
           </MainListItemStyled>

@@ -46,9 +46,11 @@ export type Mutation = {
   __typename?: 'Mutation';
   createCategory: Category;
   createExpense: Expense;
+  createSavingGoal: SavingGoal;
   createSubcategory: Subcategory;
   deleteCategory: Category;
   deleteExpense: Expense;
+  deleteSavingGoal: SavingGoal;
   deleteSubcategory: Subcategory;
   login?: Maybe<AuthPayload>;
   resetPassword: User;
@@ -56,6 +58,7 @@ export type Mutation = {
   signup?: Maybe<AuthPayload>;
   updateCategory: Category;
   updateExpense: Expense;
+  updateSavingGoal: SavingGoal;
   updateSubcategory: Subcategory;
 };
 
@@ -70,6 +73,14 @@ export type MutationCreateExpenseArgs = {
   amount: Scalars['Int'];
   date: Scalars['String'];
   subcategoryId: Scalars['ID'];
+};
+
+
+export type MutationCreateSavingGoalArgs = {
+  goalAmount: Scalars['Int'];
+  goalDate: Scalars['String'];
+  initialSaveAmount?: InputMaybe<Scalars['Int']>;
+  name: Scalars['String'];
 };
 
 
@@ -88,6 +99,11 @@ export type MutationDeleteCategoryArgs = {
 
 
 export type MutationDeleteExpenseArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type MutationDeleteSavingGoalArgs = {
   id: Scalars['ID'];
 };
 
@@ -135,6 +151,15 @@ export type MutationUpdateExpenseArgs = {
 };
 
 
+export type MutationUpdateSavingGoalArgs = {
+  goalAmount: Scalars['Int'];
+  goalDate: Scalars['String'];
+  id: Scalars['ID'];
+  initialSaveAmount?: InputMaybe<Scalars['Int']>;
+  name: Scalars['String'];
+};
+
+
 export type MutationUpdateSubcategoryArgs = {
   budgetAmount: Scalars['Int'];
   categoryId: Scalars['ID'];
@@ -155,6 +180,7 @@ export type Query = {
   chartExpenses: Array<Scalars['Int']>;
   expenses: Array<Expense>;
   me: User;
+  savingGoals: Array<SavingGoal>;
   subcategories: Array<Subcategory>;
   subcategory: Subcategory;
   user: User;
@@ -184,6 +210,17 @@ export type QuerySubcategoryArgs = {
 
 export type QueryUserArgs = {
   id: Scalars['ID'];
+};
+
+export type SavingGoal = {
+  __typename?: 'SavingGoal';
+  createdAt: Scalars['String'];
+  goalAmount: Scalars['Int'];
+  goalDate: Scalars['String'];
+  id: Scalars['ID'];
+  initialSaveAmount?: Maybe<Scalars['Int']>;
+  name: Scalars['String'];
+  user?: Maybe<User>;
 };
 
 export type Subcategory = {
@@ -321,6 +358,39 @@ export type DeleteExpenseMutationVariables = Exact<{
 
 
 export type DeleteExpenseMutation = { __typename?: 'Mutation', deleteExpense: { __typename?: 'Expense', id: string } };
+
+export type SavingGoalsListQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type SavingGoalsListQuery = { __typename?: 'Query', savingGoals: Array<{ __typename?: 'SavingGoal', id: string, createdAt: string, name: string, goalDate: string, goalAmount: number, initialSaveAmount?: number | null }> };
+
+export type CreateSavingGoalMutationVariables = Exact<{
+  name: Scalars['String'];
+  goalDate: Scalars['String'];
+  goalAmount: Scalars['Int'];
+  initialSaveAmount?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type CreateSavingGoalMutation = { __typename?: 'Mutation', createSavingGoal: { __typename?: 'SavingGoal', name: string } };
+
+export type UpdateSavingGoalMutationVariables = Exact<{
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  goalDate: Scalars['String'];
+  goalAmount: Scalars['Int'];
+  initialSaveAmount?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type UpdateSavingGoalMutation = { __typename?: 'Mutation', updateSavingGoal: { __typename?: 'SavingGoal', name: string } };
+
+export type DeleteSavingGoalMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type DeleteSavingGoalMutation = { __typename?: 'Mutation', deleteSavingGoal: { __typename?: 'SavingGoal', name: string } };
 
 export type SignupMutationVariables = Exact<{
   email: Scalars['String'];
@@ -885,6 +955,162 @@ export function useDeleteExpenseMutation(baseOptions?: Apollo.MutationHookOption
 export type DeleteExpenseMutationHookResult = ReturnType<typeof useDeleteExpenseMutation>;
 export type DeleteExpenseMutationResult = Apollo.MutationResult<DeleteExpenseMutation>;
 export type DeleteExpenseMutationOptions = Apollo.BaseMutationOptions<DeleteExpenseMutation, DeleteExpenseMutationVariables>;
+export const SavingGoalsListDocument = gql`
+    query SavingGoalsList {
+  savingGoals {
+    id
+    createdAt
+    name
+    goalDate
+    goalAmount
+    initialSaveAmount
+  }
+}
+    `;
+
+/**
+ * __useSavingGoalsListQuery__
+ *
+ * To run a query within a React component, call `useSavingGoalsListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSavingGoalsListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSavingGoalsListQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useSavingGoalsListQuery(baseOptions?: Apollo.QueryHookOptions<SavingGoalsListQuery, SavingGoalsListQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SavingGoalsListQuery, SavingGoalsListQueryVariables>(SavingGoalsListDocument, options);
+      }
+export function useSavingGoalsListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SavingGoalsListQuery, SavingGoalsListQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SavingGoalsListQuery, SavingGoalsListQueryVariables>(SavingGoalsListDocument, options);
+        }
+export type SavingGoalsListQueryHookResult = ReturnType<typeof useSavingGoalsListQuery>;
+export type SavingGoalsListLazyQueryHookResult = ReturnType<typeof useSavingGoalsListLazyQuery>;
+export type SavingGoalsListQueryResult = Apollo.QueryResult<SavingGoalsListQuery, SavingGoalsListQueryVariables>;
+export const CreateSavingGoalDocument = gql`
+    mutation CreateSavingGoal($name: String!, $goalDate: String!, $goalAmount: Int!, $initialSaveAmount: Int) {
+  createSavingGoal(
+    name: $name
+    goalDate: $goalDate
+    goalAmount: $goalAmount
+    initialSaveAmount: $initialSaveAmount
+  ) {
+    name
+  }
+}
+    `;
+export type CreateSavingGoalMutationFn = Apollo.MutationFunction<CreateSavingGoalMutation, CreateSavingGoalMutationVariables>;
+
+/**
+ * __useCreateSavingGoalMutation__
+ *
+ * To run a mutation, you first call `useCreateSavingGoalMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateSavingGoalMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createSavingGoalMutation, { data, loading, error }] = useCreateSavingGoalMutation({
+ *   variables: {
+ *      name: // value for 'name'
+ *      goalDate: // value for 'goalDate'
+ *      goalAmount: // value for 'goalAmount'
+ *      initialSaveAmount: // value for 'initialSaveAmount'
+ *   },
+ * });
+ */
+export function useCreateSavingGoalMutation(baseOptions?: Apollo.MutationHookOptions<CreateSavingGoalMutation, CreateSavingGoalMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateSavingGoalMutation, CreateSavingGoalMutationVariables>(CreateSavingGoalDocument, options);
+      }
+export type CreateSavingGoalMutationHookResult = ReturnType<typeof useCreateSavingGoalMutation>;
+export type CreateSavingGoalMutationResult = Apollo.MutationResult<CreateSavingGoalMutation>;
+export type CreateSavingGoalMutationOptions = Apollo.BaseMutationOptions<CreateSavingGoalMutation, CreateSavingGoalMutationVariables>;
+export const UpdateSavingGoalDocument = gql`
+    mutation UpdateSavingGoal($id: ID!, $name: String!, $goalDate: String!, $goalAmount: Int!, $initialSaveAmount: Int) {
+  updateSavingGoal(
+    id: $id
+    name: $name
+    goalDate: $goalDate
+    goalAmount: $goalAmount
+    initialSaveAmount: $initialSaveAmount
+  ) {
+    name
+  }
+}
+    `;
+export type UpdateSavingGoalMutationFn = Apollo.MutationFunction<UpdateSavingGoalMutation, UpdateSavingGoalMutationVariables>;
+
+/**
+ * __useUpdateSavingGoalMutation__
+ *
+ * To run a mutation, you first call `useUpdateSavingGoalMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateSavingGoalMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateSavingGoalMutation, { data, loading, error }] = useUpdateSavingGoalMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      name: // value for 'name'
+ *      goalDate: // value for 'goalDate'
+ *      goalAmount: // value for 'goalAmount'
+ *      initialSaveAmount: // value for 'initialSaveAmount'
+ *   },
+ * });
+ */
+export function useUpdateSavingGoalMutation(baseOptions?: Apollo.MutationHookOptions<UpdateSavingGoalMutation, UpdateSavingGoalMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateSavingGoalMutation, UpdateSavingGoalMutationVariables>(UpdateSavingGoalDocument, options);
+      }
+export type UpdateSavingGoalMutationHookResult = ReturnType<typeof useUpdateSavingGoalMutation>;
+export type UpdateSavingGoalMutationResult = Apollo.MutationResult<UpdateSavingGoalMutation>;
+export type UpdateSavingGoalMutationOptions = Apollo.BaseMutationOptions<UpdateSavingGoalMutation, UpdateSavingGoalMutationVariables>;
+export const DeleteSavingGoalDocument = gql`
+    mutation DeleteSavingGoal($id: ID!) {
+  deleteSavingGoal(id: $id) {
+    name
+  }
+}
+    `;
+export type DeleteSavingGoalMutationFn = Apollo.MutationFunction<DeleteSavingGoalMutation, DeleteSavingGoalMutationVariables>;
+
+/**
+ * __useDeleteSavingGoalMutation__
+ *
+ * To run a mutation, you first call `useDeleteSavingGoalMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteSavingGoalMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteSavingGoalMutation, { data, loading, error }] = useDeleteSavingGoalMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteSavingGoalMutation(baseOptions?: Apollo.MutationHookOptions<DeleteSavingGoalMutation, DeleteSavingGoalMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteSavingGoalMutation, DeleteSavingGoalMutationVariables>(DeleteSavingGoalDocument, options);
+      }
+export type DeleteSavingGoalMutationHookResult = ReturnType<typeof useDeleteSavingGoalMutation>;
+export type DeleteSavingGoalMutationResult = Apollo.MutationResult<DeleteSavingGoalMutation>;
+export type DeleteSavingGoalMutationOptions = Apollo.BaseMutationOptions<DeleteSavingGoalMutation, DeleteSavingGoalMutationVariables>;
 export const SignupDocument = gql`
     mutation Signup($email: String!, $password: String!) {
   signup(email: $email, password: $password) {

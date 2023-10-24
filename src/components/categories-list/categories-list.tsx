@@ -102,152 +102,155 @@ export const CategoriesList: React.FC<Props> = ({
           </MainListItemStyled>
         </>
       )}
-      {categories?.length === 0 && (
+      {!loading && (!categories || categories.length === 0) && (
         <MainListItemStyled>No categories</MainListItemStyled>
       )}
-      {categories?.map((category: Category) => {
-        const categoryId = category.id;
-        const showSubcategories = openCategory === categoryId;
-        const subcategories = category.subcategories;
+      {!loading &&
+        categories?.map((category: Category) => {
+          const categoryId = category.id;
+          const showSubcategories = openCategory === categoryId;
+          const subcategories = category.subcategories;
 
-        const initialValue = 0;
-        const totalBudgetAmount = subcategories?.reduce(
-          (accumulator, currentValue) =>
-            accumulator + currentValue?.budgetAmount!,
-          initialValue
-        );
+          const initialValue = 0;
+          const totalBudgetAmount = subcategories?.reduce(
+            (accumulator, currentValue) =>
+              accumulator + currentValue?.budgetAmount!,
+            initialValue
+          );
 
-        return (
-          <React.Fragment key={categoryId}>
-            <MainListItemStyled>
-              <ListItemHeader
-                title={category.name}
-                showExpand={!showSubcategories}
-                showCollapse={showSubcategories}
-                onToggleExpand={() => {
-                  if (showSubcategories) {
-                    setOpenCategory("");
-                  } else {
-                    setOpenCategory(categoryId);
-                  }
-                }}
-              />
-              <CategoryDetailsStyled>
-                <CategoryAmountStyled>
-                  {formatAmount(totalBudgetAmount || 0)}
-                </CategoryAmountStyled>
-                <div>
-                  <IconButton
-                    id={`long-menu-icon-${categoryId}`}
-                    aria-haspopup="true"
-                    size="small"
-                    onClick={(event) =>
-                      handleActionsDropdownClick(event, categoryId)
+          return (
+            <React.Fragment key={categoryId}>
+              <MainListItemStyled>
+                <ListItemHeader
+                  title={category.name}
+                  showExpand={!showSubcategories}
+                  showCollapse={showSubcategories}
+                  onToggleExpand={() => {
+                    if (showSubcategories) {
+                      setOpenCategory("");
+                    } else {
+                      setOpenCategory(categoryId);
                     }
-                  >
-                    <MoreVertIcon />
-                  </IconButton>
-                  <Menu
-                    id={`long-menu-${categoryId}`}
-                    anchorEl={anchorActionDropdownEl[categoryId]}
-                    open={Boolean(anchorActionDropdownEl[categoryId])}
-                    onClose={() => handleActionsDropdownClose(categoryId)}
-                  >
-                    <MenuItem
-                      onClick={() => {
-                        setUpdateModalCategory(category);
-                        handleActionsDropdownClose(categoryId);
-                      }}
-                    >
-                      Edit
-                    </MenuItem>
-                    <MenuItem
-                      onClick={() => {
-                        deleteCategory({ variables: { id: categoryId } });
-                        handleActionsDropdownClose(categoryId);
-                      }}
-                    >
-                      Remove
-                    </MenuItem>
-                  </Menu>
-                </div>
-              </CategoryDetailsStyled>
-            </MainListItemStyled>
-            {showSubcategories && (
-              <>
-                {!!subcategories &&
-                  subcategories.map((subcategory) => {
-                    if (!subcategory) return null;
-
-                    const subcategoryId = subcategory.id;
-
-                    return (
-                      <span key={subcategoryId}>
-                        <SubcategoryListItemStyled>
-                          <ListItemHeader title={subcategory.name} />
-                          <CategoryDetailsStyled>
-                            <CategoryAmountStyled>
-                              {formatAmount(subcategory.budgetAmount || 0)}
-                            </CategoryAmountStyled>
-                            <div>
-                              <IconButton
-                                id={`long-menu-icon-${subcategoryId}`}
-                                aria-haspopup="true"
-                                size="small"
-                                onClick={(event) =>
-                                  handleActionsDropdownClick(
-                                    event,
-                                    subcategoryId
-                                  )
-                                }
-                              >
-                                <MoreVertIcon />
-                              </IconButton>
-                              <Menu
-                                id={`long-menu-${subcategoryId}`}
-                                anchorEl={anchorActionDropdownEl[subcategoryId]}
-                                open={Boolean(
-                                  anchorActionDropdownEl[subcategoryId]
-                                )}
-                                onClose={() =>
-                                  handleActionsDropdownClose(subcategoryId)
-                                }
-                              >
-                                <MenuItem
-                                  onClick={() => {
-                                    setUpdateModalSubcategory(subcategory);
-                                    handleActionsDropdownClose(subcategoryId);
-                                  }}
-                                >
-                                  Edit
-                                </MenuItem>
-                                <MenuItem
-                                  onClick={() => {
-                                    deleteSubcategory({
-                                      variables: { id: subcategoryId },
-                                    });
-                                    handleActionsDropdownClose(subcategoryId);
-                                  }}
-                                >
-                                  Remove
-                                </MenuItem>
-                              </Menu>
-                            </div>
-                          </CategoryDetailsStyled>
-                        </SubcategoryListItemStyled>
-                      </span>
-                    );
-                  })}
-
-                <ListAddField
-                  text={`Add subcategory for "${category.name}"`}
-                  onClick={() => setCreateModalSubcategory(category.id)}
+                  }}
                 />
-              </>
-            )}
-          </React.Fragment>
-        );
-      })}
+                <CategoryDetailsStyled>
+                  <CategoryAmountStyled>
+                    {formatAmount(totalBudgetAmount || 0)}
+                  </CategoryAmountStyled>
+                  <div>
+                    <IconButton
+                      id={`long-menu-icon-${categoryId}`}
+                      aria-haspopup="true"
+                      size="small"
+                      onClick={(event) =>
+                        handleActionsDropdownClick(event, categoryId)
+                      }
+                    >
+                      <MoreVertIcon />
+                    </IconButton>
+                    <Menu
+                      id={`long-menu-${categoryId}`}
+                      anchorEl={anchorActionDropdownEl[categoryId]}
+                      open={Boolean(anchorActionDropdownEl[categoryId])}
+                      onClose={() => handleActionsDropdownClose(categoryId)}
+                    >
+                      <MenuItem
+                        onClick={() => {
+                          setUpdateModalCategory(category);
+                          handleActionsDropdownClose(categoryId);
+                        }}
+                      >
+                        Edit
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          deleteCategory({ variables: { id: categoryId } });
+                          handleActionsDropdownClose(categoryId);
+                        }}
+                      >
+                        Remove
+                      </MenuItem>
+                    </Menu>
+                  </div>
+                </CategoryDetailsStyled>
+              </MainListItemStyled>
+              {showSubcategories && (
+                <>
+                  {!!subcategories &&
+                    subcategories.map((subcategory) => {
+                      if (!subcategory) return null;
+
+                      const subcategoryId = subcategory.id;
+
+                      return (
+                        <span key={subcategoryId}>
+                          <SubcategoryListItemStyled>
+                            <ListItemHeader title={subcategory.name} />
+                            <CategoryDetailsStyled>
+                              <CategoryAmountStyled>
+                                {formatAmount(subcategory.budgetAmount || 0)}
+                              </CategoryAmountStyled>
+                              <div>
+                                <IconButton
+                                  id={`long-menu-icon-${subcategoryId}`}
+                                  aria-haspopup="true"
+                                  size="small"
+                                  onClick={(event) =>
+                                    handleActionsDropdownClick(
+                                      event,
+                                      subcategoryId
+                                    )
+                                  }
+                                >
+                                  <MoreVertIcon />
+                                </IconButton>
+                                <Menu
+                                  id={`long-menu-${subcategoryId}`}
+                                  anchorEl={
+                                    anchorActionDropdownEl[subcategoryId]
+                                  }
+                                  open={Boolean(
+                                    anchorActionDropdownEl[subcategoryId]
+                                  )}
+                                  onClose={() =>
+                                    handleActionsDropdownClose(subcategoryId)
+                                  }
+                                >
+                                  <MenuItem
+                                    onClick={() => {
+                                      setUpdateModalSubcategory(subcategory);
+                                      handleActionsDropdownClose(subcategoryId);
+                                    }}
+                                  >
+                                    Edit
+                                  </MenuItem>
+                                  <MenuItem
+                                    onClick={() => {
+                                      deleteSubcategory({
+                                        variables: { id: subcategoryId },
+                                      });
+                                      handleActionsDropdownClose(subcategoryId);
+                                    }}
+                                  >
+                                    Remove
+                                  </MenuItem>
+                                </Menu>
+                              </div>
+                            </CategoryDetailsStyled>
+                          </SubcategoryListItemStyled>
+                        </span>
+                      );
+                    })}
+
+                  <ListAddField
+                    text={`Add subcategory for "${category.name}"`}
+                    onClick={() => setCreateModalSubcategory(category.id)}
+                  />
+                </>
+              )}
+            </React.Fragment>
+          );
+        })}
 
       {createModalSubcategory && (
         <CreateSubcategoryForm

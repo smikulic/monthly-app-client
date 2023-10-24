@@ -30,9 +30,9 @@ export const WelcomePageContainer = () => {
       <div className="welcome-content">
         <div className="headline">
           <h1 className="title">
-            <span>A new way to </span>
+            <span>An easier way to </span>
             <br />
-            <span>track your savings!</span>
+            <span>track your personal finances!</span>
           </h1>
           <img
             className="product-demo-image"
