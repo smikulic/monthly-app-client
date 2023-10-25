@@ -1,10 +1,9 @@
 import * as React from "react";
-import Button from "@mui/material/Button";
-import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
 import { useCategoriesListQuery } from "../../generated/graphql";
 import { CategoriesList } from "../../components/categories-list/categories-list";
 import { ActionsBar } from "../../components/actions-bar/actions-bar";
 import { CreateCategoryForm } from "../../components/create-category-form/create-category-form";
+import { ProminentButtonStyled } from "../../shared";
 
 export const CategoriesPageContainer = () => {
   const [createModalCategory, setCreateModalCategory] = React.useState(false);
@@ -22,13 +21,9 @@ export const CategoriesPageContainer = () => {
       <ActionsBar>
         {/* Empty span to push button to the right */}
         <span></span>
-        <Button
-          variant="contained"
-          endIcon={<AddCircleRoundedIcon />}
-          onClick={() => setCreateModalCategory(true)}
-        >
+        <ProminentButtonStyled onClick={() => setCreateModalCategory(true)}>
           Add category
-        </Button>
+        </ProminentButtonStyled>
         {createModalCategory && (
           <CreateCategoryForm
             open={createModalCategory}

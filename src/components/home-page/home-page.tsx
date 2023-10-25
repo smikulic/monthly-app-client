@@ -1,17 +1,16 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
 import { LineChart } from "@mui/x-charts/LineChart";
-import { formatAmount } from "../../utils/format";
+import { Skeleton } from "@mui/material";
 import { months } from "../../constants";
 import { HomeContainerStyled } from "./home-page-style";
-import { MainListItemStyled } from "../../shared";
-import { Skeleton } from "@mui/material";
+import { HomeListItemLink } from "../home-list-item-link/home-list-item-link";
 
 export const HomePage = ({
   loading,
   totalExpensesAmount,
   totalBudgetAmount,
+  totalSavingGoalsAmount,
   chartExpensesData,
   loadingChartExpenses,
   pageDate,
@@ -19,6 +18,7 @@ export const HomePage = ({
   loading: boolean;
   totalExpensesAmount: number;
   totalBudgetAmount: number;
+  totalSavingGoalsAmount: number;
   chartExpensesData: number[];
   loadingChartExpenses: boolean;
   pageDate: Date;
@@ -28,47 +28,29 @@ export const HomePage = ({
   return (
     <HomeContainerStyled>
       <Box>
-        <Link to="/app/expenses">
-          <MainListItemStyled>
-            {loading ? (
-              <>
-                <Skeleton animation="wave" width={200} height={20} />
-                <span className="red">
-                  <Skeleton animation="wave" width={60} height={20} />
-                </span>
-              </>
-            ) : (
-              <>
-                Expenses
-                <span className="red">{formatAmount(totalExpensesAmount)}</span>
-              </>
-            )}
-          </MainListItemStyled>
-        </Link>
-        <Link to="/app/categories">
-          <MainListItemStyled>
-            {loading ? (
-              <>
-                <Skeleton animation="wave" width={200} height={20} />
-                <span className="orange">
-                  <Skeleton animation="wave" width={60} height={20} />
-                </span>
-              </>
-            ) : (
-              <>
-                Categories/Budget
-                <span className="orange">
-                  {formatAmount(totalBudgetAmount)}
-                </span>
-              </>
-            )}
-          </MainListItemStyled>
-        </Link>
+        <HomeListItemLink
+          linkTo="/app/expenses"
+          title="Expenses"
+          loading={loading}
+          value={totalExpensesAmount}
+          valueColor="red"
+        />
+        <HomeListItemLink
+          linkTo="/app/categories"
+          title="Categories/Budget"
+          loading={loading}
+          value={totalBudgetAmount}
+          valueColor="orange"
+        />
+        <HomeListItemLink
+          linkTo="/app/saving-goals"
+          title="Saving Goals"
+          loading={loading}
+          value={totalSavingGoalsAmount}
+        />
       </Box>
 
-      <br />
-
-      <Box sx={{ padding: "20px" }}>
+      <Box sx={{ padding: "8px" }}>
         {loadingChartExpenses && <Skeleton animation="wave" height={300} />}
         {!loadingChartExpenses && chartExpensesData && (
           <LineChart

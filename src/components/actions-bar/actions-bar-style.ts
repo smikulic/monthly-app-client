@@ -4,7 +4,7 @@ export const ActionsBarStyled = styled("div")({
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
-  padding: "0 32px",
+  padding: "0 24px",
   height: "56px",
   fontSize: "18px",
 });
@@ -23,6 +23,6 @@ export const MonthPaginationStyled = styled("div")({
     cursor: "pointer",
   },
   "& svg:hover": {
-    color: "#41efcd",
+    color: "#f199c0",
   },
 });
