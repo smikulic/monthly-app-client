@@ -13,7 +13,7 @@ export const ListAddFieldStyled = styled("div")<ListAddFieldStyledProps>(
     height: "48px",
     position: "relative",
     margin: indent ? "12px 12px 12px 48px" : "12px",
-    padding: "14px 32px",
+    padding: "14px 24px",
     fontSize: fontSize === "small" ? "16px" : "18px",
 
     color: "black",

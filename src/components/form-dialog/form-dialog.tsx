@@ -46,7 +46,14 @@ export const FormDialog: React.FC<Props> = ({
       onClose={closeForm}
       TransitionComponent={Transition}
     >
-      <AppBar sx={{ position: "relative" }}>
+      <AppBar
+        sx={{
+          position: "relative",
+          boxShadow: "none",
+          borderBottom: "1px solid rgb(223, 223, 223)",
+        }}
+        color="transparent"
+      >
         <Toolbar>
           <IconButton
             edge="start"
@@ -60,8 +67,8 @@ export const FormDialog: React.FC<Props> = ({
             {title}
           </Typography>
           <Button
+            variant="contained"
             autoFocus
-            color="inherit"
             onClick={formAction}
             disabled={disabled}
           >

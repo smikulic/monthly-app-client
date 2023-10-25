@@ -73,7 +73,7 @@ export const CreateSavingGoalForm: React.FC<Props> = ({
       <TextField
         required
         id="savingGoalAmount"
-        label="How much do you estimate you goal costs?"
+        label="Goal amount"
         size="small"
         margin="none"
         autoComplete="off"
@@ -89,7 +89,7 @@ export const CreateSavingGoalForm: React.FC<Props> = ({
       />
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <DatePicker
-          label="When do you wish to achieve your goal?"
+          label="Goal date"
           value={savingGoalDate}
           onChange={(newValue) =>
             newValue ? setSavingGoalDate(newValue) : null
@@ -100,6 +100,13 @@ export const CreateSavingGoalForm: React.FC<Props> = ({
       <Alert severity="info">
         <strong>Example:</strong> A saving goals can be something like "Summer
         vacation", "New car", "IKEA chair", etc.
+      </Alert>
+      <Alert severity="info">
+        <strong>Goal amount:</strong> How much do you estimate you goal would
+        cost.
+        <br />
+        <strong>Goal date:</strong> Date when you wish to purchase what you are
+        saving for.
       </Alert>
     </FormDialog>
   );

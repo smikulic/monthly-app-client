@@ -3,21 +3,19 @@ import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { differenceInCalendarMonths } from "date-fns";
 import {
   SavingGoal,
   useDeleteSavingGoalMutation,
 } from "../../generated/graphql";
 import { toast } from "react-toastify";
 import { useActionDropdown } from "../../hooks/useActionDropdown";
-import { ListItemHeader } from "../list-item-header/list-item-header";
 import { MainListItemStyled } from "../../shared";
 import { formatAmount } from "../../utils/format";
-import { Skeleton } from "@mui/material";
-import {
-  CategoryAmountStyled,
-  CategoryDetailsStyled,
-} from "../categories-list/categories-list-style";
+import { Box, Skeleton, Typography } from "@mui/material";
+import { CategoryDetailsStyled } from "../categories-list/categories-list-style";
 import { UpdateSavingGoalForm } from "../update-saving-goal-form/update-saving-goal-form";
+import { SavingGoalItemDetails } from "../saving-goal-item-details/saving-goal-item-details";
 
 interface Props {
   loading: boolean;
@@ -51,8 +49,6 @@ export const SavingGoalsList: React.FC<Props> = ({
     },
   });
 
-  console.log({ savingGoals });
-
   return (
     <div>
       {loading && (
@@ -84,14 +80,67 @@ export const SavingGoalsList: React.FC<Props> = ({
         savingGoals?.map((savingGoal: SavingGoal) => {
           const savingGoalId = savingGoal.id;
 
+          const currentDate = new Date();
+          const goalStartDate = new Date(Number(savingGoal.createdAt));
+          const goalEndDate = new Date(Number(savingGoal.goalDate));
+          const savingRangeInMonths = differenceInCalendarMonths(
+            goalEndDate,
+            goalStartDate
+          );
+          const monthsSaving = differenceInCalendarMonths(
+            currentDate,
+            goalStartDate
+          );
+
+          const monthsLeftToSave = savingRangeInMonths - monthsSaving;
+
+          const savePerMonth =
+            (savingGoal.goalAmount - (savingGoal.initialSaveAmount || 0)) /
+            savingRangeInMonths;
+
+          const savedTillNow =
+            (savingGoal.initialSaveAmount || 0) + savePerMonth * monthsSaving;
+
           return (
             <React.Fragment key={savingGoalId}>
               <MainListItemStyled>
-                <ListItemHeader title={savingGoal.name} />
+                <Box sx={{ display: "flex", flexDirection: "column" }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      width: "240px",
+                    }}
+                  >
+                    <Typography variant="body1" color="text.primary">
+                      {savingGoal.name}
+                    </Typography>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Typography variant="body2" color="secondary">
+                      {monthsLeftToSave === 0 && (
+                        <>You have saved up for your goal!</>
+                      )}
+                      {monthsLeftToSave > 0 && (
+                        <>
+                          {formatAmount(savePerMonth)}/month, {monthsLeftToSave}{" "}
+                          months left
+                        </>
+                      )}
+                    </Typography>
+                  </Box>
+                </Box>
+                <SavingGoalItemDetails
+                  goalAmount={savingGoal.goalAmount}
+                  savedTillNow={savedTillNow}
+                />
                 <CategoryDetailsStyled>
-                  <CategoryAmountStyled>
-                    {formatAmount(savingGoal.goalAmount)}
-                  </CategoryAmountStyled>
                   <div>
                     <IconButton
                       id={`long-menu-icon-${savingGoalId}`}
@@ -119,7 +168,9 @@ export const SavingGoalsList: React.FC<Props> = ({
                       </MenuItem>
                       <MenuItem
                         onClick={() => {
-                          deleteSavingGoal({ variables: { id: savingGoalId } });
+                          deleteSavingGoal({
+                            variables: { id: savingGoalId },
+                          });
                           handleActionsDropdownClose(savingGoalId);
                         }}
                       >

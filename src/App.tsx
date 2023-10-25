@@ -28,6 +28,10 @@ const muiTheme = createTheme({
     // contrastText: will be calculated to contrast with palette.primary.main
     primary: {
       main: "#41efcd",
+      contrastText: "#181818",
+    },
+    secondary: {
+      main: "#f199c0",
     },
     warning: {
       main: "#eec22f",

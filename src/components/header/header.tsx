@@ -2,15 +2,26 @@ import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { AUTH_TOKEN_USER } from "../../constants";
-import {
-  BackButtonStyled,
-  HeaderStyled,
-  LogoutButtonStyled,
-} from "./header-style";
+import { BackButtonStyled, HeaderStyled } from "./header-style";
+import { Box, Button, ListItemIcon, Menu, MenuItem } from "@mui/material";
+import { Logout } from "@mui/icons-material";
+import MenuIcon from "@mui/icons-material/Menu";
 
 export const Header = ({ onLogout }: { onLogout: () => void }) => {
   const navigate = useNavigate();
   const location = useLocation();
+
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+  const openMenu = Boolean(anchorEl);
+
+  const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
 
   const userName = localStorage.getItem(AUTH_TOKEN_USER)!.split("@")[0];
   const isHome = location.pathname === "/app";
@@ -23,8 +34,37 @@ export const Header = ({ onLogout }: { onLogout: () => void }) => {
           back
         </BackButtonStyled>
       )}
-      {userName}
-      <LogoutButtonStyled onClick={onLogout}>logout</LogoutButtonStyled>
+
+      <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
+        {userName}
+        <Button
+          color="secondary"
+          endIcon={<MenuIcon />}
+          onClick={handleMenuClick}
+        />
+      </Box>
+      <Menu
+        anchorEl={anchorEl}
+        id="account-menu"
+        open={openMenu}
+        onClose={handleMenuClose}
+        onClick={handleMenuClose}
+        transformOrigin={{ horizontal: "right", vertical: "top" }}
+        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+      >
+        {/* <MenuItem onClick={handleMenuClose}>
+          <ListItemIcon>
+            <Settings fontSize="small" />
+          </ListItemIcon>
+          Settings
+        </MenuItem> */}
+        <MenuItem onClick={onLogout}>
+          <ListItemIcon>
+            <Logout fontSize="small" />
+          </ListItemIcon>
+          Logout
+        </MenuItem>
+      </Menu>
     </HeaderStyled>
   );
 };

@@ -1,9 +1,9 @@
 import * as React from "react";
-import Button from "@mui/material/Button";
 import { useSavingGoalsListQuery } from "../../generated/graphql";
 import { SavingGoalsList } from "../../components/saving-goals-list/saving-goals-list";
 import { ActionsBar } from "../../components/actions-bar/actions-bar";
 import { CreateSavingGoalForm } from "../../components/create-saving-goal-form/create-saving-goal-form";
+import { ProminentButtonStyled } from "../../shared";
 
 export const SavingGoalsPageContainer = () => {
   const [createModalSavingGoal, setCreateModalSavingGoal] =
@@ -22,12 +22,9 @@ export const SavingGoalsPageContainer = () => {
       <ActionsBar>
         {/* Empty span to push button to the right */}
         <span></span>
-        <Button
-          variant="contained"
-          onClick={() => setCreateModalSavingGoal(true)}
-        >
+        <ProminentButtonStyled onClick={() => setCreateModalSavingGoal(true)}>
           Add saving goal
-        </Button>
+        </ProminentButtonStyled>
         {createModalSavingGoal && (
           <CreateSavingGoalForm
             open={createModalSavingGoal}

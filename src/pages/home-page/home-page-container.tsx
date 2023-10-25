@@ -9,6 +9,8 @@ import {
 } from "../../components/expenses-list/expenses-list-queries";
 import { ActionsBar } from "../../components/actions-bar/actions-bar";
 import { getChartData } from "../../utils/getChartData";
+import { GET_SAVING_GOALS_LIST } from "../../components/saving-goals-list/saving-goals-list-queries";
+import { SavingGoal } from "../../generated/graphql";
 
 export const HomePageContainer = ({
   pageDate,
@@ -31,14 +33,21 @@ export const HomePageContainer = ({
   );
   const { data: categoriesData, loading: loadingCategories } =
     useQuery(GET_CATEGORIES_LIST);
+  const { data: savingGoalsData, loading: loadingSavingGoals } = useQuery(
+    GET_SAVING_GOALS_LIST
+  );
 
   const { totalExpensesAmount, totalBudgetAmount } = getChartData({
     categories: categoriesData?.categories,
     expenses: expensesData?.expenses,
   });
 
-  // TODO: Replace this with actual data from API
-  const totalSavingGoalsAmount = 0;
+  const totalSavingGoalsAmount = savingGoalsData?.savingGoals.reduce(
+    (accumulator: number, currentGoal: SavingGoal) => {
+      return accumulator + currentGoal.goalAmount;
+    },
+    0
+  );
 
   return (
     <Sentry.ErrorBoundary fallback={<p>An error has occurred</p>}>
@@ -48,7 +57,7 @@ export const HomePageContainer = ({
         onClickPrevious={onClickPrevious}
       />
       <HomePage
-        loading={loadingExpenses || loadingCategories}
+        loading={loadingExpenses || loadingCategories || loadingSavingGoals}
         totalExpensesAmount={totalExpensesAmount}
         totalBudgetAmount={totalBudgetAmount}
         totalSavingGoalsAmount={totalSavingGoalsAmount}

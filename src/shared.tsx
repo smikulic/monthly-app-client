@@ -10,13 +10,13 @@ export const ListItemStyled = styled("div")({
 
 export const MainListItemStyled = styled(ListItemStyled)({
   height: "56px",
-  padding: "16px 32px",
+  padding: "16px 24px",
   fontSize: "20px",
 });
 
 export const SubcategoryListItemStyled = styled(ListItemStyled)({
   height: "52px",
-  padding: "8px 32px 8px 56px",
+  padding: "8px 24px 8px 56px",
   fontSize: "16px",
 });
 
