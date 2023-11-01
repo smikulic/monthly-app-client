@@ -91,21 +91,95 @@ function App() {
     setPageDate(previousDate);
   };
 
+  const subdomain = window.location.hostname.split(".").slice(0, -2).join(".");
+  const isAppSubdomain = subdomain === "app";
+  const isDevelopment = process.env.NODE_ENV === "development";
+
   return (
     <div className="App">
       <ThemeProvider theme={muiTheme}>
         <Router>
           <Routes>
-            <Route path="/" element={<WelcomePageContainer />} />
+            {!isAppSubdomain && !isDevelopment && (
+              <Route path="/" element={<WelcomePageContainer />} />
+            )}
 
-            <Route
+            {(isAppSubdomain || isDevelopment) && (
+              <>
+                <Route path="/welcome" element={<WelcomePageContainer />} />
+
+                <Route
+                  path="/reset-password"
+                  element={<ResetPasswordPageContainer />}
+                />
+
+                {!token && (
+                  <Route
+                    path="/"
+                    element={<LoginPageContainer setToken={setToken} />}
+                  />
+                )}
+
+                {token && (
+                  <>
+                    <Route
+                      element={
+                        <>
+                          <Header onLogout={handleLogout} />
+                          <FooterPaddingStyled>
+                            <Outlet />
+                          </FooterPaddingStyled>
+                          <Footer />
+                        </>
+                      }
+                    >
+                      <Route
+                        path="/"
+                        element={
+                          <HomePageContainer
+                            pageDate={pageDate}
+                            onClickNext={onClickNext}
+                            onClickPrevious={onClickPrevious}
+                          />
+                        }
+                      />
+                      <Route
+                        path="/expenses"
+                        element={
+                          <ExpensesPageContainer
+                            pageDate={pageDate}
+                            onClickNext={onClickNext}
+                            onClickPrevious={onClickPrevious}
+                          />
+                        }
+                      />
+                      <Route
+                        path="/categories"
+                        element={<CategoriesPageContainer />}
+                      />
+                      <Route
+                        path="/saving-goals"
+                        element={<SavingGoalsPageContainer />}
+                      />
+                    </Route>
+                  </>
+                )}
+
+                <Route
+                  path="*"
+                  element={<LoginPageContainer setToken={setToken} />}
+                />
+              </>
+            )}
+
+            {/* <Route
               path="/reset-password"
               element={<ResetPasswordPageContainer />}
-            />
+            /> */}
 
-            {!token && (
+            {/* {!token && (
               <Route
-                path="/app"
+                path="/"
                 element={<LoginPageContainer setToken={setToken} />}
               />
             )}
@@ -124,7 +198,7 @@ function App() {
                   }
                 >
                   <Route
-                    path="/app"
+                    path="/"
                     element={
                       <HomePageContainer
                         pageDate={pageDate}
@@ -134,7 +208,7 @@ function App() {
                     }
                   />
                   <Route
-                    path="/app/expenses"
+                    path="/expenses"
                     element={
                       <ExpensesPageContainer
                         pageDate={pageDate}
@@ -144,11 +218,11 @@ function App() {
                     }
                   />
                   <Route
-                    path="/app/categories"
+                    path="/categories"
                     element={<CategoriesPageContainer />}
                   />
                   <Route
-                    path="/app/saving-goals"
+                    path="/saving-goals"
                     element={<SavingGoalsPageContainer />}
                   />
                 </Route>
@@ -158,7 +232,7 @@ function App() {
             <Route
               path="*"
               element={<LoginPageContainer setToken={setToken} />}
-            />
+            /> */}
           </Routes>
         </Router>
 

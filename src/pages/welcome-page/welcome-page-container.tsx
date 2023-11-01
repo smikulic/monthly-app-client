@@ -1,13 +1,13 @@
 import React from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import ProductDemoImg from "../../assets/product-demo.png";
 import "./welcome-page-container.css";
 
 export const WelcomePageContainer = () => {
   const signInUrl =
     process.env.NODE_ENV === "production"
-      ? "https://app.yourmonthly.app/app"
-      : "http://localhost:3000/app";
+      ? "https://app.yourmonthly.app/"
+      : "http://localhost:3000/";
 
   return (
     <div className="welcomePage">
@@ -81,9 +81,12 @@ export const WelcomePageContainer = () => {
         </div>
 
         <br />
-        <Link to="/app" className="button-start">
+        <a className="button-start" href={signInUrl}>
           Get Started
-        </Link>
+        </a>
+        {/* <Link to="/app" className="button-start">
+          Get Started
+        </Link> */}
         <br />
         <br />
       </div>

@@ -29,21 +29,21 @@ export const HomePage = ({
     <HomeContainerStyled>
       <Box>
         <HomeListItemLink
-          linkTo="/app/expenses"
+          linkTo="/expenses"
           title="Expenses"
           loading={loading}
           value={totalExpensesAmount}
           valueColor="red"
         />
         <HomeListItemLink
-          linkTo="/app/categories"
+          linkTo="/categories"
           title="Categories/Budget"
           loading={loading}
           value={totalBudgetAmount}
           valueColor="orange"
         />
         <HomeListItemLink
-          linkTo="/app/saving-goals"
+          linkTo="/saving-goals"
           title="Saving Goals"
           loading={loading}
           value={totalSavingGoalsAmount}

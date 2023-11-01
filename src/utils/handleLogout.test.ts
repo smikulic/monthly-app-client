@@ -11,6 +11,6 @@ describe("handleLogout", () => {
     expect(spyLocalStorageRemove).toHaveBeenCalledTimes(2);
 
     expect(mockReplace).toHaveBeenCalledTimes(1);
-    expect(mockReplace).toHaveBeenCalledWith("/app");
+    expect(mockReplace).toHaveBeenCalledWith("/");
   });
 });

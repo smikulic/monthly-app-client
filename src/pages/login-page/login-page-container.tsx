@@ -63,7 +63,7 @@ export const LoginPageContainer = ({
       localStorage.setItem(AUTH_TOKEN, login?.token!);
       localStorage.setItem(AUTH_TOKEN_USER, login?.user?.email!);
       setToken(login?.token!);
-      window.location.replace("/app");
+      window.location.replace("/");
     },
   });
 
@@ -79,7 +79,7 @@ export const LoginPageContainer = ({
       localStorage.setItem(AUTH_TOKEN, signup?.token!);
       localStorage.setItem(AUTH_TOKEN_USER, signup?.user?.email!);
       console.log("REGISTER");
-      window.location.replace("/app");
+      window.location.replace("/");
     },
   });
 

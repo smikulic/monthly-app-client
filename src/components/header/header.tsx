@@ -24,12 +24,12 @@ export const Header = ({ onLogout }: { onLogout: () => void }) => {
   };
 
   const userName = localStorage.getItem(AUTH_TOKEN_USER)!.split("@")[0];
-  const isHome = location.pathname === "/app";
+  const isHome = location.pathname === "/";
 
   return (
     <HeaderStyled>
       {!isHome && (
-        <BackButtonStyled onClick={() => navigate("/app")}>
+        <BackButtonStyled onClick={() => navigate("/")}>
           <ChevronLeftIcon />
           back
         </BackButtonStyled>
