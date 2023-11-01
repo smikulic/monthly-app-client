@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useQuery } from "@apollo/client";
+import { format } from "date-fns";
 import { ExpensesList } from "../../components/expenses-list/expenses-list";
 import { GET_EXPENSES_LIST } from "../../components/expenses-list/expenses-list-queries";
 import { GET_CATEGORIES_LIST } from "../../components/categories-list/categories-list-queries";
@@ -17,13 +18,15 @@ export const ExpensesPageContainer = ({
 }) => {
   const [showRolloverBudget, setShowRolloverBudget] = useState(true);
 
+  const formattedDate = format(pageDate, "MM-dd-yyyy");
+
   const {
     data: expensesData,
     loading: loadingExpenses,
     refetch: refetchExpenses,
   } = useQuery(GET_EXPENSES_LIST, {
     variables: {
-      date: pageDate,
+      date: formattedDate,
     },
   });
   const { data: categoriesData, loading: loadingCategories } =

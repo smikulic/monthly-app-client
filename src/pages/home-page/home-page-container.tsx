@@ -1,6 +1,7 @@
 import React from "react";
 import { useQuery } from "@apollo/client";
 import * as Sentry from "@sentry/react";
+import { format } from "date-fns";
 import { GET_CATEGORIES_LIST } from "../../components/categories-list/categories-list-queries";
 import { HomePage } from "../../components/home-page/home-page";
 import {
@@ -21,14 +22,16 @@ export const HomePageContainer = ({
   onClickNext: () => void;
   onClickPrevious: () => void;
 }) => {
+  const formattedDate = format(pageDate, "MM-dd-yyyy");
+
   const { data: expensesData, loading: loadingExpenses } = useQuery(
     GET_EXPENSES_LIST,
-    { variables: { date: pageDate } }
+    { variables: { date: formattedDate } }
   );
   const { data: chartExpensesData, loading: loadingChartExpenses } = useQuery(
     GET_CHART_EXPENSES_LIST,
     {
-      variables: { date: pageDate },
+      variables: { date: formattedDate },
     }
   );
   const { data: categoriesData, loading: loadingCategories } =
