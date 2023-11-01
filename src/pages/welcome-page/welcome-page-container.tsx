@@ -4,6 +4,11 @@ import ProductDemoImg from "../../assets/product-demo.png";
 import "./welcome-page-container.css";
 
 export const WelcomePageContainer = () => {
+  const signInUrl =
+    process.env.NODE_ENV === "production"
+      ? "https://app.yourmonthly.app/app"
+      : "http://localhost:3000/app";
+
   return (
     <div className="welcomePage">
       <div className="oval-wrapper">
@@ -23,9 +28,12 @@ export const WelcomePageContainer = () => {
         </svg>
       </div>
       <div className="welcome-header">
-        <Link to="/app" className="button-start">
+        <a className="button-start" href={signInUrl}>
           Sign In
-        </Link>
+        </a>
+        {/* <Link to={signInUrl} className="button-start">
+          Sign In
+        </Link> */}
       </div>
       <div className="welcome-content">
         <div className="headline">
