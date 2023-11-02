@@ -16,6 +16,7 @@ import { Box, Skeleton, Typography } from "@mui/material";
 import { CategoryDetailsStyled } from "../categories-list/categories-list-style";
 import { UpdateSavingGoalForm } from "../update-saving-goal-form/update-saving-goal-form";
 import { SavingGoalItemDetails } from "../saving-goal-item-details/saving-goal-item-details";
+import { ProgressBar } from "../progress-bar/progress-bar";
 
 interface Props {
   loading: boolean;
@@ -124,7 +125,7 @@ export const SavingGoalsList: React.FC<Props> = ({
                     }}
                   >
                     <Typography variant="body2" color="secondary">
-                      {monthsLeftToSave === 0 && (
+                      {monthsLeftToSave <= 0 && (
                         <>You have saved up for your goal!</>
                       )}
                       {monthsLeftToSave > 0 && (
@@ -136,49 +137,58 @@ export const SavingGoalsList: React.FC<Props> = ({
                     </Typography>
                   </Box>
                 </Box>
-                <SavingGoalItemDetails
-                  goalAmount={savingGoal.goalAmount}
-                  savedTillNow={savedTillNow}
+
+                <ProgressBar
+                  value={savedTillNow}
+                  maxValue={savingGoal.goalAmount}
+                  reverse
                 />
-                <CategoryDetailsStyled>
-                  <div>
-                    <IconButton
-                      id={`long-menu-icon-${savingGoalId}`}
-                      aria-haspopup="true"
-                      size="small"
-                      onClick={(event) =>
-                        handleActionsDropdownClick(event, savingGoalId)
-                      }
-                    >
-                      <MoreVertIcon />
-                    </IconButton>
-                    <Menu
-                      id={`long-menu-${savingGoalId}`}
-                      anchorEl={anchorActionDropdownEl[savingGoalId]}
-                      open={Boolean(anchorActionDropdownEl[savingGoalId])}
-                      onClose={() => handleActionsDropdownClose(savingGoalId)}
-                    >
-                      <MenuItem
-                        onClick={() => {
-                          setUpdateModalSavingGoal(savingGoal);
-                          handleActionsDropdownClose(savingGoalId);
-                        }}
+
+                <Box sx={{ display: "flex" }}>
+                  <SavingGoalItemDetails
+                    goalAmount={savingGoal.goalAmount}
+                    savedTillNow={savedTillNow}
+                  />
+                  <CategoryDetailsStyled>
+                    <div>
+                      <IconButton
+                        id={`long-menu-icon-${savingGoalId}`}
+                        aria-haspopup="true"
+                        size="small"
+                        onClick={(event) =>
+                          handleActionsDropdownClick(event, savingGoalId)
+                        }
                       >
-                        Edit
-                      </MenuItem>
-                      <MenuItem
-                        onClick={() => {
-                          deleteSavingGoal({
-                            variables: { id: savingGoalId },
-                          });
-                          handleActionsDropdownClose(savingGoalId);
-                        }}
+                        <MoreVertIcon />
+                      </IconButton>
+                      <Menu
+                        id={`long-menu-${savingGoalId}`}
+                        anchorEl={anchorActionDropdownEl[savingGoalId]}
+                        open={Boolean(anchorActionDropdownEl[savingGoalId])}
+                        onClose={() => handleActionsDropdownClose(savingGoalId)}
                       >
-                        Remove
-                      </MenuItem>
-                    </Menu>
-                  </div>
-                </CategoryDetailsStyled>
+                        <MenuItem
+                          onClick={() => {
+                            setUpdateModalSavingGoal(savingGoal);
+                            handleActionsDropdownClose(savingGoalId);
+                          }}
+                        >
+                          Edit
+                        </MenuItem>
+                        <MenuItem
+                          onClick={() => {
+                            deleteSavingGoal({
+                              variables: { id: savingGoalId },
+                            });
+                            handleActionsDropdownClose(savingGoalId);
+                          }}
+                        >
+                          Remove
+                        </MenuItem>
+                      </Menu>
+                    </div>
+                  </CategoryDetailsStyled>
+                </Box>
               </MainListItemStyled>
             </React.Fragment>
           );
