@@ -29,9 +29,9 @@ export const ActionsBar = ({
         <>
           {pageDate && onClickPrevious && onClickNext && (
             <MonthPaginationStyled>
-              <ChevronLeftIcon fontSize="medium" onClick={onClickPrevious} />
+              <ChevronLeftIcon fontSize="large" onClick={onClickPrevious} />
               {format(pageDate, "MMM yyyy")}
-              <ChevronRightIcon fontSize="medium" onClick={onClickNext} />
+              <ChevronRightIcon fontSize="large" onClick={onClickNext} />
             </MonthPaginationStyled>
           )}
 

@@ -10,9 +10,9 @@ type ExpenseAmountStyledProps = {
 
 export const BudgetAmountStyled = styled("div")<BudgetAmountStyledProps>(
   ({ positive }) => ({
-    position: "absolute",
-    top: "28px",
-    right: "64px",
+    position: "relative",
+    // top: "38px",
+    // right: "64px",
     fontSize: "14px",
     color: positive ? "#7fb77e" : "#ff7777",
   })
@@ -20,9 +20,9 @@ export const BudgetAmountStyled = styled("div")<BudgetAmountStyledProps>(
 
 export const ExpenseAmountStyled = styled("div")<ExpenseAmountStyledProps>(
   ({ prominent }) => ({
-    position: "absolute",
-    top: prominent ? "18px" : "10px",
-    right: "64px",
+    position: "relative",
+    // top: prominent ? "18px" : "18px",
+    // right: "64px",
     fontSize: prominent ? "16px" : "14px",
     color: "#181818",
   })

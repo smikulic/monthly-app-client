@@ -10,6 +10,7 @@ import { TransitionProps } from "@mui/material/transitions";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
+// import { DialogActions } from "@mui/material";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -42,6 +43,7 @@ export const FormDialog: React.FC<Props> = ({
   return (
     <Dialog
       fullScreen
+      // fullWidth
       open={open}
       onClose={closeForm}
       TransitionComponent={Transition}
@@ -79,6 +81,12 @@ export const FormDialog: React.FC<Props> = ({
       <DialogContent>
         <Stack spacing={1}>{children}</Stack>
       </DialogContent>
+      {/* <DialogActions>
+        <Button onClick={closeForm}>Cancel</Button>
+        <Button variant="contained" onClick={formAction} disabled={disabled}>
+          {formActionText}
+        </Button>
+      </DialogActions> */}
     </Dialog>
   );
 };

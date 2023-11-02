@@ -110,7 +110,7 @@ export const SavingGoalsList: React.FC<Props> = ({
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "space-between",
-                      width: "240px",
+                      width: "210px",
                     }}
                   >
                     <Typography variant="body1" color="text.primary">

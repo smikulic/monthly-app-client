@@ -13,8 +13,8 @@ export const MonthPaginationStyled = styled("div")({
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
-  fontSize: "16px",
-  width: "140px",
+  fontSize: "17px",
+  width: "148px",
   color: "#181818",
 
   "& svg": {
