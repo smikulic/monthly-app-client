@@ -21,6 +21,13 @@ export const CategoriesPageContainer = () => {
       <ActionsBar>
         {/* Empty span to push button to the right */}
         <span></span>
+        {/* <Typography
+          variant="h6"
+          borderBottom="1px solid"
+          borderColor="warning.main"
+        >
+          Budget
+        </Typography> */}
         <ProminentButtonStyled onClick={() => setCreateModalCategory(true)}>
           Add category
         </ProminentButtonStyled>

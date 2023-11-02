@@ -45,16 +45,16 @@ export const ExpensesList: React.FC<Props> = ({
       {loading && (
         <>
           <MainListItemStyled>
-            <Skeleton animation="wave" width={200} height={20} />
-            <Skeleton animation="wave" width={60} height={20} />
+            <Skeleton animation="wave" width={200} height={24} />
+            <Skeleton animation="wave" width={60} height={24} />
           </MainListItemStyled>
           <MainListItemStyled>
-            <Skeleton animation="wave" width={200} height={20} />
-            <Skeleton animation="wave" width={60} height={20} />
+            <Skeleton animation="wave" width={200} height={24} />
+            <Skeleton animation="wave" width={60} height={24} />
           </MainListItemStyled>
           <MainListItemStyled>
-            <Skeleton animation="wave" width={200} height={20} />
-            <Skeleton animation="wave" width={60} height={20} />
+            <Skeleton animation="wave" width={200} height={24} />
+            <Skeleton animation="wave" width={60} height={24} />
           </MainListItemStyled>
         </>
       )}
@@ -79,7 +79,9 @@ export const ExpensesList: React.FC<Props> = ({
 
             return (
               <React.Fragment key={categoryId}>
-                <MainListItemStyled>
+                <MainListItemStyled
+                  active={showSubcategories && subcategoriesExist}
+                >
                   <ListItemHeader
                     title={category.name}
                     showExpand={!showSubcategories && subcategoriesExist}
@@ -130,7 +132,7 @@ export const ExpensesList: React.FC<Props> = ({
                       )}
 
                     <ListAddField
-                      text={`Add expense for "${category.name}"`}
+                      text={`Add ${category.name} expense`}
                       onClick={() => setCreateModalExpense(true)}
                     />
 

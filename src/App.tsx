@@ -32,9 +32,17 @@ const muiTheme = createTheme({
     },
     secondary: {
       main: "#f199c0",
+      contrastText: "#6a1fde",
     },
     warning: {
       main: "#eec22f",
+    },
+    error: {
+      main: "#ff7777",
+    },
+    text: {
+      secondary: "#878BAC",
+      disabled: "#d6d7e0",
     },
   },
 });
@@ -154,7 +162,7 @@ function App() {
                         }
                       />
                       <Route
-                        path="/categories"
+                        path="/budget"
                         element={<CategoriesPageContainer />}
                       />
                       <Route
@@ -218,7 +226,7 @@ function App() {
                     }
                   />
                   <Route
-                    path="/categories"
+                    path="/budget"
                     element={<CategoriesPageContainer />}
                   />
                   <Route

@@ -51,7 +51,7 @@ export const SubcategoryListItem: React.FC<Props> = ({
 
   return (
     <>
-      <SubcategoryListItemStyled>
+      <SubcategoryListItemStyled actionable={expensesExist}>
         <ListItemHeader
           title={subcategory.name}
           showExpand={!showExpenses && expensesExist}
@@ -78,7 +78,6 @@ export const SubcategoryListItem: React.FC<Props> = ({
             <ExpandedExpenses
               expenses={subcategorySelected.expenses}
               setUpdateModalExpense={setUpdateModalExpense}
-              subcategoryName={subcategory.name}
               refetchExpenses={refetchExpenses}
             />
           )}

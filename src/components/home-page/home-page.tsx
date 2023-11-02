@@ -33,20 +33,21 @@ export const HomePage = ({
           title="Expenses"
           loading={loading}
           value={totalExpensesAmount}
-          valueColor="red"
+          valueColor="#ff7777"
         />
         <HomeListItemLink
-          linkTo="/categories"
-          title="Categories/Budget"
+          linkTo="/budget"
+          title="Budget"
           loading={loading}
           value={totalBudgetAmount}
-          valueColor="orange"
+          valueColor="#eec22f"
         />
         <HomeListItemLink
           linkTo="/saving-goals"
           title="Saving Goals"
           loading={loading}
           value={totalSavingGoalsAmount}
+          valueColor="#6a1fde"
         />
       </Box>
 

@@ -4,7 +4,7 @@ export const ActionsBarStyled = styled("div")({
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
-  padding: "0 24px",
+  margin: "0 12px",
   height: "56px",
   fontSize: "18px",
 });
@@ -13,8 +13,8 @@ export const MonthPaginationStyled = styled("div")({
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
-  fontSize: "18px",
-  width: "158px",
+  fontSize: "16px",
+  width: "140px",
   color: "#181818",
 
   "& svg": {

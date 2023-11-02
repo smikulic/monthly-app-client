@@ -5,36 +5,71 @@ export const ListItemStyled = styled("div")({
   justifyContent: "space-between",
   alignItems: "center",
   position: "relative",
-  borderBottom: "1px solid rgb(223, 223, 223)",
 });
 
-export const MainListItemStyled = styled(ListItemStyled)({
-  height: "56px",
-  padding: "16px 24px",
-  fontSize: "20px",
-});
+type MainListItemStyledProps = {
+  active?: boolean;
+};
 
-export const SubcategoryListItemStyled = styled(ListItemStyled)({
+export const MainListItemStyled = styled(
+  ListItemStyled
+)<MainListItemStyledProps>(({ theme, active }) => ({
+  margin: "10px 12px",
+  padding: "16px 20px",
+  border: active
+    ? `1px solid ${theme.palette.text.secondary}`
+    : `1px solid ${theme.palette.text.disabled}`,
+  borderRadius: "16px",
+
+  "&:hover": {
+    borderColor: theme.palette.text.secondary,
+  },
+  // "&:hover svg": {
+  //   color: theme.palette.secondary.main,
+  // },
+}));
+
+type SubcategoryListItemStyledProps = {
+  actionable?: boolean;
+};
+
+export const SubcategoryListItemStyled = styled(
+  ListItemStyled
+)<SubcategoryListItemStyledProps>(({ theme, actionable }) => ({
   height: "52px",
-  padding: "8px 24px 8px 56px",
-  fontSize: "16px",
-});
+  margin: "6px 12px",
+  padding: "8px 24px 8px 38px",
+  border: `1px solid ${theme.palette.text.disabled}`,
+  borderRadius: "16px",
 
-export const ProminentButtonStyled = styled("div")({
+  "&:hover": {
+    borderColor: actionable
+      ? theme.palette.text.secondary
+      : theme.palette.text.disabled,
+  },
+  // "&:hover svg": {
+  //   color: theme.palette.secondary.main,
+  // },
+}));
+
+export const ProminentButtonStyled = styled("div")(({ theme }) => ({
   padding: "8px 16px",
   display: "flex",
   alignItems: "center",
   height: "40px",
   fontSize: "16px",
-  color: "#181818",
-  border: "1px solid #41efcd",
-  borderRadius: "5px",
+  color: theme.palette.primary.contrastText,
+  border: `1px solid ${theme.palette.primary.contrastText}`,
+  // border: `2px solid ${theme.palette.primary.main}`,
+  background: theme.palette.primary.main,
+  borderRadius: "10px",
   cursor: "pointer",
 
   "&:hover": {
-    color: " #41efcd",
+    opacity: 0.7,
+    // color: theme.palette.primary.main,
   },
-});
+}));
 
 export const FooterPaddingStyled = styled("div")({
   marginBottom: "56px",

@@ -13,14 +13,12 @@ import { useApolloClient } from "@apollo/client";
 
 interface Props {
   expenses: Expense[];
-  subcategoryName: string;
   setUpdateModalExpense: (expense: Expense) => void;
   refetchExpenses: () => Promise<unknown>;
 }
 
 export const ExpandedExpenses: React.FC<Props> = ({
   expenses,
-  subcategoryName,
   setUpdateModalExpense,
   refetchExpenses,
 }) => {
@@ -62,8 +60,7 @@ export const ExpandedExpenses: React.FC<Props> = ({
           <span key={expenseId}>
             <ExpenseListItemStyled>
               <ExpenseFieldStyled>
-                {subcategoryName} - {format(expenseISODate, "dd MMM")} -{" "}
-                {expense.amount} €
+                {format(expenseISODate, "dd MMM")} - {expense.amount} €
               </ExpenseFieldStyled>
               <div>
                 <IconButton

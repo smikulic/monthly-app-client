@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import Box from "@mui/material/Box";
-import { Skeleton } from "@mui/material";
+import { Skeleton, Typography } from "@mui/material";
 import { formatAmount } from "../../utils/format";
 import { MainListItemStyled } from "../../shared";
 
@@ -17,31 +17,38 @@ export const HomeListItemLink = ({
   title: string;
   loading: boolean;
   value: number;
-  valueColor?: "red" | "orange";
+  valueColor?: string;
 }) => {
   return (
     <Link to={linkTo}>
       <MainListItemStyled>
-        {loading ? (
-          <>
-            <Skeleton animation="wave" width={200} height={20} />
-            <Skeleton animation="wave" width={60} height={20} />
-          </>
-        ) : (
-          <>
-            <Box
-              sx={(theme) => ({
-                display: "flex",
-                "&:hover svg": {
-                  color: theme.palette.secondary.main,
-                },
-              })}
+        <Box sx={{ display: "flex" }}>
+          <Box
+            sx={{
+              marginRight: "10px",
+              width: "6px",
+              background: valueColor,
+              borderRadius: "10px",
+            }}
+          />
+          <div>
+            <Typography
+              variant="body1"
+              fontSize="18px"
+              color="primary.contrastText"
             >
-              {title} <ChevronRightIcon />
-            </Box>
-            <span className={valueColor}>{formatAmount(value)}</span>
-          </>
-        )}
+              {title}
+            </Typography>
+            {loading ? (
+              <Skeleton animation="wave" width={60} height={24} />
+            ) : (
+              <Typography variant="body1" color="text.secondary">
+                {formatAmount(value)}
+              </Typography>
+            )}
+          </div>
+        </Box>
+        <ArrowForwardIcon />
       </MainListItemStyled>
     </Link>
   );
