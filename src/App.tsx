@@ -180,11 +180,6 @@ function App() {
               </>
             )}
 
-            {/* <Route
-              path="/reset-password"
-              element={<ResetPasswordPageContainer />}
-            /> */}
-
             {/* {!token && (
               <Route
                 path="/"
