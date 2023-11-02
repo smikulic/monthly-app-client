@@ -54,7 +54,7 @@ export const HomePage = ({
       <Box
         sx={{
           margin: "2px 12px",
-          border: "1px solid #878BAC",
+          border: "1px solid #d6d7e0",
           borderRadius: "16px",
         }}
       >
@@ -83,19 +83,18 @@ export const HomePage = ({
               axisId: "budgetOverview",
               disableLine: true,
               disableTicks: true,
-              tickFontSize: 10
+              tickFontSize: 10,
             }}
             bottomAxis={{
               axisId: "yearOverview",
               disableLine: true,
               disableTicks: true,
-              tickFontSize: 10
+              tickFontSize: 10,
             }}
             series={[
               {
                 data: chartExpensesData,
                 area: true,
-                // stack: 'total',
                 label: "Expenses",
                 color: "#ff7777",
               },

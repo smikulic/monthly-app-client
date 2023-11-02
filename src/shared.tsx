@@ -24,9 +24,6 @@ export const MainListItemStyled = styled(
   "&:hover": {
     borderColor: theme.palette.text.secondary,
   },
-  // "&:hover svg": {
-  //   color: theme.palette.secondary.main,
-  // },
 }));
 
 type SubcategoryListItemStyledProps = {
@@ -47,9 +44,6 @@ export const SubcategoryListItemStyled = styled(
       ? theme.palette.text.secondary
       : theme.palette.text.disabled,
   },
-  // "&:hover svg": {
-  //   color: theme.palette.secondary.main,
-  // },
 }));
 
 export const ProminentButtonStyled = styled("div")(({ theme }) => ({
@@ -60,14 +54,12 @@ export const ProminentButtonStyled = styled("div")(({ theme }) => ({
   fontSize: "16px",
   color: theme.palette.primary.contrastText,
   border: `1px solid ${theme.palette.primary.contrastText}`,
-  // border: `2px solid ${theme.palette.primary.main}`,
   background: theme.palette.primary.main,
   borderRadius: "10px",
   cursor: "pointer",
 
   "&:hover": {
     opacity: 0.7,
-    // color: theme.palette.primary.main,
   },
 }));
 

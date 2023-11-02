@@ -15,7 +15,6 @@ export const ProgressBarStyled = styled("div")<ProgressBartSyledProps>(
     left: "0",
     width: "100%",
     height: "100%",
-    // height: "52px",
     backgroundColor: reverse ? "#fff" : "#41efcd",
     overflow: "hidden",
     opacity: "0.1",
