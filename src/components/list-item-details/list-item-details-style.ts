@@ -24,6 +24,6 @@ export const ExpenseAmountStyled = styled("div")<ExpenseAmountStyledProps>(
     top: prominent ? "18px" : "10px",
     right: "24px",
     fontSize: prominent ? "16px" : "14px",
-    color: "#181818",
+    color: "#878BAC",
   })
 );

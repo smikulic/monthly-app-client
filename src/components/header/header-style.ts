@@ -1,29 +1,29 @@
 import { styled } from "@mui/material/styles";
 
-export const HeaderStyled = styled("div")({
+export const HeaderStyled = styled("div")(({ theme }) => ({
   display: "flex",
   justifyContent: "flex-end",
   alignItems: "center",
-  padding: "24px",
+  padding: "24px 12px",
   height: "64px",
-  border: "1px solid rgb(223, 223, 223)",
-});
+  border: `1px solid ${theme.palette.text.disabled}`,
+}));
 
-export const BackButtonStyled = styled("div")({
-  padding: "8px 16px",
+export const BackButtonStyled = styled("div")(({ theme }) => ({
+  padding: "8px 0",
   display: "flex",
   alignItems: "center",
   height: "40px",
   fontSize: "16px",
-  color: "#181818",
-  borderRadius: "5px",
+  color: theme.palette.primary.contrastText,
+  borderRadius: "10px",
   cursor: "pointer",
 
   "&:hover": {
-    color: " #f199c0",
+    color: theme.palette.secondary.main,
   },
 
   position: "absolute",
   top: "13px",
-  left: "24px",
-});
+  left: "12px",
+}));

@@ -83,21 +83,21 @@ export const CategoriesList: React.FC<Props> = ({
       {loading && (
         <>
           <MainListItemStyled>
-            <Skeleton animation="wave" width={200} height={20} />
+            <Skeleton animation="wave" width={200} height={34} />
             <CategoryDetailsStyled>
-              <Skeleton animation="wave" width={60} height={20} />
+              <Skeleton animation="wave" width={60} height={34} />
             </CategoryDetailsStyled>
           </MainListItemStyled>
           <MainListItemStyled>
-            <Skeleton animation="wave" width={200} height={20} />
+            <Skeleton animation="wave" width={200} height={34} />
             <CategoryDetailsStyled>
-              <Skeleton animation="wave" width={60} height={20} />
+              <Skeleton animation="wave" width={60} height={34} />
             </CategoryDetailsStyled>
           </MainListItemStyled>
           <MainListItemStyled>
-            <Skeleton animation="wave" width={200} height={20} />
+            <Skeleton animation="wave" width={200} height={34} />
             <CategoryDetailsStyled>
-              <Skeleton animation="wave" width={60} height={20} />
+              <Skeleton animation="wave" width={60} height={34} />
             </CategoryDetailsStyled>
           </MainListItemStyled>
         </>
@@ -120,7 +120,7 @@ export const CategoriesList: React.FC<Props> = ({
 
           return (
             <React.Fragment key={categoryId}>
-              <MainListItemStyled>
+              <MainListItemStyled active={showSubcategories}>
                 <ListItemHeader
                   title={category.name}
                   showExpand={!showSubcategories}
@@ -243,7 +243,7 @@ export const CategoriesList: React.FC<Props> = ({
                     })}
 
                   <ListAddField
-                    text={`Add subcategory for "${category.name}"`}
+                    text={`Add ${category.name} subcategory`}
                     onClick={() => setCreateModalSubcategory(category.id)}
                   />
                 </>
