@@ -2,8 +2,8 @@ import * as React from "react";
 import { useSavingGoalsListQuery } from "../../generated/graphql";
 import { SavingGoalsList } from "../../components/saving-goals-list/saving-goals-list";
 import { ActionsBar } from "../../components/actions-bar/actions-bar";
-import { CreateSavingGoalForm } from "../../components/create-saving-goal-form/create-saving-goal-form";
 import { ProminentButtonStyled } from "../../shared";
+import SavingGoalFormFactory from "../../components/saving-goal-form-factory/saving-goal-form-factory";
 
 export const SavingGoalsPageContainer = () => {
   const [createModalSavingGoal, setCreateModalSavingGoal] =
@@ -26,10 +26,12 @@ export const SavingGoalsPageContainer = () => {
           Add saving goal
         </ProminentButtonStyled>
         {createModalSavingGoal && (
-          <CreateSavingGoalForm
+          <SavingGoalFormFactory
             open={createModalSavingGoal}
-            closeForm={() => setCreateModalSavingGoal(false)}
-            refetch={refetchSavingGoals}
+            closeForm={() => {
+              refetchSavingGoals();
+              setCreateModalSavingGoal(false);
+            }}
           />
         )}
       </ActionsBar>
