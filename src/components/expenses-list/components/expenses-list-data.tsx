@@ -35,7 +35,7 @@ export const ExpensesListData: React.FC<Props> = ({
       {categoriesDecoratedWithExpenses.map(
         (category: CategoryDecoratedWithExpenses) => {
           const categoryId = category.id;
-          const showSubcategories = openCategory === categoryId;
+          const expanded = openCategory === categoryId;
 
           return (
             <React.Fragment key={categoryId}>
@@ -50,15 +50,17 @@ export const ExpensesListData: React.FC<Props> = ({
                 refetchExpenses={refetchExpenses}
               />
 
-              {showSubcategories && (
+              {expanded && (
                 <>
                   {createModalExpense && (
                     <CreateExpenseForm
                       open={createModalExpense}
                       subcategories={category?.subcategories}
                       currentDate={pageDate}
-                      closeForm={() => setCreateModalExpense(false)}
-                      refetch={refetchExpenses}
+                      closeForm={() => {
+                        refetchExpenses();
+                        setCreateModalExpense(false);
+                      }}
                     />
                   )}
                   {updateModalExpense && (
@@ -66,8 +68,10 @@ export const ExpensesListData: React.FC<Props> = ({
                       open={Boolean(updateModalExpense)}
                       formData={updateModalExpense}
                       subcategories={category?.subcategories}
-                      closeForm={() => setUpdateModalExpense(null)}
-                      refetch={refetchExpenses}
+                      closeForm={() => {
+                        refetchExpenses();
+                        setUpdateModalExpense(null);
+                      }}
                     />
                   )}
                 </>

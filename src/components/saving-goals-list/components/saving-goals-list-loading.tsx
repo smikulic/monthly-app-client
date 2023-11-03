@@ -18,12 +18,6 @@ export const SavingGoalsListLoading: React.FC = () => {
           <Skeleton animation="wave" width={60} height={44} />
         </CategoryDetailsStyled>
       </MainListItemStyled>
-      <MainListItemStyled>
-        <Skeleton animation="wave" width={200} height={44} />
-        <CategoryDetailsStyled>
-          <Skeleton animation="wave" width={60} height={44} />
-        </CategoryDetailsStyled>
-      </MainListItemStyled>
     </>
   );
 };

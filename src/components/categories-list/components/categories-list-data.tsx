@@ -3,8 +3,14 @@ import { Category, Subcategory } from "../../../generated/graphql";
 import { ListAddField } from "../../list-add-field/list-add-field";
 import { formatAmount } from "../../../utils/format";
 import { AnchorActionDropdownElProps } from "../../../hooks/useActionDropdown";
-import { CategoryListItem } from "./category-list-item";
 import { CategorySubcategoriesList } from "./category-subcategories-list";
+import { MainListItemStyled } from "../../../shared";
+import { ListItemHeader } from "../../list-item-header/list-item-header";
+import {
+  CategoryAmountStyled,
+  CategoryDetailsStyled,
+} from "../categories-list-style";
+import { IconMenu } from "../../icon-menu/icon-menu";
 
 interface Props {
   categories: Category[];
@@ -53,20 +59,33 @@ export const CategoriesListData: React.FC<Props> = ({
 
         return (
           <React.Fragment key={categoryId}>
-            <CategoryListItem
-              categoryId={categoryId}
-              categoryName={categoryName}
-              categoryAmount={formatAmount(totalBudgetAmount || 0)}
-              expanded={expanded}
-              anchorActionDropdownEl={anchorActionDropdownEl}
-              onToggleExpand={() => setOpenCategory(expanded ? "" : categoryId)}
-              handleOnEditCategory={() => handleOnEditCategory(category)}
-              handleOnRemoveCategory={() => handleOnRemoveCategory(categoryId)}
-              handleOnOpenMenu={(event: React.MouseEvent<HTMLElement>) =>
-                handleActionsDropdownClick(event, categoryId)
-              }
-              handleOnCloseMenu={() => handleActionsDropdownClose(categoryId)}
-            />
+            <MainListItemStyled active={expanded}>
+              <ListItemHeader
+                title={categoryName}
+                showExpand={!expanded}
+                showCollapse={expanded}
+                onToggleExpand={() =>
+                  setOpenCategory(expanded ? "" : categoryId)
+                }
+              />
+              <CategoryDetailsStyled>
+                <CategoryAmountStyled>
+                  {formatAmount(totalBudgetAmount || 0)}
+                </CategoryAmountStyled>
+                <IconMenu
+                  itemId={categoryId}
+                  anchorActionDropdownEl={anchorActionDropdownEl}
+                  handleOnEdit={() => handleOnEditCategory(category)}
+                  handleOnRemove={() => handleOnRemoveCategory(categoryId)}
+                  handleOnOpenMenu={(event: React.MouseEvent<HTMLElement>) =>
+                    handleActionsDropdownClick(event, categoryId)
+                  }
+                  handleOnCloseMenu={() =>
+                    handleActionsDropdownClose(categoryId)
+                  }
+                />
+              </CategoryDetailsStyled>
+            </MainListItemStyled>
 
             {expanded && (
               <>

@@ -58,11 +58,7 @@ export const SubcategoryListItem: React.FC<Props> = ({
           showCollapse={showExpenses && expensesExist}
           onToggleExpand={() => {
             if (expensesExist) {
-              if (showExpenses) {
-                setOpenSubcategory("");
-              } else {
-                setOpenSubcategory(subcategoryId);
-              }
+              setOpenSubcategory(showExpenses ? "" : subcategoryId);
             }
           }}
         />
