@@ -8,12 +8,13 @@ import { toast } from "react-toastify";
 import { useActionDropdown } from "../../hooks/useActionDropdown";
 import { MainListItemStyled } from "../../shared";
 import { formatAmount } from "../../utils/format";
-import { Box, Skeleton, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { CategoryDetailsStyled } from "../categories-list/categories-list-style";
 import { UpdateSavingGoalForm } from "../update-saving-goal-form/update-saving-goal-form";
 import { SavingGoalItemDetails } from "../saving-goal-item-details/saving-goal-item-details";
 import { ProgressBar } from "../progress-bar/progress-bar";
 import { IconMenu } from "../icon-menu/icon-menu";
+import { SavingGoalsListLoading } from "./components/saving-goals-list-loading";
 
 interface Props {
   loading: boolean;
@@ -49,28 +50,7 @@ export const SavingGoalsList: React.FC<Props> = ({
 
   return (
     <div>
-      {loading && (
-        <>
-          <MainListItemStyled>
-            <Skeleton animation="wave" width={200} height={20} />
-            <CategoryDetailsStyled>
-              <Skeleton animation="wave" width={60} height={20} />
-            </CategoryDetailsStyled>
-          </MainListItemStyled>
-          <MainListItemStyled>
-            <Skeleton animation="wave" width={200} height={20} />
-            <CategoryDetailsStyled>
-              <Skeleton animation="wave" width={60} height={20} />
-            </CategoryDetailsStyled>
-          </MainListItemStyled>
-          <MainListItemStyled>
-            <Skeleton animation="wave" width={200} height={20} />
-            <CategoryDetailsStyled>
-              <Skeleton animation="wave" width={60} height={20} />
-            </CategoryDetailsStyled>
-          </MainListItemStyled>
-        </>
-      )}
+      {loading && <SavingGoalsListLoading />}
       {!loading && (!savingGoals || savingGoals.length === 0) && (
         <MainListItemStyled>No saving goals</MainListItemStyled>
       )}

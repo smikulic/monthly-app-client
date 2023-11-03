@@ -1,8 +1,10 @@
 import React, { Dispatch, SetStateAction } from "react";
 import { Category, Subcategory } from "../../../generated/graphql";
+import { ListAddField } from "../../list-add-field/list-add-field";
 import { formatAmount } from "../../../utils/format";
 import { AnchorActionDropdownElProps } from "../../../hooks/useActionDropdown";
 import { CategoryListItem } from "./category-list-item";
+import { CategorySubcategoriesList } from "./category-subcategories-list";
 
 interface Props {
   categories: Category[];
@@ -38,11 +40,12 @@ export const CategoriesListData: React.FC<Props> = ({
     <>
       {categories.map((category: Category) => {
         const categoryId = category.id;
-        const showSubcategories = openCategory === categoryId;
-        const subcategories = category.subcategories;
+        const categoryName = category.name;
+        const expanded = openCategory === categoryId;
+        const subcategories = category.subcategories as Subcategory[];
 
         const initialValue = 0;
-        const totalBudgetAmount = subcategories?.reduce(
+        const totalBudgetAmount = subcategories.reduce(
           (accumulator, currentValue) =>
             accumulator + currentValue?.budgetAmount!,
           initialValue
@@ -51,23 +54,39 @@ export const CategoriesListData: React.FC<Props> = ({
         return (
           <React.Fragment key={categoryId}>
             <CategoryListItem
-              category={category}
+              categoryId={categoryId}
+              categoryName={categoryName}
               categoryAmount={formatAmount(totalBudgetAmount || 0)}
-              showSubcategories={showSubcategories}
+              expanded={expanded}
               anchorActionDropdownEl={anchorActionDropdownEl}
-              onToggleExpand={() =>
-                setOpenCategory(showSubcategories ? "" : categoryId)
-              }
+              onToggleExpand={() => setOpenCategory(expanded ? "" : categoryId)}
               handleOnEditCategory={() => handleOnEditCategory(category)}
               handleOnRemoveCategory={() => handleOnRemoveCategory(categoryId)}
-              handleOnEditSubcategory={handleOnEditSubcategory}
-              handleOnRemoveSubcategory={handleOnRemoveSubcategory}
-              handleOpenCreateSubcategory={() =>
-                setCreateModalSubcategory(categoryId)
+              handleOnOpenMenu={(event: React.MouseEvent<HTMLElement>) =>
+                handleActionsDropdownClick(event, categoryId)
               }
-              handleActionsDropdownClick={handleActionsDropdownClick}
-              handleActionsDropdownClose={handleActionsDropdownClose}
+              handleOnCloseMenu={() => handleActionsDropdownClose(categoryId)}
             />
+
+            {expanded && (
+              <>
+                {subcategories && (
+                  <CategorySubcategoriesList
+                    subcategories={subcategories}
+                    anchorActionDropdownEl={anchorActionDropdownEl}
+                    handleOnEditSubcategory={handleOnEditSubcategory}
+                    handleOnRemoveSubcategory={handleOnRemoveSubcategory}
+                    handleActionsDropdownClick={handleActionsDropdownClick}
+                    handleActionsDropdownClose={handleActionsDropdownClose}
+                  />
+                )}
+
+                <ListAddField
+                  text={`Add ${categoryName} subcategory`}
+                  onClick={() => setCreateModalSubcategory(categoryId)}
+                />
+              </>
+            )}
           </React.Fragment>
         );
       })}
