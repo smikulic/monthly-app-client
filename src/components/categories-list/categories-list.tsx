@@ -8,11 +8,11 @@ import {
 import { toast } from "react-toastify";
 import { useActionDropdown } from "../../hooks/useActionDropdown";
 import { CreateSubcategoryForm } from "../create-subcategory-form/create-subcategory-form";
-import { UpdateCategoryForm } from "../update-category-form/update-category-form";
 import { UpdateSubcategoryForm } from "../update-subcategory-form/update-subcategory-form";
 import { CategoriesListLoading } from "./components/categories-list-loading";
 import { CategoriesListNoData } from "./components/categories-list-no-data";
 import { CategoriesListData } from "./components/categories-list-data";
+import { CategoryFormFactory } from "../category-form-factory/category-form-factory";
 
 interface Props {
   loading: boolean;
@@ -114,11 +114,13 @@ export const CategoriesList: React.FC<Props> = ({
         />
       )}
       {updateModalCategory && (
-        <UpdateCategoryForm
+        <CategoryFormFactory
           open={Boolean(updateModalCategory)}
+          closeForm={() => {
+            refetchCategories();
+            setUpdateModalCategory(null);
+          }}
           formData={updateModalCategory}
-          closeForm={() => setUpdateModalCategory(null)}
-          refetch={refetchCategories}
         />
       )}
       {updateModalSubcategory && (
