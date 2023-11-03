@@ -1,8 +1,6 @@
 import React, { Dispatch, SetStateAction } from "react";
 import { Expense } from "../../../generated/graphql";
 import { ListItemHeader } from "../../list-item-header/list-item-header";
-import { CreateExpenseForm } from "../../create-expense-form/create-expense-form";
-import { UpdateExpenseForm } from "../../update-expense-form/update-expense-form";
 import { ListAddField } from "../../list-add-field/list-add-field";
 import { ListItemDetails } from "../../list-item-details/list-item-details";
 import { SubcategoryListItem } from "../../subcategory-list-item/subcategory-list-item";
@@ -17,8 +15,6 @@ interface Props {
   showRolloverBudget: boolean;
   category: CategoryDecoratedWithExpenses;
   openCategory: string;
-  createModalExpense: boolean;
-  updateModalExpense: Expense | null;
   setOpenCategory: Dispatch<SetStateAction<string>>;
   setCreateModalExpense: Dispatch<SetStateAction<boolean>>;
   setUpdateModalExpense: Dispatch<SetStateAction<Expense | null>>;
@@ -30,8 +26,6 @@ export const ExpenseListItem: React.FC<Props> = ({
   showRolloverBudget,
   category,
   openCategory,
-  createModalExpense,
-  updateModalExpense,
   setOpenCategory,
   setCreateModalExpense,
   setUpdateModalExpense,
@@ -51,11 +45,7 @@ export const ExpenseListItem: React.FC<Props> = ({
           showCollapse={isActive}
           onToggleExpand={() => {
             if (subcategoriesExist) {
-              if (showSubcategories) {
-                setOpenCategory("");
-              } else {
-                setOpenCategory(categoryId);
-              }
+              setOpenCategory(showSubcategories ? "" : categoryId);
             }
           }}
         />
@@ -96,25 +86,6 @@ export const ExpenseListItem: React.FC<Props> = ({
             text={`Add ${category.name} expense`}
             onClick={() => setCreateModalExpense(true)}
           />
-
-          {createModalExpense && (
-            <CreateExpenseForm
-              open={createModalExpense}
-              subcategories={category?.subcategories}
-              currentDate={pageDate}
-              closeForm={() => setCreateModalExpense(false)}
-              refetch={refetchExpenses}
-            />
-          )}
-          {updateModalExpense && (
-            <UpdateExpenseForm
-              open={Boolean(updateModalExpense)}
-              formData={updateModalExpense}
-              subcategories={category?.subcategories}
-              closeForm={() => setUpdateModalExpense(null)}
-              refetch={refetchExpenses}
-            />
-          )}
         </>
       )}
     </>

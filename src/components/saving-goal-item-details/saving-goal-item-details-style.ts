@@ -28,7 +28,7 @@ export const SavingGoalExpenseAmountStyled = styled(
 export const SavingGoalItemDetailsContainerStyled = styled(Box)({
   display: "flex",
   flexDirection: "column",
-  alignItems: "center",
+  alignItems: "end",
   justifyContent: "center",
   position: "relative",
   height: "42px",

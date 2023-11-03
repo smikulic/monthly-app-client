@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-type AnchorActionDropdownElProps = Record<string, HTMLElement | null>;
+export type AnchorActionDropdownElProps = Record<string, HTMLElement | null>;
 
 export const useActionDropdown = () => {
   const [anchorActionDropdownEl, setAnchorActionDropdownEl] =
