@@ -10,11 +10,11 @@ import { MainListItemStyled } from "../../shared";
 import { formatAmount } from "../../utils/format";
 import { Box, Typography } from "@mui/material";
 import { CategoryDetailsStyled } from "../categories-list/categories-list-style";
-import { UpdateSavingGoalForm } from "../update-saving-goal-form/update-saving-goal-form";
 import { SavingGoalItemDetails } from "../saving-goal-item-details/saving-goal-item-details";
 import { ProgressBar } from "../progress-bar/progress-bar";
 import { IconMenu } from "../icon-menu/icon-menu";
 import { CategoriesListLoading } from "../categories-list/components/categories-list-loading";
+import SavingGoalFormFactory from "../saving-goal-form-factory/saving-goal-form-factory";
 
 interface Props {
   loading: boolean;
@@ -155,11 +155,13 @@ export const SavingGoalsList: React.FC<Props> = ({
         })}
 
       {updateModalSavingGoal && (
-        <UpdateSavingGoalForm
+        <SavingGoalFormFactory
           open={Boolean(updateModalSavingGoal)}
+          closeForm={() => {
+            refetchSavingGoals();
+            setUpdateModalSavingGoal(null);
+          }}
           formData={updateModalSavingGoal}
-          closeForm={() => setUpdateModalSavingGoal(null)}
-          refetch={refetchSavingGoals}
         />
       )}
     </div>

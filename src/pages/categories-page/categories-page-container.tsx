@@ -2,8 +2,8 @@ import * as React from "react";
 import { useCategoriesListQuery } from "../../generated/graphql";
 import { CategoriesList } from "../../components/categories-list/categories-list";
 import { ActionsBar } from "../../components/actions-bar/actions-bar";
-import { CreateCategoryForm } from "../../components/create-category-form/create-category-form";
 import { ProminentButtonStyled } from "../../shared";
+import { CategoryFormFactory } from "../../components/category-form-factory/category-form-factory";
 
 export const CategoriesPageContainer = () => {
   const [createModalCategory, setCreateModalCategory] = React.useState(false);
@@ -25,10 +25,12 @@ export const CategoriesPageContainer = () => {
           Add category
         </ProminentButtonStyled>
         {createModalCategory && (
-          <CreateCategoryForm
+          <CategoryFormFactory
             open={createModalCategory}
-            closeForm={() => setCreateModalCategory(false)}
-            refetch={refetchCategories}
+            closeForm={() => {
+              refetchCategories();
+              setCreateModalCategory(false);
+            }}
           />
         )}
       </ActionsBar>

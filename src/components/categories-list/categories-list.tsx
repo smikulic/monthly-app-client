@@ -7,12 +7,11 @@ import {
 } from "../../generated/graphql";
 import { toast } from "react-toastify";
 import { useActionDropdown } from "../../hooks/useActionDropdown";
-import { CreateSubcategoryForm } from "../create-subcategory-form/create-subcategory-form";
-import { UpdateCategoryForm } from "../update-category-form/update-category-form";
-import { UpdateSubcategoryForm } from "../update-subcategory-form/update-subcategory-form";
 import { CategoriesListLoading } from "./components/categories-list-loading";
 import { CategoriesListNoData } from "./components/categories-list-no-data";
 import { CategoriesListData } from "./components/categories-list-data";
+import { CategoryFormFactory } from "../category-form-factory/category-form-factory";
+import { SubcategoryFormFactory } from "../subcategory-form-factory/subcategory-form-factory";
 
 interface Props {
   loading: boolean;
@@ -106,28 +105,36 @@ export const CategoriesList: React.FC<Props> = ({
       )}
 
       {createModalSubcategory && (
-        <CreateSubcategoryForm
+        <SubcategoryFormFactory
           open={Boolean(createModalSubcategory)}
-          categoryId={createModalSubcategory}
-          closeForm={() => setCreateModalSubcategory(null)}
-          refetch={refetchCategories}
+          closeForm={() => {
+            refetchCategories();
+            setCreateModalSubcategory(null);
+          }}
+          presetCategoryId={createModalSubcategory}
+          categories={categories!}
         />
       )}
       {updateModalCategory && (
-        <UpdateCategoryForm
+        <CategoryFormFactory
           open={Boolean(updateModalCategory)}
+          closeForm={() => {
+            refetchCategories();
+            setUpdateModalCategory(null);
+          }}
           formData={updateModalCategory}
-          closeForm={() => setUpdateModalCategory(null)}
-          refetch={refetchCategories}
         />
       )}
       {updateModalSubcategory && (
-        <UpdateSubcategoryForm
+        <SubcategoryFormFactory
           open={Boolean(updateModalSubcategory)}
-          formData={updateModalSubcategory}
+          closeForm={() => {
+            refetchCategories();
+            setUpdateModalSubcategory(null);
+          }}
+          presetCategoryId={""}
           categories={categories!}
-          closeForm={() => setUpdateModalSubcategory(null)}
-          refetch={refetchCategories}
+          formData={updateModalSubcategory}
         />
       )}
     </div>
