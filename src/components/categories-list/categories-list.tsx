@@ -73,7 +73,7 @@ export const CategoriesList: React.FC<Props> = ({
 
   return (
     <div>
-      {loading && <CategoriesListLoading />}
+      {loading && <CategoriesListLoading height={34} />}
       {!loading && noDataAvailable && <CategoriesListNoData />}
       {!loading && dataAvailable && (
         <CategoriesListData

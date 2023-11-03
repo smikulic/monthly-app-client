@@ -14,7 +14,7 @@ import { UpdateSavingGoalForm } from "../update-saving-goal-form/update-saving-g
 import { SavingGoalItemDetails } from "../saving-goal-item-details/saving-goal-item-details";
 import { ProgressBar } from "../progress-bar/progress-bar";
 import { IconMenu } from "../icon-menu/icon-menu";
-import { SavingGoalsListLoading } from "./components/saving-goals-list-loading";
+import { CategoriesListLoading } from "../categories-list/components/categories-list-loading";
 
 interface Props {
   loading: boolean;
@@ -50,7 +50,7 @@ export const SavingGoalsList: React.FC<Props> = ({
 
   return (
     <div>
-      {loading && <SavingGoalsListLoading />}
+      {loading && <CategoriesListLoading height={44} />}
       {!loading && (!savingGoals || savingGoals.length === 0) && (
         <MainListItemStyled>No saving goals</MainListItemStyled>
       )}
