@@ -137,6 +137,7 @@ export const SubcategoryFormFactory = ({
           <Select
             required
             id="category"
+            data-testid="category"
             label="Category"
             margin="none"
             value={categoryId}
