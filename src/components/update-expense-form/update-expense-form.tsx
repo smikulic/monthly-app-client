@@ -21,7 +21,6 @@ interface Props {
   formData: Expense;
   subcategories: Subcategory[];
   closeForm: () => void;
-  refetch: () => Promise<unknown>;
 }
 
 export const UpdateExpenseForm: React.FC<Props> = ({
@@ -29,7 +28,6 @@ export const UpdateExpenseForm: React.FC<Props> = ({
   formData,
   subcategories,
   closeForm,
-  refetch,
 }) => {
   const client = useApolloClient();
 
@@ -44,7 +42,6 @@ export const UpdateExpenseForm: React.FC<Props> = ({
 
   const [updateExpense] = useUpdateExpenseMutation({
     onCompleted: ({ updateExpense }) => {
-      refetch();
       closeForm();
       setExpenseSubcategoryId("");
       setExpenseDate(new Date());

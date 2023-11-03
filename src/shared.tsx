@@ -11,9 +11,10 @@ type MainListItemStyledProps = {
   active?: boolean;
 };
 
-export const MainListItemStyled = styled(
-  ListItemStyled
-)<MainListItemStyledProps>(({ theme, active }) => ({
+export const MainListItemStyled = styled(ListItemStyled, {
+  // Configure which props should be forwarded on DOM
+  shouldForwardProp: (prop) => prop !== "active",
+})<MainListItemStyledProps>(({ theme, active }) => ({
   margin: "10px 12px",
   padding: "16px 20px",
   border: active
@@ -30,9 +31,10 @@ type SubcategoryListItemStyledProps = {
   actionable?: boolean;
 };
 
-export const SubcategoryListItemStyled = styled(
-  ListItemStyled
-)<SubcategoryListItemStyledProps>(({ theme, actionable }) => ({
+export const SubcategoryListItemStyled = styled(ListItemStyled, {
+  // Configure which props should be forwarded on DOM
+  shouldForwardProp: (prop) => prop !== "actionable",
+})<SubcategoryListItemStyledProps>(({ theme, actionable }) => ({
   height: "52px",
   margin: "6px 12px",
   padding: "8px 24px 8px 38px",

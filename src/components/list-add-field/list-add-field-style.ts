@@ -5,7 +5,7 @@ type ListAddFieldStyledProps = {
 };
 
 export const ListAddFieldStyled = styled("div")<ListAddFieldStyledProps>(
-  ({ indent }) => ({
+  ({ theme, indent }) => ({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -14,16 +14,14 @@ export const ListAddFieldStyled = styled("div")<ListAddFieldStyledProps>(
     margin: indent ? "12px 12px 12px 48px" : "12px",
     padding: "14px 24px",
 
-    color: "#181818",
-    border: "1px solid #181818",
-    // border: "2px solid #41efcd",
-    background: "#41efcd",
+    color: theme.palette.primary.contrastText,
+    border: `1px solid ${theme.palette.primary.contrastText}`,
+    background: theme.palette.primary.main,
     borderRadius: "16px",
     cursor: "pointer",
 
     "&:hover": {
       opacity: 0.7,
-      // color: "#41efcd",
     },
   })
 );

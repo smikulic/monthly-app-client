@@ -179,68 +179,6 @@ function App() {
                 />
               </>
             )}
-
-            {/* <Route
-              path="/reset-password"
-              element={<ResetPasswordPageContainer />}
-            /> */}
-
-            {/* {!token && (
-              <Route
-                path="/"
-                element={<LoginPageContainer setToken={setToken} />}
-              />
-            )}
-
-            {token && (
-              <>
-                <Route
-                  element={
-                    <>
-                      <Header onLogout={handleLogout} />
-                      <FooterPaddingStyled>
-                        <Outlet />
-                      </FooterPaddingStyled>
-                      <Footer />
-                    </>
-                  }
-                >
-                  <Route
-                    path="/"
-                    element={
-                      <HomePageContainer
-                        pageDate={pageDate}
-                        onClickNext={onClickNext}
-                        onClickPrevious={onClickPrevious}
-                      />
-                    }
-                  />
-                  <Route
-                    path="/expenses"
-                    element={
-                      <ExpensesPageContainer
-                        pageDate={pageDate}
-                        onClickNext={onClickNext}
-                        onClickPrevious={onClickPrevious}
-                      />
-                    }
-                  />
-                  <Route
-                    path="/budget"
-                    element={<CategoriesPageContainer />}
-                  />
-                  <Route
-                    path="/saving-goals"
-                    element={<SavingGoalsPageContainer />}
-                  />
-                </Route>
-              </>
-            )}
-
-            <Route
-              path="*"
-              element={<LoginPageContainer setToken={setToken} />}
-            /> */}
           </Routes>
         </Router>
 

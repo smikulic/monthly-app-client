@@ -1,8 +1,4 @@
 import React from "react";
-import IconButton from "@mui/material/IconButton";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { differenceInCalendarMonths } from "date-fns";
 import {
   SavingGoal,
@@ -12,10 +8,13 @@ import { toast } from "react-toastify";
 import { useActionDropdown } from "../../hooks/useActionDropdown";
 import { MainListItemStyled } from "../../shared";
 import { formatAmount } from "../../utils/format";
-import { Box, Skeleton, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { CategoryDetailsStyled } from "../categories-list/categories-list-style";
 import { UpdateSavingGoalForm } from "../update-saving-goal-form/update-saving-goal-form";
 import { SavingGoalItemDetails } from "../saving-goal-item-details/saving-goal-item-details";
+import { ProgressBar } from "../progress-bar/progress-bar";
+import { IconMenu } from "../icon-menu/icon-menu";
+import { CategoriesListLoading } from "../categories-list/components/categories-list-loading";
 
 interface Props {
   loading: boolean;
@@ -51,28 +50,7 @@ export const SavingGoalsList: React.FC<Props> = ({
 
   return (
     <div>
-      {loading && (
-        <>
-          <MainListItemStyled>
-            <Skeleton animation="wave" width={200} height={20} />
-            <CategoryDetailsStyled>
-              <Skeleton animation="wave" width={60} height={20} />
-            </CategoryDetailsStyled>
-          </MainListItemStyled>
-          <MainListItemStyled>
-            <Skeleton animation="wave" width={200} height={20} />
-            <CategoryDetailsStyled>
-              <Skeleton animation="wave" width={60} height={20} />
-            </CategoryDetailsStyled>
-          </MainListItemStyled>
-          <MainListItemStyled>
-            <Skeleton animation="wave" width={200} height={20} />
-            <CategoryDetailsStyled>
-              <Skeleton animation="wave" width={60} height={20} />
-            </CategoryDetailsStyled>
-          </MainListItemStyled>
-        </>
-      )}
+      {loading && <CategoriesListLoading height={44} />}
       {!loading && (!savingGoals || savingGoals.length === 0) && (
         <MainListItemStyled>No saving goals</MainListItemStyled>
       )}
@@ -124,7 +102,7 @@ export const SavingGoalsList: React.FC<Props> = ({
                     }}
                   >
                     <Typography variant="body2" color="secondary">
-                      {monthsLeftToSave === 0 && (
+                      {monthsLeftToSave <= 0 && (
                         <>You have saved up for your goal!</>
                       )}
                       {monthsLeftToSave > 0 && (
@@ -136,49 +114,41 @@ export const SavingGoalsList: React.FC<Props> = ({
                     </Typography>
                   </Box>
                 </Box>
-                <SavingGoalItemDetails
-                  goalAmount={savingGoal.goalAmount}
-                  savedTillNow={savedTillNow}
+
+                <ProgressBar
+                  value={savedTillNow}
+                  maxValue={savingGoal.goalAmount}
+                  reverse
                 />
-                <CategoryDetailsStyled>
-                  <div>
-                    <IconButton
-                      id={`long-menu-icon-${savingGoalId}`}
-                      aria-haspopup="true"
-                      size="small"
-                      onClick={(event) =>
-                        handleActionsDropdownClick(event, savingGoalId)
+
+                <Box sx={{ display: "flex" }}>
+                  <SavingGoalItemDetails
+                    goalAmount={savingGoal.goalAmount}
+                    savedTillNow={savedTillNow}
+                  />
+                  <CategoryDetailsStyled>
+                    <IconMenu
+                      itemId={savingGoalId}
+                      anchorActionDropdownEl={anchorActionDropdownEl}
+                      handleOnEdit={() => {
+                        setUpdateModalSavingGoal(savingGoal);
+                        handleActionsDropdownClose(savingGoalId);
+                      }}
+                      handleOnRemove={() => {
+                        deleteSavingGoal({
+                          variables: { id: savingGoalId },
+                        });
+                        handleActionsDropdownClose(savingGoalId);
+                      }}
+                      handleOnOpenMenu={(
+                        event: React.MouseEvent<HTMLElement>
+                      ) => handleActionsDropdownClick(event, savingGoalId)}
+                      handleOnCloseMenu={() =>
+                        handleActionsDropdownClose(savingGoalId)
                       }
-                    >
-                      <MoreVertIcon />
-                    </IconButton>
-                    <Menu
-                      id={`long-menu-${savingGoalId}`}
-                      anchorEl={anchorActionDropdownEl[savingGoalId]}
-                      open={Boolean(anchorActionDropdownEl[savingGoalId])}
-                      onClose={() => handleActionsDropdownClose(savingGoalId)}
-                    >
-                      <MenuItem
-                        onClick={() => {
-                          setUpdateModalSavingGoal(savingGoal);
-                          handleActionsDropdownClose(savingGoalId);
-                        }}
-                      >
-                        Edit
-                      </MenuItem>
-                      <MenuItem
-                        onClick={() => {
-                          deleteSavingGoal({
-                            variables: { id: savingGoalId },
-                          });
-                          handleActionsDropdownClose(savingGoalId);
-                        }}
-                      >
-                        Remove
-                      </MenuItem>
-                    </Menu>
-                  </div>
-                </CategoryDetailsStyled>
+                    />
+                  </CategoryDetailsStyled>
+                </Box>
               </MainListItemStyled>
             </React.Fragment>
           );

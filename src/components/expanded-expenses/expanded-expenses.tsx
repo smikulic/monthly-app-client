@@ -1,7 +1,5 @@
 import React from "react";
 import { format } from "date-fns";
-import { IconButton, Menu, MenuItem } from "@mui/material";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { toast } from "react-toastify";
 import { Expense, useDeleteExpenseMutation } from "../../generated/graphql";
 import { useActionDropdown } from "../../hooks/useActionDropdown";
@@ -10,6 +8,7 @@ import {
   ExpenseListItemStyled,
 } from "./expanded-expenses-style";
 import { useApolloClient } from "@apollo/client";
+import { IconMenu } from "../icon-menu/icon-menu";
 
 interface Props {
   expenses: Expense[];
@@ -62,41 +61,22 @@ export const ExpandedExpenses: React.FC<Props> = ({
               <ExpenseFieldStyled>
                 {format(expenseISODate, "dd MMM")} - {expense.amount} €
               </ExpenseFieldStyled>
-              <div>
-                <IconButton
-                  id={`long-menu-icon-${expenseId}`}
-                  aria-haspopup="true"
-                  size="small"
-                  onClick={(event) =>
-                    handleActionsDropdownClick(event, expenseId)
-                  }
-                >
-                  <MoreVertIcon />
-                </IconButton>
-                <Menu
-                  id={`long-menu-${expenseId}`}
-                  anchorEl={anchorActionDropdownEl[expenseId]}
-                  open={Boolean(anchorActionDropdownEl[expenseId])}
-                  onClose={() => handleActionsDropdownClose(expenseId)}
-                >
-                  <MenuItem
-                    onClick={() => {
-                      setUpdateModalExpense(expense);
-                      handleActionsDropdownClose(expenseId);
-                    }}
-                  >
-                    Edit
-                  </MenuItem>
-                  <MenuItem
-                    onClick={() => {
-                      deleteExpense({ variables: { id: expenseId } });
-                      handleActionsDropdownClose(expenseId);
-                    }}
-                  >
-                    Remove
-                  </MenuItem>
-                </Menu>
-              </div>
+              <IconMenu
+                itemId={expenseId}
+                anchorActionDropdownEl={anchorActionDropdownEl}
+                handleOnEdit={() => {
+                  setUpdateModalExpense(expense);
+                  handleActionsDropdownClose(expenseId);
+                }}
+                handleOnRemove={() => {
+                  deleteExpense({ variables: { id: expenseId } });
+                  handleActionsDropdownClose(expenseId);
+                }}
+                handleOnOpenMenu={(event: React.MouseEvent<HTMLElement>) =>
+                  handleActionsDropdownClick(event, expenseId)
+                }
+                handleOnCloseMenu={() => handleActionsDropdownClose(expenseId)}
+              />
             </ExpenseListItemStyled>
           </span>
         );

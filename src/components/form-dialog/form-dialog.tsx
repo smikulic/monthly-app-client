@@ -42,7 +42,6 @@ export const FormDialog: React.FC<Props> = ({
   return (
     <Dialog
       fullScreen
-      // fullWidth
       open={open}
       onClose={closeForm}
       TransitionComponent={Transition}

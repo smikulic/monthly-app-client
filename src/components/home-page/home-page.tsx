@@ -64,7 +64,7 @@ export const HomePage = ({
             fontSize="18px"
             color="primary.contrastText"
           >
-            Yearly Overview
+            {selectedYear} Overview
           </Typography>
         </Box>
         {loadingChartExpenses && <Skeleton animation="wave" height={300} />}

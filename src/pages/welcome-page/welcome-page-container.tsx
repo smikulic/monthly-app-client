@@ -1,5 +1,4 @@
 import React from "react";
-// import { Link } from "react-router-dom";
 import ProductDemoImg from "../../assets/product-demo.png";
 import "./welcome-page-container.css";
 
@@ -15,14 +14,10 @@ export const WelcomePageContainer = () => {
         <svg viewBox="400 0 500 500" preserveAspectRatio="xMinYMin meet">
           <path
             d="M0,290 C170,240 900,0 1000,140 L1000,00 L0,0 Z"
-            // style={{ stroke: "none", fill: "#277bc0", opacity: "0.5" }}
-            // original green: 41efcd
-            // original red: ffb6bd
             style={{ stroke: "none", fill: "#46eaa6", opacity: "0.7" }}
           />
           <path
             d="M0,220 C170,220 750,0 1000,140 L1000,00 L0,0 Z"
-            // style={{ stroke: "none", fill: "#c8e4fc", opacity: "0.4" }}
             style={{ stroke: "none", fill: "#96fcd2", opacity: "0.6" }}
           />
         </svg>
@@ -31,9 +26,6 @@ export const WelcomePageContainer = () => {
         <a className="button-start" href={signInUrl}>
           Sign In
         </a>
-        {/* <Link to={signInUrl} className="button-start">
-          Sign In
-        </Link> */}
       </div>
       <div className="welcome-content">
         <div className="headline">
@@ -84,9 +76,6 @@ export const WelcomePageContainer = () => {
         <a className="button-start" href={signInUrl}>
           Get Started
         </a>
-        {/* <Link to="/app" className="button-start">
-          Get Started
-        </Link> */}
         <br />
         <br />
       </div>

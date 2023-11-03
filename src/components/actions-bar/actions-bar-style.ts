@@ -9,20 +9,20 @@ export const ActionsBarStyled = styled("div")({
   fontSize: "18px",
 });
 
-export const MonthPaginationStyled = styled("div")({
+export const MonthPaginationStyled = styled("div")(({ theme }) => ({
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
   fontSize: "17px",
   width: "148px",
-  color: "#181818",
+  color: theme.palette.primary.contrastText,
 
   "& svg": {
-    color: "#181818",
+    color: theme.palette.primary.contrastText,
     borderRadius: "5px",
     cursor: "pointer",
   },
   "& svg:hover": {
-    color: "#f199c0",
+    color: theme.palette.secondary.main,
   },
-});
+}));
