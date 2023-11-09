@@ -20,6 +20,7 @@ import { Footer } from "./components/footer/footer";
 import { AUTH_TOKEN, AUTH_TOKEN_USER } from "./constants";
 import { handleLogout } from "./utils/handleLogout";
 import { FooterPaddingStyled } from "./shared";
+import { TestPage } from "./pages/test-page";
 
 const muiTheme = createTheme({
   palette: {
@@ -133,11 +134,12 @@ function App() {
                     <Route
                       element={
                         <>
-                          <Header onLogout={handleLogout} />
+                        <Outlet />
+                          {/* <Header onLogout={handleLogout} />
                           <FooterPaddingStyled>
                             <Outlet />
                           </FooterPaddingStyled>
-                          <Footer />
+                          <Footer /> */}
                         </>
                       }
                     >
@@ -149,6 +151,12 @@ function App() {
                             onClickNext={onClickNext}
                             onClickPrevious={onClickPrevious}
                           />
+                        }
+                      />
+                      <Route
+                        path="/interview"
+                        element={
+                          <TestPage />
                         }
                       />
                       <Route
