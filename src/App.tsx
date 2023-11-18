@@ -20,6 +20,7 @@ import { Footer } from "./components/footer/footer";
 import { AUTH_TOKEN, AUTH_TOKEN_USER } from "./constants";
 import { handleLogout } from "./utils/handleLogout";
 import { FooterPaddingStyled } from "./shared";
+import { PrivacyPageContainer } from "./pages/privacy-page/privacy-page-container";
 
 const muiTheme = createTheme({
   palette: {
@@ -109,12 +110,16 @@ function App() {
         <Router>
           <Routes>
             {!isAppSubdomain && !isDevelopment && (
+              <>
               <Route path="/" element={<WelcomePageContainer />} />
+              <Route path="/privacy" element={<PrivacyPageContainer />} />
+              </>
             )}
 
             {(isAppSubdomain || isDevelopment) && (
               <>
                 <Route path="/welcome" element={<WelcomePageContainer />} />
+                <Route path="/privacy" element={<PrivacyPageContainer />} />
 
                 <Route
                   path="/reset-password"
