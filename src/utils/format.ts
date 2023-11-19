@@ -1,5 +1,3 @@
-// import accounting from "accounting";
-
 export const formatAmount = (amount: number, userCurrency?: string): string => {
   let intlCurrency = Intl.NumberFormat("de-DE", {
     style: "currency",
@@ -32,10 +30,4 @@ export const formatAmount = (amount: number, userCurrency?: string): string => {
   }
 
   return intlCurrency.format(amount);
-
-  // return accounting.formatMoney(amount, {
-  //   symbol: "€",
-  //   format: "%v %s",
-  //   precision: 0,
-  // });
 };
