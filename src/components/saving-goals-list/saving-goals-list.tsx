@@ -15,6 +15,7 @@ import { ProgressBar } from "../progress-bar/progress-bar";
 import { IconMenu } from "../icon-menu/icon-menu";
 import { CategoriesListLoading } from "../categories-list/components/categories-list-loading";
 import SavingGoalFormFactory from "../saving-goal-form-factory/saving-goal-form-factory";
+import { UserContext } from "../../App";
 
 interface Props {
   loading: boolean;
@@ -27,6 +28,8 @@ export const SavingGoalsList: React.FC<Props> = ({
   savingGoals,
   refetchSavingGoals,
 }) => {
+  const userCurrency = React.useContext(UserContext);
+
   const {
     anchorActionDropdownEl,
     handleActionsDropdownClick,
@@ -107,8 +110,8 @@ export const SavingGoalsList: React.FC<Props> = ({
                       )}
                       {monthsLeftToSave > 0 && (
                         <>
-                          {formatAmount(savePerMonth)}/month, {monthsLeftToSave}{" "}
-                          months left
+                          {formatAmount(savePerMonth, userCurrency)}/month,{" "}
+                          {monthsLeftToSave} months left
                         </>
                       )}
                     </Typography>

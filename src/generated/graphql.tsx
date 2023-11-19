@@ -44,6 +44,7 @@ export type ExpenseFilterInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  _empty?: Maybe<Scalars['String']>;
   createCategory: Category;
   createExpense: Expense;
   createSavingGoal: SavingGoal;
@@ -60,6 +61,7 @@ export type Mutation = {
   updateExpense: Expense;
   updateSavingGoal: SavingGoal;
   updateSubcategory: Subcategory;
+  updateUser: User;
 };
 
 
@@ -168,6 +170,12 @@ export type MutationUpdateSubcategoryArgs = {
   rolloverDate?: InputMaybe<Scalars['String']>;
 };
 
+
+export type MutationUpdateUserArgs = {
+  currency: Scalars['String'];
+  id: Scalars['ID'];
+};
+
 export type PasswordResetRequestPayload = {
   __typename?: 'PasswordResetRequestPayload';
   email: Scalars['String'];
@@ -175,6 +183,7 @@ export type PasswordResetRequestPayload = {
 
 export type Query = {
   __typename?: 'Query';
+  _empty?: Maybe<Scalars['String']>;
   categories: Array<Category>;
   category: Category;
   chartExpenses: Array<Scalars['Int']>;
@@ -254,7 +263,7 @@ export type User = {
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', email: string } };
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: string, email: string, currency?: string | null } };
 
 export type CategoriesListQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -415,6 +424,14 @@ export type ResetPasswordRequestMutationVariables = Exact<{
 
 export type ResetPasswordRequestMutation = { __typename?: 'Mutation', resetPasswordRequest: { __typename?: 'PasswordResetRequestPayload', email: string } };
 
+export type UpdateUserMutationVariables = Exact<{
+  id: Scalars['ID'];
+  currency: Scalars['String'];
+}>;
+
+
+export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', email: string, currency?: string | null } };
+
 export type ResetPasswordMutationVariables = Exact<{
   token: Scalars['String'];
   password: Scalars['String'];
@@ -427,7 +444,9 @@ export type ResetPasswordMutation = { __typename?: 'Mutation', resetPassword: { 
 export const MeDocument = gql`
     query Me {
   me {
+    id
     email
+    currency
   }
 }
     `;
@@ -1218,6 +1237,41 @@ export function useResetPasswordRequestMutation(baseOptions?: Apollo.MutationHoo
 export type ResetPasswordRequestMutationHookResult = ReturnType<typeof useResetPasswordRequestMutation>;
 export type ResetPasswordRequestMutationResult = Apollo.MutationResult<ResetPasswordRequestMutation>;
 export type ResetPasswordRequestMutationOptions = Apollo.BaseMutationOptions<ResetPasswordRequestMutation, ResetPasswordRequestMutationVariables>;
+export const UpdateUserDocument = gql`
+    mutation UpdateUser($id: ID!, $currency: String!) {
+  updateUser(id: $id, currency: $currency) {
+    email
+    currency
+  }
+}
+    `;
+export type UpdateUserMutationFn = Apollo.MutationFunction<UpdateUserMutation, UpdateUserMutationVariables>;
+
+/**
+ * __useUpdateUserMutation__
+ *
+ * To run a mutation, you first call `useUpdateUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUserMutation, { data, loading, error }] = useUpdateUserMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      currency: // value for 'currency'
+ *   },
+ * });
+ */
+export function useUpdateUserMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserMutation, UpdateUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument, options);
+      }
+export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
+export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>;
+export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
 export const ResetPasswordDocument = gql`
     mutation ResetPassword($token: String!, $password: String!) {
   resetPassword(token: $token, password: $password) {

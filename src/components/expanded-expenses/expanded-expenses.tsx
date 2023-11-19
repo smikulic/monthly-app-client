@@ -9,6 +9,8 @@ import {
 } from "./expanded-expenses-style";
 import { useApolloClient } from "@apollo/client";
 import { IconMenu } from "../icon-menu/icon-menu";
+import { UserContext } from "../../App";
+import { formatAmount } from "../../utils/format";
 
 interface Props {
   expenses: Expense[];
@@ -21,6 +23,7 @@ export const ExpandedExpenses: React.FC<Props> = ({
   setUpdateModalExpense,
   refetchExpenses,
 }) => {
+  const userCurrency = React.useContext(UserContext);
   const client = useApolloClient();
 
   const {
@@ -59,7 +62,8 @@ export const ExpandedExpenses: React.FC<Props> = ({
           <span key={expenseId}>
             <ExpenseListItemStyled>
               <ExpenseFieldStyled>
-                {format(expenseISODate, "dd MMM")} - {expense.amount} €
+                {format(expenseISODate, "dd MMM")} -{" "}
+                {formatAmount(expense.amount, userCurrency)}
               </ExpenseFieldStyled>
               <IconMenu
                 itemId={expenseId}

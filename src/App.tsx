@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { createContext, useState } from "react";
 import { Slide, ToastContainer } from "react-toastify";
 import {
   BrowserRouter as Router,
@@ -21,6 +21,7 @@ import { AUTH_TOKEN, AUTH_TOKEN_USER } from "./constants";
 import { handleLogout } from "./utils/handleLogout";
 import { FooterPaddingStyled } from "./shared";
 import { PrivacyPageContainer } from "./pages/privacy-page/privacy-page-container";
+import { ProfilePageContainer } from "./pages/profile-page/profile-page-container";
 
 const muiTheme = createTheme({
   palette: {
@@ -51,10 +52,14 @@ const muiTheme = createTheme({
 export const GET_USER_ME = gql`
   query Me {
     me {
+      id
       email
+      currency
     }
   }
 `;
+
+export const UserContext = createContext("");
 
 function App() {
   const currentDate = new Date();
@@ -63,7 +68,12 @@ function App() {
     localStorage.getItem(AUTH_TOKEN)
   );
 
-  const { loading: userMeLoading, error: userMeError } = useQuery(GET_USER_ME);
+  const {
+    data: userData,
+    loading: userMeLoading,
+    error: userMeError,
+    refetch: refetchUserData,
+  } = useQuery(GET_USER_ME);
 
   if (userMeLoading) {
     return null;
@@ -109,13 +119,15 @@ function App() {
       <ThemeProvider theme={muiTheme}>
         <Router>
           <Routes>
+            {/* this is website domain */}
             {!isAppSubdomain && !isDevelopment && (
               <>
-              <Route path="/" element={<WelcomePageContainer />} />
-              <Route path="/privacy" element={<PrivacyPageContainer />} />
+                <Route path="/" element={<WelcomePageContainer />} />
+                <Route path="/privacy" element={<PrivacyPageContainer />} />
               </>
             )}
 
+            {/* this is app domain */}
             {(isAppSubdomain || isDevelopment) && (
               <>
                 <Route path="/welcome" element={<WelcomePageContainer />} />
@@ -149,30 +161,51 @@ function App() {
                       <Route
                         path="/"
                         element={
-                          <HomePageContainer
-                            pageDate={pageDate}
-                            onClickNext={onClickNext}
-                            onClickPrevious={onClickPrevious}
-                          />
+                          <UserContext.Provider value={userData.me.currency}>
+                            <HomePageContainer
+                              pageDate={pageDate}
+                              onClickNext={onClickNext}
+                              onClickPrevious={onClickPrevious}
+                            />
+                          </UserContext.Provider>
                         }
                       />
                       <Route
                         path="/expenses"
                         element={
-                          <ExpensesPageContainer
-                            pageDate={pageDate}
-                            onClickNext={onClickNext}
-                            onClickPrevious={onClickPrevious}
-                          />
+                          <UserContext.Provider value={userData.me.currency}>
+                            <ExpensesPageContainer
+                              pageDate={pageDate}
+                              onClickNext={onClickNext}
+                              onClickPrevious={onClickPrevious}
+                            />
+                          </UserContext.Provider>
                         }
                       />
                       <Route
                         path="/budget"
-                        element={<CategoriesPageContainer />}
+                        element={
+                          <UserContext.Provider value={userData.me.currency}>
+                            <CategoriesPageContainer />
+                          </UserContext.Provider>
+                        }
                       />
                       <Route
                         path="/saving-goals"
-                        element={<SavingGoalsPageContainer />}
+                        element={
+                          <UserContext.Provider value={userData.me.currency}>
+                            <SavingGoalsPageContainer />
+                          </UserContext.Provider>
+                        }
+                      />
+                      <Route
+                        path="/profile"
+                        element={
+                          <ProfilePageContainer
+                            userData={userData.me}
+                            refetchUserData={refetchUserData}
+                          />
+                        }
                       />
                     </Route>
                   </>

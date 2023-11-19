@@ -4,7 +4,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { AUTH_TOKEN_USER } from "../../constants";
 import { BackButtonStyled, HeaderStyled } from "./header-style";
 import { Box, Button, ListItemIcon, Menu, MenuItem } from "@mui/material";
-import { Logout } from "@mui/icons-material";
+import { Logout, AccountCircle } from "@mui/icons-material";
 import MenuIcon from "@mui/icons-material/Menu";
 
 export const Header = ({ onLogout }: { onLogout: () => void }) => {
@@ -52,12 +52,12 @@ export const Header = ({ onLogout }: { onLogout: () => void }) => {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        {/* <MenuItem onClick={handleMenuClose}>
+        <MenuItem onClick={() => navigate("/profile")}>
           <ListItemIcon>
-            <Settings fontSize="small" />
+            <AccountCircle fontSize="small" />
           </ListItemIcon>
-          Settings
-        </MenuItem> */}
+          Profile
+        </MenuItem>
         <MenuItem onClick={onLogout}>
           <ListItemIcon>
             <Logout fontSize="small" />

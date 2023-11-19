@@ -5,6 +5,7 @@ import Box from "@mui/material/Box";
 import { Skeleton, Typography } from "@mui/material";
 import { formatAmount } from "../../utils/format";
 import { MainListItemStyled } from "../../shared";
+import { UserContext } from "../../App";
 
 export const HomeListItemLink = ({
   linkTo,
@@ -19,6 +20,8 @@ export const HomeListItemLink = ({
   value: number;
   valueColor?: string;
 }) => {
+  const userCurrency = React.useContext(UserContext);
+
   return (
     <Link to={linkTo}>
       <MainListItemStyled>
@@ -43,7 +46,7 @@ export const HomeListItemLink = ({
               <Skeleton animation="wave" width={60} height={24} />
             ) : (
               <Typography variant="body1" color="text.secondary">
-                {formatAmount(value)}
+                {formatAmount(value, userCurrency)}
               </Typography>
             )}
           </div>

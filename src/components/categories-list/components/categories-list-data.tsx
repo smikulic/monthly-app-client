@@ -11,6 +11,7 @@ import {
   CategoryDetailsStyled,
 } from "../categories-list-style";
 import { IconMenu } from "../../icon-menu/icon-menu";
+import { UserContext } from "../../../App";
 
 interface Props {
   categories: Category[];
@@ -42,6 +43,8 @@ export const CategoriesListData: React.FC<Props> = ({
   handleActionsDropdownClick,
   handleActionsDropdownClose,
 }) => {
+  const userCurrency = React.useContext(UserContext);
+
   return (
     <>
       {categories.map((category: Category) => {
@@ -70,7 +73,7 @@ export const CategoriesListData: React.FC<Props> = ({
               />
               <CategoryDetailsStyled>
                 <CategoryAmountStyled>
-                  {formatAmount(totalBudgetAmount || 0)}
+                  {formatAmount(totalBudgetAmount || 0, userCurrency)}
                 </CategoryAmountStyled>
                 <IconMenu
                   itemId={categoryId}

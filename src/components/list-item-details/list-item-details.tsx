@@ -5,6 +5,7 @@ import {
   ExpenseAmountStyled,
 } from "./list-item-details-style";
 import { formatAmount } from "../../utils/format";
+import { UserContext } from "../../App";
 
 interface Props {
   expenseValue: number;
@@ -15,16 +16,18 @@ export const ListItemDetails: React.FC<Props> = ({
   expenseValue,
   budgetValue,
 }) => {
+  const userCurrency = React.useContext(UserContext);
+
   return (
     <>
       {budgetValue && (
         <BudgetAmountStyled positive={budgetValue - expenseValue > 0}>
-          {formatAmount(budgetValue - expenseValue)}
+          {formatAmount(budgetValue - expenseValue, userCurrency)}
         </BudgetAmountStyled>
       )}
 
       <ExpenseAmountStyled prominent={!budgetValue}>
-        {formatAmount(expenseValue)}
+        {formatAmount(expenseValue, userCurrency)}
       </ExpenseAmountStyled>
 
       {budgetValue && (
