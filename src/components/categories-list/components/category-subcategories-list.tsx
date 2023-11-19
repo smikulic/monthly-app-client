@@ -9,6 +9,7 @@ import {
   CategoryDetailsStyled,
 } from "../categories-list-style";
 import { IconMenu } from "../../icon-menu/icon-menu";
+import { UserContext } from "../../../App";
 
 interface Props {
   subcategories: Subcategory[];
@@ -30,6 +31,8 @@ export const CategorySubcategoriesList: React.FC<Props> = ({
   handleActionsDropdownClick,
   handleActionsDropdownClose,
 }) => {
+  const userCurrency = React.useContext(UserContext);
+
   return (
     <>
       {subcategories.map((subcategory: Maybe<Subcategory>) => {
@@ -43,7 +46,7 @@ export const CategorySubcategoriesList: React.FC<Props> = ({
               <ListItemHeader title={subcategory.name} />
               <CategoryDetailsStyled>
                 <CategoryAmountStyled>
-                  {formatAmount(subcategory.budgetAmount || 0)}
+                  {formatAmount(subcategory.budgetAmount || 0, userCurrency)}
                 </CategoryAmountStyled>
                 <IconMenu
                   itemId={subcategoryId}

@@ -2,7 +2,7 @@ import React from "react";
 
 export const PrivacyPageContainer = () => {
   return (
-    <div className="privacyPage">
+    <div className="privacyPage" style={{ padding: "32px" }}>
       <h1>Privacy Policy</h1>
       <p>Last updated: November 18, 2023</p>
       <p>
