@@ -235,6 +235,7 @@ function App() {
           pauseOnHover={false}
           theme="colored"
         />
+        
       </ThemeProvider>
     </div>
   );
