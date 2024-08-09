@@ -6,7 +6,7 @@
   },
   "private": true,
   "dependencies": {
-    "@apollo/client": "^3.6.9",
+    "@apollo/client": "^3.11.4",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@fontsource/roboto": "^5.0.8",
@@ -23,7 +23,7 @@
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
     "date-fns": "^2.29.3",
-    "graphql": "^16.6.0",
+    "graphql": "^16.9.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.3.0",

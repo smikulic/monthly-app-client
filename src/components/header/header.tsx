@@ -23,7 +23,9 @@ export const Header = ({ onLogout }: { onLogout: () => void }) => {
     setAnchorEl(null);
   };
 
-  const userName = localStorage.getItem(AUTH_TOKEN_USER)!.split("@")[0];
+  const userName = localStorage.getItem(AUTH_TOKEN_USER)
+    ? localStorage.getItem(AUTH_TOKEN_USER)!.split("@")[0]
+    : null;
   const isHome = location.pathname === "/";
 
   return (

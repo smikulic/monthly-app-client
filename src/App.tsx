@@ -81,7 +81,7 @@ function App() {
 
   if (userMeError?.networkError) {
     const serverError = userMeError?.networkError as ServerError;
-    const errorMessage = serverError.result.errors[0].message;
+    const errorMessage = serverError.result;
 
     if (errorMessage.includes("invalid token")) {
       handleLogout();
@@ -161,7 +161,7 @@ function App() {
                       <Route
                         path="/"
                         element={
-                          <UserContext.Provider value={userData.me.currency}>
+                          <UserContext.Provider value={userData?.me.currency}>
                             <HomePageContainer
                               pageDate={pageDate}
                               onClickNext={onClickNext}
@@ -173,7 +173,7 @@ function App() {
                       <Route
                         path="/expenses"
                         element={
-                          <UserContext.Provider value={userData.me.currency}>
+                          <UserContext.Provider value={userData?.me.currency}>
                             <ExpensesPageContainer
                               pageDate={pageDate}
                               onClickNext={onClickNext}
@@ -185,7 +185,7 @@ function App() {
                       <Route
                         path="/budget"
                         element={
-                          <UserContext.Provider value={userData.me.currency}>
+                          <UserContext.Provider value={userData?.me.currency}>
                             <CategoriesPageContainer />
                           </UserContext.Provider>
                         }
@@ -193,7 +193,7 @@ function App() {
                       <Route
                         path="/saving-goals"
                         element={
-                          <UserContext.Provider value={userData.me.currency}>
+                          <UserContext.Provider value={userData?.me.currency}>
                             <SavingGoalsPageContainer />
                           </UserContext.Provider>
                         }
@@ -202,7 +202,7 @@ function App() {
                         path="/profile"
                         element={
                           <ProfilePageContainer
-                            userData={userData.me}
+                            userData={userData?.me}
                             refetchUserData={refetchUserData}
                           />
                         }
