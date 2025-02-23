@@ -3,8 +3,18 @@ import Box from "@mui/material/Box";
 import { LineChart } from "@mui/x-charts/LineChart";
 import { Skeleton, Typography } from "@mui/material";
 import { months } from "../../constants";
-import { HomeContainerStyled } from "./home-page-style";
+import {
+  HomeContainerStyled,
+  HomeChartTotalValueStyled,
+} from "./home-page-style";
 import { HomeListItemLink } from "../home-list-item-link/home-list-item-link";
+import { UserContext } from "../../App";
+import { formatAmount } from "../../utils/format";
+import {
+  ErrorTextStyled,
+  WarningTextStyled,
+  UnderlineTextStyled,
+} from "../../shared";
 
 export const HomePage = ({
   loading,
@@ -23,7 +33,25 @@ export const HomePage = ({
   loadingChartExpenses: boolean;
   pageDate: Date;
 }) => {
+  const userCurrency = React.useContext(UserContext);
   const selectedYear = pageDate.getFullYear();
+  const totalExpensePerYear =
+    chartExpensesData?.reduce((acc, curr) => curr + acc) || 0;
+  const totalBudgetAmountPerYear = totalBudgetAmount * 12;
+  const formattedTotalExpensePerYear = formatAmount(
+    totalExpensePerYear,
+    userCurrency
+  );
+  const formattedTotalBudgetPerYear = formatAmount(
+    totalBudgetAmountPerYear,
+    userCurrency
+  );
+  const budgetExpenseDiff = totalBudgetAmountPerYear - totalExpensePerYear;
+  const spentOver = totalExpensePerYear > totalBudgetAmountPerYear;
+  const formattedBudgetExpenseDiff = formatAmount(
+    Math.abs(budgetExpenseDiff),
+    userCurrency
+  );
 
   return (
     <HomeContainerStyled>
@@ -58,13 +86,37 @@ export const HomePage = ({
           borderRadius: "16px",
         }}
       >
-        <Box sx={{ padding: "16px 0 0 20px" }}>
+        <Box sx={{ padding: "16px 20px 0 20px" }}>
           <Typography
             variant="body1"
-            fontSize="18px"
+            fontSize="16px"
             color="primary.contrastText"
           >
-            {selectedYear} Overview
+            <HomeChartTotalValueStyled>
+              <div>
+                Total {selectedYear} expenses are{" "}
+                <UnderlineTextStyled>
+                  {formattedTotalExpensePerYear}
+                </UnderlineTextStyled>{" "}
+                and total budget is{" "}
+                <UnderlineTextStyled>
+                  {formattedTotalBudgetPerYear}
+                </UnderlineTextStyled>{" "}
+                so you spent{" "}
+                <UnderlineTextStyled>
+                  {spentOver ? (
+                    <ErrorTextStyled>
+                      {formattedBudgetExpenseDiff}
+                    </ErrorTextStyled>
+                  ) : (
+                    <WarningTextStyled>
+                      {formattedBudgetExpenseDiff}
+                    </WarningTextStyled>
+                  )}{" "}
+                </UnderlineTextStyled>
+                {spentOver ? "over" : "under"} budget.
+              </div>
+            </HomeChartTotalValueStyled>
           </Typography>
         </Box>
         {loadingChartExpenses && <Skeleton animation="wave" height={300} />}

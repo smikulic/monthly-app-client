@@ -52,6 +52,8 @@ export const HomePageContainer = ({
     0
   );
 
+  console.log({ chartExpensesData });
+
   return (
     <Sentry.ErrorBoundary fallback={<p>An error has occurred</p>}>
       <ActionsBar

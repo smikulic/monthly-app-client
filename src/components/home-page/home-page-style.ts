@@ -10,3 +10,9 @@ export const HomeContainerStyled = styled("div")({
     color: "inherit",
   },
 });
+
+export const HomeChartTotalValueStyled = styled("div")({
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+});

@@ -68,3 +68,14 @@ export const ProminentButtonStyled = styled("div")(({ theme }) => ({
 export const FooterPaddingStyled = styled("div")({
   marginBottom: "56px",
 });
+
+export const ErrorTextStyled = styled("span")(({ theme }) => ({
+  color: theme.palette.error.main,
+}));
+export const WarningTextStyled = styled("span")(({ theme }) => ({
+  color: theme.palette.warning.main,
+}));
+export const UnderlineTextStyled = styled("span")(({ theme }) => ({
+  fontWeight: "500",
+  borderBottom: `1px dotted ${theme.palette.primary.contrastText}`,
+}));
