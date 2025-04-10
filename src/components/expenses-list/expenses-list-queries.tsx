@@ -19,6 +19,17 @@ export const GET_CATEGORY = gql`
   }
 `;
 
+export const GET_ALL_EXPENSES = gql`
+  query Expenses {
+    expenses {
+      id
+      subcategoryId
+      amount
+      date
+    }
+  }
+`;
+
 export const GET_EXPENSES_LIST = gql`
   query ExpensesList($date: String!) {
     expenses(filter: { date: $date }) {

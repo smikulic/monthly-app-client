@@ -3,10 +3,12 @@ import { getMonth, getYear } from "date-fns";
 import { Expense } from "../../generated/graphql";
 import { ExpandedExpenses } from "../expanded-expenses/expanded-expenses";
 import { ListItemHeader } from "../list-item-header/list-item-header";
-import { getRolloverBudget } from "../../utils/getRolloverBudget";
+import { getRemainingRolloverBudget } from "../../utils/getRolloverBudget";
 import { ListItemDetails } from "../list-item-details/list-item-details";
 import { SubcategoryDecoratedWithExpenses } from "../expenses-list/expenses-list";
 import { SubcategoryListItemStyled } from "../../shared";
+import { useQuery } from "@apollo/client";
+import { GET_ALL_EXPENSES } from "../expenses-list/expenses-list-queries";
 
 interface Props {
   subcategory: SubcategoryDecoratedWithExpenses;
@@ -27,6 +29,32 @@ export const SubcategoryListItem: React.FC<Props> = ({
 }) => {
   const [openSubcategory, setOpenSubcategory] = useState("");
 
+  const { data: expensesData } = useQuery(GET_ALL_EXPENSES);
+
+  const rolloverDate = new Date(Number(subcategory.rolloverDate));
+  const expensesSinceRollover = (expensesData?.expenses || []).filter(
+    (expense: any) => {
+      return (
+        new Date(Number(expense.date)) >= rolloverDate &&
+        expense.subcategoryId === subcategory.id
+      );
+    }
+  );
+
+  // Summing the filtered expenses
+  const totalExpensesSinceRollover = expensesSinceRollover.reduce(
+    (acc: number, expense: { amount: number }) => acc + expense.amount,
+    0
+  );
+
+  // Calculate the remaining rollover budget using the updated function
+  const remainingRolloverBudget = getRemainingRolloverBudget({
+    currentDate,
+    rolloverDate,
+    budgetAmount: subcategory.budgetAmount || 0,
+    totalExpensesSinceRollover,
+  });
+
   const subcategoryId = subcategory.id;
   const showExpenses = openSubcategory === subcategoryId;
   const totalSubcategoryExpenses = subcategory.expenses.reduce(
@@ -36,18 +64,23 @@ export const SubcategoryListItem: React.FC<Props> = ({
   );
   const expensesExist = totalSubcategoryExpenses > 0;
   const budgetAmount = subcategory.budgetAmount || 0;
-  const budgetStartDate = new Date(Number(subcategory.rolloverDate));
-  const rolloverBudgetAmount = getRolloverBudget({
-    currentDate,
-    budgetStartDate,
-    budgetAmount,
-  });
-  const budgetValue = showRolloverBudget ? rolloverBudgetAmount : budgetAmount;
+
+  // const rolloverBudgetAmount = getRolloverBudget({
+  //   currentDate,
+  //   rolloverDate,
+  //   budgetAmount,
+  // });
+  // const budgetValue = showRolloverBudget
+  //   ? rolloverBudgetAmount
+  //   : budgetAmount;
+  const budgetValue = showRolloverBudget
+    ? remainingRolloverBudget
+    : budgetAmount;
 
   const isCurrentDateMonthAfterOrEqual =
-    getYear(currentDate) > getYear(budgetStartDate) ||
-    (getYear(currentDate) === getYear(budgetStartDate) &&
-      getMonth(currentDate) >= getMonth(budgetStartDate));
+    getYear(currentDate) > getYear(rolloverDate) ||
+    (getYear(currentDate) === getYear(rolloverDate) &&
+      getMonth(currentDate) >= getMonth(rolloverDate));
 
   return (
     <>

@@ -1,5 +1,5 @@
 // import React, { useState } from "react";
-import React from "react";
+import React, { useState } from "react";
 import { useQuery } from "@apollo/client";
 import { format } from "date-fns";
 import { ExpensesList } from "../../components/expenses-list/expenses-list";
@@ -17,7 +17,7 @@ export const ExpensesPageContainer = ({
   onClickNext: () => void;
   onClickPrevious: () => void;
 }) => {
-  // const [showRolloverBudget, setShowRolloverBudget] = useState(true);
+  const [showRolloverBudget, setShowRolloverBudget] = useState(true);
 
   const formattedDate = format(pageDate, "MM-dd-yyyy");
 
@@ -45,14 +45,14 @@ export const ExpensesPageContainer = ({
         pageDate={pageDate}
         onClickNext={onClickNext}
         onClickPrevious={onClickPrevious}
-        // showRollover={showRolloverBudget}
-        // toggleRollover={() => setShowRolloverBudget(!showRolloverBudget)}
+        showRollover={showRolloverBudget}
+        toggleRollover={() => setShowRolloverBudget(!showRolloverBudget)}
       />
       <ExpensesList
         loading={loadingExpenses || loadingCategories}
         pageDate={pageDate}
-        showRolloverBudget={false}
-        // showRolloverBudget={showRolloverBudget}
+        // showRolloverBudget={false}
+        showRolloverBudget={showRolloverBudget}
         categoriesDecoratedWithExpenses={categoriesDecoratedWithExpenses}
         totalSubcategories={totalSubcategories}
         refetchExpenses={refetchExpenses}
