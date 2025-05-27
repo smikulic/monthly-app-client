@@ -1,11 +1,13 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import { AUTH_TOKEN_USER } from "../../constants";
-import { BackButtonStyled, HeaderStyled } from "./header-style";
-import { Box, Button, ListItemIcon, Menu, MenuItem } from "@mui/material";
+import { Button, ListItemIcon, Menu } from "@mui/material";
 import { Logout, AccountCircle } from "@mui/icons-material";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import MenuIcon from "@mui/icons-material/Menu";
+import { AUTH_TOKEN_USER } from "@/constants";
+import { BackButtonStyled, HeaderStyled } from "./header-style";
+import { Box } from "@/components/ui/Box";
+import { MenuItem } from "@/components/ui/MenuItem";
 
 export const Header = ({ onLogout }: { onLogout: () => void }) => {
   const navigate = useNavigate();

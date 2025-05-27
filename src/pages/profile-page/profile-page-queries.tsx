@@ -8,3 +8,9 @@ export const UPDATE_USER_MUTATION = gql`
     }
   }
 `;
+
+export const DELETE_ACCOUNT_MUTATION = gql`
+  mutation DeleteAccount {
+    deleteAccount
+  }
+`;

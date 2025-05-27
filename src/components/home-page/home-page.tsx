@@ -1,11 +1,13 @@
 import { SyntheticEvent, useState } from "react";
-import { Box, Skeleton, Typography } from "@mui/material";
 import { HomeContainerStyled } from "./home-page-style";
 import { HomeListItemLink } from "../home-list-item-link/home-list-item-link";
 import { TabsStyled, TabStyled } from "../../shared";
 import { ChartBudgetExpense } from "../chart-budget-expense/chart-budget-expense";
 import { CategoryExpenseTotal } from "../../generated/graphql";
 import { ChartPie } from "../chart-pie/chart-pie";
+import { Typography } from "@/components/ui/Typography";
+import { Box } from "@/components/ui/Box";
+import { Skeleton } from "@/components/ui/Skeleton";
 
 export const HomePage = ({
   loading,

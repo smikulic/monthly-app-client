@@ -1,44 +1,30 @@
-import React, { useState } from "react";
-import { User, useUpdateUserMutation } from "../../generated/graphql";
-import {
-  Box,
-  Button,
-  MenuItem,
-  Select,
-  TextField,
-  Typography,
-} from "@mui/material";
-import { styled } from "@mui/material/styles";
+// src/components/ProfilePageContainer.tsx
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-
-export const PageContainerStyled = styled("div")(({ theme }) => ({
-  display: "flex",
-  flexDirection: "column",
-  position: "relative",
-  margin: "10px 12px",
-  padding: "16px 20px",
-  border: `1px solid ${theme.palette.text.disabled}`,
-  borderRadius: "16px",
-}));
-
-const currencies = [
-  {
-    value: "USD",
-    label: "$",
-  },
-  {
-    value: "EUR",
-    label: "€",
-  },
-  {
-    value: "GBP",
-    label: "£",
-  },
-  {
-    value: "CAD",
-    label: "$",
-  },
-];
+import { AUTH_TOKEN, AUTH_TOKEN_USER } from "@/constants";
+import {
+  useDeleteAccountMutation,
+  User,
+  useUpdateUserMutation,
+} from "@/generated/graphql";
+import {
+  DangerButton,
+  OutlineButton,
+  PrimaryButton,
+} from "@/components/ui/Button";
+import { Container } from "@/components/ui/Container";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from "@/components/ui/Dialog";
+import { MenuItem } from "@/components/ui/MenuItem";
+import { SelectField } from "@/components/ui/Select";
+import { TextField } from "@/components/ui/TextField";
+import { Typography } from "@/components/ui/Typography";
 
 export const ProfilePageContainer = ({
   userData,
@@ -47,59 +33,92 @@ export const ProfilePageContainer = ({
   userData: User;
   refetchUserData: () => void;
 }) => {
-  const userCurrency = userData.currency || "EUR";
-  const [currency, setCurrency] = useState(userCurrency);
-  const disabled = currency === userCurrency;
+  const navigate = useNavigate();
+  const [currency, setCurrency] = useState(userData.currency || "EUR");
+  const [openDialog, setOpenDialog] = useState(false);
 
   const [updateUser] = useUpdateUserMutation({
     onCompleted: () => {
       refetchUserData();
-      toast.success(`You have successfully updated your profile!`);
+      toast.success("Profile updated");
+    },
+  });
+
+  const [deleteAccount, { loading: deleting }] = useDeleteAccountMutation({
+    onCompleted: (data) => {
+      if (data.deleteAccount) {
+        localStorage.removeItem(AUTH_TOKEN_USER);
+        localStorage.removeItem(AUTH_TOKEN);
+        toast.success("Account deleted");
+        navigate("/welcome");
+      }
+    },
+    onError: (err) => {
+      toast.error(err.message);
+      setOpenDialog(false);
     },
   });
 
   return (
     <>
-      <PageContainerStyled>
-        <Typography variant="h5" color="text.primary">
-          Profile information
-        </Typography>
-
-        <br />
-        <TextField label={userData.email} fullWidth disabled />
-
-        <br />
-        <Select
-          labelId="userCurrency-label"
+      <Container>
+        <Typography variant="h5">Profile information</Typography>
+        <TextField label={userData.email} disabled />
+        <SelectField
           id="userCurrency"
-          value={currency}
           label="Currency"
-          onChange={(e) => {
-            setCurrency(e.target.value);
-          }}
+          value={currency}
+          onChange={(e) => setCurrency(e.target.value as string)}
         >
-          {currencies.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                <div>{option.value}</div>
-                <div>({option.label})</div>
-              </Box>
+          {[
+            { value: "USD", label: "$" },
+            { value: "EUR", label: "€" },
+            { value: "GBP", label: "£" },
+            { value: "CAD", label: "$" },
+          ].map((opt) => (
+            <MenuItem key={opt.value} value={opt.value}>
+              {opt.value} ({opt.label})
             </MenuItem>
           ))}
-        </Select>
-
-        <br />
-        <Button
-          variant="contained"
-          autoFocus
-          onClick={() => {
-            updateUser({ variables: { id: userData.id, currency } });
-          }}
-          disabled={disabled}
+        </SelectField>
+        <PrimaryButton
+          onClick={() =>
+            updateUser({ variables: { id: userData.id, currency } })
+          }
+          disabled={currency === userData.currency}
         >
           Save
-        </Button>
-      </PageContainerStyled>
+        </PrimaryButton>
+      </Container>
+
+      <Container>
+        <Typography variant="h5" color="error">
+          Danger Zone
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+          Permanently delete your account and all data.
+        </Typography>
+        <OutlineButton color="error" onClick={() => setOpenDialog(true)}>
+          Delete my account
+        </OutlineButton>
+
+        <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
+          <DialogTitle>Confirm account deletion</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Are you sure? This action <strong>cannot</strong> be undone.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <PrimaryButton onClick={() => setOpenDialog(false)}>
+              Cancel
+            </PrimaryButton>
+            <DangerButton onClick={() => deleteAccount()} disabled={deleting}>
+              {deleting ? "Deleting…" : "Delete my account"}
+            </DangerButton>
+          </DialogActions>
+        </Dialog>
+      </Container>
     </>
   );
 };

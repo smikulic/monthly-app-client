@@ -1,10 +1,9 @@
 import { useContext, useMemo } from "react";
 import ReactECharts from "echarts-for-react";
-import { useTheme } from "@mui/material/styles";
-import { UserContext } from "../../App";
-import { formatAmount } from "../../utils/format";
-import { useMediaQuery } from "@mui/material";
-import { CategoryExpenseTotal } from "../../generated/graphql";
+import { useMediaQuery, useTheme } from "@mui/material";
+import { CategoryExpenseTotal } from "@/generated/graphql";
+import { formatAmount } from "@/utils/format";
+import { UserContext } from "@/App";
 
 type ChartPieProps = {
   data: CategoryExpenseTotal[];

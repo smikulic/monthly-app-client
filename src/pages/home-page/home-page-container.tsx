@@ -1,17 +1,16 @@
-import React from "react";
 import { useQuery } from "@apollo/client";
 import * as Sentry from "@sentry/react";
 import { format } from "date-fns";
-import { GET_CATEGORIES_LIST } from "../../components/categories-list/categories-list-queries";
-import { HomePage } from "../../components/home-page/home-page";
+import { GET_CATEGORIES_LIST } from "@/components/categories-list/categories-list-queries";
+import { HomePage } from "@/components/home-page/home-page";
 import {
   GET_CHART_EXPENSES_LIST,
   GET_EXPENSES_LIST,
-} from "../../components/expenses-list/expenses-list-queries";
-import { ActionsBar } from "../../components/actions-bar/actions-bar";
-import { getChartData } from "../../utils/getChartData";
-import { GET_SAVING_GOALS_LIST } from "../../components/saving-goals-list/saving-goals-list-queries";
-import { SavingGoal } from "../../generated/graphql";
+} from "@/components/expenses-list/expenses-list-queries";
+import { ActionsBar } from "@/components/actions-bar/actions-bar";
+import { getChartData } from "@/utils/getChartData";
+import { GET_SAVING_GOALS_LIST } from "@/components/saving-goals-list/saving-goals-list-queries";
+import { SavingGoal } from "@/generated/graphql";
 
 export const HomePageContainer = ({
   pageDate,
