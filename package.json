@@ -2,7 +2,7 @@
   "name": "monthly-app-client",
   "version": "0.1.0",
   "engines": {
-    "node": "^20.0.0"
+    "node": "22.15.0"
   },
   "private": true,
   "dependencies": {
@@ -12,17 +12,12 @@
     "@fontsource/roboto": "^5.0.8",
     "@mui/icons-material": "^5.14.11",
     "@mui/material": "^5.14.11",
-    "@mui/x-charts": "^6.0.0-alpha.13",
+    "@mui/x-charts": "^6.19.8",
     "@mui/x-date-pickers": "^6.16.0",
     "@sentry/react": "^7.73.0",
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.3.0",
-    "@testing-library/user-event": "^13.5.0",
-    "@types/jest": "^27.5.2",
-    "@types/node": "^16.11.56",
-    "@types/react": "^18.0.17",
-    "@types/react-dom": "^18.0.6",
     "date-fns": "^2.29.3",
+    "echarts": "^5.6.0",
+    "echarts-for-react": "^3.0.2",
     "graphql": "^16.9.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -73,6 +68,13 @@
     "@graphql-codegen/typescript": "2.8.6",
     "@graphql-codegen/typescript-operations": "2.5.11",
     "@graphql-codegen/typescript-react-apollo": "3.3.7",
-    "@types/accounting": "^0.4.2"
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.3.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/accounting": "^0.4.2",
+    "@types/jest": "^27.5.2",
+    "@types/node": "^16.11.56",
+    "@types/react": "^18.0.17",
+    "@types/react-dom": "^18.0.6"
   }
 }

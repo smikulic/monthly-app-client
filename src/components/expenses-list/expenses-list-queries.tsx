@@ -43,7 +43,14 @@ export const GET_EXPENSES_LIST = gql`
 
 export const GET_CHART_EXPENSES_LIST = gql`
   query ChartExpensesList($date: String!) {
-    chartExpenses(filter: { date: $date })
+    chartExpenses(filter: { date: $date }) {
+      monthlyTotals
+      categoryExpenseTotals {
+        categoryName
+        subcategoryName
+        total
+      }
+    }
   }
 `;
 

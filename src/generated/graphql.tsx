@@ -30,6 +30,19 @@ export type Category = {
   user?: Maybe<User>;
 };
 
+export type CategoryExpenseTotal = {
+  __typename?: 'CategoryExpenseTotal';
+  categoryName: Scalars['String'];
+  subcategoryName: Scalars['String'];
+  total: Scalars['Int'];
+};
+
+export type ChartExpensesPayload = {
+  __typename?: 'ChartExpensesPayload';
+  categoryExpenseTotals: Array<CategoryExpenseTotal>;
+  monthlyTotals: Array<Scalars['Int']>;
+};
+
 export type Expense = {
   __typename?: 'Expense';
   amount: Scalars['Int'];
@@ -186,7 +199,7 @@ export type Query = {
   _empty?: Maybe<Scalars['String']>;
   categories: Array<Category>;
   category: Category;
-  chartExpenses: Array<Scalars['Int']>;
+  chartExpenses: ChartExpensesPayload;
   expenses: Array<Expense>;
   me: User;
   savingGoals: Array<SavingGoal>;
@@ -328,6 +341,11 @@ export type CategoryQueryVariables = Exact<{
 
 export type CategoryQuery = { __typename?: 'Query', category: { __typename?: 'Category', id: string, name: string, subcategories?: Array<{ __typename?: 'Subcategory', id: string, name: string, budgetAmount?: number | null, expenses?: Array<{ __typename?: 'Expense', id: string, amount: number, date: string } | null> | null } | null> | null } };
 
+export type ExpensesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ExpensesQuery = { __typename?: 'Query', expenses: Array<{ __typename?: 'Expense', id: string, subcategoryId: string, amount: number, date: string }> };
+
 export type ExpensesListQueryVariables = Exact<{
   date: Scalars['String'];
 }>;
@@ -340,7 +358,7 @@ export type ChartExpensesListQueryVariables = Exact<{
 }>;
 
 
-export type ChartExpensesListQuery = { __typename?: 'Query', chartExpenses: Array<number> };
+export type ChartExpensesListQuery = { __typename?: 'Query', chartExpenses: { __typename?: 'ChartExpensesPayload', monthlyTotals: Array<number>, categoryExpenseTotals: Array<{ __typename?: 'CategoryExpenseTotal', categoryName: string, subcategoryName: string, total: number }> } };
 
 export type CreateExpenseMutationVariables = Exact<{
   subcategoryId: Scalars['ID'];
@@ -790,6 +808,43 @@ export function useCategoryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<C
 export type CategoryQueryHookResult = ReturnType<typeof useCategoryQuery>;
 export type CategoryLazyQueryHookResult = ReturnType<typeof useCategoryLazyQuery>;
 export type CategoryQueryResult = Apollo.QueryResult<CategoryQuery, CategoryQueryVariables>;
+export const ExpensesDocument = gql`
+    query Expenses {
+  expenses {
+    id
+    subcategoryId
+    amount
+    date
+  }
+}
+    `;
+
+/**
+ * __useExpensesQuery__
+ *
+ * To run a query within a React component, call `useExpensesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useExpensesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useExpensesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useExpensesQuery(baseOptions?: Apollo.QueryHookOptions<ExpensesQuery, ExpensesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ExpensesQuery, ExpensesQueryVariables>(ExpensesDocument, options);
+      }
+export function useExpensesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ExpensesQuery, ExpensesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ExpensesQuery, ExpensesQueryVariables>(ExpensesDocument, options);
+        }
+export type ExpensesQueryHookResult = ReturnType<typeof useExpensesQuery>;
+export type ExpensesLazyQueryHookResult = ReturnType<typeof useExpensesLazyQuery>;
+export type ExpensesQueryResult = Apollo.QueryResult<ExpensesQuery, ExpensesQueryVariables>;
 export const ExpensesListDocument = gql`
     query ExpensesList($date: String!) {
   expenses(filter: {date: $date}) {
@@ -830,7 +885,14 @@ export type ExpensesListLazyQueryHookResult = ReturnType<typeof useExpensesListL
 export type ExpensesListQueryResult = Apollo.QueryResult<ExpensesListQuery, ExpensesListQueryVariables>;
 export const ChartExpensesListDocument = gql`
     query ChartExpensesList($date: String!) {
-  chartExpenses(filter: {date: $date})
+  chartExpenses(filter: {date: $date}) {
+    monthlyTotals
+    categoryExpenseTotals {
+      categoryName
+      subcategoryName
+      total
+    }
+  }
 }
     `;
 

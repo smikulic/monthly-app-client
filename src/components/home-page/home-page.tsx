@@ -1,8 +1,6 @@
 import React from "react";
 import Box from "@mui/material/Box";
-import { LineChart } from "@mui/x-charts/LineChart";
-import { Skeleton, Typography } from "@mui/material";
-import { months } from "../../constants";
+import { Skeleton, Typography, Tabs, Tab } from "@mui/material";
 import {
   HomeContainerStyled,
   HomeChartTotalValueStyled,
@@ -15,6 +13,9 @@ import {
   WarningTextStyled,
   UnderlineTextStyled,
 } from "../../shared";
+import { ChartBudgetExpense } from "../chart-budget-expense/chart-budget-expense";
+import { CategoryExpenseTotal } from "../../generated/graphql";
+import { ChartPie } from "../chart-pie/chart-pie";
 
 export const HomePage = ({
   loading,
@@ -22,6 +23,7 @@ export const HomePage = ({
   totalBudgetAmount,
   totalSavingGoalsAmount,
   chartExpensesData,
+  chartCategoriesData,
   loadingChartExpenses,
   pageDate,
 }: {
@@ -30,11 +32,20 @@ export const HomePage = ({
   totalBudgetAmount: number;
   totalSavingGoalsAmount: number;
   chartExpensesData: number[];
+  chartCategoriesData: CategoryExpenseTotal[];
   loadingChartExpenses: boolean;
   pageDate: Date;
 }) => {
   const userCurrency = React.useContext(UserContext);
   const selectedYear = pageDate.getFullYear();
+
+  // Tab state: 0 = Budget vs Expenses, 1 = Categories
+  const [tabIndex, setTabIndex] = React.useState(0);
+
+  const handleTabChange = (_: React.SyntheticEvent, newIndex: number) => {
+    setTabIndex(newIndex);
+  };
+
   const totalExpensePerYear =
     chartExpensesData?.reduce((acc, curr) => curr + acc) || 0;
   const totalBudgetAmountPerYear = totalBudgetAmount * 12;
@@ -86,79 +97,73 @@ export const HomePage = ({
           borderRadius: "16px",
         }}
       >
-        <Box sx={{ padding: "16px 20px 0 20px" }}>
-          <Typography
-            variant="body1"
-            fontSize="16px"
-            color="primary.contrastText"
-          >
-            <HomeChartTotalValueStyled>
-              <div>
-                Total {selectedYear} expenses are{" "}
-                <UnderlineTextStyled>
-                  {formattedTotalExpensePerYear}
-                </UnderlineTextStyled>{" "}
-                and total budget is{" "}
-                <UnderlineTextStyled>
-                  {formattedTotalBudgetPerYear}
-                </UnderlineTextStyled>{" "}
-                so you spent{" "}
-                <UnderlineTextStyled>
-                  {spentOver ? (
-                    <ErrorTextStyled>
-                      {formattedBudgetExpenseDiff}
-                    </ErrorTextStyled>
-                  ) : (
-                    <WarningTextStyled>
-                      {formattedBudgetExpenseDiff}
-                    </WarningTextStyled>
-                  )}{" "}
-                </UnderlineTextStyled>
-                {spentOver ? "over" : "under"} budget.
-              </div>
-            </HomeChartTotalValueStyled>
-          </Typography>
-        </Box>
         {loadingChartExpenses && <Skeleton animation="wave" height={300} />}
-        {!loadingChartExpenses && chartExpensesData && (
-          <LineChart
-            yAxis={[{ id: "budgetOverview" }]}
-            xAxis={[
-              {
-                id: "yearOverview",
-                data: months,
-                scaleType: "band",
-                label: `${selectedYear}`,
-              },
-            ]}
-            leftAxis={{
-              axisId: "budgetOverview",
-              disableLine: true,
-              disableTicks: true,
-              tickFontSize: 10,
-            }}
-            bottomAxis={{
-              axisId: "yearOverview",
-              disableLine: true,
-              disableTicks: true,
-              tickFontSize: 10,
-            }}
-            series={[
-              {
-                data: chartExpensesData,
-                area: true,
-                label: "Expenses",
-                color: "#ff7777",
-              },
-              {
-                data: new Array(12).fill(totalBudgetAmount),
-                label: "Budget",
-                color: "#eec22f",
-                showMark: false,
-              },
-            ]}
-            height={300}
-          />
+        {!loadingChartExpenses && chartExpensesData && chartCategoriesData && (
+          <>
+            <Box sx={{ padding: "16px 20px 16px 20px" }}>
+              <Typography
+                variant="body1"
+                fontSize="16px"
+                color="primary.contrastText"
+              >
+                <HomeChartTotalValueStyled>
+                  <div>
+                    Total {selectedYear} expenses are{" "}
+                    <UnderlineTextStyled>
+                      {formattedTotalExpensePerYear}
+                    </UnderlineTextStyled>{" "}
+                    and total budget is{" "}
+                    <UnderlineTextStyled>
+                      {formattedTotalBudgetPerYear}
+                    </UnderlineTextStyled>{" "}
+                    so you spent{" "}
+                    <UnderlineTextStyled>
+                      {spentOver ? (
+                        <ErrorTextStyled>
+                          {formattedBudgetExpenseDiff}
+                        </ErrorTextStyled>
+                      ) : (
+                        <WarningTextStyled>
+                          {formattedBudgetExpenseDiff}
+                        </WarningTextStyled>
+                      )}{" "}
+                    </UnderlineTextStyled>
+                    {spentOver ? "over" : "under"} budget.
+                  </div>
+                </HomeChartTotalValueStyled>
+              </Typography>
+            </Box>
+
+            <Tabs
+              value={tabIndex}
+              onChange={handleTabChange}
+              sx={{ borderBottom: 1, borderColor: "divider" }}
+            >
+              <Tab label="Budget vs Expenses" />
+              <Tab label="Categories" />
+            </Tabs>
+
+            <Box sx={{ padding: 2 }}>
+              {tabIndex === 0 && (
+                <ChartBudgetExpense
+                  totalBudgetAmount={totalBudgetAmount}
+                  chartExpensesData={chartExpensesData}
+                  pageDate={pageDate}
+                />
+              )}
+              {tabIndex === 1 && chartCategoriesData.length > 0 ? (
+                <ChartPie data={chartCategoriesData} />
+              ) : (
+                <Box sx={{ p: 4, textAlign: "center" }}>
+                  <Typography variant="subtitle1" color="textSecondary">
+                    No categories to display.
+                  </Typography>
+                </Box>
+              )}
+            </Box>
+            {/* <ChartCategories data={chartCategoriesData} /> */}
+            {/* <ChartTreemap data={chartCategoriesData} /> */}
+          </>
         )}
       </Box>
     </HomeContainerStyled>

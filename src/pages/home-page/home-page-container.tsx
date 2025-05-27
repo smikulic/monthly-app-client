@@ -52,8 +52,6 @@ export const HomePageContainer = ({
     0
   );
 
-  console.log({ chartExpensesData });
-
   return (
     <Sentry.ErrorBoundary fallback={<p>An error has occurred</p>}>
       <ActionsBar
@@ -66,7 +64,10 @@ export const HomePageContainer = ({
         totalExpensesAmount={totalExpensesAmount}
         totalBudgetAmount={totalBudgetAmount}
         totalSavingGoalsAmount={totalSavingGoalsAmount}
-        chartExpensesData={chartExpensesData?.chartExpenses}
+        chartExpensesData={chartExpensesData?.chartExpenses?.monthlyTotals}
+        chartCategoriesData={
+          chartExpensesData?.chartExpenses?.categoryExpenseTotals
+        }
         loadingChartExpenses={loadingChartExpenses}
         pageDate={pageDate}
       />
