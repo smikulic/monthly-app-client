@@ -1,6 +1,6 @@
-import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { ActionsBar } from "./actions-bar";
+import { describe, expect, it, vi } from "vitest";
 
 describe("<ActionsBar />", () => {
   it("renders children if provided", () => {
@@ -14,8 +14,8 @@ describe("<ActionsBar />", () => {
 
   it("renders the formatted date and pagination icons if pageDate, onClickPrevious and onClickNext are provided", () => {
     const mockDate = new Date(2023, 6, 15);
-    const mockPrev = jest.fn();
-    const mockNext = jest.fn();
+    const mockPrev = vi.fn();
+    const mockNext = vi.fn();
 
     render(
       <ActionsBar
@@ -30,8 +30,8 @@ describe("<ActionsBar />", () => {
   });
 
   it("triggers onClickPrevious and onClickNext when icons are clicked", () => {
-    const mockPrev = jest.fn();
-    const mockNext = jest.fn();
+    const mockPrev = vi.fn();
+    const mockNext = vi.fn();
 
     render(
       <ActionsBar
@@ -48,7 +48,7 @@ describe("<ActionsBar />", () => {
   });
 
   it("renders and toggles the switch correctly if toggleRollover is provided", () => {
-    const mockToggleRollover = jest.fn();
+    const mockToggleRollover = vi.fn();
     render(
       <ActionsBar toggleRollover={mockToggleRollover} showRollover={false} />
     );

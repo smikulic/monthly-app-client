@@ -3,6 +3,7 @@
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
 import "@testing-library/jest-dom";
+import { vi } from "vitest";
 
 const storagePrototype = {
   getItem: function (key: string) {
@@ -35,7 +36,7 @@ Object.defineProperty(window, "localStorage", {
   value: localStorageMock,
 });
 
-export const mockReplace = jest.fn();
+export const mockReplace = vi.fn();
 
 Object.defineProperty(window, "location", {
   value: {

@@ -1,6 +1,6 @@
-import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { FormDialog } from "./form-dialog";
+import { describe, expect, it, vi } from "vitest";
 
 describe("<FormDialog />", () => {
   it("renders the dialog when open is true", () => {
@@ -10,8 +10,8 @@ describe("<FormDialog />", () => {
         title="Test Title"
         disabled={false}
         formActionText="Save"
-        formAction={jest.fn()}
-        closeForm={jest.fn()}
+        formAction={vi.fn()}
+        closeForm={vi.fn()}
       >
         test child
       </FormDialog>
@@ -26,8 +26,8 @@ describe("<FormDialog />", () => {
         title="Test Title"
         disabled={false}
         formActionText="Save"
-        formAction={jest.fn()}
-        closeForm={jest.fn()}
+        formAction={vi.fn()}
+        closeForm={vi.fn()}
       >
         test child
       </FormDialog>
@@ -36,14 +36,14 @@ describe("<FormDialog />", () => {
   });
 
   it("calls closeForm when the close button is clicked", () => {
-    const closeForm = jest.fn();
+    const closeForm = vi.fn();
     render(
       <FormDialog
         open={true}
         title="Test Title"
         disabled={false}
         formActionText="Save"
-        formAction={jest.fn()}
+        formAction={vi.fn()}
         closeForm={closeForm}
       >
         test child
@@ -55,7 +55,7 @@ describe("<FormDialog />", () => {
   });
 
   it("calls formAction when the form action button is clicked", () => {
-    const formAction = jest.fn();
+    const formAction = vi.fn();
     render(
       <FormDialog
         open={true}
@@ -63,7 +63,7 @@ describe("<FormDialog />", () => {
         disabled={false}
         formActionText="Save"
         formAction={formAction}
-        closeForm={jest.fn()}
+        closeForm={vi.fn()}
       >
         test child
       </FormDialog>

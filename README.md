@@ -1,47 +1,105 @@
-# Getting Started with Create React App
+# Monthly App - Client
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is a React + TypeScript client application bootstrapped with **Vite** for lightning-fast development.
 
-## Available Scripts
+## Prerequisites
 
-In the project directory, you can run:
+* **Node.js** v22.15.0 (as specified in `package.json`)
+* **npm** v9+ or **yarn** v1.22+
 
-### `npm start`
+## Getting Started
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+1. **Install dependencies**
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
 
-### `npm test`
+2. **Set up environment variables**
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+   Create a `.env.development` file in the project root:
 
-### `npm run build`
+   ```env
+   VITE_API_URL=http://localhost:3001/api
+   ```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+   And a `.env.production` if you have a production backend URL:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+   ```env
+   VITE_API_URL=https://monthly-app-8iesq.ondigitalocean.app/api
+   ```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+   > All environment variables exposed to client code **must** be prefixed with `VITE_`.
 
-### `npm run eject`
+3. **Run in development mode**
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+   Vite will start a dev server on `http://localhost:3000` (default) with hot module replacement.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+4. **Preview production build**
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+   ```bash
+   npm run build
+   npm run preview
+   # or
+   yarn build
+   yarn preview
+   ```
 
-## Learn More
+   The `build` command outputs optimized assets to the `build/` directory, and `preview` serves them locally.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Scripts
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-# monthly-app-client
+* `npm run dev` or `npm run start` — start Vite dev server
+* `npm run build` — create production build
+* `npm run preview` — preview production build locally
+* `npm run codegen` — generate GraphQL types/hooks
+* `npm run test` — run unit tests with Vitest
+* `npm run test:coverage` — run tests with coverage report
+
+## Vite Configuration
+
+The Vite config is in `vite.config.ts`. Key points:
+
+* **React plugin** via `@vitejs/plugin-react`
+* **Path alias**: `@/` → `src/`
+* **Server port**: 3000
+* **Build output**: `build/`
+
+## TypeScript Configuration
+
+* Type checking via Vite’s built-in TS support
+* Path aliases mirrored in `tsconfig.json`:
+
+  ```jsonc
+  {
+    "compilerOptions": {
+      "baseUrl": ".",
+      "paths": {
+        "@/*": ["src/*"]
+      }
+    }
+  }
+  ```
+
+## Testing
+
+* Tests are written with **Vitest** and **React Testing Library**.
+* Use `src/setupTests.ts` for global mocks and matchers.
+
+## Linting & Formatting
+
+(If applicable, add ESLint and Prettier notes here.)
+
+## Contributing
+
+* Fork the repo, create a feature branch, and open a pull request.
+* Ensure all tests pass and follow existing code style.
+
