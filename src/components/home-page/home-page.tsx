@@ -73,7 +73,7 @@ export const HomePage = ({
           aria-label="Home page charts"
         >
           <TabStyled label="Yearly expense" />
-          <TabStyled label="Yearly expenses by category" />
+          <TabStyled label="Expense by category" />
         </TabsStyled>
 
         <Box sx={{ padding: 1 }}>
