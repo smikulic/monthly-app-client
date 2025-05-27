@@ -28,7 +28,7 @@ This project is a React + TypeScript client application bootstrapped with **Vite
    And a `.env.production` if you have a production backend URL:
 
    ```env
-   VITE_API_URL=https://monthly-app-8iesq.ondigitalocean.app/api
+   VITE_API_URL=<PROD_URL>/api
    ```
 
    > All environment variables exposed to client code **must** be prefixed with `VITE_`.
