@@ -72,12 +72,12 @@ export const HomePage = ({
           onChange={handleTabChange}
           aria-label="Home page charts"
         >
-          <TabStyled label="Budget vs Expenses" />
-          <TabStyled label="Categories" />
+          <TabStyled label="Yearly expense" />
+          <TabStyled label="Yearly expenses by category" />
         </TabsStyled>
 
         <Box sx={{ padding: 1 }}>
-          {loadingChartExpenses && <Skeleton animation="wave" height={100} />}
+          {loadingChartExpenses && <Skeleton animation="wave" height={300} />}
           {!loadingChartExpenses &&
             chartExpensesData &&
             chartCategoriesData && (
@@ -102,7 +102,6 @@ export const HomePage = ({
               </Box>
             )}
         </Box>
-        {/* <ChartCategories data={chartCategoriesData} /> */}
         {/* <ChartTreemap data={chartCategoriesData} /> */}
       </Box>
     </HomeContainerStyled>

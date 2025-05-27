@@ -1,6 +1,6 @@
-import { LineChart } from "@mui/x-charts/LineChart";
+import ReactECharts from "echarts-for-react";
 import { months } from "../../constants";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useTheme } from "@mui/material";
 import { HomeChartTotalValueStyled } from "../home-page/home-page-style";
 import {
   ErrorTextStyled,
@@ -8,7 +8,7 @@ import {
   WarningTextStyled,
 } from "../../shared";
 import { formatAmount } from "../../utils/format";
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 import { UserContext } from "../../App";
 
 export const ChartBudgetExpense = ({
@@ -20,30 +20,76 @@ export const ChartBudgetExpense = ({
   chartExpensesData: number[];
   pageDate: Date;
 }) => {
+  const theme = useTheme();
   const userCurrency = useContext(UserContext);
   const selectedYear = pageDate.getFullYear();
 
+  // Totals & formatting
   const totalExpensePerYear =
-    chartExpensesData?.reduce((acc, curr) => curr + acc) || 0;
-  const totalBudgetAmountPerYear = totalBudgetAmount * 12;
-  const formattedTotalExpensePerYear = formatAmount(
-    totalExpensePerYear,
-    userCurrency
-  );
-  const formattedTotalBudgetPerYear = formatAmount(
-    totalBudgetAmountPerYear,
-    userCurrency
-  );
-  const budgetExpenseDiff = totalBudgetAmountPerYear - totalExpensePerYear;
-  const spentOver = totalExpensePerYear > totalBudgetAmountPerYear;
-  const formattedBudgetExpenseDiff = formatAmount(
-    Math.abs(budgetExpenseDiff),
-    userCurrency
+    chartExpensesData.reduce((sum, v) => sum + v, 0) || 0;
+  const totalBudgetPerYear = totalBudgetAmount * 12;
+  const formattedExpense = formatAmount(totalExpensePerYear, userCurrency);
+  const formattedBudget = formatAmount(totalBudgetPerYear, userCurrency);
+  const diff = totalBudgetPerYear - totalExpensePerYear;
+  const spentOver = totalExpensePerYear > totalBudgetPerYear;
+  const formattedDiff = formatAmount(Math.abs(diff), userCurrency);
+
+  // ECharts option
+  const option = useMemo(
+    () => ({
+      tooltip: {
+        trigger: "axis",
+        formatter: ({ 0: a, 1: b }: any) =>
+          `${a.seriesName}: ${formatAmount(a.data, userCurrency)}<br/>` +
+          `${b.seriesName}: ${formatAmount(b.data, userCurrency)}`,
+        textStyle: { fontSize: 12 },
+        axisPointer: { type: "line" },
+      },
+      legend: {
+        data: ["Expenses", "Budget"],
+        top: 0,
+        textStyle: { fontSize: 12 },
+      },
+      grid: { top: 30, left: 40, right: 20, bottom: 30 },
+      xAxis: {
+        type: "category",
+        data: months,
+        axisLine: { show: false },
+        axisTick: { show: false },
+        axisLabel: { fontSize: 10 },
+      },
+      yAxis: {
+        type: "value",
+        axisLine: { show: false },
+        axisTick: { show: false },
+        axisLabel: { fontSize: 10 },
+        splitLine: { lineStyle: { color: theme.palette.divider } },
+      },
+      series: [
+        {
+          name: "Expenses",
+          type: "line",
+          data: chartExpensesData,
+          smooth: true,
+          areaStyle: {},
+          itemStyle: { color: "#ff7777" },
+        },
+        {
+          name: "Budget",
+          type: "line",
+          data: new Array(12).fill(totalBudgetAmount),
+          smooth: true,
+          showSymbol: false,
+          itemStyle: { color: "#eec22f" },
+        },
+      ],
+    }),
+    [chartExpensesData, totalBudgetAmount, userCurrency, theme]
   );
 
   return (
     <>
-      <Box sx={{ padding: "16px 20px 16px 20px" }}>
+      <Box sx={{ p: 2 }}>
         <Typography
           variant="body1"
           fontSize="16px"
@@ -52,23 +98,15 @@ export const ChartBudgetExpense = ({
           <HomeChartTotalValueStyled>
             <div>
               Total {selectedYear} expenses are{" "}
-              <UnderlineTextStyled>
-                {formattedTotalExpensePerYear}
-              </UnderlineTextStyled>{" "}
-              and total budget is{" "}
-              <UnderlineTextStyled>
-                {formattedTotalBudgetPerYear}
-              </UnderlineTextStyled>{" "}
-              so you spent{" "}
+              <UnderlineTextStyled>{formattedExpense}</UnderlineTextStyled> and
+              total budget is{" "}
+              <UnderlineTextStyled>{formattedBudget}</UnderlineTextStyled> so
+              you spent{" "}
               <UnderlineTextStyled>
                 {spentOver ? (
-                  <ErrorTextStyled>
-                    {formattedBudgetExpenseDiff}
-                  </ErrorTextStyled>
+                  <ErrorTextStyled>{formattedDiff}</ErrorTextStyled>
                 ) : (
-                  <WarningTextStyled>
-                    {formattedBudgetExpenseDiff}
-                  </WarningTextStyled>
+                  <WarningTextStyled>{formattedDiff}</WarningTextStyled>
                 )}{" "}
               </UnderlineTextStyled>
               {spentOver ? "over" : "under"} budget.
@@ -76,43 +114,11 @@ export const ChartBudgetExpense = ({
           </HomeChartTotalValueStyled>
         </Typography>
       </Box>
-      <LineChart
-        yAxis={[{ id: "budgetOverview" }]}
-        xAxis={[
-          {
-            id: "yearOverview",
-            data: months,
-            scaleType: "band",
-            label: `${selectedYear}`,
-          },
-        ]}
-        leftAxis={{
-          axisId: "budgetOverview",
-          disableLine: true,
-          disableTicks: true,
-          tickFontSize: 10,
-        }}
-        bottomAxis={{
-          axisId: "yearOverview",
-          disableLine: true,
-          disableTicks: true,
-          tickFontSize: 10,
-        }}
-        series={[
-          {
-            data: chartExpensesData,
-            area: true,
-            label: "Expenses",
-            color: "#ff7777",
-          },
-          {
-            data: new Array(12).fill(totalBudgetAmount),
-            label: "Budget",
-            color: "#eec22f",
-            showMark: false,
-          },
-        ]}
-        height={300}
+
+      <ReactECharts
+        option={option}
+        style={{ width: "100%", height: 300 }}
+        opts={{ renderer: "canvas" }}
       />
     </>
   );
