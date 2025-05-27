@@ -1,17 +1,17 @@
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 import {
   Category,
   Subcategory,
   useDeleteCategoryMutation,
   useDeleteSubcategoryMutation,
-} from "../../generated/graphql";
-import { toast } from "react-toastify";
-import { useActionDropdown } from "../../hooks/useActionDropdown";
+} from "@/generated/graphql";
+import { useActionDropdown } from "@/hooks/useActionDropdown";
+import { CategoryFormFactory } from "@/components/category-form-factory/category-form-factory";
+import { SubcategoryFormFactory } from "@/components/subcategory-form-factory/subcategory-form-factory";
 import { CategoriesListLoading } from "./components/categories-list-loading";
 import { CategoriesListNoData } from "./components/categories-list-no-data";
 import { CategoriesListData } from "./components/categories-list-data";
-import { CategoryFormFactory } from "../category-form-factory/category-form-factory";
-import { SubcategoryFormFactory } from "../subcategory-form-factory/subcategory-form-factory";
 
 interface Props {
   loading: boolean;

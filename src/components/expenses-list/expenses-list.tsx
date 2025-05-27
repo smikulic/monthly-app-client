@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Category, Subcategory, Expense } from "../../generated/graphql";
+import { Category, Subcategory, Expense } from "@/generated/graphql";
 import { ExpensesListLoading } from "./components/expenses-list-loading";
 import { ExpensesListNoData } from "./components/expenses-list-no-data";
 import { ExpensesListData } from "./components/expenses-list-data";

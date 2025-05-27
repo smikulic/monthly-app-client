@@ -1,15 +1,17 @@
+import { useContext, useMemo } from "react";
 import ReactECharts from "echarts-for-react";
-import { months } from "../../constants";
-import { Box, Typography, useTheme } from "@mui/material";
-import { HomeChartTotalValueStyled } from "../home-page/home-page-style";
+import { useTheme } from "@mui/material";
+import { months } from "@/constants";
+import { formatAmount } from "@/utils/format";
 import {
   ErrorTextStyled,
   UnderlineTextStyled,
   WarningTextStyled,
-} from "../../shared";
-import { formatAmount } from "../../utils/format";
-import { useContext, useMemo } from "react";
-import { UserContext } from "../../App";
+} from "@/shared";
+import { HomeChartTotalValueStyled } from "@/components/home-page/home-page-style";
+import { Typography } from "@/components/ui/Typography";
+import { Box } from "@/components/ui/Box";
+import { UserContext } from "@/App";
 
 export const ChartBudgetExpense = ({
   totalBudgetAmount,
