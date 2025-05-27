@@ -1,3 +1,4 @@
+import { Tab, TabProps, Tabs, TabsProps } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 export const ListItemStyled = styled("div")({
@@ -78,4 +79,46 @@ export const WarningTextStyled = styled("span")(({ theme }) => ({
 export const UnderlineTextStyled = styled("span")(({ theme }) => ({
   fontWeight: "500",
   borderBottom: `1px dotted ${theme.palette.primary.contrastText}`,
+}));
+
+export const TabsStyled = styled((props: TabsProps) => <Tabs {...props} />)(
+  ({ theme }) => ({
+    marginLeft: theme.spacing(2),
+    minHeight: theme.spacing(6),
+    "& .MuiTabs-indicator": {
+      height: 2,
+      borderRadius: 2,
+      backgroundColor: theme.palette.primary.main,
+    },
+  })
+);
+
+export const TabStyled = styled((props: TabProps) => (
+  <Tab disableRipple {...props} />
+))(({ theme }) => ({
+  textTransform: "none",
+  minHeight: theme.spacing(4),
+  padding: "8px 16px",
+  fontSize: "14px",
+  fontWeight: "normal",
+  borderRadius: "10px",
+  marginRight: theme.spacing(2),
+  // unselected
+  background: "transparent",
+  color: theme.palette.primary.contrastText,
+  // color: theme.palette.text.secondary,
+  // border: `1px solid ${theme.palette.primary.contrastText}`,
+
+  "&.Mui-selected": {
+    background: theme.palette.primary.main,
+    color: theme.palette.primary.contrastText,
+  },
+
+  "&:hover": {
+    opacity: 0.8,
+    background: theme.palette.action.hover,
+    "&.Mui-selected": {
+      background: theme.palette.primary.main,
+    },
+  },
 }));

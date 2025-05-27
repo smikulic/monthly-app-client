@@ -81,6 +81,27 @@ export const ChartPie = ({
     );
   }, [data, categories, categoryColorMap, userCurrency]);
 
+  const sortedCategories = useMemo(
+    () => [...categories].sort((a, b) => categoryTotals[b] - categoryTotals[a]),
+    [categories, categoryTotals]
+  );
+
+  const legendData = useMemo(() => {
+    return sortedCategories.flatMap((cat) => {
+      // find the exact innerData name (with formatted amount)
+      const catName = innerData.find((d) =>
+        d.name.startsWith(cat + " (")
+      )!.name;
+
+      // then all its subcategory names
+      const subNames = outerData
+        .filter((d) => d.itemStyle.color === categoryColorMap[cat])
+        .map((d) => d.name);
+
+      return [catName, ...subNames];
+    });
+  }, [sortedCategories, innerData, outerData, categoryColorMap]);
+
   const innerFontSize = isMobile ? 10 : 14;
   const lineLength = isMobile ? 5 : 12;
   const tooltipFont = isMobile ? 12 : 14;
@@ -166,14 +187,15 @@ export const ChartPie = ({
         textStyle: { fontSize: isMobile ? 10 : 12 },
         // scroll the legend if it overflows
         type: "scroll",
-        // type: isMobile ? "scroll" : undefined,
         width: isMobile ? "90%" : undefined,
+        data: legendData,
       },
     }),
     [
       innerData,
       outerData,
       padWidth,
+      legendData,
       isMobile,
       innerFontSize,
       lineLength,
