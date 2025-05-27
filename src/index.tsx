@@ -1,4 +1,3 @@
-import React from "react";
 import ReactDOM from "react-dom/client";
 import { setContext } from "@apollo/client/link/context";
 import {
@@ -13,11 +12,10 @@ import "react-toastify/dist/ReactToastify.min.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { AUTH_TOKEN } from "./constants";
-import '@fontsource/roboto/300.css';
-import '@fontsource/roboto/400.css';
-import '@fontsource/roboto/500.css';
-import '@fontsource/roboto/700.css';
-
+import "@fontsource/roboto/300.css";
+import "@fontsource/roboto/400.css";
+import "@fontsource/roboto/500.css";
+import "@fontsource/roboto/700.css";
 
 Sentry.init({
   dsn: "https://929958977f59ecef61084dbe1a6ec783@o4506037007810560.ingest.sentry.io/4506037011349504",
@@ -35,9 +33,8 @@ Sentry.init({
   replaysOnErrorSampleRate: 1.0, // If you're not already sampling the entire session, change the sample rate to 100% when sampling sessions where errors occur.
 });
 
-
 const apiUrl =
-  process.env.NODE_ENV === "production"
+  import.meta.env.MODE === "production"
     ? "https://monthly-app-8iesq.ondigitalocean.app/api"
     : "http://localhost:3001";
 

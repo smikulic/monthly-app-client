@@ -4,7 +4,7 @@ import "./welcome-page-container.css";
 
 export const WelcomePageContainer = () => {
   const signInUrl =
-    process.env.NODE_ENV === "production"
+    import.meta.env.MODE === "production"
       ? "https://app.yourmonthly.app/"
       : "http://localhost:3000/";
 

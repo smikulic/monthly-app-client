@@ -112,7 +112,7 @@ function App() {
 
   const subdomain = window.location.hostname.split(".").slice(0, -2).join(".");
   const isAppSubdomain = subdomain === "app";
-  const isDevelopment = process.env.NODE_ENV === "development";
+  const isDevelopment = import.meta.env.MODE === "development";
 
   return (
     <div className="App">

@@ -1,4 +1,3 @@
-import React from "react";
 import { render, fireEvent, waitFor, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { MockedProvider } from "@apollo/client/testing";
@@ -8,6 +7,7 @@ import {
   CREATE_CATEGORY_MUTATION,
   UPDATE_CATEGORY_MUTATION,
 } from "../categories-list/categories-list-queries";
+import { describe, expect, it, vi } from "vitest";
 
 // Mock mutations and any other external calls
 const createCategoryMock = {
@@ -49,9 +49,9 @@ const updateCategoryMock = {
 
 const mocks = [createCategoryMock, updateCategoryMock];
 
-jest.mock("react-toastify", () => ({
+vi.mock("react-toastify", () => ({
   toast: {
-    success: jest.fn(),
+    success: vi.fn(),
   },
 }));
 
@@ -64,7 +64,7 @@ describe("CategoryFormFactory", () => {
   it("renders create form when no formData is passed", () => {
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
-        <CategoryFormFactory open={true} closeForm={jest.fn()} />
+        <CategoryFormFactory open={true} closeForm={vi.fn()} />
       </MockedProvider>
     );
 
@@ -77,7 +77,7 @@ describe("CategoryFormFactory", () => {
       <MockedProvider mocks={mocks} addTypename={false}>
         <CategoryFormFactory
           open={true}
-          closeForm={jest.fn()}
+          closeForm={vi.fn()}
           formData={categoryData}
         />
       </MockedProvider>
@@ -90,7 +90,7 @@ describe("CategoryFormFactory", () => {
   it("submits the form and calls createCategory mutation when in create mode", async () => {
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
-        <CategoryFormFactory open={true} closeForm={jest.fn()} />
+        <CategoryFormFactory open={true} closeForm={vi.fn()} />
       </MockedProvider>
     );
 
@@ -113,7 +113,7 @@ describe("CategoryFormFactory", () => {
       <MockedProvider mocks={[updateCategoryMock]} addTypename={false}>
         <CategoryFormFactory
           open={true}
-          closeForm={jest.fn()}
+          closeForm={vi.fn()}
           formData={categoryData}
         />
       </MockedProvider>
