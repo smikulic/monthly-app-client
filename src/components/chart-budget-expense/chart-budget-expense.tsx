@@ -1,5 +1,20 @@
 import { useContext, useMemo } from "react";
-import ReactECharts from "echarts-for-react";
+import ReactEChartsCore from "echarts-for-react/lib/core";
+import * as echarts from "echarts/core";
+
+// charts
+import { LineChart } from "echarts/charts";
+
+// components
+import {
+  TooltipComponent,
+  LegendComponent,
+  GridComponent,
+} from "echarts/components";
+
+// renderer
+import { CanvasRenderer } from "echarts/renderers";
+
 import { useTheme } from "@mui/material";
 import { UserContext } from "@/App";
 import { months } from "@/constants";
@@ -12,6 +27,15 @@ import {
 import { HomeChartTotalValueStyled } from "@/components/home-page/home-page-style";
 import { Typography } from "@/components/ui/Typography";
 import { Box } from "@/components/ui/Box";
+
+// register only what we need
+echarts.use([
+  LineChart,
+  TooltipComponent,
+  LegendComponent,
+  GridComponent,
+  CanvasRenderer,
+]);
 
 export const ChartBudgetExpense = ({
   totalBudgetAmount,
@@ -117,7 +141,8 @@ export const ChartBudgetExpense = ({
         </Typography>
       </Box>
 
-      <ReactECharts
+      <ReactEChartsCore
+        echarts={echarts}
         option={option}
         style={{ width: "100%", height: 300 }}
         opts={{ renderer: "canvas" }}

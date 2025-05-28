@@ -1,9 +1,17 @@
 import { useContext, useMemo } from "react";
-import ReactECharts from "echarts-for-react";
+import ReactEChartsCore from "echarts-for-react/lib/core";
+import * as echarts from "echarts/core";
+import { PieChart } from "echarts/charts";
+import { TooltipComponent, LegendComponent } from "echarts/components";
+import { CanvasRenderer } from "echarts/renderers";
+
 import { useMediaQuery, useTheme } from "@mui/material";
 import { CategoryExpenseTotal } from "@/generated/graphql";
 import { UserContext } from "@/App";
 import { formatAmount } from "@/utils/format";
+
+// register only the modules we need
+echarts.use([PieChart, TooltipComponent, LegendComponent, CanvasRenderer]);
 
 type ChartPieProps = {
   data: CategoryExpenseTotal[];
@@ -203,7 +211,8 @@ export const ChartPie = ({
   );
 
   return (
-    <ReactECharts
+    <ReactEChartsCore
+      echarts={echarts}
       option={option}
       style={{ width, height }}
       opts={{ renderer: "canvas" }}
