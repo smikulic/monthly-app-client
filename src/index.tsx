@@ -15,7 +15,7 @@ import { AUTH_TOKEN } from "./constants";
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
-import "@fontsource/roboto/700.css";
+// import "@fontsource/roboto/700.css";
 
 Sentry.init({
   dsn: "https://929958977f59ecef61084dbe1a6ec783@o4506037007810560.ingest.sentry.io/4506037011349504",
