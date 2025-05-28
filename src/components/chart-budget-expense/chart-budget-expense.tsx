@@ -120,6 +120,7 @@ export const ChartBudgetExpense = ({
           variant="body1"
           fontSize="16px"
           color="primary.contrastText"
+          component="div"
         >
           <HomeChartTotalValueStyled>
             <div>

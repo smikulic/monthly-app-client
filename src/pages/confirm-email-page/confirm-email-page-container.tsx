@@ -1,6 +1,6 @@
 // src/components/confirm-email/ConfirmEmailPageContainer.tsx
 import React, { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router";
 import { gql, useMutation } from "@apollo/client";
 import { toast } from "react-toastify";
 import { AUTH_TOKEN, AUTH_TOKEN_USER } from "../../constants";

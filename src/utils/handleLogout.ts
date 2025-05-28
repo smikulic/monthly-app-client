@@ -1,4 +1,4 @@
-import { AUTH_TOKEN, AUTH_TOKEN_USER } from "../constants";
+import { AUTH_TOKEN, AUTH_TOKEN_USER } from "@/constants";
 
 export const handleLogout = () => {
   localStorage.removeItem(AUTH_TOKEN);
