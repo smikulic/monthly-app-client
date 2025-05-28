@@ -1,13 +1,13 @@
 import { defineConfig } from "vitest/config";
 import compress from "vite-plugin-compression";
-import visualizer from "rollup-plugin-visualizer";
+// import visualizer from "rollup-plugin-visualizer";
 import react from "@vitejs/plugin-react";
 import path from "path";
 
 export default defineConfig({
   plugins: [
     react(),
-    visualizer({ filename: 'dist/stats.html', gzipSize: true, brotliSize: true }),
+    // visualizer({ filename: 'dist/stats.html', gzipSize: true, brotliSize: true }),
     compress({ algorithm: "brotliCompress" }),
     compress({ algorithm: "gzip" }),
   ],
