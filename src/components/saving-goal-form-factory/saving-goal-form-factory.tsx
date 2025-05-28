@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import TextField from "@mui/material/TextField";
 import { toast } from "react-toastify";
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
@@ -8,8 +7,9 @@ import {
   SavingGoal,
   useCreateSavingGoalMutation,
   useUpdateSavingGoalMutation,
-} from "../../generated/graphql";
+} from "@/generated/graphql";
 import { Alert } from "@mui/material";
+import { TextFieldStyled } from "@/shared";
 
 interface FormProps {
   open: boolean;
@@ -124,7 +124,7 @@ export const SavingGoalFormFactory = ({
       closeForm={closeForm}
       formAction={() => handleFormAction()}
     >
-      <TextField
+      <TextFieldStyled
         required
         id="savingGoalName"
         label="Name"
@@ -134,7 +134,7 @@ export const SavingGoalFormFactory = ({
         value={savingGoalName}
         onChange={(e) => setSavingGoalName(e.target.value)}
       />
-      <TextField
+      <TextFieldStyled
         required
         id="savingGoalAmount"
         label="How much do you estimate you goal costs?"
@@ -144,7 +144,7 @@ export const SavingGoalFormFactory = ({
         value={savingGoalAmount}
         onChange={(e) => setSavingGoalAmount(Number(e.target.value))}
       />
-      <TextField
+      <TextFieldStyled
         id="savingGoalInitialAmount"
         label="How much did you save so far?"
         size="small"

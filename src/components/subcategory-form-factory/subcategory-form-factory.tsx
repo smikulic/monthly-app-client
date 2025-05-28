@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import TextField from "@mui/material/TextField";
+import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -9,15 +8,11 @@ import {
   useUpdateSubcategoryMutation,
   Subcategory,
   Category,
-} from "../../generated/graphql";
+} from "@/generated/graphql";
 import { FormDialog } from "../form-dialog/form-dialog";
-import {
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-} from "@mui/material";
+import { FormControl, InputLabel, SelectChangeEvent } from "@mui/material";
+import { SelectStyled, TextFieldStyled } from "@/shared";
+import { MenuItem } from "@/components/ui/MenuItem";
 
 const useSubcategoryForm = (
   type: "create" | "update",
@@ -133,8 +128,7 @@ export const SubcategoryFormFactory = ({
     >
       {type === "update" && (
         <FormControl size="small" margin="dense">
-          <InputLabel>Category</InputLabel>
-          <Select
+          <SelectStyled
             required
             id="category"
             data-testid="category"
@@ -148,10 +142,10 @@ export const SubcategoryFormFactory = ({
                 {category.name}
               </MenuItem>
             ))}
-          </Select>
+          </SelectStyled>
         </FormControl>
       )}
-      <TextField
+      <TextFieldStyled
         required
         id="subcategoryName"
         label="Name"
@@ -161,7 +155,7 @@ export const SubcategoryFormFactory = ({
         value={subcategoryName}
         onChange={(e) => setSubcategoryName(e.target.value)}
       />
-      <TextField
+      <TextFieldStyled
         required
         id="subcategoryBudget"
         label="Budget"

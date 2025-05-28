@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import TextField from "@mui/material/TextField";
+import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import Alert from "@mui/material/Alert";
 import {
@@ -8,6 +7,7 @@ import {
   Category,
 } from "../../generated/graphql";
 import { FormDialog } from "../form-dialog/form-dialog";
+import { TextFieldStyled } from "@/shared";
 
 interface FormProps {
   open: boolean;
@@ -86,7 +86,7 @@ export const CategoryFormFactory = ({
       closeForm={closeForm}
       formAction={() => handleFormAction()}
     >
-      <TextField
+      <TextFieldStyled
         required
         id="categoryName"
         label="Name"
