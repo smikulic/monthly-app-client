@@ -1,5 +1,8 @@
 import { Tab, TabProps, Tabs, TabsProps } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { SelectField } from "./components/ui/Select";
+import { TextField } from "./components/ui/TextField";
+import shadows from "@mui/material/styles/shadows";
 
 export const ListItemStyled = styled("div")({
   display: "flex",
@@ -49,22 +52,65 @@ export const SubcategoryListItemStyled = styled(ListItemStyled, {
   },
 }));
 
-export const ProminentButtonStyled = styled("div")(({ theme }) => ({
-  padding: "8px 16px",
-  display: "flex",
-  alignItems: "center",
-  height: "40px",
-  fontSize: "16px",
-  color: theme.palette.primary.contrastText,
-  border: `1px solid ${theme.palette.primary.contrastText}`,
-  background: theme.palette.primary.main,
-  borderRadius: "10px",
-  cursor: "pointer",
+interface ProminentButtonProps {
+  textCenter?: boolean;
+  disabled?: boolean;
+  color?: "primary" | "error";
+  outline?: boolean;
+}
 
-  "&:hover": {
-    opacity: 0.7,
-  },
-}));
+export const ProminentButtonStyled = styled("div")<ProminentButtonProps>(
+  ({ theme, textCenter, disabled, color = "primary", outline = false }) => {
+    const palette = theme.palette[color];
+
+    // Determine colors based on disabled and outline flags
+    let textColor: string;
+    let bgColor: string;
+    let borderColor: string;
+
+    if (disabled) {
+      // disabled state overrides outline
+      textColor = theme.palette.action.disabled;
+      bgColor = theme.palette.action.disabledBackground;
+      borderColor = theme.palette.action.disabled;
+    } else if (outline) {
+      // outline variant
+      textColor = palette.main;
+      bgColor = "transparent";
+      borderColor = palette.main;
+    } else {
+      // filled variant
+      textColor = palette.contrastText;
+      bgColor = palette.main;
+      borderColor = palette.contrastText;
+    }
+
+    return {
+      padding: "8px 16px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: textCenter ? "center" : "flex-start",
+      textAlign: textCenter ? "center" : "left",
+      height: "40px",
+      fontSize: "16px",
+
+      color: textColor,
+      background: bgColor,
+      border: `1px solid ${borderColor}`,
+      borderRadius: "10px",
+
+      cursor: disabled ? "not-allowed" : "pointer",
+      pointerEvents: disabled ? "none" : "auto",
+      opacity: disabled ? 0.5 : 1,
+
+      "&:hover": disabled
+        ? {}
+        : {
+            opacity: 0.7,
+          },
+    };
+  }
+);
 
 export const FooterPaddingStyled = styled("div")({
   marginBottom: "56px",
@@ -120,5 +166,45 @@ export const TabStyled = styled((props: TabProps) => (
     "&.Mui-selected": {
       background: theme.palette.primary.main,
     },
+  },
+}));
+
+export const SelectStyled = styled(SelectField)(({ theme }) => ({
+  height: "40px",
+  borderRadius: "10px",
+  // style the OutlinedInput root
+  "& .MuiOutlinedInput-root": {
+    height: "100%",
+    borderRadius: "10px",
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.primary.contrastText,
+    border: `1px solid ${theme.palette.primary.contrastText}`,
+    // the outline itself
+    "& fieldset": {
+      borderColor: theme.palette.primary.contrastText,
+    },
+    "&:hover fieldset": {
+      opacity: 0.7,
+    },
+    // ensure the select arrow is also light
+    "& .MuiSelect-icon": {
+      color: theme.palette.primary.contrastText,
+    },
+    // pad the “display area” of the select to match your button
+    "& .MuiSelect-select": {
+      padding: "8px 16px",
+      display: "flex",
+      alignItems: "center",
+    },
+  },
+}));
+
+export const TextFieldStyled = styled(TextField)(({ theme }) => ({
+  marginBottom: 0,
+  height: "40px",
+
+  "& .MuiOutlinedInput-root": {
+    height: "40px",
+    borderRadius: "10px",
   },
 }));

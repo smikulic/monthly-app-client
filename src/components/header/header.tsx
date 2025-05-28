@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button, ListItemIcon, Menu } from "@mui/material";
-import { Logout, AccountCircle } from "@mui/icons-material";
+import { Logout, AccountCircle, AssessmentOutlined } from "@mui/icons-material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import MenuIcon from "@mui/icons-material/Menu";
 import { AUTH_TOKEN_USER } from "@/constants";
@@ -61,6 +61,12 @@ export const Header = ({ onLogout }: { onLogout: () => void }) => {
             <AccountCircle fontSize="small" />
           </ListItemIcon>
           Profile
+        </MenuItem>
+        <MenuItem onClick={() => navigate("/reports")}>
+          <ListItemIcon>
+            <AssessmentOutlined fontSize="small" />
+          </ListItemIcon>
+          Reports
         </MenuItem>
         <MenuItem onClick={onLogout}>
           <ListItemIcon>

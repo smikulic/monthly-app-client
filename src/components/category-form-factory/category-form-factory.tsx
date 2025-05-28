@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
-import TextField from "@mui/material/TextField";
+import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import Alert from "@mui/material/Alert";
 import {
   useCreateCategoryMutation,
   useUpdateCategoryMutation,
   Category,
-} from "../../generated/graphql";
+} from "@/generated/graphql";
+import { TextFieldStyled } from "@/shared";
+import { Alert } from "@/components/ui/Alert";
 import { FormDialog } from "../form-dialog/form-dialog";
 
 interface FormProps {
@@ -86,7 +86,7 @@ export const CategoryFormFactory = ({
       closeForm={closeForm}
       formAction={() => handleFormAction()}
     >
-      <TextField
+      <TextFieldStyled
         required
         id="categoryName"
         label="Name"

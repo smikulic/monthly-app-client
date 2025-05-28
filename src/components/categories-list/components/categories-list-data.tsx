@@ -1,17 +1,17 @@
 import React, { Dispatch, SetStateAction } from "react";
-import { Category, Subcategory } from "../../../generated/graphql";
-import { ListAddField } from "../../list-add-field/list-add-field";
-import { formatAmount } from "../../../utils/format";
-import { AnchorActionDropdownElProps } from "../../../hooks/useActionDropdown";
+import { Category, Subcategory } from "@/generated/graphql";
+import { UserContext } from "@/App";
+import { formatAmount } from "@/utils/format";
+import { AnchorActionDropdownElProps } from "@/hooks/useActionDropdown";
+import { MainListItemStyled } from "@/shared";
 import { CategorySubcategoriesList } from "./category-subcategories-list";
-import { MainListItemStyled } from "../../../shared";
 import { ListItemHeader } from "../../list-item-header/list-item-header";
+import { ListAddField } from "../../list-add-field/list-add-field";
+import { IconMenu } from "../../icon-menu/icon-menu";
 import {
   CategoryAmountStyled,
   CategoryDetailsStyled,
 } from "../categories-list-style";
-import { IconMenu } from "../../icon-menu/icon-menu";
-import { UserContext } from "../../../App";
 
 interface Props {
   categories: Category[];

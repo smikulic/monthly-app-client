@@ -1,19 +1,19 @@
 import React from "react";
 import { differenceInCalendarMonths } from "date-fns";
-import { SavingGoal, useDeleteSavingGoalMutation } from "@/generated/graphql";
 import { toast } from "react-toastify";
+import { SavingGoal, useDeleteSavingGoalMutation } from "@/generated/graphql";
+import { UserContext } from "@/App";
 import { formatAmount } from "@/utils/format";
 import { useActionDropdown } from "@/hooks/useActionDropdown";
 import { MainListItemStyled } from "@/shared";
+import { Box } from "@/components/ui/Box";
+import { Typography } from "@/components/ui/Typography";
 import { CategoryDetailsStyled } from "../categories-list/categories-list-style";
 import { SavingGoalItemDetails } from "../saving-goal-item-details/saving-goal-item-details";
 import { ProgressBar } from "../progress-bar/progress-bar";
 import { IconMenu } from "../icon-menu/icon-menu";
 import { CategoriesListLoading } from "../categories-list/components/categories-list-loading";
 import SavingGoalFormFactory from "../saving-goal-form-factory/saving-goal-form-factory";
-import { Box } from "@/components/ui/Box";
-import { Typography } from "@/components/ui/Typography";
-import { UserContext } from "@/App";
 
 interface Props {
   loading: boolean;

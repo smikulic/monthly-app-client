@@ -1,15 +1,15 @@
 import React from "react";
-import { Maybe, Subcategory } from "../../../generated/graphql";
-import { SubcategoryListItemStyled } from "../../../shared";
+import { Maybe, Subcategory } from "@/generated/graphql";
+import { UserContext } from "@/App";
+import { formatAmount } from "@/utils/format";
+import { AnchorActionDropdownElProps } from "@/hooks/useActionDropdown";
+import { SubcategoryListItemStyled } from "@/shared";
 import { ListItemHeader } from "../../list-item-header/list-item-header";
-import { formatAmount } from "../../../utils/format";
-import { AnchorActionDropdownElProps } from "../../../hooks/useActionDropdown";
+import { IconMenu } from "../../icon-menu/icon-menu";
 import {
   CategoryAmountStyled,
   CategoryDetailsStyled,
 } from "../categories-list-style";
-import { IconMenu } from "../../icon-menu/icon-menu";
-import { UserContext } from "../../../App";
 
 interface Props {
   subcategories: Subcategory[];

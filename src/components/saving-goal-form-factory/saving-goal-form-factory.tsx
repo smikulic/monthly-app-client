@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react";
-import TextField from "@mui/material/TextField";
 import { toast } from "react-toastify";
-import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { FormDialog } from "../form-dialog/form-dialog";
 import {
   SavingGoal,
   useCreateSavingGoalMutation,
   useUpdateSavingGoalMutation,
-} from "../../generated/graphql";
-import { Alert } from "@mui/material";
+} from "@/generated/graphql";
+import { TextFieldStyled } from "@/shared";
+import { DatePickerStyled } from "@/components/ui/DatePickerStyled";
+import { Alert } from "@/components/ui/Alert";
+import { FormDialog } from "../form-dialog/form-dialog";
 
 interface FormProps {
   open: boolean;
@@ -124,7 +123,7 @@ export const SavingGoalFormFactory = ({
       closeForm={closeForm}
       formAction={() => handleFormAction()}
     >
-      <TextField
+      <TextFieldStyled
         required
         id="savingGoalName"
         label="Name"
@@ -134,7 +133,7 @@ export const SavingGoalFormFactory = ({
         value={savingGoalName}
         onChange={(e) => setSavingGoalName(e.target.value)}
       />
-      <TextField
+      <TextFieldStyled
         required
         id="savingGoalAmount"
         label="How much do you estimate you goal costs?"
@@ -144,7 +143,7 @@ export const SavingGoalFormFactory = ({
         value={savingGoalAmount}
         onChange={(e) => setSavingGoalAmount(Number(e.target.value))}
       />
-      <TextField
+      <TextFieldStyled
         id="savingGoalInitialAmount"
         label="How much did you save so far?"
         size="small"
@@ -153,15 +152,13 @@ export const SavingGoalFormFactory = ({
         value={savingGoalInitialAmount}
         onChange={(e) => setSavingGoalInitialAmount(Number(e.target.value))}
       />
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <DatePicker
-          label="Goal date"
-          value={savingGoalDate}
-          onChange={(newValue) =>
-            newValue ? setSavingGoalDate(newValue) : null
-          }
-        />
-      </LocalizationProvider>
+      <DatePickerStyled
+        label="Goal date"
+        value={savingGoalDate}
+        onChange={(newValue: any) =>
+          newValue ? setSavingGoalDate(newValue) : null
+        }
+      />
 
       {type === "create" && (
         <>

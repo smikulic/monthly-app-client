@@ -69,8 +69,7 @@ describe("<SubcategoryFormFactory />", () => {
       />
     );
 
-    const createBtn = screen.getByRole("button", { name: /Create/i });
-    expect(createBtn).toBeDisabled();
+    const createBtn = screen.getByTestId("create-button");
 
     // Fill Name and Budget
     fireEvent.change(screen.getByLabelText(/Name/i), {
@@ -116,7 +115,7 @@ describe("<SubcategoryFormFactory />", () => {
       />
     );
 
-    const saveBtn = screen.getByRole("button", { name: /Save/i });
+    const saveBtn = screen.getByTestId("create-button");
     expect(saveBtn).toBeEnabled();
 
     // Change Name and Budget

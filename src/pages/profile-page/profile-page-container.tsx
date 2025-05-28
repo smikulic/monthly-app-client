@@ -8,11 +8,6 @@ import {
   User,
   useUpdateUserMutation,
 } from "@/generated/graphql";
-import {
-  DangerButton,
-  OutlineButton,
-  PrimaryButton,
-} from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import {
   Dialog,
@@ -22,9 +17,9 @@ import {
   DialogTitle,
 } from "@/components/ui/Dialog";
 import { MenuItem } from "@/components/ui/MenuItem";
-import { SelectField } from "@/components/ui/Select";
 import { TextField } from "@/components/ui/TextField";
 import { Typography } from "@/components/ui/Typography";
+import { ProminentButtonStyled, SelectStyled, TextFieldStyled } from "@/shared";
 
 export const ProfilePageContainer = ({
   userData,
@@ -63,8 +58,8 @@ export const ProfilePageContainer = ({
     <>
       <Container>
         <Typography variant="h5">Profile information</Typography>
-        <TextField label={userData.email} disabled />
-        <SelectField
+        <TextFieldStyled placeholder={userData.email} disabled />
+        <SelectStyled
           id="userCurrency"
           label="Currency"
           value={currency}
@@ -80,15 +75,16 @@ export const ProfilePageContainer = ({
               {opt.value} ({opt.label})
             </MenuItem>
           ))}
-        </SelectField>
-        <PrimaryButton
+        </SelectStyled>
+        <ProminentButtonStyled
           onClick={() =>
             updateUser({ variables: { id: userData.id, currency } })
           }
           disabled={currency === userData.currency}
+          textCenter
         >
           Save
-        </PrimaryButton>
+        </ProminentButtonStyled>
       </Container>
 
       <Container>
@@ -98,9 +94,14 @@ export const ProfilePageContainer = ({
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
           Permanently delete your account and all data.
         </Typography>
-        <OutlineButton color="error" onClick={() => setOpenDialog(true)}>
+        <ProminentButtonStyled
+          onClick={() => setOpenDialog(true)}
+          color="error"
+          textCenter
+          outline
+        >
           Delete my account
-        </OutlineButton>
+        </ProminentButtonStyled>
 
         <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
           <DialogTitle>Confirm account deletion</DialogTitle>
@@ -110,12 +111,17 @@ export const ProfilePageContainer = ({
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <PrimaryButton onClick={() => setOpenDialog(false)}>
+            <ProminentButtonStyled onClick={() => setOpenDialog(false)}>
               Cancel
-            </PrimaryButton>
-            <DangerButton onClick={() => deleteAccount()} disabled={deleting}>
+            </ProminentButtonStyled>
+            <ProminentButtonStyled
+              onClick={() => deleteAccount()}
+              disabled={deleting}
+              color="error"
+              outline
+            >
               {deleting ? "Deleting…" : "Delete my account"}
-            </DangerButton>
+            </ProminentButtonStyled>
           </DialogActions>
         </Dialog>
       </Container>

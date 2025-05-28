@@ -1,23 +1,16 @@
-import React, { useState, useEffect } from "react";
-import TextField from "@mui/material/TextField";
+import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { FormControl, SelectChangeEvent } from "@mui/material";
 import {
   useCreateSubcategoryMutation,
   useUpdateSubcategoryMutation,
   Subcategory,
   Category,
-} from "../../generated/graphql";
+} from "@/generated/graphql";
+import { SelectStyled, TextFieldStyled } from "@/shared";
+import { MenuItem } from "@/components/ui/MenuItem";
+import { DatePickerStyled } from "@/components/ui/DatePickerStyled";
 import { FormDialog } from "../form-dialog/form-dialog";
-import {
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-} from "@mui/material";
 
 const useSubcategoryForm = (
   type: "create" | "update",
@@ -132,36 +125,35 @@ export const SubcategoryFormFactory = ({
       formAction={handleFormAction}
     >
       {type === "update" && (
-        <FormControl size="small" margin="dense">
-          <InputLabel>Category</InputLabel>
-          <Select
-            required
-            id="category"
-            data-testid="category"
-            label="Category"
-            margin="none"
-            value={categoryId}
-            onChange={handleCategoryChange}
-          >
-            {categories.map((category: Category) => (
-              <MenuItem key={category.id} value={category.id}>
-                {category.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+        <SelectStyled
+          required
+          id="category"
+          data-testid="category"
+          label="Category"
+          margin="none"
+          value={categoryId}
+          onChange={handleCategoryChange}
+        >
+          {categories.map((category: Category) => (
+            <MenuItem key={category.id} value={category.id}>
+              {category.name}
+            </MenuItem>
+          ))}
+        </SelectStyled>
       )}
-      <TextField
-        required
-        id="subcategoryName"
-        label="Name"
-        size="small"
-        margin="none"
-        autoComplete="off"
-        value={subcategoryName}
-        onChange={(e) => setSubcategoryName(e.target.value)}
-      />
-      <TextField
+      <FormControl size="small" margin="dense">
+        <TextFieldStyled
+          required
+          id="subcategoryName"
+          label="Name"
+          size="small"
+          margin="none"
+          autoComplete="off"
+          value={subcategoryName}
+          onChange={(e) => setSubcategoryName(e.target.value)}
+        />
+      </FormControl>
+      <TextFieldStyled
         required
         id="subcategoryBudget"
         label="Budget"
@@ -171,13 +163,12 @@ export const SubcategoryFormFactory = ({
         value={subcategoryBudget}
         onChange={(e) => setSubcategoryBudget(Number(e.target.value))}
       />
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <DatePicker
-          label="Rollover Date"
-          value={subcategoryRolloverDate}
-          onChange={(date) => date && setSubcategoryRolloverDate(date)}
-        />
-      </LocalizationProvider>
+
+      <DatePickerStyled
+        label="Rollover Date"
+        value={subcategoryRolloverDate}
+        onChange={(date: any) => date && setSubcategoryRolloverDate(date)}
+      />
     </FormDialog>
   );
 };

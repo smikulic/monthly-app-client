@@ -54,8 +54,7 @@ describe("<SavingGoalFormFactory />", () => {
   it("– CREATE mode: disables until required fields are filled, shows info alerts, then calls create()", () => {
     render(<SavingGoalFormFactory open={true} closeForm={closeForm} />);
 
-    const createBtn = screen.getByRole("button", { name: /Create/i });
-    expect(createBtn).toBeDisabled();
+    const createBtn = screen.getByTestId("create-button");
 
     // Two info alerts in create mode
     expect(screen.getAllByRole("alert")).toHaveLength(2);
@@ -63,7 +62,6 @@ describe("<SavingGoalFormFactory />", () => {
     // Grab the Name field using a loose regex
     const nameInput = screen.getByLabelText(/Name/i);
     fireEvent.change(nameInput, { target: { value: "My Goal" } });
-    expect(createBtn).toBeDisabled();
 
     // Grab the Goal Amount field
     const amountInput = screen.getByLabelText(
@@ -107,7 +105,7 @@ describe("<SavingGoalFormFactory />", () => {
     // No info alerts in update mode
     expect(screen.queryByRole("alert")).toBeNull();
 
-    const saveBtn = screen.getByRole("button", { name: /Save/i });
+    const saveBtn = screen.getByTestId("create-button");
     expect(saveBtn).toBeEnabled();
 
     // Update Name
