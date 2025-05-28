@@ -15,6 +15,7 @@ import { HomePageContainer } from "./pages/home-page/home-page-container";
 import { ExpensesPageContainer } from "./pages/expenses-page/expenses-page-container";
 import { CategoriesPageContainer } from "./pages/categories-page/categories-page-container";
 import { SavingGoalsPageContainer } from "./pages/saving-goals-page/saving-goals-page-container";
+import { ConfirmEmailPageContainer } from "./pages/confirm-email-page/confirm-email-page-container";
 import { Header } from "./components/header/header";
 import { Footer } from "./components/footer/footer";
 import { AUTH_TOKEN, AUTH_TOKEN_USER } from "./constants";
@@ -136,6 +137,11 @@ function App() {
                 <Route
                   path="/reset-password"
                   element={<ResetPasswordPageContainer />}
+                />
+
+                <Route
+                  path="/confirm-email"
+                  element={<ConfirmEmailPageContainer />}
                 />
 
                 {!token && (
