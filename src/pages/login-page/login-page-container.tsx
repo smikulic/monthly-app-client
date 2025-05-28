@@ -57,7 +57,15 @@ export const LoginPageContainer = ({
       password: formState.password,
     },
     onError: (error) => {
-      toast.error(error.message);
+      // toast.error(error.message);
+      if (
+        error.message.includes("confirm your email") ||
+        error.message.includes("Email not confirmed")
+      ) {
+        toast.error("Please confirm your email first. Check your inbox.");
+      } else {
+        toast.error(error.message);
+      }
     },
     onCompleted: ({ login }) => {
       localStorage.setItem(AUTH_TOKEN, login?.token!);
@@ -76,11 +84,15 @@ export const LoginPageContainer = ({
       toast.error(error.message);
     },
     onCompleted: ({ signup }) => {
-      localStorage.setItem(AUTH_TOKEN, signup?.token!);
-      localStorage.setItem(AUTH_TOKEN_USER, signup?.user?.email!);
-      console.log("REGISTER");
-      window.location.replace("/");
+      console.log({ signup });
+      toast.success("Email with confirmation instructions is sent!");
     },
+    // onCompleted: ({ signup }) => {
+    //   localStorage.setItem(AUTH_TOKEN, signup?.token!);
+    //   localStorage.setItem(AUTH_TOKEN_USER, signup?.user?.email!);
+    //   console.log("REGISTER");
+    //   window.location.replace("/");
+    // },
   });
 
   const [resetPasswordRequestAction]: any = useResetPasswordRequestMutation({
