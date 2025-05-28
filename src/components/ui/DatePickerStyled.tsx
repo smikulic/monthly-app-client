@@ -1,8 +1,9 @@
 // src/components/ui/DatePickerStyled.tsx
-import { styled } from "@mui/system";
+import dayjs, { Dayjs } from "dayjs";
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { TextField } from "@mui/material";
+import { styled } from "@mui/system";
 
 // 1) Create a TextField styled exactly like your SelectStyled
 const DateFieldStyled = styled(TextField)(({ theme }) => ({
@@ -16,17 +17,31 @@ const DateFieldStyled = styled(TextField)(({ theme }) => ({
 }));
 
 // 2) Wrap DatePicker, exposing the same generic as the original
+
 export function DatePickerStyled<
   TDate = unknown,
   TView extends "year" | "month" | "day" = "day"
->(props: any) {
+>(props: {
+  value: Date | null;
+  onChange: (date: Date | null) => void;
+  label?: string;
+  // …any other DatePicker props you need
+}) {
+  const { value, onChange, ...other } = props;
+  const dayjsValue = value ? dayjs(value) : null;
+
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DatePicker
-        {...props}
-        slots={{
-          textField: DateFieldStyled,
+        {...other}
+        value={dayjsValue}
+        onChange={(newVal: Dayjs | null) => {
+          onChange(newVal ? newVal.toDate() : null);
         }}
+        // ← opt out of the new accessible DOM structure
+        enableAccessibleFieldDOMStructure={false}
+        // swap in your styled TextField
+        slots={{ textField: DateFieldStyled }}
       />
     </LocalizationProvider>
   );

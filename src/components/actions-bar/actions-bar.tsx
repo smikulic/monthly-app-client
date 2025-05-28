@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { format } from "date-fns";
+import dayjs from "dayjs";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import Switch from "@mui/material/Switch";
@@ -30,7 +30,7 @@ export const ActionsBar = ({
           {pageDate && onClickPrevious && onClickNext && (
             <MonthPaginationStyled>
               <ChevronLeftIcon fontSize="large" onClick={onClickPrevious} />
-              {format(pageDate, "MMM yyyy")}
+              {dayjs(pageDate).format("MMM YYYY")}
               <ChevronRightIcon fontSize="large" onClick={onClickNext} />
             </MonthPaginationStyled>
           )}

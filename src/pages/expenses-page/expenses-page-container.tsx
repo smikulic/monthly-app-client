@@ -1,12 +1,11 @@
-// import React, { useState } from "react";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useQuery } from "@apollo/client";
-import { format } from "date-fns";
-import { ExpensesList } from "../../components/expenses-list/expenses-list";
-import { GET_EXPENSES_LIST } from "../../components/expenses-list/expenses-list-queries";
-import { GET_CATEGORIES_LIST } from "../../components/categories-list/categories-list-queries";
-import { ActionsBar } from "../../components/actions-bar/actions-bar";
-import { getDecoratedCategoriesWithExpenses } from "../../utils/getDecoratedCategoriesWithExpenses";
+import dayjs from "dayjs";
+import { getDecoratedCategoriesWithExpenses } from "@/utils/getDecoratedCategoriesWithExpenses";
+import { ExpensesList } from "@/components/expenses-list/expenses-list";
+import { GET_EXPENSES_LIST } from "@/components/expenses-list/expenses-list-queries";
+import { GET_CATEGORIES_LIST } from "@/components/categories-list/categories-list-queries";
+import { ActionsBar } from "@/components/actions-bar/actions-bar";
 
 export const ExpensesPageContainer = ({
   pageDate,
@@ -19,7 +18,7 @@ export const ExpensesPageContainer = ({
 }) => {
   const [showRolloverBudget, setShowRolloverBudget] = useState(true);
 
-  const formattedDate = format(pageDate, "MM-dd-yyyy");
+  const formattedDate = dayjs(pageDate).format("MM-DD-YYYY");
 
   const {
     data: expensesData,
