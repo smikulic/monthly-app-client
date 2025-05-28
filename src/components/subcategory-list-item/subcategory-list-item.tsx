@@ -1,14 +1,14 @@
 import React, { useState } from "react";
+import { useQuery } from "@apollo/client";
 import { getMonth, getYear } from "date-fns";
-import { Expense } from "../../generated/graphql";
+import { Expense } from "@/generated/graphql";
+import { SubcategoryListItemStyled } from "@/shared";
+import { getRemainingRolloverBudget } from "@/utils/getRolloverBudget";
+import { GET_ALL_EXPENSES } from "../expenses-list/expenses-list-queries";
 import { ExpandedExpenses } from "../expanded-expenses/expanded-expenses";
 import { ListItemHeader } from "../list-item-header/list-item-header";
-import { getRemainingRolloverBudget } from "../../utils/getRolloverBudget";
 import { ListItemDetails } from "../list-item-details/list-item-details";
 import { SubcategoryDecoratedWithExpenses } from "../expenses-list/expenses-list";
-import { SubcategoryListItemStyled } from "../../shared";
-import { useQuery } from "@apollo/client";
-import { GET_ALL_EXPENSES } from "../expenses-list/expenses-list-queries";
 
 interface Props {
   subcategory: SubcategoryDecoratedWithExpenses;
@@ -65,14 +65,6 @@ export const SubcategoryListItem: React.FC<Props> = ({
   const expensesExist = totalSubcategoryExpenses > 0;
   const budgetAmount = subcategory.budgetAmount || 0;
 
-  // const rolloverBudgetAmount = getRolloverBudget({
-  //   currentDate,
-  //   rolloverDate,
-  //   budgetAmount,
-  // });
-  // const budgetValue = showRolloverBudget
-  //   ? rolloverBudgetAmount
-  //   : budgetAmount;
   const budgetValue = showRolloverBudget
     ? remainingRolloverBudget
     : budgetAmount;

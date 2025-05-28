@@ -1,6 +1,7 @@
 import { useContext, useMemo } from "react";
 import ReactECharts from "echarts-for-react";
 import { useTheme } from "@mui/material";
+import { UserContext } from "@/App";
 import { months } from "@/constants";
 import { formatAmount } from "@/utils/format";
 import {
@@ -11,7 +12,6 @@ import {
 import { HomeChartTotalValueStyled } from "@/components/home-page/home-page-style";
 import { Typography } from "@/components/ui/Typography";
 import { Box } from "@/components/ui/Box";
-import { UserContext } from "@/App";
 
 export const ChartBudgetExpense = ({
   totalBudgetAmount,

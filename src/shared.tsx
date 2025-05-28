@@ -171,6 +171,7 @@ export const TabStyled = styled((props: TabProps) => (
 
 export const SelectStyled = styled(SelectField)(({ theme }) => ({
   height: "40px",
+  borderRadius: "10px",
   // style the OutlinedInput root
   "& .MuiOutlinedInput-root": {
     height: "100%",

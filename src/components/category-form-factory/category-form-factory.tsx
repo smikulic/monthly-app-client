@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import Alert from "@mui/material/Alert";
 import {
   useCreateCategoryMutation,
   useUpdateCategoryMutation,
   Category,
-} from "../../generated/graphql";
-import { FormDialog } from "../form-dialog/form-dialog";
+} from "@/generated/graphql";
 import { TextFieldStyled } from "@/shared";
+import { Alert } from "@/components/ui/Alert";
+import { FormDialog } from "../form-dialog/form-dialog";
 
 interface FormProps {
   open: boolean;

@@ -1,7 +1,7 @@
 import React from "react";
-import { MainListItemStyled } from "../../../shared";
+import { MainListItemStyled } from "@/shared";
+import { Skeleton } from "@/components/ui/Skeleton";
 import { CategoryDetailsStyled } from "../categories-list-style";
-import { Skeleton } from "@mui/material";
 
 interface Props {
   height: number;

@@ -1,20 +1,16 @@
 import React, { useEffect, useState } from "react";
-import TextField from "@mui/material/TextField";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { useApolloClient } from "@apollo/client";
 import { toast } from "react-toastify";
+import { SelectChangeEvent } from "@mui/material";
 import {
   Expense,
   Subcategory,
   useUpdateExpenseMutation,
-} from "../../generated/graphql";
+} from "@/generated/graphql";
+import { SelectStyled, TextFieldStyled } from "@/shared";
+import { DatePickerStyled } from "@/components/ui/DatePickerStyled";
+import { MenuItem } from "@/components/ui/MenuItem";
 import { FormDialog } from "../form-dialog/form-dialog";
-import { useApolloClient } from "@apollo/client";
 
 interface Props {
   open: boolean;
@@ -84,7 +80,7 @@ export const UpdateExpenseForm: React.FC<Props> = ({
         })
       }
     >
-      <TextField
+      <TextFieldStyled
         required
         id="amount"
         label="Amount"
@@ -94,36 +90,33 @@ export const UpdateExpenseForm: React.FC<Props> = ({
         value={expenseAmount}
         onChange={(e) => setExpenseAmount(Number(e.target.value))}
       />
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <DatePicker
-          label="Date"
-          value={expenseDate}
-          onChange={(newValue) => (newValue ? setExpenseDate(newValue) : null)}
-        />
-      </LocalizationProvider>
+      <DatePickerStyled
+        label="Date"
+        value={expenseDate}
+        onChange={(newValue: any) =>
+          newValue ? setExpenseDate(newValue) : null
+        }
+      />
 
-      <FormControl size="small" margin="dense">
-        <InputLabel>Subcategory</InputLabel>
-        <Select
-          required
-          id="subcategory"
-          label="Subcategory"
-          margin="none"
-          value={expenseSubcategoryId}
-          onChange={(e: SelectChangeEvent) => {
-            setExpenseSubcategoryId(e.target.value);
-          }}
-        >
-          {subcategories.map((subcategory: Subcategory) => {
-            const subcategoryId = subcategory.id;
-            return (
-              <MenuItem key={subcategoryId} value={subcategoryId}>
-                {subcategory.name}
-              </MenuItem>
-            );
-          })}
-        </Select>
-      </FormControl>
+      <SelectStyled
+        required
+        id="subcategory"
+        label="Subcategory"
+        margin="none"
+        value={expenseSubcategoryId}
+        onChange={(e: SelectChangeEvent) => {
+          setExpenseSubcategoryId(e.target.value);
+        }}
+      >
+        {subcategories.map((subcategory: Subcategory) => {
+          const subcategoryId = subcategory.id;
+          return (
+            <MenuItem key={subcategoryId} value={subcategoryId}>
+              {subcategory.name}
+            </MenuItem>
+          );
+        })}
+      </SelectStyled>
     </FormDialog>
   );
 };

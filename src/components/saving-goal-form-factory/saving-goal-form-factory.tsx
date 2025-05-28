@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { FormDialog } from "../form-dialog/form-dialog";
 import {
   SavingGoal,
   useCreateSavingGoalMutation,
   useUpdateSavingGoalMutation,
 } from "@/generated/graphql";
-import { Alert } from "@mui/material";
 import { TextFieldStyled } from "@/shared";
+import { DatePickerStyled } from "@/components/ui/DatePickerStyled";
+import { Alert } from "@/components/ui/Alert";
+import { FormDialog } from "../form-dialog/form-dialog";
 
 interface FormProps {
   open: boolean;
@@ -153,15 +152,13 @@ export const SavingGoalFormFactory = ({
         value={savingGoalInitialAmount}
         onChange={(e) => setSavingGoalInitialAmount(Number(e.target.value))}
       />
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <DatePicker
-          label="Goal date"
-          value={savingGoalDate}
-          onChange={(newValue) =>
-            newValue ? setSavingGoalDate(newValue) : null
-          }
-        />
-      </LocalizationProvider>
+      <DatePickerStyled
+        label="Goal date"
+        value={savingGoalDate}
+        onChange={(newValue: any) =>
+          newValue ? setSavingGoalDate(newValue) : null
+        }
+      />
 
       {type === "create" && (
         <>

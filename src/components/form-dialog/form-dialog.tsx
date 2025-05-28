@@ -67,10 +67,10 @@ export const FormDialog: React.FC<Props> = ({
             {title}
           </Typography>
           <ProminentButtonStyled
-            // variant="contained"
             onClick={formAction}
             disabled={disabled}
             autoFocus
+            data-testid="create-button"
           >
             {formActionText}
           </ProminentButtonStyled>
