@@ -1,5 +1,4 @@
 import React from "react";
-import { differenceInCalendarMonths } from "date-fns";
 import { toast } from "react-toastify";
 import { SavingGoal, useDeleteSavingGoalMutation } from "@/generated/graphql";
 import { UserContext } from "@/App";
@@ -14,6 +13,7 @@ import { ProgressBar } from "../progress-bar/progress-bar";
 import { IconMenu } from "../icon-menu/icon-menu";
 import { CategoriesListLoading } from "../categories-list/components/categories-list-loading";
 import SavingGoalFormFactory from "../saving-goal-form-factory/saving-goal-form-factory";
+import dayjs from "dayjs";
 
 interface Props {
   loading: boolean;
@@ -62,13 +62,13 @@ export const SavingGoalsList: React.FC<Props> = ({
           const currentDate = new Date();
           const goalStartDate = new Date(Number(savingGoal.createdAt));
           const goalEndDate = new Date(Number(savingGoal.goalDate));
-          const savingRangeInMonths = differenceInCalendarMonths(
-            goalEndDate,
-            goalStartDate
+          const savingRangeInMonths = dayjs(goalEndDate).diff(
+            dayjs(goalStartDate),
+            "month"
           );
-          const monthsSaving = differenceInCalendarMonths(
-            currentDate,
-            goalStartDate
+          const monthsSaving = dayjs(currentDate).diff(
+            dayjs(goalStartDate),
+            "month"
           );
 
           const monthsLeftToSave = savingRangeInMonths - monthsSaving;

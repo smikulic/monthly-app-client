@@ -1,16 +1,16 @@
 import { useQuery } from "@apollo/client";
 import * as Sentry from "@sentry/react";
-import { format } from "date-fns";
-import { GET_CATEGORIES_LIST } from "@/components/categories-list/categories-list-queries";
-import { HomePage } from "@/components/home-page/home-page";
+import dayjs from "dayjs";
+import { SavingGoal } from "@/generated/graphql";
 import {
   GET_CHART_EXPENSES_LIST,
   GET_EXPENSES_LIST,
 } from "@/components/expenses-list/expenses-list-queries";
-import { ActionsBar } from "@/components/actions-bar/actions-bar";
+import { GET_CATEGORIES_LIST } from "@/components/categories-list/categories-list-queries";
 import { getChartData } from "@/utils/getChartData";
+import { HomePage } from "@/components/home-page/home-page";
+import { ActionsBar } from "@/components/actions-bar/actions-bar";
 import { GET_SAVING_GOALS_LIST } from "@/components/saving-goals-list/saving-goals-list-queries";
-import { SavingGoal } from "@/generated/graphql";
 
 export const HomePageContainer = ({
   pageDate,
@@ -21,7 +21,7 @@ export const HomePageContainer = ({
   onClickNext: () => void;
   onClickPrevious: () => void;
 }) => {
-  const formattedDate = format(pageDate, "MM-dd-yyyy");
+  const formattedDate = dayjs(pageDate).format("MM-DD-YYYY");
 
   const { data: expensesData, loading: loadingExpenses } = useQuery(
     GET_EXPENSES_LIST,

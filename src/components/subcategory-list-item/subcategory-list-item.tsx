@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useQuery } from "@apollo/client";
-import { getMonth, getYear } from "date-fns";
+import dayjs from "dayjs";
 import { Expense } from "@/generated/graphql";
 import { SubcategoryListItemStyled } from "@/shared";
 import { getRemainingRolloverBudget } from "@/utils/getRolloverBudget";
@@ -69,10 +69,12 @@ export const SubcategoryListItem: React.FC<Props> = ({
     ? remainingRolloverBudget
     : budgetAmount;
 
+  const current = dayjs(currentDate);
+  const rollover = dayjs(rolloverDate);
+
   const isCurrentDateMonthAfterOrEqual =
-    getYear(currentDate) > getYear(rolloverDate) ||
-    (getYear(currentDate) === getYear(rolloverDate) &&
-      getMonth(currentDate) >= getMonth(rolloverDate));
+    current.year() > rollover.year() ||
+    (current.year() === rollover.year() && current.month() >= rollover.month());
 
   return (
     <>

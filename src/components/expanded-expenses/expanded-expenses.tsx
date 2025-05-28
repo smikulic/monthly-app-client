@@ -1,16 +1,16 @@
 import React from "react";
-import { format } from "date-fns";
 import { toast } from "react-toastify";
-import { Expense, useDeleteExpenseMutation } from "../../generated/graphql";
-import { useActionDropdown } from "../../hooks/useActionDropdown";
+import { useApolloClient } from "@apollo/client";
+import dayjs from "dayjs";
+import { Expense, useDeleteExpenseMutation } from "@/generated/graphql";
+import { UserContext } from "@/App";
+import { useActionDropdown } from "@/hooks/useActionDropdown";
+import { formatAmount } from "@/utils/format";
 import {
   ExpenseFieldStyled,
   ExpenseListItemStyled,
 } from "./expanded-expenses-style";
-import { useApolloClient } from "@apollo/client";
 import { IconMenu } from "../icon-menu/icon-menu";
-import { UserContext } from "../../App";
-import { formatAmount } from "../../utils/format";
 
 interface Props {
   expenses: Expense[];
@@ -62,7 +62,7 @@ export const ExpandedExpenses: React.FC<Props> = ({
           <span key={expenseId}>
             <ExpenseListItemStyled>
               <ExpenseFieldStyled>
-                {format(expenseISODate, "dd MMM")} -{" "}
+                {dayjs(expenseISODate).format("d MMM")} -{" "}
                 {formatAmount(expense.amount, userCurrency)}
               </ExpenseFieldStyled>
               <IconMenu
