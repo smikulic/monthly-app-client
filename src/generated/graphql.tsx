@@ -208,6 +208,7 @@ export type Query = {
   category: Category;
   chartExpenses: ChartExpensesPayload;
   expenses: Array<Expense>;
+  generateReport: Scalars['String'];
   me: User;
   savingGoals: Array<SavingGoal>;
   subcategories: Array<Subcategory>;
@@ -229,6 +230,11 @@ export type QueryChartExpensesArgs = {
 
 export type QueryExpensesArgs = {
   filter?: InputMaybe<ExpenseFilterInput>;
+};
+
+
+export type QueryGenerateReportArgs = {
+  year: Scalars['Int'];
 };
 
 
@@ -468,6 +474,13 @@ export type DeleteAccountMutationVariables = Exact<{ [key: string]: never; }>;
 
 
 export type DeleteAccountMutation = { __typename?: 'Mutation', deleteAccount: boolean };
+
+export type GenerateReportQueryVariables = Exact<{
+  year: Scalars['Int'];
+}>;
+
+
+export type GenerateReportQuery = { __typename?: 'Query', generateReport: string };
 
 export type ResetPasswordMutationVariables = Exact<{
   token: Scalars['String'];
@@ -1419,6 +1432,39 @@ export function useDeleteAccountMutation(baseOptions?: Apollo.MutationHookOption
 export type DeleteAccountMutationHookResult = ReturnType<typeof useDeleteAccountMutation>;
 export type DeleteAccountMutationResult = Apollo.MutationResult<DeleteAccountMutation>;
 export type DeleteAccountMutationOptions = Apollo.BaseMutationOptions<DeleteAccountMutation, DeleteAccountMutationVariables>;
+export const GenerateReportDocument = gql`
+    query GenerateReport($year: Int!) {
+  generateReport(year: $year)
+}
+    `;
+
+/**
+ * __useGenerateReportQuery__
+ *
+ * To run a query within a React component, call `useGenerateReportQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGenerateReportQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGenerateReportQuery({
+ *   variables: {
+ *      year: // value for 'year'
+ *   },
+ * });
+ */
+export function useGenerateReportQuery(baseOptions: Apollo.QueryHookOptions<GenerateReportQuery, GenerateReportQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GenerateReportQuery, GenerateReportQueryVariables>(GenerateReportDocument, options);
+      }
+export function useGenerateReportLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GenerateReportQuery, GenerateReportQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GenerateReportQuery, GenerateReportQueryVariables>(GenerateReportDocument, options);
+        }
+export type GenerateReportQueryHookResult = ReturnType<typeof useGenerateReportQuery>;
+export type GenerateReportLazyQueryHookResult = ReturnType<typeof useGenerateReportLazyQuery>;
+export type GenerateReportQueryResult = Apollo.QueryResult<GenerateReportQuery, GenerateReportQueryVariables>;
 export const ResetPasswordDocument = gql`
     mutation ResetPassword($token: String!, $password: String!) {
   resetPassword(token: $token, password: $password) {

@@ -23,6 +23,7 @@ import { handleLogout } from "./utils/handleLogout";
 import { FooterPaddingStyled } from "./shared";
 import { PrivacyPageContainer } from "./pages/privacy-page/privacy-page-container";
 import { ProfilePageContainer } from "./pages/profile-page/profile-page-container";
+import { ReportsPageContainer } from "./pages/reports-page/reports-page-container";
 
 const muiTheme = createTheme({
   palette: {
@@ -211,6 +212,12 @@ function App() {
                             userData={userData?.me}
                             refetchUserData={refetchUserData}
                           />
+                        }
+                      />
+                      <Route
+                        path="/reports"
+                        element={
+                          <ReportsPageContainer userData={userData?.me} />
                         }
                       />
                     </Route>
