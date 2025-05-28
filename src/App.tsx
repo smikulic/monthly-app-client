@@ -1,11 +1,6 @@
 import React, { createContext, useState } from "react";
 import { Slide, ToastContainer } from "react-toastify";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Outlet,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Outlet } from "react-router";
 import { gql, ServerError, useQuery } from "@apollo/client";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { WelcomePageContainer } from "./pages/welcome-page/welcome-page-container";

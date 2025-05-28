@@ -1,6 +1,6 @@
 // src/components/ProfilePageContainer.tsx
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import { AUTH_TOKEN, AUTH_TOKEN_USER } from "@/constants";
 import {
