@@ -8,6 +8,7 @@ import { ChartPie } from "../chart-pie/chart-pie";
 import { Typography } from "@/components/ui/Typography";
 import { Box } from "@/components/ui/Box";
 import { Skeleton } from "@/components/ui/Skeleton";
+import { Insight } from "../insight/Insight";
 
 export const HomePage = ({
   loading,
@@ -28,7 +29,7 @@ export const HomePage = ({
   loadingChartExpenses: boolean;
   pageDate: Date;
 }) => {
-  // Tab state: 0 = Budget vs Expenses, 1 = Categories
+  // Tab state: 0 = Budget vs Expenses, 1 = Categories, 2 = Insight
   const [tabIndex, setTabIndex] = useState(0);
 
   const handleTabChange = (_: SyntheticEvent, newIndex: number) => {
@@ -76,6 +77,7 @@ export const HomePage = ({
         >
           <TabStyled label="Yearly expense" />
           <TabStyled label="Expense by category" />
+          <TabStyled label="Insight" />
         </TabsStyled>
 
         <Box sx={{ padding: 1 }}>
@@ -92,6 +94,7 @@ export const HomePage = ({
                   />
                 )}
                 {tabIndex === 1 && <ChartPie data={chartCategoriesData} />}
+                {tabIndex === 2 && <Insight pageDate={pageDate} />}
               </>
             )}
           {!loadingChartExpenses &&

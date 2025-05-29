@@ -54,6 +54,23 @@ export const GET_CHART_EXPENSES_LIST = gql`
   }
 `;
 
+export const GET_YEARLY_INSIGHT = gql`
+  query YearlyInsight($date: String!) {
+    yearlyInsight(filter: { date: $date }) {
+      yearly {
+        title
+        narrative
+        data
+      }
+      forecast {
+        title
+        narrative
+        data
+      }
+    }
+  }
+`;
+
 export const CREATE_EXPENSE_MUTATION = gql`
   mutation CreateExpense($subcategoryId: ID!, $amount: Int!, $date: String!) {
     createExpense(subcategoryId: $subcategoryId, amount: $amount, date: $date) {

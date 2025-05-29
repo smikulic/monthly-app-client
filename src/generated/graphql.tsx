@@ -13,6 +13,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  JSON: any;
 };
 
 export type AuthPayload = {
@@ -53,6 +54,13 @@ export type Expense = {
 
 export type ExpenseFilterInput = {
   date: Scalars['String'];
+};
+
+export type InsightPayload = {
+  __typename?: 'InsightPayload';
+  data: Scalars['JSON'];
+  narrative: Scalars['String'];
+  title: Scalars['String'];
 };
 
 export type Mutation = {
@@ -215,6 +223,7 @@ export type Query = {
   subcategory: Subcategory;
   user: User;
   users: Array<User>;
+  yearlyInsight: YearInsightsPayload;
 };
 
 
@@ -245,6 +254,11 @@ export type QuerySubcategoryArgs = {
 
 export type QueryUserArgs = {
   id: Scalars['ID'];
+};
+
+
+export type QueryYearlyInsightArgs = {
+  filter: ExpenseFilterInput;
 };
 
 export type SavingGoal = {
@@ -284,6 +298,12 @@ export type User = {
   expenses?: Maybe<Array<Maybe<Expense>>>;
   id: Scalars['ID'];
   password: Scalars['String'];
+};
+
+export type YearInsightsPayload = {
+  __typename?: 'YearInsightsPayload';
+  forecast: InsightPayload;
+  yearly: InsightPayload;
 };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
@@ -372,6 +392,13 @@ export type ChartExpensesListQueryVariables = Exact<{
 
 
 export type ChartExpensesListQuery = { __typename?: 'Query', chartExpenses: { __typename?: 'ChartExpensesPayload', monthlyTotals: Array<number>, categoryExpenseTotals: Array<{ __typename?: 'CategoryExpenseTotal', categoryName: string, subcategoryName: string, total: number }> } };
+
+export type YearlyInsightQueryVariables = Exact<{
+  date: Scalars['String'];
+}>;
+
+
+export type YearlyInsightQuery = { __typename?: 'Query', yearlyInsight: { __typename?: 'YearInsightsPayload', yearly: { __typename?: 'InsightPayload', title: string, narrative: string, data: any }, forecast: { __typename?: 'InsightPayload', title: string, narrative: string, data: any } } };
 
 export type CreateExpenseMutationVariables = Exact<{
   subcategoryId: Scalars['ID'];
@@ -955,6 +982,50 @@ export function useChartExpensesListLazyQuery(baseOptions?: Apollo.LazyQueryHook
 export type ChartExpensesListQueryHookResult = ReturnType<typeof useChartExpensesListQuery>;
 export type ChartExpensesListLazyQueryHookResult = ReturnType<typeof useChartExpensesListLazyQuery>;
 export type ChartExpensesListQueryResult = Apollo.QueryResult<ChartExpensesListQuery, ChartExpensesListQueryVariables>;
+export const YearlyInsightDocument = gql`
+    query YearlyInsight($date: String!) {
+  yearlyInsight(filter: {date: $date}) {
+    yearly {
+      title
+      narrative
+      data
+    }
+    forecast {
+      title
+      narrative
+      data
+    }
+  }
+}
+    `;
+
+/**
+ * __useYearlyInsightQuery__
+ *
+ * To run a query within a React component, call `useYearlyInsightQuery` and pass it any options that fit your needs.
+ * When your component renders, `useYearlyInsightQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useYearlyInsightQuery({
+ *   variables: {
+ *      date: // value for 'date'
+ *   },
+ * });
+ */
+export function useYearlyInsightQuery(baseOptions: Apollo.QueryHookOptions<YearlyInsightQuery, YearlyInsightQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<YearlyInsightQuery, YearlyInsightQueryVariables>(YearlyInsightDocument, options);
+      }
+export function useYearlyInsightLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<YearlyInsightQuery, YearlyInsightQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<YearlyInsightQuery, YearlyInsightQueryVariables>(YearlyInsightDocument, options);
+        }
+export type YearlyInsightQueryHookResult = ReturnType<typeof useYearlyInsightQuery>;
+export type YearlyInsightLazyQueryHookResult = ReturnType<typeof useYearlyInsightLazyQuery>;
+export type YearlyInsightQueryResult = Apollo.QueryResult<YearlyInsightQuery, YearlyInsightQueryVariables>;
 export const CreateExpenseDocument = gql`
     mutation CreateExpense($subcategoryId: ID!, $amount: Int!, $date: String!) {
   createExpense(subcategoryId: $subcategoryId, amount: $amount, date: $date) {
