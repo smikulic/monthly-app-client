@@ -27,7 +27,9 @@ export const CreateExpenseForm: React.FC<Props> = ({
   const [formInvalid, setFormInvalid] = useState(true);
   const [expenseAmount, setExpenseAmount] = useState("");
   const [expenseDate, setExpenseDate] = useState(currentDate);
-  const [expenseSubcategoryId, setExpenseSubcategoryId] = useState("");
+  const [expenseSubcategoryId, setExpenseSubcategoryId] = useState(
+    subcategories[0].id
+  );
 
   const [createExpense] = useCreateExpenseMutation({
     onCompleted: ({ createExpense }) => {
