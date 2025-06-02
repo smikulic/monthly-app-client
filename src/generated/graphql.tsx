@@ -43,10 +43,18 @@ export type ChartExpensesPayload = {
   monthlyTotals: Array<Scalars['Int']>;
 };
 
+export type CreateInvestmentInput = {
+  amount?: InputMaybe<Scalars['Int']>;
+  currency: Scalars['String'];
+  name: Scalars['String'];
+  quantity: Scalars['Float'];
+};
+
 export type Expense = {
   __typename?: 'Expense';
   amount: Scalars['Int'];
   date: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   subcategoryId: Scalars['ID'];
 };
@@ -55,17 +63,30 @@ export type ExpenseFilterInput = {
   date: Scalars['String'];
 };
 
+export type Investment = {
+  __typename?: 'Investment';
+  amount: Scalars['Int'];
+  createdAt: Scalars['String'];
+  currency: Scalars['String'];
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  quantity: Scalars['Float'];
+  updatedAt: Scalars['String'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   _empty?: Maybe<Scalars['String']>;
   confirmEmail: AuthPayload;
   createCategory: Category;
   createExpense: Expense;
+  createInvestment: Investment;
   createSavingGoal: SavingGoal;
   createSubcategory: Subcategory;
   deleteAccount: Scalars['Boolean'];
   deleteCategory: Category;
   deleteExpense: Expense;
+  deleteInvestment: Scalars['Boolean'];
   deleteSavingGoal: SavingGoal;
   deleteSubcategory: Subcategory;
   login?: Maybe<AuthPayload>;
@@ -74,6 +95,7 @@ export type Mutation = {
   signup?: Maybe<AuthPayload>;
   updateCategory: Category;
   updateExpense: Expense;
+  updateInvestment: Investment;
   updateSavingGoal: SavingGoal;
   updateSubcategory: Subcategory;
   updateUser: User;
@@ -94,7 +116,13 @@ export type MutationCreateCategoryArgs = {
 export type MutationCreateExpenseArgs = {
   amount: Scalars['Int'];
   date: Scalars['String'];
+  description?: InputMaybe<Scalars['String']>;
   subcategoryId: Scalars['ID'];
+};
+
+
+export type MutationCreateInvestmentArgs = {
+  input: CreateInvestmentInput;
 };
 
 
@@ -121,6 +149,11 @@ export type MutationDeleteCategoryArgs = {
 
 
 export type MutationDeleteExpenseArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type MutationDeleteInvestmentArgs = {
   id: Scalars['ID'];
 };
 
@@ -168,8 +201,14 @@ export type MutationUpdateCategoryArgs = {
 export type MutationUpdateExpenseArgs = {
   amount: Scalars['Int'];
   date: Scalars['String'];
+  description?: InputMaybe<Scalars['String']>;
   id: Scalars['ID'];
   subcategoryId: Scalars['ID'];
+};
+
+
+export type MutationUpdateInvestmentArgs = {
+  input: UpdateInvestmentInput;
 };
 
 
@@ -209,6 +248,8 @@ export type Query = {
   chartExpenses: ChartExpensesPayload;
   expenses: Array<Expense>;
   generateReport: Scalars['String'];
+  investment?: Maybe<Investment>;
+  investments: Array<Investment>;
   me: User;
   savingGoals: Array<SavingGoal>;
   subcategories: Array<Subcategory>;
@@ -235,6 +276,11 @@ export type QueryExpensesArgs = {
 
 export type QueryGenerateReportArgs = {
   year: Scalars['Int'];
+};
+
+
+export type QueryInvestmentArgs = {
+  id: Scalars['ID'];
 };
 
 
@@ -273,6 +319,14 @@ export type Subcategory = {
 
 export type SubcategoryExpensesArgs = {
   filter?: InputMaybe<ExpenseFilterInput>;
+};
+
+export type UpdateInvestmentInput = {
+  amount?: InputMaybe<Scalars['Int']>;
+  currency?: InputMaybe<Scalars['String']>;
+  id: Scalars['ID'];
+  name?: InputMaybe<Scalars['String']>;
+  quantity?: InputMaybe<Scalars['Float']>;
 };
 
 export type User = {
@@ -357,14 +411,14 @@ export type CategoryQuery = { __typename?: 'Query', category: { __typename?: 'Ca
 export type ExpensesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ExpensesQuery = { __typename?: 'Query', expenses: Array<{ __typename?: 'Expense', id: string, subcategoryId: string, amount: number, date: string }> };
+export type ExpensesQuery = { __typename?: 'Query', expenses: Array<{ __typename?: 'Expense', id: string, subcategoryId: string, amount: number, description?: string | null, date: string }> };
 
 export type ExpensesListQueryVariables = Exact<{
   date: Scalars['String'];
 }>;
 
 
-export type ExpensesListQuery = { __typename?: 'Query', expenses: Array<{ __typename?: 'Expense', id: string, subcategoryId: string, amount: number, date: string }> };
+export type ExpensesListQuery = { __typename?: 'Query', expenses: Array<{ __typename?: 'Expense', id: string, subcategoryId: string, amount: number, description?: string | null, date: string }> };
 
 export type ChartExpensesListQueryVariables = Exact<{
   date: Scalars['String'];
@@ -376,21 +430,23 @@ export type ChartExpensesListQuery = { __typename?: 'Query', chartExpenses: { __
 export type CreateExpenseMutationVariables = Exact<{
   subcategoryId: Scalars['ID'];
   amount: Scalars['Int'];
+  description?: InputMaybe<Scalars['String']>;
   date: Scalars['String'];
 }>;
 
 
-export type CreateExpenseMutation = { __typename?: 'Mutation', createExpense: { __typename?: 'Expense', id: string, amount: number, date: string } };
+export type CreateExpenseMutation = { __typename?: 'Mutation', createExpense: { __typename?: 'Expense', id: string, amount: number, description?: string | null, date: string } };
 
 export type UpdateExpenseMutationVariables = Exact<{
   id: Scalars['ID'];
   subcategoryId: Scalars['ID'];
   amount: Scalars['Int'];
+  description?: InputMaybe<Scalars['String']>;
   date: Scalars['String'];
 }>;
 
 
-export type UpdateExpenseMutation = { __typename?: 'Mutation', updateExpense: { __typename?: 'Expense', id: string, amount: number, date: string } };
+export type UpdateExpenseMutation = { __typename?: 'Mutation', updateExpense: { __typename?: 'Expense', id: string, amount: number, description?: string | null, date: string } };
 
 export type DeleteExpenseMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -846,6 +902,7 @@ export const ExpensesDocument = gql`
     id
     subcategoryId
     amount
+    description
     date
   }
 }
@@ -883,6 +940,7 @@ export const ExpensesListDocument = gql`
     id
     subcategoryId
     amount
+    description
     date
   }
 }
@@ -956,10 +1014,16 @@ export type ChartExpensesListQueryHookResult = ReturnType<typeof useChartExpense
 export type ChartExpensesListLazyQueryHookResult = ReturnType<typeof useChartExpensesListLazyQuery>;
 export type ChartExpensesListQueryResult = Apollo.QueryResult<ChartExpensesListQuery, ChartExpensesListQueryVariables>;
 export const CreateExpenseDocument = gql`
-    mutation CreateExpense($subcategoryId: ID!, $amount: Int!, $date: String!) {
-  createExpense(subcategoryId: $subcategoryId, amount: $amount, date: $date) {
+    mutation CreateExpense($subcategoryId: ID!, $amount: Int!, $description: String, $date: String!) {
+  createExpense(
+    subcategoryId: $subcategoryId
+    amount: $amount
+    description: $description
+    date: $date
+  ) {
     id
     amount
+    description
     date
   }
 }
@@ -981,6 +1045,7 @@ export type CreateExpenseMutationFn = Apollo.MutationFunction<CreateExpenseMutat
  *   variables: {
  *      subcategoryId: // value for 'subcategoryId'
  *      amount: // value for 'amount'
+ *      description: // value for 'description'
  *      date: // value for 'date'
  *   },
  * });
@@ -993,15 +1058,17 @@ export type CreateExpenseMutationHookResult = ReturnType<typeof useCreateExpense
 export type CreateExpenseMutationResult = Apollo.MutationResult<CreateExpenseMutation>;
 export type CreateExpenseMutationOptions = Apollo.BaseMutationOptions<CreateExpenseMutation, CreateExpenseMutationVariables>;
 export const UpdateExpenseDocument = gql`
-    mutation UpdateExpense($id: ID!, $subcategoryId: ID!, $amount: Int!, $date: String!) {
+    mutation UpdateExpense($id: ID!, $subcategoryId: ID!, $amount: Int!, $description: String, $date: String!) {
   updateExpense(
     id: $id
     subcategoryId: $subcategoryId
     amount: $amount
+    description: $description
     date: $date
   ) {
     id
     amount
+    description
     date
   }
 }
@@ -1024,6 +1091,7 @@ export type UpdateExpenseMutationFn = Apollo.MutationFunction<UpdateExpenseMutat
  *      id: // value for 'id'
  *      subcategoryId: // value for 'subcategoryId'
  *      amount: // value for 'amount'
+ *      description: // value for 'description'
  *      date: // value for 'date'
  *   },
  * });

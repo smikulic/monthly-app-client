@@ -17,4 +17,9 @@ export const ExpenseFieldStyled = styled("div")({
   paddingLeft: "24px",
   color: "#878BAC",
   fontSize: "14px",
+  whiteSpace: 'nowrap',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  width: "90%",
+
 });

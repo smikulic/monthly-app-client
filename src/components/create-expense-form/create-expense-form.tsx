@@ -26,6 +26,7 @@ export const CreateExpenseForm: React.FC<Props> = ({
 
   const [formInvalid, setFormInvalid] = useState(true);
   const [expenseAmount, setExpenseAmount] = useState("");
+  const [expenseDescription, setExpenseDescription] = useState("");
   const [expenseDate, setExpenseDate] = useState(currentDate);
   const [expenseSubcategoryId, setExpenseSubcategoryId] = useState(
     subcategories[0].id
@@ -35,6 +36,7 @@ export const CreateExpenseForm: React.FC<Props> = ({
     onCompleted: ({ createExpense }) => {
       closeForm();
       setExpenseAmount("");
+      setExpenseDescription("");
       setExpenseDate(currentDate);
       setExpenseSubcategoryId("");
 
@@ -68,6 +70,7 @@ export const CreateExpenseForm: React.FC<Props> = ({
           variables: {
             subcategoryId: expenseSubcategoryId,
             amount: Number(expenseAmount),
+            description: expenseDescription,
             date: String(expenseDate),
           },
         })
@@ -81,6 +84,14 @@ export const CreateExpenseForm: React.FC<Props> = ({
         margin="none"
         autoComplete="off"
         onChange={(e) => setExpenseAmount(e.target.value)}
+      />
+      <TextFieldStyled
+        id="description"
+        label="Description"
+        size="small"
+        margin="none"
+        autoComplete="off"
+        onChange={(e) => setExpenseDescription(e.target.value)}
       />
       <DatePickerStyled
         label="Date"

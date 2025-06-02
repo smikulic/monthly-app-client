@@ -31,6 +31,9 @@ export const UpdateExpenseForm: React.FC<Props> = ({
 
   const [formInvalid, setFormInvalid] = useState(true);
   const [expenseAmount, setExpenseAmount] = useState(formData.amount);
+  const [expenseDescription, setExpenseDescription] = useState(
+    formData.description
+  );
   const [expenseDate, setExpenseDate] = useState(formExpenseDate);
   const [expenseSubcategoryId, setExpenseSubcategoryId] = useState(
     formData.subcategoryId
@@ -42,6 +45,7 @@ export const UpdateExpenseForm: React.FC<Props> = ({
       setExpenseSubcategoryId("");
       setExpenseDate(new Date());
       setExpenseAmount(0);
+      setExpenseDescription("");
 
       // Clear chartExpenses cache so that we don't have to refetch everytime on state change,
       // but only when expense data changes
@@ -74,6 +78,7 @@ export const UpdateExpenseForm: React.FC<Props> = ({
           variables: {
             id: formData.id,
             amount: expenseAmount,
+            description: expenseDescription,
             date: String(expenseDate),
             subcategoryId: expenseSubcategoryId,
           },
@@ -89,6 +94,15 @@ export const UpdateExpenseForm: React.FC<Props> = ({
         autoComplete="off"
         value={expenseAmount}
         onChange={(e) => setExpenseAmount(Number(e.target.value))}
+      />
+      <TextFieldStyled
+        id="description"
+        label="Description"
+        size="small"
+        margin="none"
+        autoComplete="off"
+        value={expenseDescription}
+        onChange={(e) => setExpenseDescription(e.target.value)}
       />
       <DatePickerStyled
         label="Date"

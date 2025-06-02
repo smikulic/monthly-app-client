@@ -56,6 +56,7 @@ export const ExpandedExpenses: React.FC<Props> = ({
         if (!expense) return null;
 
         const expenseId = expense.id;
+        const expenseDescription = expense.description;
         const expenseISODate = Number(expense.date);
 
         return (
@@ -64,6 +65,7 @@ export const ExpandedExpenses: React.FC<Props> = ({
               <ExpenseFieldStyled>
                 {dayjs(expenseISODate).format("d MMM")} -{" "}
                 {formatAmount(expense.amount, userCurrency)}
+                {expenseDescription && <> - {expenseDescription}</>}
               </ExpenseFieldStyled>
               <IconMenu
                 itemId={expenseId}
