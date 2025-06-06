@@ -2,6 +2,12 @@
 
 This project is a React + TypeScript client application bootstrapped with **Vite** for lightning-fast development.
 
+It's live on https://yourmonthly.app/ and feel free to use Demo account if you don't wish to register yourself :)
+```
+email: demo@example.com
+password: password123
+```
+
 ## Prerequisites
 
 * **Node.js** v22.15.0 (as specified in `package.json`)
