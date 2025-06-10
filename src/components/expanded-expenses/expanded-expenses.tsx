@@ -63,7 +63,7 @@ export const ExpandedExpenses: React.FC<Props> = ({
           <span key={expenseId}>
             <ExpenseListItemStyled>
               <ExpenseFieldStyled>
-                {dayjs(expenseISODate).format("d MMM")} -{" "}
+                {dayjs(expenseISODate).format("D MMM")} -{" "}
                 {formatAmount(expense.amount, userCurrency)}
                 {expenseDescription && <> - {expenseDescription}</>}
               </ExpenseFieldStyled>
