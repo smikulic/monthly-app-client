@@ -59,8 +59,8 @@ export const LoginPageContainer = ({
     onError: (error) => {
       // toast.error(error.message);
       if (
-        error.message.includes("confirm your email") ||
-        error.message.includes("Email not confirmed")
+        error.message?.includes("confirm your email") ||
+        error.message?.includes("Email not confirmed")
       ) {
         toast.error("Please confirm your email first. Check your inbox.");
       } else {
