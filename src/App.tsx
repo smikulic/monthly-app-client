@@ -80,7 +80,7 @@ function App() {
     const serverError = userMeError?.networkError as ServerError;
     const errorMessage = serverError.result;
 
-    if (errorMessage.includes("invalid token")) {
+    if (errorMessage?.includes("invalid token")) {
       handleLogout();
     }
   }
