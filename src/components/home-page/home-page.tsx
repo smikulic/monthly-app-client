@@ -14,6 +14,7 @@ export const HomePage = ({
   totalExpensesAmount,
   totalBudgetAmount,
   totalSavingGoalsAmount,
+  totalInvestmentsValue,
   chartExpensesData,
   chartCategoriesData,
   loadingChartExpenses,
@@ -23,6 +24,7 @@ export const HomePage = ({
   totalExpensesAmount: number;
   totalBudgetAmount: number;
   totalSavingGoalsAmount: number;
+  totalInvestmentsValue: number;
   chartExpensesData: number[];
   chartCategoriesData: CategoryExpenseTotal[];
   loadingChartExpenses: boolean;
@@ -58,6 +60,13 @@ export const HomePage = ({
           loading={loading}
           value={totalSavingGoalsAmount}
           valueColor="#6a1fde"
+        />
+        <HomeListItemLink
+          linkTo="/investments"
+          title="Investments"
+          loading={loading}
+          value={totalInvestmentsValue}
+          valueColor="#7fb77e"
         />
       </Box>
 

@@ -10,6 +10,7 @@ import { HomePageContainer } from "./pages/home-page/home-page-container";
 import { ExpensesPageContainer } from "./pages/expenses-page/expenses-page-container";
 import { CategoriesPageContainer } from "./pages/categories-page/categories-page-container";
 import { SavingGoalsPageContainer } from "./pages/saving-goals-page/saving-goals-page-container";
+import { InvestmentsPageContainer } from "./pages/investments-page/investments-page-container";
 import { ConfirmEmailPageContainer } from "./pages/confirm-email-page/confirm-email-page-container";
 import { Header } from "./components/header/header";
 import { Footer } from "./components/footer/footer";
@@ -197,6 +198,14 @@ function App() {
                         element={
                           <UserContext.Provider value={userData?.me.currency}>
                             <SavingGoalsPageContainer />
+                          </UserContext.Provider>
+                        }
+                      />
+                      <Route
+                        path="/investments"
+                        element={
+                          <UserContext.Provider value={userData?.me.currency}>
+                            <InvestmentsPageContainer />
                           </UserContext.Provider>
                         }
                       />
