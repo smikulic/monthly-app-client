@@ -7,7 +7,7 @@ type InvestmentCurrentValueStyledProps = {
 
 export const InvestmentInitialAmountStyled = styled("div")({
   position: "relative",
-  fontSize: "12px",
+  fontSize: "13px",
   color: "#666666",
 });
 
@@ -22,7 +22,8 @@ export const InvestmentCurrentValueStyled = styled(
 
 export const InvestmentDateStyled = styled("div")({
   position: "relative",
-  fontSize: "11px",
+  marginLeft: '8px',
+  fontSize: "12px",
   color: "#999999",
 });
 

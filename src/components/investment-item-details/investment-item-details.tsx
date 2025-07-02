@@ -3,35 +3,45 @@ import {
   InvestmentInitialAmountStyled,
   InvestmentCurrentValueStyled,
   InvestmentItemDetailsContainerStyled,
-  InvestmentDateStyled,
 } from "./investment-item-details-style";
 import { formatAmount } from "@/utils/format";
-import dayjs from "dayjs";
 
 interface Props {
   initialAmount: number;
   currentAmount: number;
-  startDate: string;
+  percentageChange: number;
   currency: string;
+  isPositive: boolean;
 }
 
 export const InvestmentItemDetails: React.FC<Props> = ({
   initialAmount,
   currentAmount,
-  startDate,
+  percentageChange,
   currency,
+  isPositive,
 }) => {
+  const gainLoss = currentAmount - initialAmount;
+
   return (
     <InvestmentItemDetailsContainerStyled>
-      <InvestmentInitialAmountStyled>
-        Initial: {formatAmount(initialAmount, currency)}
-      </InvestmentInitialAmountStyled>
-      <InvestmentCurrentValueStyled positive={currentAmount >= initialAmount}>
-        Current: {formatAmount(currentAmount, currency)}
+      <InvestmentCurrentValueStyled positive={isPositive}>
+        {isPositive ? "+" : ""}
+        {formatAmount(gainLoss, currency)} ({percentageChange.toFixed(2)}%)
       </InvestmentCurrentValueStyled>
-      <InvestmentDateStyled>
-        Since {dayjs(Number(startDate)).format("MMM YYYY")}
-      </InvestmentDateStyled>
+      <InvestmentInitialAmountStyled>
+        <small>Init: {formatAmount(initialAmount, currency)}</small>
+      </InvestmentInitialAmountStyled>
+      <InvestmentCurrentValueStyled positive={isPositive}>
+        <small>Curr: {formatAmount(currentAmount, currency)}</small>
+      </InvestmentCurrentValueStyled>
+      {/* <InvestmentCurrentValueStyled positive={isPositive}>
+        {isPositive ? "+" : ""}
+        {formatAmount(gainLoss, currency)}
+      </InvestmentCurrentValueStyled>
+      <InvestmentCurrentValueStyled positive={isPositive}>
+        ({percentageChange.toFixed(2)}%)
+      </InvestmentCurrentValueStyled> */}
     </InvestmentItemDetailsContainerStyled>
   );
 };

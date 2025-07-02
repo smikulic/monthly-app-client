@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import { SavingGoal, useDeleteSavingGoalMutation } from "@/generated/graphql";
 import { UserContext } from "@/App";
@@ -26,7 +26,7 @@ export const SavingGoalsList: React.FC<Props> = ({
   savingGoals,
   refetchSavingGoals,
 }) => {
-  const userCurrency = React.useContext(UserContext);
+  const userCurrency = useContext(UserContext);
 
   const {
     anchorActionDropdownEl,
@@ -35,7 +35,7 @@ export const SavingGoalsList: React.FC<Props> = ({
   } = useActionDropdown();
 
   const [updateModalSavingGoal, setUpdateModalSavingGoal] =
-    React.useState<SavingGoal | null>(null);
+    useState<SavingGoal | null>(null);
 
   const [deleteSavingGoal] = useDeleteSavingGoalMutation({
     onError: () => {

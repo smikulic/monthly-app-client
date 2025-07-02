@@ -1,10 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { Investment, useDeleteInvestmentMutation } from "@/generated/graphql";
-import { UserContext } from "@/App";
-import { formatAmount } from "@/utils/format";
-import { useActionDropdown } from "@/hooks/useActionDropdown";
 import { MainListItemStyled } from "@/shared";
+import { useActionDropdown } from "@/hooks/useActionDropdown";
 import { Box } from "@/components/ui/Box";
 import { Typography } from "@/components/ui/Typography";
 import { CategoryDetailsStyled } from "../categories-list/categories-list-style";
@@ -12,6 +10,8 @@ import { InvestmentItemDetails } from "../investment-item-details/investment-ite
 import { IconMenu } from "../icon-menu/icon-menu";
 import { CategoriesListLoading } from "../categories-list/components/categories-list-loading";
 import InvestmentFormFactory from "../investment-form-factory/investment-form-factory";
+// import { InvestmentDateStyled } from "../investment-item-details/investment-item-details-style";
+import dayjs from "dayjs";
 
 interface Props {
   loading: boolean;
@@ -24,17 +24,14 @@ export const InvestmentsList: React.FC<Props> = ({
   investments,
   refetchInvestments,
 }) => {
-  const userCurrency = React.useContext(UserContext);
-
   const {
     anchorActionDropdownEl,
     handleActionsDropdownClick,
     handleActionsDropdownClose,
   } = useActionDropdown();
 
-  const [updateModalInvestment, setUpdateModalInvestment] = React.useState<Investment | null>(
-    null
-  );
+  const [updateModalInvestment, setUpdateModalInvestment] =
+    useState<Investment | null>(null);
 
   const [deleteInvestment] = useDeleteInvestmentMutation({
     onError: () => {
@@ -92,6 +89,18 @@ export const InvestmentsList: React.FC<Props> = ({
                     <Typography variant="body2" color="secondary">
                       Qty: {investment.quantity}
                     </Typography>
+                    <Typography variant="body2" color="secondary">
+                      , Held:{" "}
+                      {dayjs()
+                        .diff(dayjs(Number(investment.startDate)), "year", true) // get fractional years
+                        .toFixed(1)
+                        .replace(/\.0$/, "")}{" "}
+                      years
+                    </Typography>
+                    {/* <InvestmentDateStyled>
+                    Since{" "}
+                      {dayjs(Number(investment.startDate)).format("MMM YYYY")}
+                    </InvestmentDateStyled> */}
                   </Box>
                 </Box>
 
@@ -103,30 +112,25 @@ export const InvestmentsList: React.FC<Props> = ({
                     flex: 1,
                   }}
                 >
-                  <Typography
-                    variant="body1"
-                    color="text.primary"
-                    sx={{ fontWeight: 500 }}
-                  >
-                    {formatAmount(currentValue, investment.currency)}
-                  </Typography>
-                  <Typography
+                  {/* <Typography
                     variant="body2"
                     sx={{
                       color: isPositive ? "success.main" : "error.main",
+                      paddingRight: "8px",
                     }}
                   >
                     {isPositive ? "+" : ""}
                     {percentageChange.toFixed(2)}%
-                  </Typography>
+                  </Typography> */}
                 </Box>
 
                 <Box sx={{ display: "flex" }}>
                   <InvestmentItemDetails
                     initialAmount={investment.initialAmount}
                     currentAmount={currentValue}
-                    startDate={investment.startDate}
+                    percentageChange={percentageChange}
                     currency={investment.currency}
+                    isPositive={isPositive}
                   />
                   <CategoryDetailsStyled>
                     <IconMenu

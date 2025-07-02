@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { FormControl, InputLabel, Select } from "@mui/material";
 import {
   Investment,
   useCreateInvestmentMutation,
@@ -7,10 +8,10 @@ import {
 } from "@/generated/graphql";
 import { TextFieldStyled } from "@/shared";
 import { DatePickerStyled } from "@/components/ui/DatePickerStyled";
+import { MenuItem } from "@/components/ui/MenuItem";
 import { Alert } from "@/components/ui/Alert";
 import { FormDialog } from "../form-dialog/form-dialog";
-import { MenuItem } from "@/components/ui/MenuItem";
-import { FormControl, InputLabel, Select } from "@mui/material";
+import { UserContext } from "@/App";
 
 interface FormProps {
   open: boolean;
@@ -32,24 +33,28 @@ const useInvestmentForm = (
   closeForm: () => void,
   formData?: Investment
 ) => {
+  const userCurrency = useContext(UserContext);
+
   const isCreateMode = type === "create";
   const [formInvalid, setFormInvalid] = useState(true);
   const [investmentName, setInvestmentName] = useState(formData?.name || "");
   const [quantity, setQuantity] = useState(formData?.quantity || "");
   const [amount, setAmount] = useState(formData?.amount || "");
-  const [currency, setCurrency] = useState(formData?.currency || "USD");
+  const [currency, setCurrency] = useState(formData?.currency || userCurrency);
   const [initialAmount, setInitialAmount] = useState(
     formData?.initialAmount || ""
   );
   const [startDate, setStartDate] = useState(
-    formData?.startDate ? new Date(parseInt(formData.startDate, 10)) : new Date()
+    formData?.startDate
+      ? new Date(parseInt(formData.startDate, 10))
+      : new Date()
   );
 
   const [createInvestment] = useCreateInvestmentMutation({
     onCompleted: ({ createInvestment }) => {
       closeForm();
       toast.success(
-        `You have successfully created ${createInvestment.name} investment!`
+        `You have successfully created ${createInvestment.name} investment asset!`
       );
     },
   });
@@ -58,18 +63,14 @@ const useInvestmentForm = (
     onCompleted: ({ updateInvestment }) => {
       closeForm();
       toast.success(
-        `You have successfully updated ${updateInvestment.name} investment!`
+        `You have successfully updated ${updateInvestment.name} investment asset!`
       );
     },
   });
 
   useEffect(() => {
     setFormInvalid(
-      !investmentName ||
-        !quantity ||
-        !currency ||
-        !initialAmount ||
-        !startDate
+      !investmentName || !quantity || !currency || !initialAmount || !startDate
     );
   }, [investmentName, quantity, currency, initialAmount, startDate]);
 
@@ -120,7 +121,11 @@ const useInvestmentForm = (
   };
 };
 
-export const InvestmentFormFactory = ({ open, closeForm, formData }: FormProps) => {
+export const InvestmentFormFactory = ({
+  open,
+  closeForm,
+  formData,
+}: FormProps) => {
   const type = formData ? "update" : "create";
   const {
     formInvalid,
@@ -152,14 +157,14 @@ export const InvestmentFormFactory = ({ open, closeForm, formData }: FormProps) 
       <TextFieldStyled
         required
         id="investmentName"
-        label="Name"
+        label="Investment Asset Name"
         size="small"
         margin="none"
         autoComplete="off"
         value={investmentName}
         onChange={(e) => setInvestmentName(e.target.value)}
       />
-      
+
       <TextFieldStyled
         required
         id="quantity"
@@ -173,8 +178,9 @@ export const InvestmentFormFactory = ({ open, closeForm, formData }: FormProps) 
       />
 
       <TextFieldStyled
+        required
         id="amount"
-        label="Current Amount (optional)"
+        label="Current Amount"
         size="small"
         margin="none"
         autoComplete="off"
@@ -182,23 +188,6 @@ export const InvestmentFormFactory = ({ open, closeForm, formData }: FormProps) 
         value={amount}
         onChange={(e) => setAmount(Number(e.target.value))}
       />
-      
-      <FormControl size="small" required sx={{ minWidth: 120 }}>
-        <InputLabel id="currency-label">Currency</InputLabel>
-        <Select
-          labelId="currency-label"
-          id="currency"
-          value={currency}
-          label="Currency"
-          onChange={(e) => setCurrency(e.target.value)}
-        >
-          {CURRENCY_OPTIONS.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
 
       <TextFieldStyled
         required
@@ -211,25 +200,41 @@ export const InvestmentFormFactory = ({ open, closeForm, formData }: FormProps) 
         value={initialAmount}
         onChange={(e) => setInitialAmount(Number(e.target.value))}
       />
-      
+
+      <FormControl size="small" required sx={{ minWidth: 120 }}>
+        <InputLabel id="currency-label">Currency</InputLabel>
+        <Select
+          labelId="currency-label"
+          id="currency"
+          value={currency}
+          label="Currency"
+          onChange={(e) => setCurrency(e.target.value)}
+        >
+          {CURRENCY_OPTIONS.map((currency) => (
+            <MenuItem key={currency.value} value={currency.value}>
+              {currency.label}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+
       <DatePickerStyled
         label="Start Date"
         value={startDate}
-        onChange={(newValue: any) =>
-          newValue ? setStartDate(newValue) : null
-        }
+        onChange={(newValue: any) => (newValue ? setStartDate(newValue) : null)}
       />
 
       {type === "create" && (
         <>
           <Alert severity="info">
-            <strong>Example:</strong> Investments can be things like "Apple Stock",
-            "Bitcoin", "S&P 500 ETF", "Tesla Shares", etc.
+            <strong>Example:</strong> Investments can be things like "Apple
+            Stock", "Bitcoin", "S&P 500 ETF", "House", etc.
           </Alert>
           <Alert severity="info">
-            <strong>Quantity:</strong> Number of shares, coins, or units you own.
+            <strong>Quantity:</strong> Number of shares, coins, or units you
+            own.
             <br />
-            <strong>Current Amount:</strong> Current market value (leave empty to use initial amount).
+            <strong>Current Amount:</strong> Current market value.
             <br />
             <strong>Initial Amount:</strong> The amount you initially invested.
             <br />

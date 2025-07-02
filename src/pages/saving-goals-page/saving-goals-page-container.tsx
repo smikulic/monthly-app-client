@@ -1,13 +1,12 @@
-import * as React from "react";
-import { useSavingGoalsListQuery } from "../../generated/graphql";
-import { SavingGoalsList } from "../../components/saving-goals-list/saving-goals-list";
-import { ActionsBar } from "../../components/actions-bar/actions-bar";
-import { ProminentButtonStyled } from "../../shared";
-import SavingGoalFormFactory from "../../components/saving-goal-form-factory/saving-goal-form-factory";
+import { useState } from "react";
+import { useSavingGoalsListQuery } from "@/generated/graphql";
+import { ProminentButtonStyled } from "@/shared";
+import { SavingGoalsList } from "@/components/saving-goals-list/saving-goals-list";
+import { ActionsBar } from "@/components/actions-bar/actions-bar";
+import SavingGoalFormFactory from "@/components/saving-goal-form-factory/saving-goal-form-factory";
 
 export const SavingGoalsPageContainer = () => {
-  const [createModalSavingGoal, setCreateModalSavingGoal] =
-    React.useState(false);
+  const [createModalSavingGoal, setCreateModalSavingGoal] = useState(false);
 
   const {
     data: savingGoalsData,
