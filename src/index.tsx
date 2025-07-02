@@ -12,6 +12,7 @@ import "react-toastify/dist/ReactToastify.min.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { AUTH_TOKEN } from "./constants";
+import { analytics } from "./utils/mixpanel";
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
@@ -62,6 +63,9 @@ const client = new ApolloClient({
   link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
 });
+
+// Initialize Mixpanel
+analytics.init();
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

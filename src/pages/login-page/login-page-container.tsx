@@ -7,6 +7,7 @@ import {
   useResetPasswordRequestMutation,
   useSignupMutation,
 } from "../../generated/graphql";
+import { analytics } from "../../utils/mixpanel";
 import "./login-page-container.css";
 
 export const SIGNUP_MUTATION = gql`
@@ -14,6 +15,7 @@ export const SIGNUP_MUTATION = gql`
     signup(email: $email, password: $password) {
       token
       user {
+        id
         email
       }
     }
@@ -25,6 +27,7 @@ export const LOGIN_MUTATION = gql`
     login(email: $email, password: $password) {
       token
       user {
+        id
         email
       }
     }
@@ -68,6 +71,13 @@ export const LoginPageContainer = ({
       }
     },
     onCompleted: ({ login }) => {
+      // Track user login
+      analytics.trackUserLogin(login?.user?.email!);
+      analytics.identify(login?.user?.id!);
+      analytics.setUserProperties({
+        $email: login?.user?.email!,
+      });
+
       localStorage.setItem(AUTH_TOKEN, login?.token!);
       localStorage.setItem(AUTH_TOKEN_USER, login?.user?.email!);
       setToken(login?.token!);
@@ -85,6 +95,8 @@ export const LoginPageContainer = ({
     },
     onCompleted: ({ signup }) => {
       console.log({ signup });
+      // Track user signup
+      analytics.trackUserSignup(formState.email);
       toast.success("Email with confirmation instructions is sent!");
     },
     // onCompleted: ({ signup }) => {

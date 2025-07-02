@@ -21,6 +21,8 @@ export const CREATE_INVESTMENT_MUTATION = gql`
     createInvestment(input: $input) {
       id
       name
+      initialAmount
+      currency
     }
   }
 `;

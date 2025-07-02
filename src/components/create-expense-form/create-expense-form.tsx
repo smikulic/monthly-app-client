@@ -8,6 +8,7 @@ import { DatePickerStyled } from "@/components/ui/DatePickerStyled";
 import { MenuItem } from "@/components/ui/MenuItem";
 import { SubcategoryDecoratedWithExpenses } from "../expenses-list/expenses-list";
 import { FormDialog } from "../form-dialog/form-dialog";
+import { analytics } from "@/utils/mixpanel";
 
 interface Props {
   open: boolean;
@@ -34,6 +35,18 @@ export const CreateExpenseForm: React.FC<Props> = ({
 
   const [createExpense] = useCreateExpenseMutation({
     onCompleted: ({ createExpense }) => {
+      // Find the selected subcategory to get category and subcategory names
+      const selectedSubcategory = subcategories.find(
+        (sub) => sub.id === expenseSubcategoryId
+      );
+
+      // Track expense creation
+      analytics.trackExpenseCreated(
+        Number(expenseAmount),
+        selectedSubcategory?.categoryId || "Unknown",
+        selectedSubcategory?.name || "Unknown"
+      );
+
       closeForm();
       setExpenseAmount("");
       setExpenseDescription("");

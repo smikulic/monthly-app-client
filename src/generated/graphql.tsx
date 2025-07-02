@@ -471,7 +471,7 @@ export type CreateInvestmentMutationVariables = Exact<{
 }>;
 
 
-export type CreateInvestmentMutation = { __typename?: 'Mutation', createInvestment: { __typename?: 'Investment', id: string, name: string } };
+export type CreateInvestmentMutation = { __typename?: 'Mutation', createInvestment: { __typename?: 'Investment', id: string, name: string, initialAmount: number, currency: string } };
 
 export type UpdateInvestmentMutationVariables = Exact<{
   input: UpdateInvestmentInput;
@@ -500,7 +500,7 @@ export type CreateSavingGoalMutationVariables = Exact<{
 }>;
 
 
-export type CreateSavingGoalMutation = { __typename?: 'Mutation', createSavingGoal: { __typename?: 'SavingGoal', name: string } };
+export type CreateSavingGoalMutation = { __typename?: 'Mutation', createSavingGoal: { __typename?: 'SavingGoal', name: string, goalAmount: number, goalDate: string } };
 
 export type UpdateSavingGoalMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -533,7 +533,7 @@ export type SignupMutationVariables = Exact<{
 }>;
 
 
-export type SignupMutation = { __typename?: 'Mutation', signup?: { __typename?: 'AuthPayload', token?: string | null, user?: { __typename?: 'User', email: string } | null } | null };
+export type SignupMutation = { __typename?: 'Mutation', signup?: { __typename?: 'AuthPayload', token?: string | null, user?: { __typename?: 'User', id: string, email: string } | null } | null };
 
 export type LoginMutationVariables = Exact<{
   email: Scalars['String'];
@@ -541,7 +541,7 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login?: { __typename?: 'AuthPayload', token?: string | null, user?: { __typename?: 'User', email: string } | null } | null };
+export type LoginMutation = { __typename?: 'Mutation', login?: { __typename?: 'AuthPayload', token?: string | null, user?: { __typename?: 'User', id: string, email: string } | null } | null };
 
 export type ResetPasswordRequestMutationVariables = Exact<{
   email: Scalars['String'];
@@ -1215,6 +1215,8 @@ export const CreateInvestmentDocument = gql`
   createInvestment(input: $input) {
     id
     name
+    initialAmount
+    currency
   }
 }
     `;
@@ -1357,6 +1359,8 @@ export const CreateSavingGoalDocument = gql`
     initialSaveAmount: $initialSaveAmount
   ) {
     name
+    goalAmount
+    goalDate
   }
 }
     `;
@@ -1506,6 +1510,7 @@ export const SignupDocument = gql`
   signup(email: $email, password: $password) {
     token
     user {
+      id
       email
     }
   }
@@ -1543,6 +1548,7 @@ export const LoginDocument = gql`
   login(email: $email, password: $password) {
     token
     user {
+      id
       email
     }
   }

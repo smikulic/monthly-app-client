@@ -12,6 +12,7 @@ import { MenuItem } from "@/components/ui/MenuItem";
 import { Alert } from "@/components/ui/Alert";
 import { FormDialog } from "../form-dialog/form-dialog";
 import { UserContext } from "@/App";
+import { analytics } from "@/utils/mixpanel";
 
 interface FormProps {
   open: boolean;
@@ -52,6 +53,11 @@ const useInvestmentForm = (
 
   const [createInvestment] = useCreateInvestmentMutation({
     onCompleted: ({ createInvestment }) => {
+      analytics.trackInvestmentCreated(
+        createInvestment.name,
+        createInvestment.initialAmount,
+        createInvestment.currency
+      );
       closeForm();
       toast.success(
         `You have successfully created ${createInvestment.name} investment asset!`

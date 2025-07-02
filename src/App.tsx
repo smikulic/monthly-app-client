@@ -20,6 +20,7 @@ import { FooterPaddingStyled } from "./shared";
 import { PrivacyPageContainer } from "./pages/privacy-page/privacy-page-container";
 import { ProfilePageContainer } from "./pages/profile-page/profile-page-container";
 import { ReportsPageContainer } from "./pages/reports-page/reports-page-container";
+import { analytics } from "./utils/mixpanel";
 
 const muiTheme = createTheme({
   palette: {
@@ -71,7 +72,20 @@ function App() {
     loading: userMeLoading,
     error: userMeError,
     refetch: refetchUserData,
-  } = useQuery(GET_USER_ME);
+  } = useQuery(GET_USER_ME, {
+    skip: !token,
+    onCompleted: (data) => {
+      if (data?.me) {
+        // Identify user in Mixpanel
+        analytics.identify(data.me.id);
+        analytics.setUserProperties({
+          '$email': data.me.email,
+          'currency': data.me.currency || 'USD',
+          // Add any other user properties here
+        });
+      }
+    },
+  });
 
   if (userMeLoading) {
     return null;

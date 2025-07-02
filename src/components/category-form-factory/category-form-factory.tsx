@@ -8,6 +8,7 @@ import {
 import { TextFieldStyled } from "@/shared";
 import { Alert } from "@/components/ui/Alert";
 import { FormDialog } from "../form-dialog/form-dialog";
+import { analytics } from "@/utils/mixpanel";
 
 interface FormProps {
   open: boolean;
@@ -26,10 +27,23 @@ const useCategoryForm = (
 
   const [createCategory] = useCreateCategoryMutation({
     onCompleted: ({ createCategory }) => {
+      analytics.trackCategoryCreated(createCategory.name);
       closeForm();
       toast.success(
         `You have successfully created ${createCategory.name} category!`
       );
+    },
+    onError: (error) => {
+      // Check if the error message contains the specific duplicate name error
+      if (error.message.includes("A category with this name already exists")) {
+        toast.error(
+          "A category with this name already exists. Please choose a different name."
+        );
+      } else {
+        toast.error(
+          "There was an error creating the category. Please try again."
+        );
+      }
     },
   });
 
@@ -39,6 +53,18 @@ const useCategoryForm = (
       toast.success(
         `You have successfully updated ${updateCategory.name} category!`
       );
+    },
+    onError: (error) => {
+      // Check if the error message contains the specific duplicate name error
+      if (error.message.includes("A category with this name already exists")) {
+        toast.error(
+          "A category with this name already exists. Please choose a different name."
+        );
+      } else {
+        toast.error(
+          "There was an error updating the category. Please try again."
+        );
+      }
     },
   });
 

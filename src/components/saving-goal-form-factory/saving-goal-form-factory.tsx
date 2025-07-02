@@ -9,6 +9,7 @@ import { TextFieldStyled } from "@/shared";
 import { DatePickerStyled } from "@/components/ui/DatePickerStyled";
 import { Alert } from "@/components/ui/Alert";
 import { FormDialog } from "../form-dialog/form-dialog";
+import { analytics } from "@/utils/mixpanel";
 
 interface FormProps {
   open: boolean;
@@ -36,6 +37,13 @@ const useSavingGoalForm = (
 
   const [createSavingGoal] = useCreateSavingGoalMutation({
     onCompleted: ({ createSavingGoal }) => {
+      // Track saving goal creation
+      analytics.trackSavingGoalCreated(
+        createSavingGoal.name,
+        createSavingGoal.goalAmount,
+        createSavingGoal.goalDate
+      );
+
       closeForm();
       toast.success(
         `You have successfully created ${createSavingGoal.name} saving goal!`
