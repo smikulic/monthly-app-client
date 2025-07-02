@@ -33,7 +33,7 @@ export const SubcategoryListItem: React.FC<Props> = ({
 
   const rolloverDate = new Date(Number(subcategory.rolloverDate));
   const expensesSinceRollover = (expensesData?.expenses || []).filter(
-    (expense: any) => {
+    (expense: Expense) => {
       return (
         new Date(Number(expense.date)) >= rolloverDate &&
         expense.subcategoryId === subcategory.id

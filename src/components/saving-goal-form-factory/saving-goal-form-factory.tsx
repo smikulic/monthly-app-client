@@ -170,7 +170,7 @@ export const SavingGoalFormFactory = ({
       <DatePickerStyled
         label="Goal date"
         value={savingGoalDate}
-        onChange={(newValue: any) =>
+        onChange={(newValue: Date | null) =>
           newValue ? setSavingGoalDate(newValue) : null
         }
       />

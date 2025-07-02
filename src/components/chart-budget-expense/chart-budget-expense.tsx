@@ -65,7 +65,13 @@ export const ChartBudgetExpense = ({
     () => ({
       tooltip: {
         trigger: "axis",
-        formatter: ({ 0: a, 1: b }: any) =>
+        formatter: ({
+          0: a,
+          1: b,
+        }: {
+          0: { seriesName: string; data: number };
+          1: { seriesName: string; data: number };
+        }) =>
           `${a.seriesName}: ${formatAmount(a.data, userCurrency)}<br/>` +
           `${b.seriesName}: ${formatAmount(b.data, userCurrency)}`,
         textStyle: { fontSize: 12 },

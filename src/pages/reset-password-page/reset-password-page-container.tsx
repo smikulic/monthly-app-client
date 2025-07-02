@@ -21,7 +21,7 @@ export const ResetPasswordPageContainer = () => {
     password: "",
   });
 
-  const [resetPasswordAction]: any = useResetPasswordMutation({
+  const [resetPasswordAction] = useResetPasswordMutation({
     variables: {
       token: query.get("resetToken") || "",
       password: formState.password,
@@ -50,7 +50,7 @@ export const ResetPasswordPageContainer = () => {
           />
         </div>
         <div className="actions">
-          <button onClick={resetPasswordAction}>Reset</button>
+          <button onClick={() => resetPasswordAction()}>Reset</button>
 
           <br />
           <div onClick={() => window.location.replace("/")}>

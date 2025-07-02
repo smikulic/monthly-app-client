@@ -214,7 +214,9 @@ export const SubcategoryFormFactory = ({
       <DatePickerStyled
         label="Rollover Date"
         value={subcategoryRolloverDate}
-        onChange={(date: any) => date && setSubcategoryRolloverDate(date)}
+        onChange={(date: Date | null) =>
+          date && setSubcategoryRolloverDate(date)
+        }
       />
     </FormDialog>
   );

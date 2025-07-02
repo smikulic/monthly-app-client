@@ -66,7 +66,8 @@ export const TOAST_MESSAGES = {
 
 // Form validation rules
 export const VALIDATION_RULES = {
-  REQUIRED: (value: any) => !!value && value !== "",
+  REQUIRED: (value: string | number | boolean | null | undefined) =>
+    !!value && value !== "",
   POSITIVE_NUMBER: (value: number) => value > 0,
   EMAIL: (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

@@ -119,7 +119,8 @@ export const ChartPie = ({
         trigger: "item",
         confine: true,
         textStyle: { fontSize: tooltipFont },
-        formatter: ({ name, percent }: any) => `${name}: (${percent}%)`,
+        formatter: ({ name, percent }: { name: string; percent: number }) =>
+          `${name}: (${percent}%)`,
         // formatter: "{b}: {c} ({d}%)",
       },
       series: [
@@ -140,7 +141,7 @@ export const ChartPie = ({
             // show: !isMobile,
             position: "inside",
             fontSize: innerFontSize,
-            formatter: ({ name }: any) => name,
+            formatter: ({ name }: { name: string }) => name,
             // formatter: "{b}\n{c}",
           },
           labelLine: {
@@ -168,7 +169,7 @@ export const ChartPie = ({
           label: {
             show: !isMobile,
             position: "outside",
-            formatter: ({ name }: any) => name,
+            formatter: ({ name }: { name: string }) => name,
             // formatter: "{b}",
           },
           labelLine: {

@@ -106,7 +106,7 @@ export const UpdateExpenseForm: React.FC<Props> = ({
       <DatePickerStyled
         label="Date"
         value={expenseDate}
-        onChange={(newValue: any) =>
+        onChange={(newValue: Date | null) =>
           newValue ? setExpenseDate(newValue) : null
         }
       />

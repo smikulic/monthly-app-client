@@ -230,7 +230,9 @@ export const InvestmentFormFactory = ({
       <DatePickerStyled
         label="Start Date"
         value={startDate}
-        onChange={(newValue: any) => (newValue ? setStartDate(newValue) : null)}
+        onChange={(newValue: Date | null) =>
+          newValue ? setStartDate(newValue) : null
+        }
       />
 
       {type === "create" && (
