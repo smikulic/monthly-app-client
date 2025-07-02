@@ -46,8 +46,10 @@ export type ChartExpensesPayload = {
 export type CreateInvestmentInput = {
   amount?: InputMaybe<Scalars['Int']>;
   currency: Scalars['String'];
+  initialAmount: Scalars['Int'];
   name: Scalars['String'];
   quantity: Scalars['Float'];
+  startDate: Scalars['String'];
 };
 
 export type Expense = {
@@ -69,8 +71,10 @@ export type Investment = {
   createdAt: Scalars['String'];
   currency: Scalars['String'];
   id: Scalars['ID'];
+  initialAmount: Scalars['Int'];
   name: Scalars['String'];
   quantity: Scalars['Float'];
+  startDate: Scalars['String'];
   updatedAt: Scalars['String'];
 };
 
@@ -325,8 +329,10 @@ export type UpdateInvestmentInput = {
   amount?: InputMaybe<Scalars['Int']>;
   currency?: InputMaybe<Scalars['String']>;
   id: Scalars['ID'];
+  initialAmount?: InputMaybe<Scalars['Int']>;
   name?: InputMaybe<Scalars['String']>;
   quantity?: InputMaybe<Scalars['Float']>;
+  startDate?: InputMaybe<Scalars['String']>;
 };
 
 export type User = {
@@ -454,6 +460,32 @@ export type DeleteExpenseMutationVariables = Exact<{
 
 
 export type DeleteExpenseMutation = { __typename?: 'Mutation', deleteExpense: { __typename?: 'Expense', id: string } };
+
+export type InvestmentsListQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type InvestmentsListQuery = { __typename?: 'Query', investments: Array<{ __typename?: 'Investment', id: string, createdAt: string, updatedAt: string, name: string, quantity: number, amount: number, currency: string, startDate: string, initialAmount: number }> };
+
+export type CreateInvestmentMutationVariables = Exact<{
+  input: CreateInvestmentInput;
+}>;
+
+
+export type CreateInvestmentMutation = { __typename?: 'Mutation', createInvestment: { __typename?: 'Investment', id: string, name: string } };
+
+export type UpdateInvestmentMutationVariables = Exact<{
+  input: UpdateInvestmentInput;
+}>;
+
+
+export type UpdateInvestmentMutation = { __typename?: 'Mutation', updateInvestment: { __typename?: 'Investment', id: string, name: string } };
+
+export type DeleteInvestmentMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type DeleteInvestmentMutation = { __typename?: 'Mutation', deleteInvestment: boolean };
 
 export type SavingGoalsListQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1136,6 +1168,147 @@ export function useDeleteExpenseMutation(baseOptions?: Apollo.MutationHookOption
 export type DeleteExpenseMutationHookResult = ReturnType<typeof useDeleteExpenseMutation>;
 export type DeleteExpenseMutationResult = Apollo.MutationResult<DeleteExpenseMutation>;
 export type DeleteExpenseMutationOptions = Apollo.BaseMutationOptions<DeleteExpenseMutation, DeleteExpenseMutationVariables>;
+export const InvestmentsListDocument = gql`
+    query InvestmentsList {
+  investments {
+    id
+    createdAt
+    updatedAt
+    name
+    quantity
+    amount
+    currency
+    startDate
+    initialAmount
+  }
+}
+    `;
+
+/**
+ * __useInvestmentsListQuery__
+ *
+ * To run a query within a React component, call `useInvestmentsListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useInvestmentsListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useInvestmentsListQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useInvestmentsListQuery(baseOptions?: Apollo.QueryHookOptions<InvestmentsListQuery, InvestmentsListQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<InvestmentsListQuery, InvestmentsListQueryVariables>(InvestmentsListDocument, options);
+      }
+export function useInvestmentsListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<InvestmentsListQuery, InvestmentsListQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<InvestmentsListQuery, InvestmentsListQueryVariables>(InvestmentsListDocument, options);
+        }
+export type InvestmentsListQueryHookResult = ReturnType<typeof useInvestmentsListQuery>;
+export type InvestmentsListLazyQueryHookResult = ReturnType<typeof useInvestmentsListLazyQuery>;
+export type InvestmentsListQueryResult = Apollo.QueryResult<InvestmentsListQuery, InvestmentsListQueryVariables>;
+export const CreateInvestmentDocument = gql`
+    mutation CreateInvestment($input: CreateInvestmentInput!) {
+  createInvestment(input: $input) {
+    id
+    name
+  }
+}
+    `;
+export type CreateInvestmentMutationFn = Apollo.MutationFunction<CreateInvestmentMutation, CreateInvestmentMutationVariables>;
+
+/**
+ * __useCreateInvestmentMutation__
+ *
+ * To run a mutation, you first call `useCreateInvestmentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateInvestmentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createInvestmentMutation, { data, loading, error }] = useCreateInvestmentMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateInvestmentMutation(baseOptions?: Apollo.MutationHookOptions<CreateInvestmentMutation, CreateInvestmentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateInvestmentMutation, CreateInvestmentMutationVariables>(CreateInvestmentDocument, options);
+      }
+export type CreateInvestmentMutationHookResult = ReturnType<typeof useCreateInvestmentMutation>;
+export type CreateInvestmentMutationResult = Apollo.MutationResult<CreateInvestmentMutation>;
+export type CreateInvestmentMutationOptions = Apollo.BaseMutationOptions<CreateInvestmentMutation, CreateInvestmentMutationVariables>;
+export const UpdateInvestmentDocument = gql`
+    mutation UpdateInvestment($input: UpdateInvestmentInput!) {
+  updateInvestment(input: $input) {
+    id
+    name
+  }
+}
+    `;
+export type UpdateInvestmentMutationFn = Apollo.MutationFunction<UpdateInvestmentMutation, UpdateInvestmentMutationVariables>;
+
+/**
+ * __useUpdateInvestmentMutation__
+ *
+ * To run a mutation, you first call `useUpdateInvestmentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateInvestmentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateInvestmentMutation, { data, loading, error }] = useUpdateInvestmentMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateInvestmentMutation(baseOptions?: Apollo.MutationHookOptions<UpdateInvestmentMutation, UpdateInvestmentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateInvestmentMutation, UpdateInvestmentMutationVariables>(UpdateInvestmentDocument, options);
+      }
+export type UpdateInvestmentMutationHookResult = ReturnType<typeof useUpdateInvestmentMutation>;
+export type UpdateInvestmentMutationResult = Apollo.MutationResult<UpdateInvestmentMutation>;
+export type UpdateInvestmentMutationOptions = Apollo.BaseMutationOptions<UpdateInvestmentMutation, UpdateInvestmentMutationVariables>;
+export const DeleteInvestmentDocument = gql`
+    mutation DeleteInvestment($id: ID!) {
+  deleteInvestment(id: $id)
+}
+    `;
+export type DeleteInvestmentMutationFn = Apollo.MutationFunction<DeleteInvestmentMutation, DeleteInvestmentMutationVariables>;
+
+/**
+ * __useDeleteInvestmentMutation__
+ *
+ * To run a mutation, you first call `useDeleteInvestmentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteInvestmentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteInvestmentMutation, { data, loading, error }] = useDeleteInvestmentMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteInvestmentMutation(baseOptions?: Apollo.MutationHookOptions<DeleteInvestmentMutation, DeleteInvestmentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteInvestmentMutation, DeleteInvestmentMutationVariables>(DeleteInvestmentDocument, options);
+      }
+export type DeleteInvestmentMutationHookResult = ReturnType<typeof useDeleteInvestmentMutation>;
+export type DeleteInvestmentMutationResult = Apollo.MutationResult<DeleteInvestmentMutation>;
+export type DeleteInvestmentMutationOptions = Apollo.BaseMutationOptions<DeleteInvestmentMutation, DeleteInvestmentMutationVariables>;
 export const SavingGoalsListDocument = gql`
     query SavingGoalsList {
   savingGoals {
