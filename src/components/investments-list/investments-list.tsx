@@ -8,7 +8,7 @@ import { Typography } from "@/components/ui/Typography";
 import { CategoryDetailsStyled } from "../categories-list/categories-list-style";
 import { InvestmentItemDetails } from "../investment-item-details/investment-item-details";
 import { IconMenu } from "../icon-menu/icon-menu";
-import { CategoriesListLoading } from "../categories-list/components/categories-list-loading";
+import { ListLoading } from "@/components/ui/ListLoading";
 import InvestmentFormFactory from "../investment-form-factory/investment-form-factory";
 // import { InvestmentDateStyled } from "../investment-item-details/investment-item-details-style";
 import dayjs from "dayjs";
@@ -50,7 +50,7 @@ export const InvestmentsList: React.FC<Props> = ({
 
   return (
     <div>
-      {loading && <CategoriesListLoading height={44} />}
+      {loading && <ListLoading height={44} itemCount={3} showDetails showActions />}
       {!loading && (!investments || investments.length === 0) && (
         <MainListItemStyled>No investments</MainListItemStyled>
       )}

@@ -9,7 +9,7 @@ import {
 import { useActionDropdown } from "@/hooks/useActionDropdown";
 import { CategoryFormFactory } from "@/components/category-form-factory/category-form-factory";
 import { SubcategoryFormFactory } from "@/components/subcategory-form-factory/subcategory-form-factory";
-import { CategoriesListLoading } from "./components/categories-list-loading";
+import { ListLoading } from "@/components/ui/ListLoading";
 import { CategoriesListNoData } from "./components/categories-list-no-data";
 import { CategoriesListData } from "./components/categories-list-data";
 
@@ -72,7 +72,7 @@ export const CategoriesList: React.FC<Props> = ({
 
   return (
     <div>
-      {loading && <CategoriesListLoading height={34} />}
+      {loading && <ListLoading height={34} itemCount={3} showDetails />}
       {!loading && noDataAvailable && <CategoriesListNoData />}
       {!loading && dataAvailable && (
         <CategoriesListData

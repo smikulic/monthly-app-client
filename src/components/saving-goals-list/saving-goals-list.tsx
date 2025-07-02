@@ -11,7 +11,7 @@ import { CategoryDetailsStyled } from "../categories-list/categories-list-style"
 import { SavingGoalItemDetails } from "../saving-goal-item-details/saving-goal-item-details";
 import { ProgressBar } from "../progress-bar/progress-bar";
 import { IconMenu } from "../icon-menu/icon-menu";
-import { CategoriesListLoading } from "../categories-list/components/categories-list-loading";
+import { ListLoading } from "@/components/ui/ListLoading";
 import SavingGoalFormFactory from "../saving-goal-form-factory/saving-goal-form-factory";
 import dayjs from "dayjs";
 
@@ -51,7 +51,7 @@ export const SavingGoalsList: React.FC<Props> = ({
 
   return (
     <div>
-      {loading && <CategoriesListLoading height={44} />}
+      {loading && <ListLoading height={44} itemCount={3} showDetails showActions />}
       {!loading && (!savingGoals || savingGoals.length === 0) && (
         <MainListItemStyled>No saving goals</MainListItemStyled>
       )}

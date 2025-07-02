@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Category, Subcategory, Expense } from "@/generated/graphql";
-import { ExpensesListLoading } from "./components/expenses-list-loading";
+import { ListLoading } from "@/components/ui/ListLoading";
 import { ExpensesListNoData } from "./components/expenses-list-no-data";
 import { ExpensesListData } from "./components/expenses-list-data";
 
@@ -42,7 +42,7 @@ export const ExpensesList: React.FC<Props> = ({
 
   return (
     <div>
-      {loading && <ExpensesListLoading />}
+      {loading && <ListLoading height={24} itemCount={3} showDetails />}
       {!loading && noDataAvailable && <ExpensesListNoData />}
       {!loading && dataAvailable && (
         <ExpensesListData
