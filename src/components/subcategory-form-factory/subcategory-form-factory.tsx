@@ -38,6 +38,18 @@ const useSubcategoryForm = (
         `You have successfully created ${createSubcategory.name} subcategory!`
       );
     },
+    onError: (error) => {
+      // Check for specific validation errors
+      if (error.message.includes("budgetAmount must be positive")) {
+        toast.error(
+          "Budget amount must be positive. Please enter a value greater than 0."
+        );
+      } else {
+        toast.error(
+          "There was an error creating the subcategory. Please try again."
+        );
+      }
+    },
   });
 
   const [updateSubcategory] = useUpdateSubcategoryMutation({
@@ -46,6 +58,24 @@ const useSubcategoryForm = (
       toast.success(
         `You have successfully updated ${updateSubcategory.name} subcategory!`
       );
+    },
+    onError: (error) => {
+      // Check for specific validation errors
+      if (error.message.includes("budgetAmount must be positive")) {
+        toast.error(
+          "Budget amount must be positive. Please enter a value greater than 0."
+        );
+      } else if (
+        error.message.includes("A subcategory with this name already exists")
+      ) {
+        toast.error(
+          "A subcategory with this name already exists. Please choose a different name."
+        );
+      } else {
+        toast.error(
+          "There was an error updating the subcategory. Please try again."
+        );
+      }
     },
   });
 

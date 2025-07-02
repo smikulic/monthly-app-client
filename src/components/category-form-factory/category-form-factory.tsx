@@ -31,6 +31,18 @@ const useCategoryForm = (
         `You have successfully created ${createCategory.name} category!`
       );
     },
+    onError: (error) => {
+      // Check if the error message contains the specific duplicate name error
+      if (error.message.includes("A category with this name already exists")) {
+        toast.error(
+          "A category with this name already exists. Please choose a different name."
+        );
+      } else {
+        toast.error(
+          "There was an error creating the category. Please try again."
+        );
+      }
+    },
   });
 
   const [updateCategory] = useUpdateCategoryMutation({
@@ -39,6 +51,18 @@ const useCategoryForm = (
       toast.success(
         `You have successfully updated ${updateCategory.name} category!`
       );
+    },
+    onError: (error) => {
+      // Check if the error message contains the specific duplicate name error
+      if (error.message.includes("A category with this name already exists")) {
+        toast.error(
+          "A category with this name already exists. Please choose a different name."
+        );
+      } else {
+        toast.error(
+          "There was an error updating the category. Please try again."
+        );
+      }
     },
   });
 
