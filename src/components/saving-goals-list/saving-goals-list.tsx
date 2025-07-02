@@ -14,6 +14,7 @@ import { IconMenu } from "../icon-menu/icon-menu";
 import { ListLoading } from "@/components/ui/ListLoading";
 import SavingGoalFormFactory from "../saving-goal-form-factory/saving-goal-form-factory";
 import dayjs from "dayjs";
+import { TOAST_MESSAGES, ENTITY_NAMES } from "@/constants/forms";
 
 interface Props {
   loading: boolean;
@@ -39,19 +40,24 @@ export const SavingGoalsList: React.FC<Props> = ({
 
   const [deleteSavingGoal] = useDeleteSavingGoalMutation({
     onError: () => {
-      toast.error(`There was an error while removing saving goal!`);
+      toast.error(TOAST_MESSAGES.ERROR.DELETE(ENTITY_NAMES.SAVING_GOAL));
     },
     onCompleted: ({ deleteSavingGoal }) => {
       refetchSavingGoals();
       toast.success(
-        `You have successfully removed ${deleteSavingGoal.name} saving goal!`
+        TOAST_MESSAGES.SUCCESS.DELETE(
+          ENTITY_NAMES.SAVING_GOAL,
+          deleteSavingGoal.name
+        )
       );
     },
   });
 
   return (
     <div>
-      {loading && <ListLoading height={44} itemCount={3} showDetails showActions />}
+      {loading && (
+        <ListLoading height={44} itemCount={3} showDetails showActions />
+      )}
       {!loading && (!savingGoals || savingGoals.length === 0) && (
         <MainListItemStyled>No saving goals</MainListItemStyled>
       )}

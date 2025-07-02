@@ -13,21 +13,18 @@ import { Alert } from "@/components/ui/Alert";
 import { FormDialog } from "../form-dialog/form-dialog";
 import { UserContext } from "@/App";
 import { analytics } from "@/utils/mixpanel";
+import {
+  CURRENCY_OPTIONS,
+  FORM_ACTIONS,
+  TOAST_MESSAGES,
+  ENTITY_NAMES,
+} from "@/constants/forms";
 
 interface FormProps {
   open: boolean;
   closeForm: () => void;
   formData?: Investment; // Optional, only provided for the update form
 }
-
-const CURRENCY_OPTIONS = [
-  { value: "USD", label: "USD" },
-  { value: "EUR", label: "EUR" },
-  { value: "GBP", label: "GBP" },
-  { value: "CAD", label: "CAD" },
-  { value: "AUD", label: "AUD" },
-  { value: "JPY", label: "JPY" },
-];
 
 const useInvestmentForm = (
   type: "create" | "update",
@@ -60,7 +57,10 @@ const useInvestmentForm = (
       );
       closeForm();
       toast.success(
-        `You have successfully created ${createInvestment.name} investment asset!`
+        TOAST_MESSAGES.SUCCESS.CREATE(
+          ENTITY_NAMES.INVESTMENT,
+          createInvestment.name
+        )
       );
     },
   });
@@ -69,7 +69,10 @@ const useInvestmentForm = (
     onCompleted: ({ updateInvestment }) => {
       closeForm();
       toast.success(
-        `You have successfully updated ${updateInvestment.name} investment asset!`
+        TOAST_MESSAGES.SUCCESS.UPDATE(
+          ENTITY_NAMES.INVESTMENT,
+          updateInvestment.name
+        )
       );
     },
   });
@@ -123,7 +126,7 @@ const useInvestmentForm = (
     setInitialAmount,
     setStartDate,
     handleFormAction,
-    formActionText: isCreateMode ? "Create" : "Save",
+    formActionText: isCreateMode ? FORM_ACTIONS.CREATE : FORM_ACTIONS.SAVE,
   };
 };
 

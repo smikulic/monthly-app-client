@@ -11,6 +11,7 @@ import { SelectStyled, TextFieldStyled } from "@/shared";
 import { DatePickerStyled } from "@/components/ui/DatePickerStyled";
 import { MenuItem } from "@/components/ui/MenuItem";
 import { FormDialog } from "../form-dialog/form-dialog";
+import { FORM_ACTIONS, TOAST_MESSAGES, ENTITY_NAMES } from "@/constants/forms";
 
 interface Props {
   open: boolean;
@@ -52,9 +53,7 @@ export const UpdateExpenseForm: React.FC<Props> = ({
       client.cache.evict({ id: "ROOT_QUERY", fieldName: "chartExpenses" });
       client.cache.gc();
 
-      toast.success(
-        `You have successfully updated ${updateExpense.id} expense!`
-      );
+      toast.success(TOAST_MESSAGES.SUCCESS.UPDATE(ENTITY_NAMES.EXPENSE));
     },
   });
 
@@ -71,7 +70,7 @@ export const UpdateExpenseForm: React.FC<Props> = ({
       open={open}
       title="Expense"
       disabled={formInvalid}
-      formActionText="Save"
+      formActionText={FORM_ACTIONS.SAVE}
       closeForm={closeForm}
       formAction={() =>
         updateExpense({

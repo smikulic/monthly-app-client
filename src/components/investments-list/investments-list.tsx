@@ -12,6 +12,7 @@ import { ListLoading } from "@/components/ui/ListLoading";
 import InvestmentFormFactory from "../investment-form-factory/investment-form-factory";
 // import { InvestmentDateStyled } from "../investment-item-details/investment-item-details-style";
 import dayjs from "dayjs";
+import { TOAST_MESSAGES, ENTITY_NAMES } from "@/constants/forms";
 
 interface Props {
   loading: boolean;
@@ -35,11 +36,11 @@ export const InvestmentsList: React.FC<Props> = ({
 
   const [deleteInvestment] = useDeleteInvestmentMutation({
     onError: () => {
-      toast.error(`There was an error while removing investment!`);
+      toast.error(TOAST_MESSAGES.ERROR.DELETE(ENTITY_NAMES.INVESTMENT));
     },
     onCompleted: () => {
       refetchInvestments();
-      toast.success(`You have successfully removed the investment!`);
+      toast.success(TOAST_MESSAGES.SUCCESS.DELETE(ENTITY_NAMES.INVESTMENT));
     },
   });
 
@@ -50,7 +51,9 @@ export const InvestmentsList: React.FC<Props> = ({
 
   return (
     <div>
-      {loading && <ListLoading height={44} itemCount={3} showDetails showActions />}
+      {loading && (
+        <ListLoading height={44} itemCount={3} showDetails showActions />
+      )}
       {!loading && (!investments || investments.length === 0) && (
         <MainListItemStyled>No investments</MainListItemStyled>
       )}

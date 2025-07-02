@@ -10,6 +10,7 @@ import { DatePickerStyled } from "@/components/ui/DatePickerStyled";
 import { Alert } from "@/components/ui/Alert";
 import { FormDialog } from "../form-dialog/form-dialog";
 import { analytics } from "@/utils/mixpanel";
+import { FORM_ACTIONS, TOAST_MESSAGES, ENTITY_NAMES } from "@/constants/forms";
 
 interface FormProps {
   open: boolean;
@@ -46,7 +47,10 @@ const useSavingGoalForm = (
 
       closeForm();
       toast.success(
-        `You have successfully created ${createSavingGoal.name} saving goal!`
+        TOAST_MESSAGES.SUCCESS.CREATE(
+          ENTITY_NAMES.SAVING_GOAL,
+          createSavingGoal.name
+        )
       );
     },
   });
@@ -55,7 +59,10 @@ const useSavingGoalForm = (
     onCompleted: ({ updateSavingGoal }) => {
       closeForm();
       toast.success(
-        `You have successfully updated ${updateSavingGoal.name} saving goal!`
+        TOAST_MESSAGES.SUCCESS.UPDATE(
+          ENTITY_NAMES.SAVING_GOAL,
+          updateSavingGoal.name
+        )
       );
     },
   });
@@ -98,7 +105,7 @@ const useSavingGoalForm = (
     setSavingGoalInitialAmount,
     setSavingGoalDate,
     handleFormAction,
-    formActionText: isCreateMode ? "Create" : "Save",
+    formActionText: isCreateMode ? FORM_ACTIONS.CREATE : FORM_ACTIONS.SAVE,
   };
 };
 

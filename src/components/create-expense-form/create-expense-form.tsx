@@ -9,6 +9,7 @@ import { MenuItem } from "@/components/ui/MenuItem";
 import { SubcategoryDecoratedWithExpenses } from "../expenses-list/expenses-list";
 import { FormDialog } from "../form-dialog/form-dialog";
 import { analytics } from "@/utils/mixpanel";
+import { FORM_ACTIONS, TOAST_MESSAGES, ENTITY_NAMES } from "@/constants/forms";
 
 interface Props {
   open: boolean;
@@ -58,7 +59,7 @@ export const CreateExpenseForm: React.FC<Props> = ({
       client.cache.evict({ id: "ROOT_QUERY", fieldName: "chartExpenses" });
       client.cache.gc();
 
-      toast.success(`You have successfully created a new expense!`);
+      toast.success(TOAST_MESSAGES.SUCCESS.CREATE(ENTITY_NAMES.EXPENSE));
       console.log(`Expense ${createExpense.id} created!`);
     },
   });
@@ -76,7 +77,7 @@ export const CreateExpenseForm: React.FC<Props> = ({
       open={open}
       title="Expense"
       disabled={formInvalid}
-      formActionText="Create"
+      formActionText={FORM_ACTIONS.CREATE}
       closeForm={closeForm}
       formAction={() =>
         createExpense({

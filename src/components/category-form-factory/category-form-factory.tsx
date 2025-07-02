@@ -9,6 +9,7 @@ import { TextFieldStyled } from "@/shared";
 import { Alert } from "@/components/ui/Alert";
 import { FormDialog } from "../form-dialog/form-dialog";
 import { analytics } from "@/utils/mixpanel";
+import { FORM_ACTIONS, TOAST_MESSAGES, ENTITY_NAMES } from "@/constants/forms";
 
 interface FormProps {
   open: boolean;
@@ -30,19 +31,18 @@ const useCategoryForm = (
       analytics.trackCategoryCreated(createCategory.name);
       closeForm();
       toast.success(
-        `You have successfully created ${createCategory.name} category!`
+        TOAST_MESSAGES.SUCCESS.CREATE(
+          ENTITY_NAMES.CATEGORY,
+          createCategory.name
+        )
       );
     },
     onError: (error) => {
       // Check if the error message contains the specific duplicate name error
       if (error.message.includes("A category with this name already exists")) {
-        toast.error(
-          "A category with this name already exists. Please choose a different name."
-        );
+        toast.error(TOAST_MESSAGES.ERROR.DUPLICATE_NAME(ENTITY_NAMES.CATEGORY));
       } else {
-        toast.error(
-          "There was an error creating the category. Please try again."
-        );
+        toast.error(TOAST_MESSAGES.ERROR.CREATE(ENTITY_NAMES.CATEGORY));
       }
     },
   });
@@ -51,19 +51,18 @@ const useCategoryForm = (
     onCompleted: ({ updateCategory }) => {
       closeForm();
       toast.success(
-        `You have successfully updated ${updateCategory.name} category!`
+        TOAST_MESSAGES.SUCCESS.UPDATE(
+          ENTITY_NAMES.CATEGORY,
+          updateCategory.name
+        )
       );
     },
     onError: (error) => {
       // Check if the error message contains the specific duplicate name error
       if (error.message.includes("A category with this name already exists")) {
-        toast.error(
-          "A category with this name already exists. Please choose a different name."
-        );
+        toast.error(TOAST_MESSAGES.ERROR.DUPLICATE_NAME(ENTITY_NAMES.CATEGORY));
       } else {
-        toast.error(
-          "There was an error updating the category. Please try again."
-        );
+        toast.error(TOAST_MESSAGES.ERROR.UPDATE(ENTITY_NAMES.CATEGORY));
       }
     },
   });
@@ -85,7 +84,7 @@ const useCategoryForm = (
     categoryName,
     setCategoryName,
     handleFormAction,
-    formActionText: isCreateMode ? "Create" : "Save",
+    formActionText: isCreateMode ? FORM_ACTIONS.CREATE : FORM_ACTIONS.SAVE,
   };
 };
 

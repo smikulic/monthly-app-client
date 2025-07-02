@@ -12,6 +12,7 @@ import { SubcategoryFormFactory } from "@/components/subcategory-form-factory/su
 import { ListLoading } from "@/components/ui/ListLoading";
 import { CategoriesListNoData } from "./components/categories-list-no-data";
 import { CategoriesListData } from "./components/categories-list-data";
+import { TOAST_MESSAGES, ENTITY_NAMES } from "@/constants/forms";
 
 interface Props {
   loading: boolean;
@@ -41,28 +42,30 @@ export const CategoriesList: React.FC<Props> = ({
 
   const [deleteCategory] = useDeleteCategoryMutation({
     onError: () => {
-      toast.error(
-        `You need to remove all subcategories before removing its category!`
-      );
+      toast.error(TOAST_MESSAGES.ERROR.CATEGORY_HAS_SUBCATEGORIES);
     },
     onCompleted: ({ deleteCategory }) => {
       refetchCategories();
       toast.success(
-        `You have successfully removed ${deleteCategory.name} category!`
+        TOAST_MESSAGES.SUCCESS.DELETE(
+          ENTITY_NAMES.CATEGORY,
+          deleteCategory.name
+        )
       );
     },
   });
 
   const [deleteSubcategory] = useDeleteSubcategoryMutation({
     onError: () => {
-      toast.error(
-        `You need to remove all subcategory expenses before removing its subcategory!`
-      );
+      toast.error(TOAST_MESSAGES.ERROR.SUBCATEGORY_HAS_EXPENSES);
     },
     onCompleted: ({ deleteSubcategory }) => {
       refetchCategories();
       toast.success(
-        `You have successfully removed ${deleteSubcategory.name} subcategory!`
+        TOAST_MESSAGES.SUCCESS.DELETE(
+          ENTITY_NAMES.SUBCATEGORY,
+          deleteSubcategory.name
+        )
       );
     },
   });

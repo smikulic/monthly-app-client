@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { useResetPasswordMutation } from "../../generated/graphql";
 import { useParamsQuery } from "../../hooks/useParamsQuery";
+import { TOAST_MESSAGES } from "@/constants/forms";
 import "../login-page/login-page-container.css";
 
 export const RESET_PASSWORD_MUTATION = gql`
@@ -29,7 +30,7 @@ export const ResetPasswordPageContainer = () => {
       toast.error(error.message);
     },
     onCompleted: ({ resetPassword }) => {
-      toast.success("You have successfully reset your password!");
+      toast.success(TOAST_MESSAGES.SUCCESS.GENERIC("Password reset"));
     },
   });
 

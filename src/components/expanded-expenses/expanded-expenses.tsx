@@ -11,6 +11,7 @@ import {
   ExpenseListItemStyled,
 } from "./expanded-expenses-style";
 import { IconMenu } from "../icon-menu/icon-menu";
+import { TOAST_MESSAGES, ENTITY_NAMES } from "@/constants/forms";
 
 interface Props {
   expenses: Expense[];
@@ -34,7 +35,7 @@ export const ExpandedExpenses: React.FC<Props> = ({
 
   const [deleteExpense] = useDeleteExpenseMutation({
     onError: () => {
-      toast.error(`Error while deleting an expense! Please try again.`);
+      toast.error(TOAST_MESSAGES.ERROR.DELETE(ENTITY_NAMES.EXPENSE));
     },
     onCompleted: ({ deleteExpense }) => {
       refetchExpenses();
@@ -44,9 +45,7 @@ export const ExpandedExpenses: React.FC<Props> = ({
       client.cache.evict({ id: "ROOT_QUERY", fieldName: "chartExpenses" });
       client.cache.gc();
 
-      toast.success(
-        `You have successfully removed ${deleteExpense.id} expense!`
-      );
+      toast.success(TOAST_MESSAGES.SUCCESS.DELETE(ENTITY_NAMES.EXPENSE));
     },
   });
 

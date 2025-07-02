@@ -12,6 +12,7 @@ import { DatePickerStyled } from "@/components/ui/DatePickerStyled";
 import { MenuItem } from "@/components/ui/MenuItem";
 import { FormDialog } from "../form-dialog/form-dialog";
 import { analytics } from "@/utils/mixpanel";
+import { FORM_ACTIONS, TOAST_MESSAGES, ENTITY_NAMES } from "@/constants/forms";
 
 const useSubcategoryForm = (
   type: "create" | "update",
@@ -47,19 +48,18 @@ const useSubcategoryForm = (
 
       closeForm();
       toast.success(
-        `You have successfully created ${createSubcategory.name} subcategory!`
+        TOAST_MESSAGES.SUCCESS.CREATE(
+          ENTITY_NAMES.SUBCATEGORY,
+          createSubcategory.name
+        )
       );
     },
     onError: (error) => {
       // Check for specific validation errors
       if (error.message.includes("budgetAmount must be positive")) {
-        toast.error(
-          "Budget amount must be positive. Please enter a value greater than 0."
-        );
+        toast.error(TOAST_MESSAGES.ERROR.POSITIVE_AMOUNT);
       } else {
-        toast.error(
-          "There was an error creating the subcategory. Please try again."
-        );
+        toast.error(TOAST_MESSAGES.ERROR.CREATE(ENTITY_NAMES.SUBCATEGORY));
       }
     },
   });
@@ -68,25 +68,24 @@ const useSubcategoryForm = (
     onCompleted: ({ updateSubcategory }) => {
       closeForm();
       toast.success(
-        `You have successfully updated ${updateSubcategory.name} subcategory!`
+        TOAST_MESSAGES.SUCCESS.UPDATE(
+          ENTITY_NAMES.SUBCATEGORY,
+          updateSubcategory.name
+        )
       );
     },
     onError: (error) => {
       // Check for specific validation errors
       if (error.message.includes("budgetAmount must be positive")) {
-        toast.error(
-          "Budget amount must be positive. Please enter a value greater than 0."
-        );
+        toast.error(TOAST_MESSAGES.ERROR.POSITIVE_AMOUNT);
       } else if (
         error.message.includes("A subcategory with this name already exists")
       ) {
         toast.error(
-          "A subcategory with this name already exists. Please choose a different name."
+          TOAST_MESSAGES.ERROR.DUPLICATE_NAME(ENTITY_NAMES.SUBCATEGORY)
         );
       } else {
-        toast.error(
-          "There was an error updating the subcategory. Please try again."
-        );
+        toast.error(TOAST_MESSAGES.ERROR.UPDATE(ENTITY_NAMES.SUBCATEGORY));
       }
     },
   });
@@ -121,7 +120,7 @@ const useSubcategoryForm = (
     setSubcategoryBudget,
     setSubcategoryRolloverDate,
     handleFormAction,
-    formActionText: isCreateMode ? "Create" : "Save",
+    formActionText: isCreateMode ? FORM_ACTIONS.CREATE : FORM_ACTIONS.SAVE,
   };
 };
 
