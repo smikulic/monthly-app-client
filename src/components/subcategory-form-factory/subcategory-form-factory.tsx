@@ -11,10 +11,12 @@ import { SelectStyled, TextFieldStyled } from "@/shared";
 import { DatePickerStyled } from "@/components/ui/DatePickerStyled";
 import { MenuItem } from "@/components/ui/MenuItem";
 import { FormDialog } from "../form-dialog/form-dialog";
+import { analytics } from "@/utils/mixpanel";
 
 const useSubcategoryForm = (
   type: "create" | "update",
   presetCategoryId: string,
+  categories: Category[],
   closeForm: () => void,
   formData?: Subcategory
 ) => {
@@ -33,6 +35,16 @@ const useSubcategoryForm = (
 
   const [createSubcategory] = useCreateSubcategoryMutation({
     onCompleted: ({ createSubcategory }) => {
+      // Find the selected category to get category name
+      const selectedCategory = categories.find((cat) => cat.id === categoryId);
+
+      // Track subcategory creation
+      analytics.trackSubcategoryCreated(
+        createSubcategory.name,
+        selectedCategory?.name || "Unknown",
+        createSubcategory?.budgetAmount || 0
+      );
+
       closeForm();
       toast.success(
         `You have successfully created ${createSubcategory.name} subcategory!`
@@ -139,7 +151,13 @@ export const SubcategoryFormFactory = ({
     setSubcategoryRolloverDate,
     handleFormAction,
     formActionText,
-  } = useSubcategoryForm(type, presetCategoryId, closeForm, formData);
+  } = useSubcategoryForm(
+    type,
+    presetCategoryId,
+    categories,
+    closeForm,
+    formData
+  );
 
   const handleCategoryChange = (event: SelectChangeEvent) => {
     setCategoryId(event.target.value);

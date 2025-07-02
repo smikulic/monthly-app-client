@@ -8,6 +8,7 @@ import {
 import { TextFieldStyled } from "@/shared";
 import { Alert } from "@/components/ui/Alert";
 import { FormDialog } from "../form-dialog/form-dialog";
+import { analytics } from "@/utils/mixpanel";
 
 interface FormProps {
   open: boolean;
@@ -26,6 +27,7 @@ const useCategoryForm = (
 
   const [createCategory] = useCreateCategoryMutation({
     onCompleted: ({ createCategory }) => {
+      analytics.trackCategoryCreated(createCategory.name);
       closeForm();
       toast.success(
         `You have successfully created ${createCategory.name} category!`

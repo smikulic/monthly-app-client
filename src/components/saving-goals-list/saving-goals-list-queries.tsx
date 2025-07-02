@@ -27,6 +27,8 @@ export const CREATE_SAVING_GOAL_MUTATION = gql`
       initialSaveAmount: $initialSaveAmount
     ) {
       name
+      goalAmount
+      goalDate
     }
   }
 `;
