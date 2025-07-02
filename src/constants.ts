@@ -1,5 +1,5 @@
-export const AUTH_TOKEN = "monthly-auth-token";
-export const AUTH_TOKEN_USER = "monthly-auth-token-user";
+export const AUTH_TOKEN = import.meta.env.VITE_AUTH_TOKEN_KEY;
+export const AUTH_TOKEN_USER = import.meta.env.VITE_AUTH_TOKEN_USER_KEY;
 
 export const months = [
   "Jan",
