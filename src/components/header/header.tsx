@@ -34,7 +34,7 @@ export const Header = ({ onLogout }: { onLogout: () => void }) => {
   return (
     <HeaderStyled>
       {!isHome && (
-        <BackButtonStyled onClick={() => navigate("/")}>
+        <BackButtonStyled onClick={() => navigate("/")} data-testId="back-button">
           <ChevronLeftIcon />
           back
         </BackButtonStyled>

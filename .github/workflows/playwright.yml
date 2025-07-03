@@ -1,0 +1,30 @@
+name: Playwright Tests
+on:
+  pull_request:
+    branches: [main, master]
+  # Removed push trigger to avoid CI failures due to missing dev server
+  # Run manually with: gh workflow run playwright.yml
+  workflow_dispatch:
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - name: Install dependencies
+        run: npm install -g yarn && yarn
+      - name: Install Playwright Browsers
+        run: yarn playwright install --with-deps
+      - name: Run Playwright tests
+        run: yarn playwright test
+        # Note: These tests require a backend server to be running
+        # Currently configured for localhost:3000
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30

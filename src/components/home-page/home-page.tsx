@@ -90,8 +90,11 @@ export const HomePage = ({
         <Box sx={{ padding: 1 }}>
           {loadingChartExpenses && <Skeleton animation="wave" height={300} />}
           {!loadingChartExpenses &&
-            chartExpensesData &&
-            chartCategoriesData && (
+            Array.isArray(chartExpensesData) &&
+            chartExpensesData.length === 12 &&
+            Array.isArray(chartCategoriesData) &&
+            typeof totalBudgetAmount === "number" &&
+            !isNaN(totalBudgetAmount) && (
               <>
                 {tabIndex === 0 && (
                   <ChartBudgetExpense
@@ -100,12 +103,17 @@ export const HomePage = ({
                     pageDate={pageDate}
                   />
                 )}
-                {tabIndex === 1 && <ChartPie data={chartCategoriesData} />}
+                {tabIndex === 1 && chartCategoriesData.length > 0 && (
+                  <ChartPie data={chartCategoriesData} />
+                )}
               </>
             )}
           {!loadingChartExpenses &&
-            chartExpensesData.length === 0 &&
-            chartCategoriesData.length === 0 && (
+            (!Array.isArray(chartExpensesData) ||
+              chartExpensesData.length > 0 ||
+              !Array.isArray(chartCategoriesData) ||
+              typeof totalBudgetAmount !== "number" ||
+              isNaN(totalBudgetAmount)) && (
               <Box sx={{ p: 4, textAlign: "center" }}>
                 <Typography variant="subtitle1" color="textSecondary">
                   No chart data to display.

@@ -1,5 +1,5 @@
 import { useQuery } from "@apollo/client";
-import * as Sentry from "@sentry/react";
+// import * as Sentry from "@sentry/react";
 import dayjs from "dayjs";
 import { SavingGoal, Investment } from "@/generated/graphql";
 import {
@@ -66,7 +66,8 @@ export const HomePageContainer = ({
     ) || 0;
 
   return (
-    <Sentry.ErrorBoundary fallback={<p>An error has occurred</p>}>
+    // <Sentry.ErrorBoundary fallback={<p>An error has occurred</p>}>
+    <>
       <ActionsBar
         pageDate={pageDate}
         onClickNext={onClickNext}
@@ -83,13 +84,16 @@ export const HomePageContainer = ({
         totalBudgetAmount={totalBudgetAmount}
         totalSavingGoalsAmount={totalSavingGoalsAmount}
         totalInvestmentsValue={totalInvestmentsValue}
-        chartExpensesData={chartExpensesData?.chartExpenses?.monthlyTotals}
+        chartExpensesData={
+          chartExpensesData?.chartExpenses?.monthlyTotals || []
+        }
         chartCategoriesData={
-          chartExpensesData?.chartExpenses?.categoryExpenseTotals
+          chartExpensesData?.chartExpenses?.categoryExpenseTotals || []
         }
         loadingChartExpenses={loadingChartExpenses}
         pageDate={pageDate}
       />
-    </Sentry.ErrorBoundary>
+    </>
+    // </Sentry.ErrorBoundary>
   );
 };

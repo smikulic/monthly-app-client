@@ -33,9 +33,11 @@ export const ChartPie = ({
 
   const categoryTotals = useMemo(() => {
     const map: Record<string, number> = {};
-    data.forEach(({ categoryName, total }) => {
-      map[categoryName] = (map[categoryName] || 0) + total;
-    });
+    if (Array.isArray(data)) {
+      data.forEach(({ categoryName, total }) => {
+        map[categoryName] = (map[categoryName] || 0) + total;
+      });
+    }
     return map;
   }, [data]);
   const categories = Object.keys(categoryTotals);
@@ -78,6 +80,7 @@ export const ChartPie = ({
 
   // outer data: grouped by category so siblings sit next to each other
   const outerData = useMemo(() => {
+    if (!Array.isArray(data)) return [];
     return categories.flatMap((cat) =>
       data
         .filter((d) => d.categoryName === cat)
@@ -211,6 +214,23 @@ export const ChartPie = ({
       tooltipFont,
     ]
   );
+
+  // Don't render chart if data is invalid
+  if (!Array.isArray(data) || data.length === 0) {
+    return (
+      <div
+        style={{
+          width,
+          height,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <span>No chart data to display</span>
+      </div>
+    );
+  }
 
   return (
     <ReactEChartsCore
