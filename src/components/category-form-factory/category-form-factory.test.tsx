@@ -52,6 +52,13 @@ const mocks = [createCategoryMock, updateCategoryMock];
 vi.mock("react-toastify", () => ({
   toast: {
     success: vi.fn(),
+    error: vi.fn(),
+  },
+}));
+
+vi.mock("@/utils/mixpanel", () => ({
+  analytics: {
+    trackCategoryCreated: vi.fn(),
   },
 }));
 

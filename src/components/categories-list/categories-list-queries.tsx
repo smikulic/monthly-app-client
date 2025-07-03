@@ -20,6 +20,7 @@ export const GET_CATEGORIES_LIST = gql`
 export const CREATE_CATEGORY_MUTATION = gql`
   mutation CreateCategory($name: String!) {
     createCategory(name: $name) {
+      id
       name
     }
   }
@@ -27,6 +28,7 @@ export const CREATE_CATEGORY_MUTATION = gql`
 export const UPDATE_CATEGORY_MUTATION = gql`
   mutation UpdateCategory($id: ID!, $name: String!) {
     updateCategory(id: $id, name: $name) {
+      id
       name
     }
   }

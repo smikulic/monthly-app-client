@@ -361,7 +361,7 @@ export type CreateCategoryMutationVariables = Exact<{
 }>;
 
 
-export type CreateCategoryMutation = { __typename?: 'Mutation', createCategory: { __typename?: 'Category', name: string } };
+export type CreateCategoryMutation = { __typename?: 'Mutation', createCategory: { __typename?: 'Category', id: string, name: string } };
 
 export type UpdateCategoryMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -369,7 +369,7 @@ export type UpdateCategoryMutationVariables = Exact<{
 }>;
 
 
-export type UpdateCategoryMutation = { __typename?: 'Mutation', updateCategory: { __typename?: 'Category', name: string } };
+export type UpdateCategoryMutation = { __typename?: 'Mutation', updateCategory: { __typename?: 'Category', id: string, name: string } };
 
 export type DeleteCategoryMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -661,6 +661,7 @@ export type CategoriesListQueryResult = Apollo.QueryResult<CategoriesListQuery, 
 export const CreateCategoryDocument = gql`
     mutation CreateCategory($name: String!) {
   createCategory(name: $name) {
+    id
     name
   }
 }
@@ -694,6 +695,7 @@ export type CreateCategoryMutationOptions = Apollo.BaseMutationOptions<CreateCat
 export const UpdateCategoryDocument = gql`
     mutation UpdateCategory($id: ID!, $name: String!) {
   updateCategory(id: $id, name: $name) {
+    id
     name
   }
 }
