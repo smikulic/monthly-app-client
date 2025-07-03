@@ -15,7 +15,7 @@ import {
 // renderer
 import { CanvasRenderer } from "echarts/renderers";
 
-import { useTheme } from "@mui/material";
+import { useTheme } from "@/hooks/useTheme";
 import { UserContext } from "@/App";
 import { months } from "@/constants";
 import { formatAmount } from "@/utils/format";

@@ -1,8 +1,7 @@
-import { Tab, TabProps, Tabs, TabsProps } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { Tab, TabProps, Tabs, TabsProps } from "./components/ui/Tabs";
 import { SelectField } from "./components/ui/Select";
 import { TextField } from "./components/ui/TextField";
-import shadows from "@mui/material/styles/shadows";
 
 export const ListItemStyled = styled("div")({
   display: "flex",

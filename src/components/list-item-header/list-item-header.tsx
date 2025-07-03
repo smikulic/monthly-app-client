@@ -2,7 +2,7 @@ import React from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { IconStyled, ListItemHeaderStyled } from "./list-item-header-style";
-import Typography from "@mui/material/Typography";
+import { Typography } from "@/components/ui/Typography";
 
 interface Props {
   title: string;

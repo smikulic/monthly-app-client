@@ -5,7 +5,8 @@ import { PieChart } from "echarts/charts";
 import { TooltipComponent, LegendComponent } from "echarts/components";
 import { CanvasRenderer } from "echarts/renderers";
 
-import { useMediaQuery, useTheme } from "@mui/material";
+import { useTheme } from "@/hooks/useTheme";
+import { useResponsive } from "@/hooks/useResponsive";
 import { CategoryExpenseTotal } from "@/generated/graphql";
 import { UserContext } from "@/App";
 import { formatAmount } from "@/utils/format";
@@ -26,8 +27,8 @@ export const ChartPie = ({
   height = 400,
   padWidth = 2,
 }: ChartPieProps) => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const { palette } = useTheme();
+  const { isMobile } = useResponsive();
   const userCurrency = useContext(UserContext);
 
   const categoryTotals = useMemo(() => {
@@ -41,27 +42,27 @@ export const ChartPie = ({
 
   // memoize the category→color map so it only changes when categories or palette change
   const categoryColorMap = useMemo<Record<string, string>>(() => {
-    const palette = [
-      theme.palette.primary.main,
-      theme.palette.secondary.main,
-      theme.palette.error.main,
-      theme.palette.warning.main,
-      theme.palette.info.main,
-      theme.palette.success.main,
+    const colors = [
+      palette.primary.main,
+      palette.secondary.main,
+      palette.error.main,
+      palette.warning.main,
+      palette.info.main,
+      palette.success.main,
     ];
     const map: Record<string, string> = {};
     categories.forEach((cat, i) => {
-      map[cat] = palette[i % palette.length];
+      map[cat] = colors[i % colors.length];
     });
     return map;
   }, [
     categories,
-    theme.palette.primary.main,
-    theme.palette.secondary.main,
-    theme.palette.error.main,
-    theme.palette.warning.main,
-    theme.palette.info.main,
-    theme.palette.success.main,
+    palette.primary.main,
+    palette.secondary.main,
+    palette.error.main,
+    palette.warning.main,
+    palette.info.main,
+    palette.success.main,
   ]);
 
   // 2) Prepare inner (categories) and outer (subcategories) series data

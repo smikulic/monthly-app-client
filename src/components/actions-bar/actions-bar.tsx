@@ -2,9 +2,9 @@ import { ReactNode } from "react";
 import dayjs from "dayjs";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import Switch from "@mui/material/Switch";
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
+import { Switch } from "@/components/ui/Switch";
+import { FormGroup } from "@/components/ui/FormGroup";
+import { FormControlLabel } from "@/components/ui/FormControl";
 import { ActionsBarStyled, MonthPaginationStyled } from "./actions-bar-style";
 
 export const ActionsBar = ({

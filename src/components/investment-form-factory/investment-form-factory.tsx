@@ -1,6 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { FormControl, InputLabel, Select } from "@mui/material";
+import { FormControl } from "@/components/ui/FormControl";
+import { InputLabel } from "@/components/ui/InputLabel";
+import { Select } from "@/components/ui/Select";
 import {
   Investment,
   useCreateInvestmentMutation,

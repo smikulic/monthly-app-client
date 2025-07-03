@@ -1,10 +1,11 @@
-import React from "react";
+import { useState, MouseEvent } from "react";
 import { useNavigate, useLocation } from "react-router";
-import { Button, ListItemIcon, Menu } from "@mui/material";
+import { AUTH_TOKEN_USER } from "@/constants";
+import { Button } from "@/components/ui/Button";
+import { ListItemIcon, Menu } from "@/components/ui/Menu";
 import { Logout, AccountCircle, AssessmentOutlined } from "@mui/icons-material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import MenuIcon from "@mui/icons-material/Menu";
-import { AUTH_TOKEN_USER } from "@/constants";
 import { BackButtonStyled, HeaderStyled } from "./header-style";
 import { Box } from "@/components/ui/Box";
 import { MenuItem } from "@/components/ui/MenuItem";
@@ -13,11 +14,11 @@ export const Header = ({ onLogout }: { onLogout: () => void }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const openMenu = Boolean(anchorEl);
 
-  const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => {
+  const handleMenuClick = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 

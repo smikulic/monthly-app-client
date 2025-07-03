@@ -64,66 +64,6 @@ export const TOAST_MESSAGES = {
   },
 } as const;
 
-// Form validation rules
-export const VALIDATION_RULES = {
-  REQUIRED: (value: string | number | boolean | null | undefined) =>
-    !!value && value !== "",
-  POSITIVE_NUMBER: (value: number) => value > 0,
-  EMAIL: (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  },
-  MIN_LENGTH: (minLength: number) => (value: string) =>
-    value.length >= minLength,
-  MAX_LENGTH: (maxLength: number) => (value: string) =>
-    value.length <= maxLength,
-} as const;
-
-// Common form field configurations
-export const FORM_FIELD_CONFIGS = {
-  NAME: {
-    label: "Name",
-    placeholder: "Enter name",
-    required: true,
-    type: "text" as const,
-  },
-  EMAIL: {
-    label: "Email",
-    placeholder: "Enter email address",
-    required: true,
-    type: "email" as const,
-  },
-  PASSWORD: {
-    label: "Password",
-    placeholder: "Enter password",
-    required: true,
-    type: "password" as const,
-  },
-  AMOUNT: {
-    label: "Amount",
-    placeholder: "Enter amount",
-    required: true,
-    type: "number" as const,
-  },
-  DESCRIPTION: {
-    label: "Description",
-    placeholder: "Enter description",
-    required: false,
-    type: "text" as const,
-  },
-  DATE: {
-    label: "Date",
-    required: true,
-    type: "date" as const,
-  },
-  CURRENCY: {
-    label: "Currency",
-    required: true,
-    type: "select" as const,
-    options: CURRENCY_OPTIONS,
-  },
-} as const;
-
 // Entity names for consistent messaging
 export const ENTITY_NAMES = {
   CATEGORY: "category",
@@ -133,24 +73,4 @@ export const ENTITY_NAMES = {
   SAVING_GOAL: "saving goal",
   USER: "user",
   PROFILE: "profile",
-} as const;
-
-// Form dialog sizes
-export const DIALOG_SIZES = {
-  SMALL: "400px",
-  MEDIUM: "600px",
-  LARGE: "800px",
-} as const;
-
-// Common spacing and sizing values
-export const FORM_SPACING = {
-  FIELD_MARGIN: "16px",
-  SECTION_MARGIN: "24px",
-  BUTTON_MARGIN: "8px",
-} as const;
-
-export const FORM_SIZES = {
-  FIELD_HEIGHT: "56px",
-  BUTTON_HEIGHT: "42px",
-  ICON_SIZE: "24px",
 } as const;

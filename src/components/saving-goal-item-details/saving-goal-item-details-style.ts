@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box } from "@/components/ui/Box";
 import { styled } from "@mui/material/styles";
 
 type SavingGoalBudgetAmountStyledProps = {

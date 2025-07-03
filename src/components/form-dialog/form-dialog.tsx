@@ -1,14 +1,12 @@
 import React, { ReactNode } from "react";
-import DialogContent from "@mui/material/DialogContent";
-import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import Stack from "@mui/material/Stack";
-import Dialog from "@mui/material/Dialog";
-import Slide from "@mui/material/Slide";
-import { TransitionProps } from "@mui/material/transitions";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
+import { DialogContent, Dialog } from "@/components/ui/Dialog";
+import { IconButton } from "@/components/ui/IconButton";
+import { Stack } from "@/components/ui/Stack";
+import { Slide, TransitionProps } from "@/components/ui/Slide";
+import { AppBar } from "@/components/ui/AppBar";
+import { Toolbar } from "@/components/ui/Toolbar";
+import { Typography } from "@/components/ui/Typography";
 import { ProminentButtonStyled } from "@/shared";
 
 const Transition = React.forwardRef(function Transition(

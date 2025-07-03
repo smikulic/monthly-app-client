@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box } from "@/components/ui/Box";
 import { styled } from "@mui/material/styles";
 
 type InvestmentCurrentValueStyledProps = {
@@ -22,7 +22,7 @@ export const InvestmentCurrentValueStyled = styled(
 
 export const InvestmentDateStyled = styled("div")({
   position: "relative",
-  marginLeft: '8px',
+  marginLeft: "8px",
   fontSize: "12px",
   color: "#999999",
 });

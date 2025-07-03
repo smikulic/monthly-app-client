@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import { FormControl, SelectChangeEvent } from "@mui/material";
+import { SelectChangeEvent } from "@/components/ui/Select";
+import { FormControl } from "@/components/ui/FormControl";
 import {
   useCreateSubcategoryMutation,
   useUpdateSubcategoryMutation,

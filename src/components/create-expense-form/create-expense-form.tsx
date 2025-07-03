@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useApolloClient } from "@apollo/client";
 import { toast } from "react-toastify";
-import { SelectChangeEvent } from "@mui/material";
+import { SelectChangeEvent } from "@/components/ui/Select";
 import { Subcategory, useCreateExpenseMutation } from "@/generated/graphql";
 import { SelectStyled, TextFieldStyled } from "@/shared";
 import { DatePickerStyled } from "@/components/ui/DatePickerStyled";

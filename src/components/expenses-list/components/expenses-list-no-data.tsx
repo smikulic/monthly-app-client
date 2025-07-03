@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router";
-import { Alert, AlertTitle } from "@mui/material";
+import { Alert, AlertTitle } from "@/components/ui/Alert";
 
 export const ExpensesListNoData: React.FC = () => {
   return (

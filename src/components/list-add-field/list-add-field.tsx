@@ -1,6 +1,6 @@
 import React from "react";
 import { ListAddFieldStyled } from "./list-add-field-style";
-import { Typography } from "@mui/material";
+import { Typography } from "@/components/ui/Typography";
 
 interface Props {
   text: string;

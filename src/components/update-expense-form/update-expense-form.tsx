@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useApolloClient } from "@apollo/client";
 import { toast } from "react-toastify";
-import { SelectChangeEvent } from "@mui/material";
+import { useApolloClient } from "@apollo/client";
+import { SelectChangeEvent } from "@/components/ui/Select";
 import {
   Expense,
   Subcategory,
@@ -41,7 +41,7 @@ export const UpdateExpenseForm: React.FC<Props> = ({
   );
 
   const [updateExpense] = useUpdateExpenseMutation({
-    onCompleted: ({ updateExpense }) => {
+    onCompleted: () => {
       closeForm();
       setExpenseSubcategoryId("");
       setExpenseDate(new Date());
