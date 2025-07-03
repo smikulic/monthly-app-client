@@ -8,7 +8,7 @@ import { GET_ALL_EXPENSES } from "../../pages/expenses-page/expenses-page-querie
 import { ExpandedExpenses } from "../expanded-expenses/expanded-expenses";
 import { ListItemHeader } from "../list-item-header/list-item-header";
 import { ListItemDetails } from "../list-item-details/list-item-details";
-import { SubcategoryDecoratedWithExpenses } from "../expenses-list/expenses-list";
+import { SubcategoryDecoratedWithExpenses } from "@/features/expenses/expenses-list/expenses-list";
 
 interface Props {
   subcategory: SubcategoryDecoratedWithExpenses;

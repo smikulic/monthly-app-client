@@ -9,7 +9,7 @@ import {
 import { GET_CATEGORIES_LIST } from "@/pages/categories-page/categories-page-queries";
 import { getChartData } from "@/utils/getChartData";
 import { HomePageList } from "@/components/home-page-list/home-page-list";
-import { ActionsBar } from "@/components/actions-bar/actions-bar";
+import { ActionsBar } from "@/components/layout";
 import { GET_SAVING_GOALS_LIST } from "@/pages/saving-goals-page/saving-goals-page-queries";
 import { GET_INVESTMENTS_LIST } from "@/pages/investments-page/investments-page-queries";
 

@@ -1,4 +1,4 @@
-import React from "react";
+import { FC } from "react";
 import {
   ProgressBarInnerStyled,
   ProgressBarStyled,
@@ -10,7 +10,7 @@ interface ProgressBarProps {
   reverse?: boolean;
 }
 
-export const ProgressBar: React.FC<ProgressBarProps> = ({
+export const ProgressBar: FC<ProgressBarProps> = ({
   value,
   maxValue,
   reverse,

@@ -1,4 +1,4 @@
-import React from "react";
+import { FC, MouseEvent, useContext } from "react";
 import { toast } from "react-toastify";
 import { useApolloClient } from "@apollo/client";
 import dayjs from "dayjs";
@@ -19,12 +19,12 @@ interface Props {
   refetchExpenses: () => Promise<unknown>;
 }
 
-export const ExpandedExpenses: React.FC<Props> = ({
+export const ExpandedExpenses: FC<Props> = ({
   expenses,
   setUpdateModalExpense,
   refetchExpenses,
 }) => {
-  const userCurrency = React.useContext(UserContext);
+  const userCurrency = useContext(UserContext);
   const client = useApolloClient();
 
   const {
@@ -77,7 +77,7 @@ export const ExpandedExpenses: React.FC<Props> = ({
                   deleteExpense({ variables: { id: expenseId } });
                   handleActionsDropdownClose(expenseId);
                 }}
-                handleOnOpenMenu={(event: React.MouseEvent<HTMLElement>) =>
+                handleOnOpenMenu={(event: MouseEvent<HTMLElement>) =>
                   handleActionsDropdownClick(event, expenseId)
                 }
                 handleOnCloseMenu={() => handleActionsDropdownClose(expenseId)}

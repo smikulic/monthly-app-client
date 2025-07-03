@@ -12,8 +12,7 @@ import { CategoriesPageContainer } from "./pages/categories-page/categories-page
 import { SavingGoalsPageContainer } from "./pages/saving-goals-page/saving-goals-page-container";
 import { InvestmentsPageContainer } from "./pages/investments-page/investments-page-container";
 import { ConfirmEmailPageContainer } from "./pages/confirm-email-page/confirm-email-page-container";
-import { Header } from "./components/header/header";
-import { Footer } from "./components/footer/footer";
+import { Header, Footer } from "./components/layout";
 import { AUTH_TOKEN, AUTH_TOKEN_USER } from "./constants";
 import { handleLogout } from "./utils/handleLogout";
 import { FooterPaddingStyled } from "./shared";

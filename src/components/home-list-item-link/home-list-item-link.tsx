@@ -1,4 +1,4 @@
-import React from "react";
+import { useContext } from "react";
 import { Link } from "react-router";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { Box } from "@/components/ui/Box";
@@ -21,7 +21,7 @@ export const HomeListItemLink = ({
   value: number;
   valueColor?: string;
 }) => {
-  const userCurrency = React.useContext(UserContext);
+  const userCurrency = useContext(UserContext);
 
   return (
     <Link to={linkTo}>

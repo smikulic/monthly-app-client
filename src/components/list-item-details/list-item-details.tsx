@@ -1,4 +1,4 @@
-import React from "react";
+import { FC, useContext } from "react";
 import { ProgressBar } from "../progress-bar/progress-bar";
 import {
   BudgetAmountStyled,
@@ -12,11 +12,8 @@ interface Props {
   budgetValue?: number;
 }
 
-export const ListItemDetails: React.FC<Props> = ({
-  expenseValue,
-  budgetValue,
-}) => {
-  const userCurrency = React.useContext(UserContext);
+export const ListItemDetails: FC<Props> = ({ expenseValue, budgetValue }) => {
+  const userCurrency = useContext(UserContext);
 
   return (
     <>

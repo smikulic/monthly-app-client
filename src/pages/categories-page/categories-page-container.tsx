@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useCategoriesListQuery } from "@/generated/graphql";
 import { ProminentButtonStyled } from "@/shared";
-import { CategoriesList } from "@/components/categories-list/categories-list";
-import { ActionsBar } from "@/components/actions-bar/actions-bar";
-import { CategoryFormFactory } from "@/components/category-form-factory/category-form-factory";
-import { SubcategoryFormFactory } from "@/components/subcategory-form-factory/subcategory-form-factory";
+import {
+  CategoriesList,
+  CategoryFormFactory,
+  SubcategoryFormFactory,
+} from "@/features/categories";
+import { ActionsBar } from "@/components/layout";
 import { useCategoriesActions } from "./use-categories-actions-hook";
 
 export const CategoriesPageContainer = () => {

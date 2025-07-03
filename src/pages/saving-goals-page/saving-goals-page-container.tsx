@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { useSavingGoalsListQuery } from "@/generated/graphql";
 import { ProminentButtonStyled } from "@/shared";
-import { SavingGoalsList } from "@/components/saving-goals-list/saving-goals-list";
-import { ActionsBar } from "@/components/actions-bar/actions-bar";
-import SavingGoalFormFactory from "@/components/saving-goal-form-factory/saving-goal-form-factory";
+import {
+  SavingGoalsList,
+  SavingGoalFormFactory,
+} from "@/features/saving-goals";
+import { ActionsBar } from "@/components/layout";
 import { useSavingGoalsActions } from "./use-saving-goals-actions-hook";
 
 export const SavingGoalsPageContainer = () => {

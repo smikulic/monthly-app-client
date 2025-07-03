@@ -2,10 +2,10 @@ import { useState } from "react";
 import { useQuery } from "@apollo/client";
 import dayjs from "dayjs";
 import { getDecoratedCategoriesWithExpenses } from "@/utils/getDecoratedCategoriesWithExpenses";
-import { ExpensesList } from "@/components/expenses-list/expenses-list";
+import { ExpensesList } from "@/features/expenses";
 import { GET_EXPENSES_LIST } from "@/pages/expenses-page/expenses-page-queries";
 import { GET_CATEGORIES_LIST } from "@/pages/categories-page/categories-page-queries";
-import { ActionsBar } from "@/components/actions-bar/actions-bar";
+import { ActionsBar } from "@/components/layout";
 import { useExpensesActions } from "./use-expenses-actions-hook";
 
 export const ExpensesPageContainer = ({
