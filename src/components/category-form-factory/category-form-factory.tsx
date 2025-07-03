@@ -120,6 +120,7 @@ export const CategoryFormFactory = ({
         autoComplete="off"
         value={categoryName}
         onChange={(e) => setCategoryName(e.target.value)}
+        data-testid="category-name-input"
       />
 
       {type === "create" && (

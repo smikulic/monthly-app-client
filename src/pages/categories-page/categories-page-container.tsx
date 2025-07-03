@@ -21,7 +21,10 @@ export const CategoriesPageContainer = () => {
       <ActionsBar>
         {/* Empty span to push button to the right */}
         <span></span>
-        <ProminentButtonStyled onClick={() => setCreateModalCategory(true)}>
+        <ProminentButtonStyled
+          onClick={() => setCreateModalCategory(true)}
+          data-testid="add-category-button"
+        >
           Add category
         </ProminentButtonStyled>
         {createModalCategory && (

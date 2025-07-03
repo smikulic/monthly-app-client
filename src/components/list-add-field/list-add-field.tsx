@@ -10,7 +10,11 @@ interface Props {
 
 export const ListAddField: React.FC<Props> = ({ text, indent, onClick }) => {
   return (
-    <ListAddFieldStyled indent={indent} onClick={onClick}>
+    <ListAddFieldStyled 
+      indent={indent} 
+      onClick={onClick}
+      data-testid="list-add-field"
+    >
       <Typography fontSize={16} noWrap>
         {text}
       </Typography>

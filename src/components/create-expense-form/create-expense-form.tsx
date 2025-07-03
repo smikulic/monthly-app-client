@@ -98,6 +98,7 @@ export const CreateExpenseForm: React.FC<Props> = ({
         margin="none"
         autoComplete="off"
         onChange={(e) => setExpenseAmount(e.target.value)}
+        data-testid="expense-amount-input"
       />
       <TextFieldStyled
         id="description"
@@ -106,6 +107,7 @@ export const CreateExpenseForm: React.FC<Props> = ({
         margin="none"
         autoComplete="off"
         onChange={(e) => setExpenseDescription(e.target.value)}
+        data-testid="expense-description-input"
       />
       <DatePickerStyled
         label="Date"
@@ -124,6 +126,7 @@ export const CreateExpenseForm: React.FC<Props> = ({
         onChange={(e: SelectChangeEvent) => {
           setExpenseSubcategoryId(e.target.value);
         }}
+        data-testid="expense-subcategory-select"
       >
         {subcategories.map((subcategory: Subcategory) => {
           const subcategoryId = subcategory.id;

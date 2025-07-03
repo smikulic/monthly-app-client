@@ -29,6 +29,8 @@ export const IconMenu: React.FC<Props> = ({
         aria-haspopup="true"
         size="small"
         onClick={handleOnOpenMenu}
+        data-testid={`menu-button-${itemId}`}
+        aria-label="More options"
       >
         <MoreVertIcon />
       </IconButton>

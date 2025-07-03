@@ -199,6 +199,7 @@ export const SubcategoryFormFactory = ({
           autoComplete="off"
           value={subcategoryName}
           onChange={(e) => setSubcategoryName(e.target.value)}
+          data-testid="subcategory-name-input"
         />
       </FormControl>
       <TextFieldStyled
@@ -210,6 +211,7 @@ export const SubcategoryFormFactory = ({
         autoComplete="off"
         value={subcategoryBudget}
         onChange={(e) => setSubcategoryBudget(Number(e.target.value))}
+        data-testid="subcategory-budget-input"
       />
 
       <DatePickerStyled
