@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { FC, useState } from "react";
 import { useQuery } from "@apollo/client";
 import dayjs from "dayjs";
 import { Expense } from "@/generated/graphql";
@@ -19,7 +19,7 @@ interface Props {
   setUpdateModalExpense: (expense: Expense) => void;
 }
 
-export const SubcategoryListItem: React.FC<Props> = ({
+export const SubcategoryListItem: FC<Props> = ({
   subcategory,
   subcategorySelected,
   currentDate,

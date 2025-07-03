@@ -10,7 +10,7 @@ import { GET_CATEGORIES_LIST } from "@/pages/categories-page/categories-page-que
 import { getChartData } from "@/utils/getChartData";
 import { HomePageList } from "@/components/home-page-list/home-page-list";
 import { ActionsBar } from "@/components/actions-bar/actions-bar";
-import { GET_SAVING_GOALS_LIST } from "@/components/saving-goals-list/saving-goals-list-queries";
+import { GET_SAVING_GOALS_LIST } from "@/pages/saving-goals-page/saving-goals-page-queries";
 import { GET_INVESTMENTS_LIST } from "@/pages/investments-page/investments-page-queries";
 
 export const HomePageContainer = ({
