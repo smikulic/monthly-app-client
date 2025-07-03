@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { Category, Expense } from "../generated/graphql";
 import { getDecoratedCategoriesWithExpenses } from "./getDecoratedCategoriesWithExpenses";
 import { categoryMock1, expenseMock1, expenseMock2 } from "./mockData";

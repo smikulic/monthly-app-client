@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 import { Expense } from "@/generated/graphql";
 import { SubcategoryListItemStyled } from "@/shared";
 import { getRemainingRolloverBudget } from "@/utils/getRolloverBudget";
-import { GET_ALL_EXPENSES } from "../expenses-list/expenses-list-queries";
+import { GET_ALL_EXPENSES } from "../../pages/expenses-page/expenses-page-queries";
 import { ExpandedExpenses } from "../expanded-expenses/expanded-expenses";
 import { ListItemHeader } from "../list-item-header/list-item-header";
 import { ListItemDetails } from "../list-item-details/list-item-details";

@@ -1,4 +1,4 @@
-import React from "react";
+import { FC, MouseEvent, useContext } from "react";
 import { Maybe, Subcategory } from "@/generated/graphql";
 import { UserContext } from "@/App";
 import { formatAmount } from "@/utils/format";
@@ -17,13 +17,13 @@ interface Props {
   handleOnEditSubcategory: (subcategory: Subcategory) => void;
   handleOnRemoveSubcategory: (subcategoryId: string) => void;
   handleActionsDropdownClick: (
-    event: React.MouseEvent<HTMLElement>,
+    event: MouseEvent<HTMLElement>,
     anchorIndex: string
   ) => void;
   handleActionsDropdownClose: (anchorIndex: string) => void;
 }
 
-export const CategorySubcategoriesList: React.FC<Props> = ({
+export const CategorySubcategoriesList: FC<Props> = ({
   subcategories,
   anchorActionDropdownEl,
   handleOnEditSubcategory,
@@ -31,7 +31,7 @@ export const CategorySubcategoriesList: React.FC<Props> = ({
   handleActionsDropdownClick,
   handleActionsDropdownClose,
 }) => {
-  const userCurrency = React.useContext(UserContext);
+  const userCurrency = useContext(UserContext);
 
   return (
     <>
@@ -55,7 +55,7 @@ export const CategorySubcategoriesList: React.FC<Props> = ({
                   handleOnRemove={() =>
                     handleOnRemoveSubcategory(subcategoryId)
                   }
-                  handleOnOpenMenu={(event: React.MouseEvent<HTMLElement>) =>
+                  handleOnOpenMenu={(event: MouseEvent<HTMLElement>) =>
                     handleActionsDropdownClick(event, subcategoryId)
                   }
                   handleOnCloseMenu={() =>

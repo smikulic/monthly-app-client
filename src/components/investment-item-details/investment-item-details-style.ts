@@ -20,13 +20,6 @@ export const InvestmentCurrentValueStyled = styled(
   fontWeight: 500,
 }));
 
-export const InvestmentDateStyled = styled("div")({
-  position: "relative",
-  marginLeft: "8px",
-  fontSize: "12px",
-  color: "#999999",
-});
-
 export const InvestmentItemDetailsContainerStyled = styled(Box)({
   display: "flex",
   flexDirection: "column",

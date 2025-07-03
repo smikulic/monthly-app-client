@@ -6,7 +6,7 @@ import { CategoryFormFactory } from "./category-form-factory";
 import {
   CREATE_CATEGORY_MUTATION,
   UPDATE_CATEGORY_MUTATION,
-} from "../categories-list/categories-list-queries";
+} from "../../pages/categories-page/categories-page-queries";
 import { describe, expect, it, vi } from "vitest";
 
 // Mock mutations and any other external calls

@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from "react";
+import { Fragment, FC, MouseEvent, useContext } from "react";
 import { Category, Subcategory } from "@/generated/graphql";
 import { UserContext } from "@/App";
 import { formatAmount } from "@/utils/format";
@@ -17,33 +17,33 @@ interface Props {
   categories: Category[];
   openCategory: string;
   anchorActionDropdownEl: AnchorActionDropdownElProps;
-  setOpenCategory: Dispatch<SetStateAction<string>>;
-  setCreateModalSubcategory: Dispatch<SetStateAction<string | null>>;
-  handleOnEditCategory: (category: Category) => void;
-  handleOnEditSubcategory: (subcategory: Subcategory) => void;
-  handleOnRemoveCategory: (categoryId: string) => void;
-  handleOnRemoveSubcategory: (subcategoryId: string) => void;
-  handleActionsDropdownClick: (
-    event: React.MouseEvent<HTMLElement>,
+  setOpenCategory: (categoryId: string) => void;
+  setCreateModalSubcategory: (categoryId: string | null) => void;
+  onEditCategory: (category: Category) => void;
+  onEditSubcategory: (subcategory: Subcategory) => void;
+  onRemoveCategory: (categoryId: string) => void;
+  onRemoveSubcategory: (subcategoryId: string) => void;
+  onActionsDropdownClick: (
+    event: MouseEvent<HTMLElement>,
     anchorIndex: string
   ) => void;
-  handleActionsDropdownClose: (anchorIndex: string) => void;
+  onActionsDropdownClose: (anchorIndex: string) => void;
 }
 
-export const CategoriesListData: React.FC<Props> = ({
+export const CategoriesListData: FC<Props> = ({
   categories,
   openCategory,
   anchorActionDropdownEl,
   setOpenCategory,
   setCreateModalSubcategory,
-  handleOnEditCategory,
-  handleOnEditSubcategory,
-  handleOnRemoveCategory,
-  handleOnRemoveSubcategory,
-  handleActionsDropdownClick,
-  handleActionsDropdownClose,
+  onEditCategory,
+  onEditSubcategory,
+  onRemoveCategory,
+  onRemoveSubcategory,
+  onActionsDropdownClick,
+  onActionsDropdownClose,
 }) => {
-  const userCurrency = React.useContext(UserContext);
+  const userCurrency = useContext(UserContext);
 
   return (
     <>
@@ -61,7 +61,7 @@ export const CategoriesListData: React.FC<Props> = ({
         );
 
         return (
-          <React.Fragment key={categoryId}>
+          <Fragment key={categoryId}>
             <MainListItemStyled active={expanded}>
               <ListItemHeader
                 title={categoryName}
@@ -78,14 +78,12 @@ export const CategoriesListData: React.FC<Props> = ({
                 <IconMenu
                   itemId={categoryId}
                   anchorActionDropdownEl={anchorActionDropdownEl}
-                  handleOnEdit={() => handleOnEditCategory(category)}
-                  handleOnRemove={() => handleOnRemoveCategory(categoryId)}
-                  handleOnOpenMenu={(event: React.MouseEvent<HTMLElement>) =>
-                    handleActionsDropdownClick(event, categoryId)
+                  handleOnEdit={() => onEditCategory(category)}
+                  handleOnRemove={() => onRemoveCategory(categoryId)}
+                  handleOnOpenMenu={(event: MouseEvent<HTMLElement>) =>
+                    onActionsDropdownClick(event, categoryId)
                   }
-                  handleOnCloseMenu={() =>
-                    handleActionsDropdownClose(categoryId)
-                  }
+                  handleOnCloseMenu={() => onActionsDropdownClose(categoryId)}
                 />
               </CategoryDetailsStyled>
             </MainListItemStyled>
@@ -96,10 +94,10 @@ export const CategoriesListData: React.FC<Props> = ({
                   <CategorySubcategoriesList
                     subcategories={subcategories}
                     anchorActionDropdownEl={anchorActionDropdownEl}
-                    handleOnEditSubcategory={handleOnEditSubcategory}
-                    handleOnRemoveSubcategory={handleOnRemoveSubcategory}
-                    handleActionsDropdownClick={handleActionsDropdownClick}
-                    handleActionsDropdownClose={handleActionsDropdownClose}
+                    handleOnEditSubcategory={onEditSubcategory}
+                    handleOnRemoveSubcategory={onRemoveSubcategory}
+                    handleActionsDropdownClick={onActionsDropdownClick}
+                    handleActionsDropdownClose={onActionsDropdownClose}
                   />
                 )}
 
@@ -109,7 +107,7 @@ export const CategoriesListData: React.FC<Props> = ({
                 />
               </>
             )}
-          </React.Fragment>
+          </Fragment>
         );
       })}
     </>

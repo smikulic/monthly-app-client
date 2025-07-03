@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Category, Subcategory, Expense } from "@/generated/graphql";
 import { ListLoading } from "@/components/ui/ListLoading";
 import { ExpensesListNoData } from "./components/expenses-list-no-data";
@@ -19,6 +19,12 @@ interface Props {
   pageDate: Date;
   showRolloverBudget: boolean;
   categoriesDecoratedWithExpenses?: CategoryDecoratedWithExpenses[];
+  openCategory: string;
+  createModalExpense: boolean;
+  updateModalExpense: Expense | null;
+  onSetOpenCategory: (categoryId: string) => void;
+  onSetCreateModalExpense: (open: boolean) => void;
+  onSetUpdateModalExpense: (expense: Expense | null) => void;
   refetchExpenses: () => Promise<unknown>;
 }
 
@@ -28,13 +34,14 @@ export const ExpensesList: React.FC<Props> = ({
   pageDate,
   showRolloverBudget,
   categoriesDecoratedWithExpenses,
+  openCategory,
+  createModalExpense,
+  updateModalExpense,
+  onSetOpenCategory,
+  onSetCreateModalExpense,
+  onSetUpdateModalExpense,
   refetchExpenses,
 }) => {
-  const [openCategory, setOpenCategory] = useState("");
-  const [createModalExpense, setCreateModalExpense] = React.useState(false);
-  const [updateModalExpense, setUpdateModalExpense] =
-    React.useState<Expense | null>(null);
-
   const noDataAvailable =
     totalSubcategories === 0 || !categoriesDecoratedWithExpenses;
   const dataAvailable =
@@ -52,9 +59,9 @@ export const ExpensesList: React.FC<Props> = ({
           openCategory={openCategory}
           createModalExpense={createModalExpense}
           updateModalExpense={updateModalExpense}
-          setOpenCategory={setOpenCategory}
-          setCreateModalExpense={setCreateModalExpense}
-          setUpdateModalExpense={setUpdateModalExpense}
+          setOpenCategory={onSetOpenCategory}
+          setCreateModalExpense={onSetCreateModalExpense}
+          setUpdateModalExpense={onSetUpdateModalExpense}
           refetchExpenses={refetchExpenses}
         />
       )}

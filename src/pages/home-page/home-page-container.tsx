@@ -5,13 +5,13 @@ import { SavingGoal, Investment } from "@/generated/graphql";
 import {
   GET_CHART_EXPENSES_LIST,
   GET_EXPENSES_LIST,
-} from "@/components/expenses-list/expenses-list-queries";
-import { GET_CATEGORIES_LIST } from "@/components/categories-list/categories-list-queries";
+} from "@/pages/expenses-page/expenses-page-queries";
+import { GET_CATEGORIES_LIST } from "@/pages/categories-page/categories-page-queries";
 import { getChartData } from "@/utils/getChartData";
-import { HomePage } from "@/components/home-page/home-page";
+import { HomePageList } from "@/components/home-page-list/home-page-list";
 import { ActionsBar } from "@/components/actions-bar/actions-bar";
 import { GET_SAVING_GOALS_LIST } from "@/components/saving-goals-list/saving-goals-list-queries";
-import { GET_INVESTMENTS_LIST } from "@/components/investments-list/investments-list-queries";
+import { GET_INVESTMENTS_LIST } from "@/pages/investments-page/investments-page-queries";
 
 export const HomePageContainer = ({
   pageDate,
@@ -72,7 +72,7 @@ export const HomePageContainer = ({
         onClickNext={onClickNext}
         onClickPrevious={onClickPrevious}
       />
-      <HomePage
+      <HomePageList
         loading={
           loadingExpenses ||
           loadingCategories ||

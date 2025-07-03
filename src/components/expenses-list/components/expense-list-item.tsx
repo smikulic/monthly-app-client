@@ -1,10 +1,10 @@
-import React, { Dispatch, SetStateAction } from "react";
-import { Expense } from "../../../generated/graphql";
+import { FC } from "react";
+import { Expense } from "@/generated/graphql";
+import { MainListItemStyled } from "@/shared";
 import { ListItemHeader } from "../../list-item-header/list-item-header";
 import { ListAddField } from "../../list-add-field/list-add-field";
 import { ListItemDetails } from "../../list-item-details/list-item-details";
 import { SubcategoryListItem } from "../../subcategory-list-item/subcategory-list-item";
-import { MainListItemStyled } from "../../../shared";
 import {
   CategoryDecoratedWithExpenses,
   SubcategoryDecoratedWithExpenses,
@@ -15,13 +15,13 @@ interface Props {
   showRolloverBudget: boolean;
   category: CategoryDecoratedWithExpenses;
   openCategory: string;
-  setOpenCategory: Dispatch<SetStateAction<string>>;
-  setCreateModalExpense: Dispatch<SetStateAction<boolean>>;
-  setUpdateModalExpense: Dispatch<SetStateAction<Expense | null>>;
+  setOpenCategory: (categoryId: string) => void;
+  setCreateModalExpense: (open: boolean) => void;
+  setUpdateModalExpense: (expense: Expense | null) => void;
   refetchExpenses: () => Promise<unknown>;
 }
 
-export const ExpenseListItem: React.FC<Props> = ({
+export const ExpenseListItem: FC<Props> = ({
   pageDate,
   showRolloverBudget,
   category,

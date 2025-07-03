@@ -1,8 +1,8 @@
-import React from "react";
+import { FC } from "react";
 import { Link } from "react-router";
 import { Alert, AlertTitle } from "@/components/ui/Alert";
 
-export const ExpensesListNoData: React.FC = () => {
+export const ExpensesListNoData: FC = () => {
   return (
     <Alert severity="info">
       <AlertTitle>

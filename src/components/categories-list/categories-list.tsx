@@ -1,75 +1,45 @@
-import React, { useState } from "react";
-import { toast } from "react-toastify";
-import {
-  Category,
-  Subcategory,
-  useDeleteCategoryMutation,
-  useDeleteSubcategoryMutation,
-} from "@/generated/graphql";
-import { useActionDropdown } from "@/hooks/useActionDropdown";
-import { CategoryFormFactory } from "@/components/category-form-factory/category-form-factory";
-import { SubcategoryFormFactory } from "@/components/subcategory-form-factory/subcategory-form-factory";
+import { FC, MouseEvent } from "react";
+import { Category, Subcategory } from "@/generated/graphql";
+import { AnchorActionDropdownElProps } from "@/hooks/useActionDropdown";
 import { ListLoading } from "@/components/ui/ListLoading";
 import { CategoriesListNoData } from "./components/categories-list-no-data";
 import { CategoriesListData } from "./components/categories-list-data";
-import { TOAST_MESSAGES, ENTITY_NAMES } from "@/constants/forms";
 
 interface Props {
   loading: boolean;
   categories?: Category[];
-  refetchCategories: () => Promise<unknown>;
+  openCategory: string;
+  createModalSubcategory: string | null;
+  updateModalCategory: Category | null;
+  updateModalSubcategory: Subcategory | null;
+  anchorActionDropdownEl: AnchorActionDropdownElProps;
+  onSetOpenCategory: (categoryId: string) => void;
+  onSetCreateModalSubcategory: (categoryId: string | null) => void;
+  onEditCategory: (category: Category) => void;
+  onEditSubcategory: (subcategory: Subcategory) => void;
+  onRemoveCategory: (categoryId: string) => void;
+  onRemoveSubcategory: (subcategoryId: string) => void;
+  onActionsDropdownClick: (
+    event: MouseEvent<HTMLElement>,
+    anchorIndex: string
+  ) => void;
+  onActionsDropdownClose: (anchorIndex: string) => void;
 }
 
-export const CategoriesList: React.FC<Props> = ({
+export const CategoriesList: FC<Props> = ({
   loading,
   categories,
-  refetchCategories,
+  openCategory,
+  anchorActionDropdownEl,
+  onSetOpenCategory,
+  onSetCreateModalSubcategory,
+  onEditCategory,
+  onEditSubcategory,
+  onRemoveCategory,
+  onRemoveSubcategory,
+  onActionsDropdownClick,
+  onActionsDropdownClose,
 }) => {
-  const {
-    anchorActionDropdownEl,
-    handleActionsDropdownClick,
-    handleActionsDropdownClose,
-  } = useActionDropdown();
-
-  const [openCategory, setOpenCategory] = useState("");
-  const [createModalSubcategory, setCreateModalSubcategory] = React.useState<
-    string | null
-  >(null);
-  const [updateModalCategory, setUpdateModalCategory] =
-    React.useState<Category | null>(null);
-  const [updateModalSubcategory, setUpdateModalSubcategory] =
-    React.useState<Subcategory | null>(null);
-
-  const [deleteCategory] = useDeleteCategoryMutation({
-    onError: () => {
-      toast.error(TOAST_MESSAGES.ERROR.CATEGORY_HAS_SUBCATEGORIES);
-    },
-    onCompleted: ({ deleteCategory }) => {
-      refetchCategories();
-      toast.success(
-        TOAST_MESSAGES.SUCCESS.DELETE(
-          ENTITY_NAMES.CATEGORY,
-          deleteCategory.name
-        )
-      );
-    },
-  });
-
-  const [deleteSubcategory] = useDeleteSubcategoryMutation({
-    onError: () => {
-      toast.error(TOAST_MESSAGES.ERROR.SUBCATEGORY_HAS_EXPENSES);
-    },
-    onCompleted: ({ deleteSubcategory }) => {
-      refetchCategories();
-      toast.success(
-        TOAST_MESSAGES.SUCCESS.DELETE(
-          ENTITY_NAMES.SUBCATEGORY,
-          deleteSubcategory.name
-        )
-      );
-    },
-  });
-
   const noDataAvailable = !categories || categories.length === 0;
   const dataAvailable = categories !== undefined;
 
@@ -82,62 +52,14 @@ export const CategoriesList: React.FC<Props> = ({
           categories={categories}
           openCategory={openCategory}
           anchorActionDropdownEl={anchorActionDropdownEl}
-          setOpenCategory={setOpenCategory}
-          setCreateModalSubcategory={setCreateModalSubcategory}
-          handleOnEditCategory={(category: Category) => {
-            setUpdateModalCategory(category);
-            handleActionsDropdownClose(category.id);
-          }}
-          handleOnEditSubcategory={(subcategory: Subcategory) => {
-            setUpdateModalSubcategory(subcategory);
-            handleActionsDropdownClose(subcategory.id);
-          }}
-          handleOnRemoveCategory={(categoryId: string) => {
-            deleteCategory({ variables: { id: categoryId } });
-            handleActionsDropdownClose(categoryId);
-          }}
-          handleOnRemoveSubcategory={(subcategoryId: string) => {
-            deleteSubcategory({
-              variables: { id: subcategoryId },
-            });
-            handleActionsDropdownClose(subcategoryId);
-          }}
-          handleActionsDropdownClick={handleActionsDropdownClick}
-          handleActionsDropdownClose={handleActionsDropdownClose}
-        />
-      )}
-
-      {createModalSubcategory && (
-        <SubcategoryFormFactory
-          open={Boolean(createModalSubcategory)}
-          closeForm={() => {
-            refetchCategories();
-            setCreateModalSubcategory(null);
-          }}
-          presetCategoryId={createModalSubcategory}
-          categories={categories!}
-        />
-      )}
-      {updateModalCategory && (
-        <CategoryFormFactory
-          open={Boolean(updateModalCategory)}
-          closeForm={() => {
-            refetchCategories();
-            setUpdateModalCategory(null);
-          }}
-          formData={updateModalCategory}
-        />
-      )}
-      {updateModalSubcategory && (
-        <SubcategoryFormFactory
-          open={Boolean(updateModalSubcategory)}
-          closeForm={() => {
-            refetchCategories();
-            setUpdateModalSubcategory(null);
-          }}
-          presetCategoryId={""}
-          categories={categories!}
-          formData={updateModalSubcategory}
+          setOpenCategory={onSetOpenCategory}
+          setCreateModalSubcategory={onSetCreateModalSubcategory}
+          onEditCategory={onEditCategory}
+          onEditSubcategory={onEditSubcategory}
+          onRemoveCategory={onRemoveCategory}
+          onRemoveSubcategory={onRemoveSubcategory}
+          onActionsDropdownClick={onActionsDropdownClick}
+          onActionsDropdownClose={onActionsDropdownClose}
         />
       )}
     </div>

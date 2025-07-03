@@ -24,7 +24,7 @@ import {
   UnderlineTextStyled,
   WarningTextStyled,
 } from "@/shared";
-import { HomeChartTotalValueStyled } from "@/components/home-page/home-page-style";
+import { HomeChartTotalValueStyled } from "@/components/home-page-list/home-page-list-style";
 import { Typography } from "@/components/ui/Typography";
 import { Box } from "@/components/ui/Box";
 

@@ -57,8 +57,18 @@ export const GET_CHART_EXPENSES_LIST = gql`
 `;
 
 export const CREATE_EXPENSE_MUTATION = gql`
-  mutation CreateExpense($subcategoryId: ID!, $amount: Int!, $description: String, $date: String!) {
-    createExpense(subcategoryId: $subcategoryId, amount: $amount, description: $description, date: $date) {
+  mutation CreateExpense(
+    $subcategoryId: ID!
+    $amount: Int!
+    $description: String
+    $date: String!
+  ) {
+    createExpense(
+      subcategoryId: $subcategoryId
+      amount: $amount
+      description: $description
+      date: $date
+    ) {
       id
       amount
       description

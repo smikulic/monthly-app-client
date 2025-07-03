@@ -1,5 +1,5 @@
-import React, { Dispatch, SetStateAction } from "react";
-import { Expense } from "../../../generated/graphql";
+import { Fragment, FC } from "react";
+import { Expense } from "@/generated/graphql";
 import { CategoryDecoratedWithExpenses } from "../expenses-list";
 import { ExpenseListItem } from "./expense-list-item";
 import { CreateExpenseForm } from "../../create-expense-form/create-expense-form";
@@ -12,13 +12,13 @@ interface Props {
   openCategory: string;
   createModalExpense: boolean;
   updateModalExpense: Expense | null;
-  setOpenCategory: Dispatch<SetStateAction<string>>;
-  setCreateModalExpense: Dispatch<SetStateAction<boolean>>;
-  setUpdateModalExpense: Dispatch<SetStateAction<Expense | null>>;
+  setOpenCategory: (categoryId: string) => void;
+  setCreateModalExpense: (open: boolean) => void;
+  setUpdateModalExpense: (expense: Expense | null) => void;
   refetchExpenses: () => Promise<unknown>;
 }
 
-export const ExpensesListData: React.FC<Props> = ({
+export const ExpensesListData: FC<Props> = ({
   pageDate,
   showRolloverBudget,
   categoriesDecoratedWithExpenses,
@@ -38,7 +38,7 @@ export const ExpensesListData: React.FC<Props> = ({
           const expanded = openCategory === categoryId;
 
           return (
-            <React.Fragment key={categoryId}>
+            <Fragment key={categoryId}>
               <ExpenseListItem
                 pageDate={pageDate}
                 showRolloverBudget={showRolloverBudget}
@@ -76,7 +76,7 @@ export const ExpensesListData: React.FC<Props> = ({
                   )}
                 </>
               )}
-            </React.Fragment>
+            </Fragment>
           );
         }
       )}
