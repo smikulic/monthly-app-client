@@ -70,7 +70,7 @@ export const SavingGoalsListData: FC<Props> = ({
                 >
                   <Typography variant="body2" color="secondary">
                     {monthsLeftToSave <= 0 && (
-                      <>You have saved up for your goal!</>
+                      <>You have reached your goal date!</>
                     )}
                     {monthsLeftToSave > 0 && (
                       <>

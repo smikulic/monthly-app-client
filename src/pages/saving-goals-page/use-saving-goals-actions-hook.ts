@@ -5,14 +5,17 @@ import { useActionDropdown } from "@/hooks/useActionDropdown";
 import { TOAST_MESSAGES, ENTITY_NAMES } from "@/constants/forms";
 import dayjs from "dayjs";
 
-export const useSavingGoalsActions = (refetchSavingGoals: () => Promise<unknown>) => {
+export const useSavingGoalsActions = (
+  refetchSavingGoals: () => Promise<unknown>
+) => {
   const {
     anchorActionDropdownEl,
     handleActionsDropdownClick,
     handleActionsDropdownClose,
   } = useActionDropdown();
 
-  const [updateModalSavingGoal, setUpdateModalSavingGoal] = useState<SavingGoal | null>(null);
+  const [updateModalSavingGoal, setUpdateModalSavingGoal] =
+    useState<SavingGoal | null>(null);
 
   const [deleteSavingGoal] = useDeleteSavingGoalMutation({
     onError: () => {
@@ -43,28 +46,39 @@ export const useSavingGoalsActions = (refetchSavingGoals: () => Promise<unknown>
     const currentDate = new Date();
     const goalStartDate = new Date(Number(savingGoal.createdAt));
     const goalEndDate = new Date(Number(savingGoal.goalDate));
-    const savingRangeInMonths = dayjs(goalEndDate).diff(
-      dayjs(goalStartDate),
-      "month"
-    );
-    const monthsSaving = dayjs(currentDate).diff(
+
+    // Calculate total months from start to goal date
+    const totalSavingMonths = dayjs(goalEndDate).diff(
       dayjs(goalStartDate),
       "month"
     );
 
-    const monthsLeftToSave = savingRangeInMonths - monthsSaving;
+    // Calculate months elapsed since start
+    const monthsElapsed = Math.max(
+      0,
+      dayjs(currentDate).diff(dayjs(goalStartDate), "month")
+    );
 
+    // Calculate months remaining (can't be negative)
+    const monthsLeftToSave = Math.max(0, totalSavingMonths - monthsElapsed);
+
+    // Calculate required monthly savings (excluding initial amount)
+    const remainingAmount =
+      savingGoal.goalAmount - (savingGoal.initialSaveAmount || 0);
     const savePerMonth =
-      (savingGoal.goalAmount - (savingGoal.initialSaveAmount || 0)) /
-      savingRangeInMonths;
+      totalSavingMonths > 0 ? remainingAmount / totalSavingMonths : 0;
 
-    const savedTillNow =
-      (savingGoal.initialSaveAmount || 0) + savePerMonth * monthsSaving;
+    // Calculate expected savings by now (initial + monthly savings * months elapsed)
+    const expectedSavingsByNow =
+      (savingGoal.initialSaveAmount || 0) + savePerMonth * monthsElapsed;
+
+    // Ensure we don't exceed the goal amount
+    const savedTillNow = Math.min(expectedSavingsByNow, savingGoal.goalAmount);
 
     return {
       monthsLeftToSave,
-      savePerMonth,
-      savedTillNow,
+      savePerMonth: Math.max(0, savePerMonth),
+      savedTillNow: Math.max(savingGoal.initialSaveAmount || 0, savedTillNow),
     };
   };
 
@@ -72,14 +86,14 @@ export const useSavingGoalsActions = (refetchSavingGoals: () => Promise<unknown>
     // State
     updateModalSavingGoal,
     anchorActionDropdownEl,
-    
+
     // Actions
     setUpdateModalSavingGoal,
     handleEditSavingGoal,
     handleRemoveSavingGoal,
     handleActionsDropdownClick,
     handleActionsDropdownClose,
-    
+
     // Utilities
     calculateSavingGoalData,
   };
