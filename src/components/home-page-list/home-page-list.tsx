@@ -90,36 +90,45 @@ export const HomePageList = ({
         <Box sx={{ padding: 1 }}>
           {loadingChartExpenses && <Skeleton animation="wave" height={300} />}
           {!loadingChartExpenses &&
-            Array.isArray(chartExpensesData) &&
-            chartExpensesData.length === 12 &&
-            Array.isArray(chartCategoriesData) &&
-            typeof totalBudgetAmount === "number" &&
-            !isNaN(totalBudgetAmount) && (
-              <>
-                {tabIndex === 0 && (
+            (() => {
+              // Check if we have valid chart data
+              const hasValidExpenseData =
+                Array.isArray(chartExpensesData) &&
+                chartExpensesData.length === 12;
+              const hasValidCategoriesData = Array.isArray(chartCategoriesData);
+              const hasValidBudget =
+                typeof totalBudgetAmount === "number" &&
+                !isNaN(totalBudgetAmount);
+              const hasValidData =
+                hasValidExpenseData && hasValidCategoriesData && hasValidBudget;
+
+              if (!hasValidData) {
+                return (
+                  <Box sx={{ p: 4, textAlign: "center" }}>
+                    <Typography variant="subtitle1" color="textSecondary">
+                      No chart data to display.
+                    </Typography>
+                  </Box>
+                );
+              }
+
+              // Render the appropriate chart based on selected tab
+              if (tabIndex === 0) {
+                return (
                   <ChartBudgetExpense
                     totalBudgetAmount={totalBudgetAmount}
                     chartExpensesData={chartExpensesData}
                     pageDate={pageDate}
                   />
-                )}
-                {tabIndex === 1 && chartCategoriesData.length > 0 && (
-                  <ChartPie data={chartCategoriesData} />
-                )}
-              </>
-            )}
-          {!loadingChartExpenses &&
-            (!Array.isArray(chartExpensesData) ||
-              chartExpensesData.length > 0 ||
-              !Array.isArray(chartCategoriesData) ||
-              typeof totalBudgetAmount !== "number" ||
-              isNaN(totalBudgetAmount)) && (
-              <Box sx={{ p: 4, textAlign: "center" }}>
-                <Typography variant="subtitle1" color="textSecondary">
-                  No chart data to display.
-                </Typography>
-              </Box>
-            )}
+                );
+              }
+
+              if (tabIndex === 1 && chartCategoriesData.length > 0) {
+                return <ChartPie data={chartCategoriesData} />;
+              }
+
+              return null;
+            })()}
         </Box>
         {/* <ChartTreemap data={chartCategoriesData} /> */}
       </Box>
