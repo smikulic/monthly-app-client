@@ -2,8 +2,41 @@ import React from "react";
 
 export const PrivacyPageContainer = () => {
   return (
-    <div className="privacyPage" style={{ padding: "32px" }}>
-      <h1>Privacy Policy</h1>
+    <div
+      className="privacyPage"
+      style={{
+        padding: "32px",
+        maxWidth: "800px",
+        margin: "0 auto",
+        backgroundColor: "#fafafa",
+        minHeight: "100vh",
+        position: "relative",
+      }}
+    >
+      {/* Subtle background accent */}
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          height: "200px",
+          background: "linear-gradient(135deg, #41efcd 0%, #96fcd2 100%)",
+          opacity: 0.03,
+          zIndex: -1,
+        }}
+      ></div>
+      <h1
+        style={{
+          color: "#333",
+          fontSize: "42px",
+          textAlign: "center",
+          marginBottom: "40px",
+          fontWeight: "600",
+        }}
+      >
+        Privacy Policy
+      </h1>
       <p>Last updated: January 7, 2025</p>
       <p>
         This Privacy Policy describes Our policies and procedures on the
@@ -25,15 +58,31 @@ export const PrivacyPageContainer = () => {
         </a>
         .
       </p>
-      <h2>Interpretation and Definitions</h2>
-      <h3>Interpretation</h3>
+      <h2
+        style={{
+          color: "#555",
+          fontSize: "26px",
+          marginBottom: "16px",
+          fontWeight: "500",
+          borderBottom: "2px solid #41efcd",
+          paddingBottom: "8px",
+          display: "inline-block",
+        }}
+      >
+        Interpretation and Definitions
+      </h2>
+      <h3 style={{ color: "#666", fontSize: "20px", marginBottom: "12px" }}>
+        Interpretation
+      </h3>
       <p>
         The words of which the initial letter is capitalized have meanings
         defined under the following conditions. The following definitions shall
         have the same meaning regardless of whether they appear in singular or
         in plural.
       </p>
-      <h3>Definitions</h3>
+      <h3 style={{ color: "#666", fontSize: "20px", marginBottom: "12px" }}>
+        Definitions
+      </h3>
       <p>For the purposes of this Privacy Policy:</p>
       <ul>
         <li>
@@ -111,9 +160,32 @@ export const PrivacyPageContainer = () => {
           </p>
         </li>
       </ul>
-      <h2>Collecting and Using Your Personal Data</h2>
-      <h3>Types of Data Collected</h3>
-      <h4>Personal Data</h4>
+      <h2
+        style={{
+          color: "#555",
+          fontSize: "26px",
+          marginBottom: "16px",
+          fontWeight: "500",
+          borderBottom: "2px solid #41efcd",
+          paddingBottom: "8px",
+          display: "inline-block",
+        }}
+      >
+        Collecting and Using Your Personal Data
+      </h2>
+      <h3 style={{ color: "#666", fontSize: "20px", marginBottom: "12px" }}>
+        Types of Data Collected
+      </h3>
+      <h4
+        style={{
+          color: "#777",
+          fontSize: "18px",
+          marginBottom: "10px",
+          fontWeight: "500",
+        }}
+      >
+        Personal Data
+      </h4>
       <p>
         While using Our Service, We may ask You to provide Us with certain
         personally identifiable information that can be used to contact or
@@ -128,7 +200,16 @@ export const PrivacyPageContainer = () => {
           <p>Usage Data</p>
         </li>
       </ul>
-      <h4>Usage Data</h4>
+      <h4
+        style={{
+          color: "#777",
+          fontSize: "18px",
+          marginBottom: "10px",
+          fontWeight: "500",
+        }}
+      >
+        Usage Data
+      </h4>
       <p>Usage Data is collected automatically when using the Service.</p>
       <p>
         Usage Data may include information such as Your Device's Internet
@@ -150,7 +231,16 @@ export const PrivacyPageContainer = () => {
         visit our Service or when You access the Service by or through a mobile
         device.
       </p>
-      <h4>Analytics and Tracking Technologies</h4>
+      <h4
+        style={{
+          color: "#777",
+          fontSize: "18px",
+          marginBottom: "10px",
+          fontWeight: "500",
+        }}
+      >
+        Analytics and Tracking Technologies
+      </h4>
       <p>
         We use Mixpanel, a third-party analytics service, to help us understand
         how our Service is used. Mixpanel collects information about how You
@@ -174,7 +264,9 @@ export const PrivacyPageContainer = () => {
         when prompted on our welcome page, or by adjusting Your cookie
         preferences in Your browser settings.
       </p>
-      <h3>Use of Your Personal Data</h3>
+      <h3 style={{ color: "#666", fontSize: "20px", marginBottom: "12px" }}>
+        Use of Your Personal Data
+      </h3>
       <p>The Company may use Personal Data for the following purposes:</p>
       <ul>
         <li>
@@ -283,7 +375,9 @@ export const PrivacyPageContainer = () => {
           information for any other purpose with Your consent.
         </li>
       </ul>
-      <h3>Retention of Your Personal Data</h3>
+      <h3 style={{ color: "#666", fontSize: "20px", marginBottom: "12px" }}>
+        Retention of Your Personal Data
+      </h3>
       <p>
         The Company will retain Your Personal Data only for as long as is
         necessary for the purposes set out in this Privacy Policy. We will
@@ -299,7 +393,9 @@ export const PrivacyPageContainer = () => {
         functionality of Our Service, or We are legally obligated to retain this
         data for longer time periods.
       </p>
-      <h3>Transfer of Your Personal Data</h3>
+      <h3 style={{ color: "#666", fontSize: "20px", marginBottom: "12px" }}>
+        Transfer of Your Personal Data
+      </h3>
       <p>
         Your information, including Personal Data, is processed at the Company's
         operating offices and in any other places where the parties involved in
@@ -319,7 +415,9 @@ export const PrivacyPageContainer = () => {
         a country unless there are adequate controls in place including the
         security of Your data and other personal information.
       </p>
-      <h3>Delete Your Personal Data</h3>
+      <h3 style={{ color: "#666", fontSize: "20px", marginBottom: "12px" }}>
+        Delete Your Personal Data
+      </h3>
       <p>
         You have the right to delete or request that We assist in deleting the
         Personal Data that We have collected about You.
@@ -349,21 +447,50 @@ export const PrivacyPageContainer = () => {
         Please note, however, that We may need to retain certain information
         when we have a legal obligation or lawful basis to do so.
       </p>
-      <h3>Disclosure of Your Personal Data</h3>
-      <h4>Business Transactions</h4>
+      <h3 style={{ color: "#666", fontSize: "20px", marginBottom: "12px" }}>
+        Disclosure of Your Personal Data
+      </h3>
+      <h4
+        style={{
+          color: "#777",
+          fontSize: "18px",
+          marginBottom: "10px",
+          fontWeight: "500",
+        }}
+      >
+        Business Transactions
+      </h4>
       <p>
         If the Company is involved in a merger, acquisition or asset sale, Your
         Personal Data may be transferred. We will provide notice before Your
         Personal Data is transferred and becomes subject to a different Privacy
         Policy.
       </p>
-      <h4>Law enforcement</h4>
+      <h4
+        style={{
+          color: "#777",
+          fontSize: "18px",
+          marginBottom: "10px",
+          fontWeight: "500",
+        }}
+      >
+        Law enforcement
+      </h4>
       <p>
         Under certain circumstances, the Company may be required to disclose
         Your Personal Data if required to do so by law or in response to valid
         requests by public authorities (e.g. a court or a government agency).
       </p>
-      <h4>Other legal requirements</h4>
+      <h4
+        style={{
+          color: "#777",
+          fontSize: "18px",
+          marginBottom: "10px",
+          fontWeight: "500",
+        }}
+      >
+        Other legal requirements
+      </h4>
       <p>
         The Company may disclose Your Personal Data in the good faith belief
         that such action is necessary to:
@@ -380,7 +507,9 @@ export const PrivacyPageContainer = () => {
         </li>
         <li>Protect against legal liability</li>
       </ul>
-      <h3>Security of Your Personal Data</h3>
+      <h3 style={{ color: "#666", fontSize: "20px", marginBottom: "12px" }}>
+        Security of Your Personal Data
+      </h3>
       <p>
         The security of Your Personal Data is important to Us, but remember that
         no method of transmission over the Internet, or method of electronic
@@ -388,7 +517,19 @@ export const PrivacyPageContainer = () => {
         means to protect Your Personal Data, We cannot guarantee its absolute
         security.
       </p>
-      <h2>Children's Privacy</h2>
+      <h2
+        style={{
+          color: "#555",
+          fontSize: "26px",
+          marginBottom: "16px",
+          fontWeight: "500",
+          borderBottom: "2px solid #41efcd",
+          paddingBottom: "8px",
+          display: "inline-block",
+        }}
+      >
+        Children's Privacy
+      </h2>
       <p>
         Our Service does not address anyone under the age of 13. We do not
         knowingly collect personally identifiable information from anyone under
@@ -404,7 +545,19 @@ export const PrivacyPageContainer = () => {
         require Your parent's consent before We collect and use that
         information.
       </p>
-      <h2>Links to Other Websites</h2>
+      <h2
+        style={{
+          color: "#555",
+          fontSize: "26px",
+          marginBottom: "16px",
+          fontWeight: "500",
+          borderBottom: "2px solid #41efcd",
+          paddingBottom: "8px",
+          display: "inline-block",
+        }}
+      >
+        Links to Other Websites
+      </h2>
       <p>
         Our Service may contain links to other websites that are not operated by
         Us. If You click on a third party link, You will be directed to that
@@ -415,7 +568,19 @@ export const PrivacyPageContainer = () => {
         We have no control over and assume no responsibility for the content,
         privacy policies or practices of any third party sites or services.
       </p>
-      <h2>Changes to this Privacy Policy</h2>
+      <h2
+        style={{
+          color: "#555",
+          fontSize: "26px",
+          marginBottom: "16px",
+          fontWeight: "500",
+          borderBottom: "2px solid #41efcd",
+          paddingBottom: "8px",
+          display: "inline-block",
+        }}
+      >
+        Changes to this Privacy Policy
+      </h2>
       <p>
         We may update Our Privacy Policy from time to time. We will notify You
         of any changes by posting the new Privacy Policy on this page.
@@ -430,7 +595,19 @@ export const PrivacyPageContainer = () => {
         changes. Changes to this Privacy Policy are effective when they are
         posted on this page.
       </p>
-      <h2>Contact Us</h2>
+      <h2
+        style={{
+          color: "#555",
+          fontSize: "26px",
+          marginBottom: "16px",
+          fontWeight: "500",
+          borderBottom: "2px solid #41efcd",
+          paddingBottom: "8px",
+          display: "inline-block",
+        }}
+      >
+        Contact Us
+      </h2>
       <p>
         If you have any questions about this Privacy Policy, You can contact us:
       </p>
