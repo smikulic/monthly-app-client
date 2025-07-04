@@ -1,4 +1,4 @@
-import React from "react";
+import { FC, MouseEvent } from "react";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -10,11 +10,11 @@ interface Props {
   anchorActionDropdownEl: AnchorActionDropdownElProps;
   handleOnEdit: () => void;
   handleOnRemove: () => void;
-  handleOnOpenMenu: (event: React.MouseEvent<HTMLElement>) => void;
+  handleOnOpenMenu: (event: MouseEvent<HTMLElement>) => void;
   handleOnCloseMenu: () => void;
 }
 
-export const IconMenu: React.FC<Props> = ({
+export const IconMenu: FC<Props> = ({
   itemId,
   anchorActionDropdownEl,
   handleOnEdit,
@@ -29,6 +29,8 @@ export const IconMenu: React.FC<Props> = ({
         aria-haspopup="true"
         size="small"
         onClick={handleOnOpenMenu}
+        data-testid={`menu-button-${itemId}`}
+        aria-label="More options"
       >
         <MoreVertIcon />
       </IconButton>

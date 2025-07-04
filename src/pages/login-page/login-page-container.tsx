@@ -1,6 +1,6 @@
-import { gql } from "@apollo/client";
-import React, { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { toast } from "react-toastify";
+import { gql } from "@apollo/client";
 import { AUTH_TOKEN, AUTH_TOKEN_USER } from "../../constants";
 import {
   useLoginMutation,
@@ -54,7 +54,7 @@ export const LoginPageContainer = ({
     password: "",
   });
 
-  const [loginAction]: any = useLoginMutation({
+  const [loginAction] = useLoginMutation({
     variables: {
       email: formState.email,
       password: formState.password,
@@ -85,7 +85,7 @@ export const LoginPageContainer = ({
     },
   });
 
-  const [signupAction]: any = useSignupMutation({
+  const [signupAction] = useSignupMutation({
     variables: {
       email: formState.email,
       password: formState.password,
@@ -107,7 +107,7 @@ export const LoginPageContainer = ({
     // },
   });
 
-  const [resetPasswordRequestAction]: any = useResetPasswordRequestMutation({
+  const [resetPasswordRequestAction] = useResetPasswordRequestMutation({
     variables: {
       email: formState.email,
     },
@@ -154,7 +154,9 @@ export const LoginPageContainer = ({
             </div>
             <div className="actions">
               <button
-                onClick={formState.login ? () => loginAction() : signupAction}
+                onClick={
+                  formState.login ? () => loginAction() : () => signupAction()
+                }
               >
                 {formState.login ? "Login" : "Register"}
               </button>
@@ -210,7 +212,7 @@ export const LoginPageContainer = ({
               />
             </div>
             <div className="actions">
-              <button onClick={resetPasswordRequestAction}>
+              <button onClick={() => resetPasswordRequestAction()}>
                 Send reset instructions
               </button>
 

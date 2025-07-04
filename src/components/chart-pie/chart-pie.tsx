@@ -5,7 +5,8 @@ import { PieChart } from "echarts/charts";
 import { TooltipComponent, LegendComponent } from "echarts/components";
 import { CanvasRenderer } from "echarts/renderers";
 
-import { useMediaQuery, useTheme } from "@mui/material";
+import { useTheme } from "@/hooks/useTheme";
+import { useResponsive } from "@/hooks/useResponsive";
 import { CategoryExpenseTotal } from "@/generated/graphql";
 import { UserContext } from "@/App";
 import { formatAmount } from "@/utils/format";
@@ -26,42 +27,44 @@ export const ChartPie = ({
   height = 400,
   padWidth = 2,
 }: ChartPieProps) => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const { palette } = useTheme();
+  const { isMobile } = useResponsive();
   const userCurrency = useContext(UserContext);
 
   const categoryTotals = useMemo(() => {
     const map: Record<string, number> = {};
-    data.forEach(({ categoryName, total }) => {
-      map[categoryName] = (map[categoryName] || 0) + total;
-    });
+    if (Array.isArray(data)) {
+      data.forEach(({ categoryName, total }) => {
+        map[categoryName] = (map[categoryName] || 0) + total;
+      });
+    }
     return map;
   }, [data]);
   const categories = Object.keys(categoryTotals);
 
   // memoize the category→color map so it only changes when categories or palette change
   const categoryColorMap = useMemo<Record<string, string>>(() => {
-    const palette = [
-      theme.palette.primary.main,
-      theme.palette.secondary.main,
-      theme.palette.error.main,
-      theme.palette.warning.main,
-      theme.palette.info.main,
-      theme.palette.success.main,
+    const colors = [
+      palette.primary.main,
+      palette.secondary.main,
+      palette.error.main,
+      palette.warning.main,
+      palette.info.main,
+      palette.success.main,
     ];
     const map: Record<string, string> = {};
     categories.forEach((cat, i) => {
-      map[cat] = palette[i % palette.length];
+      map[cat] = colors[i % colors.length];
     });
     return map;
   }, [
     categories,
-    theme.palette.primary.main,
-    theme.palette.secondary.main,
-    theme.palette.error.main,
-    theme.palette.warning.main,
-    theme.palette.info.main,
-    theme.palette.success.main,
+    palette.primary.main,
+    palette.secondary.main,
+    palette.error.main,
+    palette.warning.main,
+    palette.info.main,
+    palette.success.main,
   ]);
 
   // 2) Prepare inner (categories) and outer (subcategories) series data
@@ -77,6 +80,7 @@ export const ChartPie = ({
 
   // outer data: grouped by category so siblings sit next to each other
   const outerData = useMemo(() => {
+    if (!Array.isArray(data)) return [];
     return categories.flatMap((cat) =>
       data
         .filter((d) => d.categoryName === cat)
@@ -119,7 +123,8 @@ export const ChartPie = ({
         trigger: "item",
         confine: true,
         textStyle: { fontSize: tooltipFont },
-        formatter: ({ name, percent }: any) => `${name}: (${percent}%)`,
+        formatter: ({ name, percent }: { name: string; percent: number }) =>
+          `${name}: (${percent}%)`,
         // formatter: "{b}: {c} ({d}%)",
       },
       series: [
@@ -140,7 +145,7 @@ export const ChartPie = ({
             // show: !isMobile,
             position: "inside",
             fontSize: innerFontSize,
-            formatter: ({ name }: any) => name,
+            formatter: ({ name }: { name: string }) => name,
             // formatter: "{b}\n{c}",
           },
           labelLine: {
@@ -168,7 +173,7 @@ export const ChartPie = ({
           label: {
             show: !isMobile,
             position: "outside",
-            formatter: ({ name }: any) => name,
+            formatter: ({ name }: { name: string }) => name,
             // formatter: "{b}",
           },
           labelLine: {
@@ -209,6 +214,23 @@ export const ChartPie = ({
       tooltipFont,
     ]
   );
+
+  // Don't render chart if data is invalid
+  if (!Array.isArray(data) || data.length === 0) {
+    return (
+      <div
+        style={{
+          width,
+          height,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <span>No chart data to display</span>
+      </div>
+    );
+  }
 
   return (
     <ReactEChartsCore

@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import { FC, useState } from "react";
 import { useQuery } from "@apollo/client";
 import dayjs from "dayjs";
 import { Expense } from "@/generated/graphql";
 import { SubcategoryListItemStyled } from "@/shared";
 import { getRemainingRolloverBudget } from "@/utils/getRolloverBudget";
-import { GET_ALL_EXPENSES } from "../expenses-list/expenses-list-queries";
+import { GET_ALL_EXPENSES } from "../../pages/expenses-page/expenses-page-queries";
 import { ExpandedExpenses } from "../expanded-expenses/expanded-expenses";
 import { ListItemHeader } from "../list-item-header/list-item-header";
 import { ListItemDetails } from "../list-item-details/list-item-details";
-import { SubcategoryDecoratedWithExpenses } from "../expenses-list/expenses-list";
+import { SubcategoryDecoratedWithExpenses } from "@/features/expenses/expenses-list/expenses-list";
 
 interface Props {
   subcategory: SubcategoryDecoratedWithExpenses;
@@ -19,7 +19,7 @@ interface Props {
   setUpdateModalExpense: (expense: Expense) => void;
 }
 
-export const SubcategoryListItem: React.FC<Props> = ({
+export const SubcategoryListItem: FC<Props> = ({
   subcategory,
   subcategorySelected,
   currentDate,
@@ -33,7 +33,7 @@ export const SubcategoryListItem: React.FC<Props> = ({
 
   const rolloverDate = new Date(Number(subcategory.rolloverDate));
   const expensesSinceRollover = (expensesData?.expenses || []).filter(
-    (expense: any) => {
+    (expense: Expense) => {
       return (
         new Date(Number(expense.date)) >= rolloverDate &&
         expense.subcategoryId === subcategory.id

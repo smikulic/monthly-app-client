@@ -29,14 +29,19 @@ export const analytics = {
   },
 
   // Set user properties
-  setUserProperties: (properties: Record<string, any>) => {
+  setUserProperties: (
+    properties: Record<string, string | number | boolean>
+  ) => {
     if (import.meta.env.VITE_MIXPANEL_TOKEN) {
       mixpanel.people.set(properties);
     }
   },
 
   // Track events
-  track: (eventName: string, properties?: Record<string, any>) => {
+  track: (
+    eventName: string,
+    properties?: Record<string, string | number | boolean>
+  ) => {
     if (import.meta.env.VITE_MIXPANEL_TOKEN) {
       mixpanel.track(eventName, {
         ...properties,
@@ -47,7 +52,10 @@ export const analytics = {
   },
 
   // Track page views
-  trackPageView: (pageName: string, properties?: Record<string, any>) => {
+  trackPageView: (
+    pageName: string,
+    properties?: Record<string, string | number | boolean>
+  ) => {
     analytics.track("Page View", {
       page_name: pageName,
       ...properties,

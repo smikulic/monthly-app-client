@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import { createContext, useState } from "react";
 import { Slide, ToastContainer } from "react-toastify";
 import { BrowserRouter as Router, Routes, Route, Outlet } from "react-router";
 import { gql, ServerError, useQuery } from "@apollo/client";
@@ -12,8 +12,7 @@ import { CategoriesPageContainer } from "./pages/categories-page/categories-page
 import { SavingGoalsPageContainer } from "./pages/saving-goals-page/saving-goals-page-container";
 import { InvestmentsPageContainer } from "./pages/investments-page/investments-page-container";
 import { ConfirmEmailPageContainer } from "./pages/confirm-email-page/confirm-email-page-container";
-import { Header } from "./components/header/header";
-import { Footer } from "./components/footer/footer";
+import { Header, Footer } from "./components/layout";
 import { AUTH_TOKEN, AUTH_TOKEN_USER } from "./constants";
 import { handleLogout } from "./utils/handleLogout";
 import { FooterPaddingStyled } from "./shared";
@@ -79,8 +78,8 @@ function App() {
         // Identify user in Mixpanel
         analytics.identify(data.me.id);
         analytics.setUserProperties({
-          '$email': data.me.email,
-          'currency': data.me.currency || 'USD',
+          $email: data.me.email,
+          currency: data.me.currency || "USD",
           // Add any other user properties here
         });
       }
@@ -166,62 +165,46 @@ function App() {
                   <>
                     <Route
                       element={
-                        <>
+                        <UserContext.Provider value={userData?.me.currency}>
                           <Header onLogout={handleLogout} />
                           <FooterPaddingStyled>
                             <Outlet />
                           </FooterPaddingStyled>
                           <Footer />
-                        </>
+                        </UserContext.Provider>
                       }
                     >
                       <Route
                         path="/"
                         element={
-                          <UserContext.Provider value={userData?.me.currency}>
-                            <HomePageContainer
-                              pageDate={pageDate}
-                              onClickNext={onClickNext}
-                              onClickPrevious={onClickPrevious}
-                            />
-                          </UserContext.Provider>
+                          <HomePageContainer
+                            pageDate={pageDate}
+                            onClickNext={onClickNext}
+                            onClickPrevious={onClickPrevious}
+                          />
                         }
                       />
                       <Route
                         path="/expenses"
                         element={
-                          <UserContext.Provider value={userData?.me.currency}>
-                            <ExpensesPageContainer
-                              pageDate={pageDate}
-                              onClickNext={onClickNext}
-                              onClickPrevious={onClickPrevious}
-                            />
-                          </UserContext.Provider>
+                          <ExpensesPageContainer
+                            pageDate={pageDate}
+                            onClickNext={onClickNext}
+                            onClickPrevious={onClickPrevious}
+                          />
                         }
                       />
                       <Route
                         path="/budget"
-                        element={
-                          <UserContext.Provider value={userData?.me.currency}>
-                            <CategoriesPageContainer />
-                          </UserContext.Provider>
-                        }
+                        element={<CategoriesPageContainer />}
                       />
                       <Route
                         path="/saving-goals"
-                        element={
-                          <UserContext.Provider value={userData?.me.currency}>
-                            <SavingGoalsPageContainer />
-                          </UserContext.Provider>
-                        }
+                        element={<SavingGoalsPageContainer />}
                       />
                       <Route
                         path="/investments"
-                        element={
-                          <UserContext.Provider value={userData?.me.currency}>
-                            <InvestmentsPageContainer />
-                          </UserContext.Provider>
-                        }
+                        element={<InvestmentsPageContainer />}
                       />
                       <Route
                         path="/profile"

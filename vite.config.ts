@@ -34,5 +34,11 @@ export default defineConfig({
     environment: "jsdom",
     setupFiles: "./src/setupTests.ts",
     coverage: { reporter: ["text", "lcov"] },
+    exclude: [
+      "**/node_modules/**",
+      "**/dist/**",
+      "**/build/**",
+      "**/tests/e2e/**", // Exclude e2e tests
+    ],
   },
 });

@@ -1,6 +1,12 @@
 // src/components/ui/Button.tsx
+import React from "react";
 import { Button as MuiButton, ButtonProps } from "@mui/material";
 import { styled } from "@mui/material/styles";
+
+// Generic Button component
+export const Button: React.FC<ButtonProps> = (props) => (
+  <MuiButton {...props} />
+);
 
 export const PrimaryButton = styled((props: ButtonProps) => (
   <MuiButton variant="contained" {...props} />

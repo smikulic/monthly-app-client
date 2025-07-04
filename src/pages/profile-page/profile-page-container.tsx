@@ -19,6 +19,7 @@ import {
 import { MenuItem } from "@/components/ui/MenuItem";
 import { Typography } from "@/components/ui/Typography";
 import { ProminentButtonStyled, SelectStyled, TextFieldStyled } from "@/shared";
+import { CURRENCY_OPTIONS } from "@/constants/forms";
 
 export const ProfilePageContainer = ({
   userData,
@@ -64,12 +65,7 @@ export const ProfilePageContainer = ({
           value={currency}
           onChange={(e) => setCurrency(e.target.value as string)}
         >
-          {[
-            { value: "USD", label: "$" },
-            { value: "EUR", label: "€" },
-            { value: "GBP", label: "£" },
-            { value: "CAD", label: "$" },
-          ].map((opt) => (
+          {CURRENCY_OPTIONS.map((opt) => (
             <MenuItem key={opt.value} value={opt.value}>
               {opt.value} ({opt.label})
             </MenuItem>

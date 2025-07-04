@@ -1,4 +1,4 @@
-import React from "react";
+import { FC, MouseEvent, useContext } from "react";
 import { toast } from "react-toastify";
 import { useApolloClient } from "@apollo/client";
 import dayjs from "dayjs";
@@ -11,6 +11,7 @@ import {
   ExpenseListItemStyled,
 } from "./expanded-expenses-style";
 import { IconMenu } from "../icon-menu/icon-menu";
+import { TOAST_MESSAGES, ENTITY_NAMES } from "@/constants/forms";
 
 interface Props {
   expenses: Expense[];
@@ -18,12 +19,12 @@ interface Props {
   refetchExpenses: () => Promise<unknown>;
 }
 
-export const ExpandedExpenses: React.FC<Props> = ({
+export const ExpandedExpenses: FC<Props> = ({
   expenses,
   setUpdateModalExpense,
   refetchExpenses,
 }) => {
-  const userCurrency = React.useContext(UserContext);
+  const userCurrency = useContext(UserContext);
   const client = useApolloClient();
 
   const {
@@ -34,7 +35,7 @@ export const ExpandedExpenses: React.FC<Props> = ({
 
   const [deleteExpense] = useDeleteExpenseMutation({
     onError: () => {
-      toast.error(`Error while deleting an expense! Please try again.`);
+      toast.error(TOAST_MESSAGES.ERROR.DELETE(ENTITY_NAMES.EXPENSE));
     },
     onCompleted: ({ deleteExpense }) => {
       refetchExpenses();
@@ -44,9 +45,7 @@ export const ExpandedExpenses: React.FC<Props> = ({
       client.cache.evict({ id: "ROOT_QUERY", fieldName: "chartExpenses" });
       client.cache.gc();
 
-      toast.success(
-        `You have successfully removed ${deleteExpense.id} expense!`
-      );
+      toast.success(TOAST_MESSAGES.SUCCESS.DELETE(ENTITY_NAMES.EXPENSE));
     },
   });
 
@@ -78,7 +77,7 @@ export const ExpandedExpenses: React.FC<Props> = ({
                   deleteExpense({ variables: { id: expenseId } });
                   handleActionsDropdownClose(expenseId);
                 }}
-                handleOnOpenMenu={(event: React.MouseEvent<HTMLElement>) =>
+                handleOnOpenMenu={(event: MouseEvent<HTMLElement>) =>
                   handleActionsDropdownClick(event, expenseId)
                 }
                 handleOnCloseMenu={() => handleActionsDropdownClose(expenseId)}

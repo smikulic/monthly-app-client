@@ -1,5 +1,6 @@
-// import { mockReplace } from "../setupTests";
+import { describe, expect, it } from "vitest";
 import { formatAmount } from "./format";
+// import { mockReplace } from "../setupTests";
 
 describe("formatAmount", () => {
   it("should format 100 EUR", async () => {

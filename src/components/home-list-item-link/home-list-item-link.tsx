@@ -1,8 +1,9 @@
-import React from "react";
+import { useContext } from "react";
 import { Link } from "react-router";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import Box from "@mui/material/Box";
-import { Skeleton, Typography } from "@mui/material";
+import { Box } from "@/components/ui/Box";
+import { Skeleton } from "@/components/ui/Skeleton";
+import { Typography } from "@/components/ui/Typography";
 import { formatAmount } from "../../utils/format";
 import { MainListItemStyled } from "../../shared";
 import { UserContext } from "../../App";
@@ -20,7 +21,7 @@ export const HomeListItemLink = ({
   value: number;
   valueColor?: string;
 }) => {
-  const userCurrency = React.useContext(UserContext);
+  const userCurrency = useContext(UserContext);
 
   return (
     <Link to={linkTo}>

@@ -2,10 +2,11 @@ import { useState } from "react";
 import { useQuery } from "@apollo/client";
 import dayjs from "dayjs";
 import { getDecoratedCategoriesWithExpenses } from "@/utils/getDecoratedCategoriesWithExpenses";
-import { ExpensesList } from "@/components/expenses-list/expenses-list";
-import { GET_EXPENSES_LIST } from "@/components/expenses-list/expenses-list-queries";
-import { GET_CATEGORIES_LIST } from "@/components/categories-list/categories-list-queries";
-import { ActionsBar } from "@/components/actions-bar/actions-bar";
+import { ExpensesList } from "@/features/expenses";
+import { GET_EXPENSES_LIST } from "@/pages/expenses-page/expenses-page-queries";
+import { GET_CATEGORIES_LIST } from "@/pages/categories-page/categories-page-queries";
+import { ActionsBar } from "@/components/layout";
+import { useExpensesActions } from "./use-expenses-actions-hook";
 
 export const ExpensesPageContainer = ({
   pageDate,
@@ -29,8 +30,18 @@ export const ExpensesPageContainer = ({
       date: formattedDate,
     },
   });
+
   const { data: categoriesData, loading: loadingCategories } =
     useQuery(GET_CATEGORIES_LIST);
+
+  const {
+    openCategory,
+    createModalExpense,
+    updateModalExpense,
+    setOpenCategory,
+    setCreateModalExpense,
+    setUpdateModalExpense,
+  } = useExpensesActions();
 
   const { totalSubcategories, categoriesDecoratedWithExpenses } =
     getDecoratedCategoriesWithExpenses({
@@ -50,10 +61,15 @@ export const ExpensesPageContainer = ({
       <ExpensesList
         loading={loadingExpenses || loadingCategories}
         pageDate={pageDate}
-        // showRolloverBudget={false}
         showRolloverBudget={showRolloverBudget}
         categoriesDecoratedWithExpenses={categoriesDecoratedWithExpenses}
         totalSubcategories={totalSubcategories}
+        openCategory={openCategory}
+        createModalExpense={createModalExpense}
+        updateModalExpense={updateModalExpense}
+        onSetOpenCategory={setOpenCategory}
+        onSetCreateModalExpense={setCreateModalExpense}
+        onSetUpdateModalExpense={setUpdateModalExpense}
         refetchExpenses={refetchExpenses}
       />
     </>

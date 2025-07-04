@@ -1,13 +1,23 @@
 // src/components/ui/Select.tsx
+import React from "react";
 import {
-  FormControl,
-  InputLabel,
   Select as MuiSelect,
-  SelectProps,
-  MenuItem,
+  SelectProps as MuiSelectProps,
+  SelectChangeEvent,
 } from "@mui/material";
+import { FormControl } from "./FormControl";
+import { InputLabel } from "./InputLabel";
 
-type SelectFieldProps = Omit<SelectProps<string>, "native"> & {
+// Re-export types
+export type { SelectChangeEvent };
+
+// Individual component exports
+export const Select = <T,>(props: MuiSelectProps<T>) => (
+  <MuiSelect {...props} />
+);
+
+// Composed SelectField component
+type SelectFieldProps = Omit<MuiSelectProps<string>, "native"> & {
   label: string;
   id: string;
 };
@@ -20,8 +30,8 @@ export const SelectField: React.FC<SelectFieldProps> = ({
 }) => (
   <FormControl fullWidth margin="normal">
     <InputLabel htmlFor={id}>{label}</InputLabel>
-    <MuiSelect label={label} id={id} {...rest}>
+    <Select label={label} id={id} {...rest}>
       {children}
-    </MuiSelect>
+    </Select>
   </FormControl>
 );

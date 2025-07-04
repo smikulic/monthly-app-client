@@ -27,3 +27,9 @@ yarn-error.log*
 
 # Claude Code documentation
 CLAUDE.md
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
