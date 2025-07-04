@@ -1,18 +1,59 @@
 import mixpanel from "mixpanel-browser";
+import Cookies from "js-cookie";
+
+// Cookie consent status
+export const COOKIE_CONSENT_KEY = "cookie-consent";
+
+// Check if user has consented to analytics
+export const hasAnalyticsConsent = () => {
+  const consent = Cookies.get(COOKIE_CONSENT_KEY);
+  return consent === "true";
+};
 
 // Initialize Mixpanel
 const initMixpanel = () => {
   const token = import.meta.env.VITE_MIXPANEL_TOKEN;
 
   if (token) {
-    mixpanel.init(token, {
-      debug: import.meta.env.MODE === "development",
-      track_pageview: true,
-      persistence: "localStorage",
-      ignore_dnt: false,
-    });
+    // Only initialize if user has consented
+    if (hasAnalyticsConsent()) {
+      mixpanel.init(token, {
+        debug: import.meta.env.MODE === "development",
+        track_pageview: true,
+        persistence: "localStorage",
+        ignore_dnt: false,
+      });
+    } else {
+      // If no consent, opt out
+      mixpanel.init(token, {
+        opt_out_tracking_by_default: true,
+        debug: import.meta.env.MODE === "development",
+      });
+    }
   } else {
     console.warn("Mixpanel token not found. Analytics disabled.");
+  }
+};
+
+// Handle consent changes
+export const handleAnalyticsConsent = (hasConsent: boolean) => {
+  const token = import.meta.env.VITE_MIXPANEL_TOKEN;
+
+  if (token) {
+    if (hasConsent) {
+      // Opt in to tracking
+      mixpanel.opt_in_tracking();
+      // Re-initialize with full settings
+      mixpanel.init(token, {
+        debug: import.meta.env.MODE === "development",
+        track_pageview: true,
+        persistence: "localStorage",
+        ignore_dnt: false,
+      });
+    } else {
+      // Opt out of tracking
+      mixpanel.opt_out_tracking();
+    }
   }
 };
 
@@ -23,7 +64,7 @@ export const analytics = {
 
   // Identify user
   identify: (userId: string) => {
-    if (import.meta.env.VITE_MIXPANEL_TOKEN) {
+    if (import.meta.env.VITE_MIXPANEL_TOKEN && hasAnalyticsConsent()) {
       mixpanel.identify(userId);
     }
   },
@@ -32,7 +73,7 @@ export const analytics = {
   setUserProperties: (
     properties: Record<string, string | number | boolean>
   ) => {
-    if (import.meta.env.VITE_MIXPANEL_TOKEN) {
+    if (import.meta.env.VITE_MIXPANEL_TOKEN && hasAnalyticsConsent()) {
       mixpanel.people.set(properties);
     }
   },
@@ -42,7 +83,7 @@ export const analytics = {
     eventName: string,
     properties?: Record<string, string | number | boolean>
   ) => {
-    if (import.meta.env.VITE_MIXPANEL_TOKEN) {
+    if (import.meta.env.VITE_MIXPANEL_TOKEN && hasAnalyticsConsent()) {
       mixpanel.track(eventName, {
         ...properties,
         timestamp: new Date().toISOString(),
@@ -135,7 +176,7 @@ export const analytics = {
 
   // Reset user data (call on logout)
   reset: () => {
-    if (import.meta.env.VITE_MIXPANEL_TOKEN) {
+    if (import.meta.env.VITE_MIXPANEL_TOKEN && hasAnalyticsConsent()) {
       mixpanel.reset();
     }
   },

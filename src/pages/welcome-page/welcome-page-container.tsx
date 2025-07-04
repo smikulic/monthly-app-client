@@ -1,5 +1,7 @@
 import React from "react";
+import CookieConsent from "react-cookie-consent";
 import ProductDemoImg from "../../assets/product-demo.png";
+import { handleAnalyticsConsent, COOKIE_CONSENT_KEY } from "@/utils/mixpanel";
 import "./welcome-page-container.css";
 
 export const WelcomePageContainer = () => {
@@ -79,6 +81,61 @@ export const WelcomePageContainer = () => {
         <br />
         <br />
       </div>
+
+      <CookieConsent
+        location="bottom"
+        buttonText="Accept"
+        declineButtonText="Decline"
+        enableDeclineButton
+        cookieName={COOKIE_CONSENT_KEY}
+        style={{
+          background: "#2B373B",
+          fontSize: "14px",
+          padding: "15px",
+        }}
+        buttonStyle={{
+          backgroundColor: "#46eaa6",
+          color: "#2B373B",
+          fontSize: "14px",
+          padding: "10px 20px",
+          borderRadius: "4px",
+          fontWeight: "500",
+        }}
+        declineButtonStyle={{
+          backgroundColor: "transparent",
+          color: "#fff",
+          fontSize: "14px",
+          padding: "10px 20px",
+          borderRadius: "4px",
+          border: "1px solid #fff",
+          fontWeight: "500",
+        }}
+        expires={365}
+        onAccept={() => {
+          handleAnalyticsConsent(true);
+        }}
+        onDecline={() => {
+          handleAnalyticsConsent(false);
+        }}
+      >
+        This website uses cookies to enhance your experience and provide
+        analytics. By clicking "Accept", you consent to our use of cookies for
+        analytics purposes. View our{" "}
+        <a
+          href="/privacy"
+          style={{ color: "#46eaa6", textDecoration: "underline" }}
+        >
+          Privacy Policy
+        </a>{" "}
+        and{" "}
+        <a
+          href="/terms"
+          style={{ color: "#46eaa6", textDecoration: "underline" }}
+        >
+          Terms & Conditions
+        </a>{" "}
+        for more details.
+      </CookieConsent>
     </div>
   );
 };

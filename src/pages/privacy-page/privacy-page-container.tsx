@@ -4,7 +4,7 @@ export const PrivacyPageContainer = () => {
   return (
     <div className="privacyPage" style={{ padding: "32px" }}>
       <h1>Privacy Policy</h1>
-      <p>Last updated: November 18, 2023</p>
+      <p>Last updated: January 7, 2025</p>
       <p>
         This Privacy Policy describes Our policies and procedures on the
         collection, use and disclosure of Your information when You use the
@@ -150,6 +150,30 @@ export const PrivacyPageContainer = () => {
         visit our Service or when You access the Service by or through a mobile
         device.
       </p>
+      <h4>Analytics and Tracking Technologies</h4>
+      <p>
+        We use Mixpanel, a third-party analytics service, to help us understand
+        how our Service is used. Mixpanel collects information about how You
+        interact with our Service, such as which features You use, how often You
+        use them, and other usage patterns. This information helps us identify
+        areas for improvement and develop new features that better serve Your
+        needs.
+      </p>
+      <p>The analytics data collected includes:</p>
+      <ul>
+        <li>Page views and navigation paths</li>
+        <li>
+          Feature usage (e.g., when You create categories, expenses, or saving
+          goals)
+        </li>
+        <li>Session duration and frequency</li>
+        <li>General location information (city/country level only)</li>
+      </ul>
+      <p>
+        You can opt out of analytics tracking at any time by declining cookies
+        when prompted on our welcome page, or by adjusting Your cookie
+        preferences in Your browser settings.
+      </p>
       <h3>Use of Your Personal Data</h3>
       <p>The Company may use Personal Data for the following purposes:</p>
       <ul>
@@ -162,9 +186,11 @@ export const PrivacyPageContainer = () => {
         <li>
           <p>
             <strong>To manage Your Account:</strong> to manage Your registration
-            as a user of the Service. The Personal Data You provide can give You
-            access to different functionalities of the Service that are
-            available to You as a registered user.
+            as a user of the Service. We collect Your email address to allow You
+            to log in to Your account and store Your financial data securely.
+            The Personal Data You provide can give You access to different
+            functionalities of the Service that are available to You as a
+            registered user.
           </p>
         </li>
         <li>
@@ -299,15 +325,25 @@ export const PrivacyPageContainer = () => {
         Personal Data that We have collected about You.
       </p>
       <p>
-        Our Service may give You the ability to delete certain information about
-        You from within the Service.
+        Our Service provides You with the ability to delete Your account and all
+        associated data directly from within the Service.
+      </p>
+      <p>To delete Your account:</p>
+      <ol>
+        <li>Sign in to Your Account</li>
+        <li>Navigate to Your Profile page</li>
+        <li>Click on "Delete Account"</li>
+        <li>Confirm Your decision</li>
+      </ol>
+      <p>
+        Upon account deletion, all Your personal data, including Your email
+        address, financial records, categories, expenses, and any other
+        information You have provided, will be permanently removed from our
+        systems. This action is irreversible.
       </p>
       <p>
-        You may update, amend, or delete Your information at any time by signing
-        in to Your Account, if you have one, and visiting the account settings
-        section that allows you to manage Your personal information. You may
-        also contact Us to request access to, correct, or delete any personal
-        information that You have provided to Us.
+        You may also contact Us to request access to, correct, or delete any
+        personal information that You have provided to Us.
       </p>
       <p>
         Please note, however, that We may need to retain certain information
