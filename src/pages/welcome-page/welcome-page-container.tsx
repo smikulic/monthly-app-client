@@ -82,6 +82,49 @@ export const WelcomePageContainer = () => {
         <br />
       </div>
 
+      <footer
+        style={{
+          padding: "20px",
+          textAlign: "center",
+          marginTop: "40px",
+        }}
+      >
+        <div style={{ fontSize: "14px", color: "#666" }}>
+          <a
+            href="/privacy"
+            style={{
+              color: "#666",
+              textDecoration: "none",
+              marginRight: "20px",
+            }}
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.textDecoration = "underline")
+            }
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.textDecoration = "none")
+            }
+          >
+            Privacy Policy
+          </a>
+          <span style={{ marginRight: "20px" }}>•</span>
+          <a
+            href="/terms"
+            style={{
+              color: "#666",
+              textDecoration: "none",
+            }}
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.textDecoration = "underline")
+            }
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.textDecoration = "none")
+            }
+          >
+            Terms & Conditions
+          </a>
+        </div>
+      </footer>
+
       <CookieConsent
         location="bottom"
         buttonText="Accept"
@@ -89,7 +132,8 @@ export const WelcomePageContainer = () => {
         enableDeclineButton
         cookieName={COOKIE_CONSENT_KEY}
         style={{
-          background: "#2B373B",
+          background: "rgba(43, 55, 59, 0.9)",
+          // background: "#2B373B",
           fontSize: "14px",
           padding: "15px",
         }}
