@@ -91,6 +91,23 @@ export const WelcomePageContainer = () => {
       >
         <div style={{ fontSize: "14px", color: "#666" }}>
           <a
+            href="/about"
+            style={{
+              color: "#666",
+              textDecoration: "none",
+              marginRight: "20px",
+            }}
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.textDecoration = "underline")
+            }
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.textDecoration = "none")
+            }
+          >
+            About
+          </a>
+          <span style={{ marginRight: "20px" }}>•</span>
+          <a
             href="/privacy"
             style={{
               color: "#666",
