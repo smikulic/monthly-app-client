@@ -17,6 +17,8 @@ import { AUTH_TOKEN, AUTH_TOKEN_USER } from "./constants";
 import { handleLogout } from "./utils/handleLogout";
 import { FooterPaddingStyled } from "./shared";
 import { PrivacyPageContainer } from "./pages/privacy-page/privacy-page-container";
+import { TermsPageContainer } from "./pages/terms-page/terms-page-container";
+import { AboutPageContainer } from "./pages/about-page/about-page-container";
 import { ProfilePageContainer } from "./pages/profile-page/profile-page-container";
 import { ReportsPageContainer } from "./pages/reports-page/reports-page-container";
 import { analytics } from "./utils/mixpanel";
@@ -135,6 +137,8 @@ function App() {
               <>
                 <Route path="/" element={<WelcomePageContainer />} />
                 <Route path="/privacy" element={<PrivacyPageContainer />} />
+                <Route path="/terms" element={<TermsPageContainer />} />
+                <Route path="/about" element={<AboutPageContainer />} />
               </>
             )}
 
@@ -143,6 +147,8 @@ function App() {
               <>
                 <Route path="/welcome" element={<WelcomePageContainer />} />
                 <Route path="/privacy" element={<PrivacyPageContainer />} />
+                <Route path="/terms" element={<TermsPageContainer />} />
+                <Route path="/about" element={<AboutPageContainer />} />
 
                 <Route
                   path="/reset-password"
