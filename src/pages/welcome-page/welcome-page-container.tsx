@@ -49,29 +49,37 @@ export const WelcomePageContainer = () => {
               Not sure how much to spend this month?
             </h3>
             <p className="feature-box-description">
-              A bunch of apps out there offer complex budget tracking but none
-              give insight about how much should you actually save up.
+              Stop guessing. Monthly shows you where your money can go and why.
             </p>
           </span>
         </div>
         <div className="feature-box">
           <span>
-            <h3 className="feature-box-title">There is a simpler way.</h3>
+            <h3 className="feature-box-title">Quick, intuitive budgeting</h3>
             <p className="feature-box-description">
-              Monthly App offers a quick and easy way to add your expenses,
-              organize your budget and have your monthly spending overview.
+              Add expenses in seconds, organize categories, and get an
+              at-a-glance view of your month’s spending.
             </p>
           </span>
         </div>
         <div className="feature-box">
           <span>
-            <h3 className="feature-box-title">Monthly is 100% free.</h3>
+            <h3 className="feature-box-title">
+              Free to start - no bank details
+            </h3>
             <p className="feature-box-description">
-              Don't worry, there are no fees involved and no bank accounts
-              information needed, Monthly App is just a glorified calculator and
-              a way to unload the burden of financial planning.
+              Just a simple calculator to lighten your planning load; optional
+              premium features may arrive later to help cover server and
+              maintenance costs.
             </p>
           </span>
+        </div>
+        <div className="feature-box">
+          <h3 className="feature-box-title">All your finances in one place</h3>
+          <p className="feature-box-description">
+            Track spending patterns, savings goals, investments, and overall net
+            worth, without ever connecting an account.
+          </p>
         </div>
 
         <br />
@@ -150,9 +158,8 @@ export const WelcomePageContainer = () => {
         cookieName={COOKIE_CONSENT_KEY}
         style={{
           background: "rgba(43, 55, 59, 0.9)",
-          // background: "#2B373B",
           fontSize: "14px",
-          padding: "15px",
+          padding: "8px",
         }}
         buttonStyle={{
           backgroundColor: "#46eaa6",
