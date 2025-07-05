@@ -135,7 +135,7 @@ export const WelcomePageContainer = () => {
                 border: "none",
                 borderRadius: "8px",
               }}
-              src="https://www.youtube.com/embed/ybZ2o7T8z0w"
+              src="https://www.youtube.com/embed/aeRSCK--kls"
               title="How to get started with Monthly"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
