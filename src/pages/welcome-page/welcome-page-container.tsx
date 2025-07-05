@@ -82,6 +82,67 @@ export const WelcomePageContainer = () => {
           </p>
         </div>
 
+        <div
+          style={{
+            marginTop: "60px",
+            marginBottom: "40px",
+            textAlign: "center",
+          }}
+        >
+          <h2
+            style={{
+              fontSize: "32px",
+              color: "#333",
+              marginBottom: "20px",
+              fontWeight: "500",
+            }}
+          >
+            How to get started?
+          </h2>
+          <p
+            style={{
+              fontSize: "18px",
+              color: "#666",
+              marginBottom: "30px",
+              maxWidth: "600px",
+              margin: "0 auto 30px auto",
+            }}
+          >
+            Watch this quick 2-minute overview to see how Monthly can simplify
+            your financial planning.
+          </p>
+
+          <div
+            style={{
+              position: "relative",
+              paddingBottom: "56.25%", // 16:9 aspect ratio
+              height: 0,
+              overflow: "hidden",
+              maxWidth: "800px",
+              margin: "0 auto",
+              backgroundColor: "#f0f0f0",
+              borderRadius: "8px",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+            }}
+          >
+            <iframe
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                border: "none",
+                borderRadius: "8px",
+              }}
+              src="https://www.youtube.com/embed/ybZ2o7T8z0w"
+              title="How to get started with Monthly"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
+        </div>
+
         <br />
         <a className="button-start" href={signInUrl}>
           Get Started
