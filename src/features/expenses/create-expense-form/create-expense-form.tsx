@@ -10,6 +10,7 @@ import { FormDialog } from "@/components/form-dialog/form-dialog";
 import { DatePickerStyled } from "@/components/ui/DatePickerStyled";
 import { MenuItem } from "@/components/ui/MenuItem";
 import { SubcategoryDecoratedWithExpenses } from "../expenses-list/expenses-list";
+import dayjs from "dayjs";
 
 interface Props {
   open: boolean;
@@ -85,7 +86,7 @@ export const CreateExpenseForm: React.FC<Props> = ({
             subcategoryId: expenseSubcategoryId,
             amount: Number(expenseAmount),
             description: expenseDescription,
-            date: String(expenseDate),
+            date: dayjs(expenseDate).format("YYYY-MM-DD"),
           },
         })
       }

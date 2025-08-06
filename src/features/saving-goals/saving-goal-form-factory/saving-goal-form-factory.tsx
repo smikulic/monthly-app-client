@@ -11,6 +11,7 @@ import { TextFieldStyled } from "@/shared";
 import { DatePickerStyled } from "@/components/ui/DatePickerStyled";
 import { FormDialog } from "@/components/form-dialog/form-dialog";
 import { Alert } from "@/components/ui/Alert";
+import dayjs from "dayjs";
 
 interface FormProps {
   open: boolean;
@@ -76,7 +77,7 @@ const useSavingGoalForm = (
       createSavingGoal({
         variables: {
           name: savingGoalName,
-          goalDate: String(savingGoalDate),
+          goalDate: dayjs(savingGoalDate).format("YYYY-MM-DD"),
           goalAmount: Number(savingGoalAmount),
           initialSaveAmount: Number(savingGoalInitialAmount),
         },
@@ -86,7 +87,7 @@ const useSavingGoalForm = (
         variables: {
           id: formData!.id,
           name: savingGoalName,
-          goalDate: String(savingGoalDate),
+          goalDate: dayjs(savingGoalDate).format("YYYY-MM-DD"),
           goalAmount: Number(savingGoalAmount),
           initialSaveAmount: Number(savingGoalInitialAmount),
         },

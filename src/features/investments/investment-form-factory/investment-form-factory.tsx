@@ -21,6 +21,7 @@ import { MenuItem } from "@/components/ui/MenuItem";
 import { Alert } from "@/components/ui/Alert";
 import { UserContext } from "@/App";
 import { FormDialog } from "@/components/form-dialog/form-dialog";
+import dayjs from "dayjs";
 
 interface FormProps {
   open: boolean;
@@ -92,7 +93,7 @@ const useInvestmentForm = (
       amount: amount ? Number(amount) : undefined,
       currency: currency,
       initialAmount: Number(initialAmount),
-      startDate: String(startDate),
+      startDate: dayjs(startDate).format("YYYY-MM-DD"),
     };
 
     if (isCreateMode) {

@@ -12,8 +12,7 @@ import {
 import * as gql from "@/generated/graphql";
 import SavingGoalFormFactory from "./saving-goal-form-factory";
 
-const FROZEN_ISO = "2023-01-01T00:00:00.000Z";
-const FROZEN_TS = new Date(FROZEN_ISO).getTime();
+const FROZEN_ISO = "1970-01-01";
 
 vi.mock("@/generated/graphql", () => ({
   useCreateSavingGoalMutation: vi.fn(),
@@ -27,7 +26,7 @@ describe("<SavingGoalFormFactory />", () => {
 
   beforeAll(() => {
     vi.useFakeTimers();
-    vi.setSystemTime(FROZEN_TS);
+    vi.setSystemTime(FROZEN_ISO);
   });
 
   afterAll(() => {
@@ -77,7 +76,7 @@ describe("<SavingGoalFormFactory />", () => {
     const [{ variables }] = mockCreate.mock.calls[0];
     expect(variables).toEqual({
       name: "My Goal",
-      goalDate: new Date(FROZEN_TS).toString(),
+      goalDate: FROZEN_ISO,
       goalAmount: 5000,
       initialSaveAmount: 0,
     });
@@ -86,11 +85,11 @@ describe("<SavingGoalFormFactory />", () => {
   it("– UPDATE mode: hides info alerts, pre-fills fields, and calls update()", () => {
     const existing = {
       id: "42",
-      createdAt: String(FROZEN_TS),
+      createdAt: FROZEN_ISO,
       name: "Existing Goal",
       goalAmount: 1000,
       initialSaveAmount: 200,
-      goalDate: String(FROZEN_TS),
+      goalDate: FROZEN_ISO,
     };
 
     render(
@@ -125,7 +124,7 @@ describe("<SavingGoalFormFactory />", () => {
     expect(variables).toEqual({
       id: "42",
       name: "Updated Goal",
-      goalDate: new Date(FROZEN_TS).toString(),
+      goalDate: FROZEN_ISO,
       goalAmount: 1500,
       initialSaveAmount: 200,
     });

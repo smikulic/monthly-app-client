@@ -12,6 +12,7 @@ import { SelectChangeEvent } from "@/components/ui/Select";
 import { DatePickerStyled } from "@/components/ui/DatePickerStyled";
 import { FormDialog } from "@/components/form-dialog/form-dialog";
 import { MenuItem } from "@/components/ui/MenuItem";
+import dayjs from "dayjs";
 
 interface Props {
   open: boolean;
@@ -78,7 +79,7 @@ export const UpdateExpenseForm: React.FC<Props> = ({
             id: formData.id,
             amount: expenseAmount,
             description: expenseDescription,
-            date: String(expenseDate),
+            date: dayjs(expenseDate).format("YYYY-MM-DD"),
             subcategoryId: expenseSubcategoryId,
           },
         })
