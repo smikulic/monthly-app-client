@@ -14,8 +14,7 @@ import { SubcategoryFormFactory } from "./subcategory-form-factory";
 import { Category, Subcategory } from "@/generated/graphql";
 
 // Freeze date to a known ISO
-const FROZEN_ISO = "2023-01-01T00:00:00.000Z";
-const FROZEN_TS = new Date(FROZEN_ISO).getTime();
+const FROZEN_ISO = "1970-01-01";
 
 // Mock GraphQL hooks
 vi.mock("@/generated/graphql", () => ({
@@ -35,7 +34,7 @@ describe("<SubcategoryFormFactory />", () => {
 
   beforeAll(() => {
     vi.useFakeTimers();
-    vi.setSystemTime(FROZEN_TS);
+    vi.setSystemTime(FROZEN_ISO);
   });
 
   afterAll(() => {
@@ -96,10 +95,10 @@ describe("<SubcategoryFormFactory />", () => {
   it("renders update mode and calls update mutation with initial category", () => {
     const existing: Subcategory = {
       id: "1",
-      createdAt: String(FROZEN_TS),
+      createdAt: FROZEN_ISO,
       name: "Existing Subcategory",
       budgetAmount: 1000,
-      rolloverDate: String(FROZEN_TS),
+      rolloverDate: FROZEN_ISO,
       categoryId: "test-category-id",
       __typename: "Subcategory",
     };
