@@ -220,13 +220,13 @@ export const WelcomePageContainer = () => {
         style={{
           background: "rgba(43, 55, 59, 0.9)",
           fontSize: "14px",
-          padding: "8px",
+          padding: "5px",
         }}
         buttonStyle={{
           backgroundColor: "#46eaa6",
           color: "#2B373B",
           fontSize: "14px",
-          padding: "10px 20px",
+          padding: "8px 18px",
           borderRadius: "4px",
           fontWeight: "500",
         }}
@@ -234,7 +234,7 @@ export const WelcomePageContainer = () => {
           backgroundColor: "transparent",
           color: "#fff",
           fontSize: "14px",
-          padding: "10px 20px",
+          padding: "8px 18px",
           borderRadius: "4px",
           border: "1px solid #fff",
           fontWeight: "500",

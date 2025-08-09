@@ -3,7 +3,7 @@ import { styled } from "@mui/material/styles";
 export const FooterStyled = styled("div")({
   position: "fixed",
   bottom: "0",
-  padding: "12px",
+  padding: "10px",
   width: "100%",
   textAlign: "center",
   background: "white",

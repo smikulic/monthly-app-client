@@ -14,6 +14,7 @@ import { FormControl } from "@/components/ui/FormControl";
 import { DatePickerStyled } from "@/components/ui/DatePickerStyled";
 import { MenuItem } from "@/components/ui/MenuItem";
 import { FormDialog } from "@/components/form-dialog/form-dialog";
+import dayjs from "dayjs";
 
 const useSubcategoryForm = (
   type: "create" | "update",
@@ -29,7 +30,7 @@ const useSubcategoryForm = (
   );
   const [subcategoryName, setSubcategoryName] = useState(formData?.name || "");
   const [subcategoryBudget, setSubcategoryBudget] = useState(
-    formData?.budgetAmount || 0
+    formData?.budgetAmount
   );
   const [subcategoryRolloverDate, setSubcategoryRolloverDate] = useState(
     formData ? new Date(parseInt(formData.rolloverDate, 10)) : new Date()
@@ -99,8 +100,8 @@ const useSubcategoryForm = (
     const variables = {
       categoryId,
       name: subcategoryName,
-      budgetAmount: subcategoryBudget,
-      rolloverDate: subcategoryRolloverDate.toISOString(),
+      budgetAmount: subcategoryBudget as number,
+      rolloverDate: dayjs(subcategoryRolloverDate).format("YYYY-MM-DD"),
     };
 
     if (isCreateMode) {

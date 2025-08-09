@@ -112,7 +112,7 @@ export const ProminentButtonStyled = styled("div")<ProminentButtonProps>(
 );
 
 export const FooterPaddingStyled = styled("div")({
-  marginBottom: "56px",
+  marginBottom: "68px",
 });
 
 export const ErrorTextStyled = styled("span")(({ theme }) => ({
