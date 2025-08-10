@@ -1,7 +1,7 @@
-import React from "react";
 import CookieConsent from "react-cookie-consent";
-import ProductDemoImg from "../../assets/product-demo.png";
 import { handleAnalyticsConsent, COOKIE_CONSENT_KEY } from "@/utils/mixpanel";
+import { FeatureGrid } from "./feature-grid";
+import ProductDemoImg from "../../assets/product-demo.png";
 import "./welcome-page-container.css";
 
 export const WelcomePageContainer = () => {
@@ -81,10 +81,15 @@ export const WelcomePageContainer = () => {
             worth, without ever connecting an account.
           </p>
         </div>
+      </div>
 
+      {/* new feature presentation grid */}
+      <FeatureGrid />
+
+      <div className="welcome-content">
         <div
           style={{
-            marginTop: "60px",
+            marginTop: "20px",
             marginBottom: "40px",
             textAlign: "center",
           }}

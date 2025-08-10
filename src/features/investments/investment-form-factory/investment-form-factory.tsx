@@ -186,7 +186,7 @@ export const InvestmentFormFactory = ({
         autoComplete="off"
         type="number"
         value={quantity}
-        onChange={(e) => setQuantity(Number(e.target.value))}
+        onChange={(e) => setQuantity(e.target.value)}
       />
 
       <TextFieldStyled
@@ -198,7 +198,7 @@ export const InvestmentFormFactory = ({
         autoComplete="off"
         type="number"
         value={amount}
-        onChange={(e) => setAmount(Number(e.target.value))}
+        onChange={(e) => setAmount(e.target.value)}
       />
 
       <TextFieldStyled
@@ -210,7 +210,7 @@ export const InvestmentFormFactory = ({
         autoComplete="off"
         type="number"
         value={initialAmount}
-        onChange={(e) => setInitialAmount(Number(e.target.value))}
+        onChange={(e) => setInitialAmount(e.target.value)}
       />
 
       <FormControl size="small" required sx={{ minWidth: 120 }}>
