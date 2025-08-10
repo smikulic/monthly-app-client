@@ -19,6 +19,20 @@ export const FeatureGrid: React.FC = () => {
 
   const features = [
     {
+      image: RolloverImg,
+      alt: "Rollover budgeting screenshot",
+      title: "Rollover Budgeting",
+      description:
+        "Stay on track even when life gets unpredictable. One‑off expenses don’t derail your budget: Monthly lets unused budget roll over and balances overspending across upcoming months.",
+    },
+    {
+      image: SpendingChartImg,
+      alt: "Spending breakdown screenshot",
+      title: "Spending Breakdown",
+      description:
+        "Spot trends and overspending quickly. The intelligent spending chart shows where your money goes by category, highlighting your biggest spenders to help you adjust.",
+    },
+    {
       image: SavingGoalsImg,
       alt: "Saving goals screenshot",
       title: "Saving Goals",
@@ -31,20 +45,6 @@ export const FeatureGrid: React.FC = () => {
       title: "Net Worth Tracking",
       description:
         "See your entire financial picture at a glance. Monthly adds up your accounts and investments so you always know your total net worth and how your money is distributed.",
-    },
-    {
-      image: SpendingChartImg,
-      alt: "Spending breakdown screenshot",
-      title: "Spending Breakdown",
-      description:
-        "Spot trends and overspending quickly. The intelligent spending chart shows where your money goes by category, highlighting your biggest spenders to help you adjust.",
-    },
-    {
-      image: RolloverImg,
-      alt: "Rollover budgeting screenshot",
-      title: "Rollover Budgeting",
-      description:
-        "Stay on track even when life gets unpredictable. One‑off expenses don’t derail your budget: Monthly lets unused budget roll over and balances overspending across upcoming months.",
     },
   ];
 
@@ -96,6 +96,7 @@ export const FeatureGrid: React.FC = () => {
                       style={{
                         fontSize: "18px",
                         margin: 0,
+                        marginTop: "8px",
                         fontWeight: 600,
                       }}
                     >
