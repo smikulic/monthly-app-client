@@ -55,6 +55,7 @@ export const GET_USER_ME = gql`
       id
       email
       currency
+      weeklyReminder
     }
   }
 `;
