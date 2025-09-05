@@ -18,6 +18,9 @@ import {
 } from "@/components/ui/Dialog";
 import { MenuItem } from "@/components/ui/MenuItem";
 import { Typography } from "@/components/ui/Typography";
+import { Switch } from "@/components/ui/Switch";
+import { FormGroup } from "@/components/ui/FormGroup";
+import { FormControlLabel } from "@/components/ui/FormControl";
 import { ProminentButtonStyled, SelectStyled, TextFieldStyled } from "@/shared";
 import { CURRENCY_OPTIONS } from "@/constants/forms";
 
@@ -30,6 +33,9 @@ export const ProfilePageContainer = ({
 }) => {
   const navigate = useNavigate();
   const [currency, setCurrency] = useState(userData.currency || "EUR");
+  const [weeklyReminder, setWeeklyReminder] = useState(
+    userData.weeklyReminder || false
+  );
   const [openDialog, setOpenDialog] = useState(false);
 
   const [updateUser] = useUpdateUserMutation({
@@ -71,11 +77,30 @@ export const ProfilePageContainer = ({
             </MenuItem>
           ))}
         </SelectStyled>
+        <FormGroup>
+          <FormControlLabel
+            control={
+              <>
+                <Switch
+                  aria-describedby="weekly-help"
+                  checked={weeklyReminder}
+                  onChange={(e) => setWeeklyReminder(!weeklyReminder)}
+                />
+              </>
+            }
+            label="Weekly expense email (Saturday recap: total spent & budget left)"
+          />
+        </FormGroup>
         <ProminentButtonStyled
           onClick={() =>
-            updateUser({ variables: { id: userData.id, currency } })
+            updateUser({
+              variables: { id: userData.id, currency, weeklyReminder },
+            })
           }
-          disabled={currency === userData.currency}
+          disabled={
+            currency === userData.currency &&
+            weeklyReminder === userData.weeklyReminder
+          }
           textCenter
         >
           Save
