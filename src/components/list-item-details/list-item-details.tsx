@@ -17,9 +17,9 @@ export const ListItemDetails: FC<Props> = ({ expenseValue, budgetValue }) => {
 
   return (
     <>
-      {budgetValue && (
-        <BudgetAmountStyled positive={budgetValue - expenseValue > 0}>
-          {formatAmount(budgetValue - expenseValue, userCurrency)}
+      {budgetValue !== undefined && budgetValue !== null && (
+        <BudgetAmountStyled positive={budgetValue > 0}>
+          {formatAmount(budgetValue, userCurrency)}
         </BudgetAmountStyled>
       )}
 

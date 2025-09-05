@@ -9,6 +9,7 @@ import { ExpandedExpenses } from "../expanded-expenses/expanded-expenses";
 import { ListItemHeader } from "../list-item-header/list-item-header";
 import { ListItemDetails } from "../list-item-details/list-item-details";
 import { SubcategoryDecoratedWithExpenses } from "@/features/expenses/expenses-list/expenses-list";
+import { getEndOfMonth } from "@/utils/getEndOfMonth";
 
 interface Props {
   subcategory: SubcategoryDecoratedWithExpenses;
@@ -32,10 +33,16 @@ export const SubcategoryListItem: FC<Props> = ({
   const { data: expensesData } = useQuery(GET_ALL_EXPENSES);
 
   const rolloverDate = new Date(Number(subcategory.rolloverDate));
+
+  // Where we build the expenses list for the viewed month
+  const monthEnd = getEndOfMonth(currentDate);
+
   const expensesSinceRollover = (expensesData?.expenses || []).filter(
     (expense: Expense) => {
+      const dt = new Date(Number(expense.date));
       return (
-        new Date(Number(expense.date)) >= rolloverDate &&
+        dt >= rolloverDate && // from rollover start
+        dt <= monthEnd && // up to end of viewed month
         expense.subcategoryId === subcategory.id
       );
     }
@@ -47,7 +54,7 @@ export const SubcategoryListItem: FC<Props> = ({
     0
   );
 
-  // Calculate the remaining rollover budget using the updated function
+  // Remaining rollover for the viewed month
   const remainingRolloverBudget = getRemainingRolloverBudget({
     currentDate,
     rolloverDate,
