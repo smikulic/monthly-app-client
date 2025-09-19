@@ -69,6 +69,7 @@ export const SubcategoryListItem: FC<Props> = ({
       accumulator + currentValue.amount,
     0
   );
+
   const expensesExist = totalSubcategoryExpenses > 0;
   const budgetAmount = subcategory.budgetAmount || 0;
 

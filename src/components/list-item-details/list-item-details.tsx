@@ -14,20 +14,22 @@ interface Props {
 
 export const ListItemDetails: FC<Props> = ({ expenseValue, budgetValue }) => {
   const userCurrency = useContext(UserContext);
+  const hasBudget = budgetValue !== undefined && budgetValue != null;
+  const isPositiveBudget = hasBudget && budgetValue > 0;
 
   return (
     <>
-      {budgetValue !== undefined && budgetValue !== null && (
+      {hasBudget && (
         <BudgetAmountStyled positive={budgetValue > 0}>
           {formatAmount(budgetValue, userCurrency)}
         </BudgetAmountStyled>
       )}
 
-      <ExpenseAmountStyled prominent={!budgetValue}>
+      <ExpenseAmountStyled prominent={!hasBudget}>
         {formatAmount(expenseValue, userCurrency)}
       </ExpenseAmountStyled>
 
-      {budgetValue && (
+      {isPositiveBudget && (
         <ProgressBar value={expenseValue} maxValue={budgetValue} />
       )}
     </>
