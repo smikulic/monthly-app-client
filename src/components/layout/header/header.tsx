@@ -68,6 +68,7 @@ export const Header = ({
             alt={userName || "User"}
             sx={{ width: 32, height: 32, cursor: "pointer" }}
             onClick={handleMenuClick}
+            // onError={(e) => console.error("Avatar image failed to load:", e)}
           />
         ) : (
           <Button

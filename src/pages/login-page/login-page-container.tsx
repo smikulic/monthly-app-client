@@ -144,32 +144,12 @@ export const LoginPageContainer = ({
     },
   });
 
-  // const [googleAuthAction] = useGoogleAuthMutation({
-  //   onError: (error) => {
-  //     toast.error(error.message);
-  //   },
-  //   onCompleted: ({ googleAuth }) => {
-  //     // Track user login via Google
-  //     analytics.trackUserLogin(googleAuth?.user?.email!);
-  //     analytics.identify(googleAuth?.user?.id!);
-  //     analytics.setUserProperties({
-  //       $email: googleAuth?.user?.email!,
-  //     });
-
-  //     localStorage.setItem(AUTH_TOKEN, googleAuth?.token!);
-  //     localStorage.setItem(AUTH_TOKEN_USER, googleAuth?.user?.email!);
-  //     setToken(googleAuth?.token!);
-  //     window.location.replace("/");
-  //   },
-  // });
-
   const { data: googleAuthUrlData } = useGoogleAuthUrlQuery();
 
   const handleGoogleLogin = () => {
     if (googleAuthUrlData?.googleAuthUrl?.url) {
       window.location.href = googleAuthUrlData.googleAuthUrl.url;
     } else {
-      console.error("Google auth URL not available");
       toast.error("Google authentication is not available right now");
     }
   };

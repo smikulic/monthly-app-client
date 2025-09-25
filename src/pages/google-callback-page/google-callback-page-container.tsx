@@ -37,14 +37,12 @@ export const GoogleCallbackPageContainer = ({
     },
     onCompleted: ({ googleLogin }) => {
       if (googleLogin?.token && googleLogin?.user) {
-        // Track user login via Google
         analytics.trackUserLogin(googleLogin.user.email!);
         analytics.identify(googleLogin.user.id!);
         analytics.setUserProperties({
           $email: googleLogin.user.email!,
         });
 
-        // Store auth data
         localStorage.setItem(AUTH_TOKEN, googleLogin.token);
         localStorage.setItem(AUTH_TOKEN_USER, googleLogin.user.email!);
         setToken(googleLogin.token);
