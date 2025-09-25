@@ -65,6 +65,11 @@ export type ExpenseFilterInput = {
   date: Scalars['String'];
 };
 
+export type GoogleAuthUrl = {
+  __typename?: 'GoogleAuthUrl';
+  url: Scalars['String'];
+};
+
 export type Investment = {
   __typename?: 'Investment';
   amount: Scalars['Int'];
@@ -93,9 +98,11 @@ export type Mutation = {
   deleteInvestment: Scalars['Boolean'];
   deleteSavingGoal: SavingGoal;
   deleteSubcategory: Subcategory;
+  googleLogin: AuthPayload;
   login?: Maybe<AuthPayload>;
   resetPassword: User;
   resetPasswordRequest: PasswordResetRequestPayload;
+  setPassword: User;
   signup?: Maybe<AuthPayload>;
   updateCategory: Category;
   updateExpense: Expense;
@@ -172,6 +179,11 @@ export type MutationDeleteSubcategoryArgs = {
 };
 
 
+export type MutationGoogleLoginArgs = {
+  code: Scalars['String'];
+};
+
+
 export type MutationLoginArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
@@ -186,6 +198,11 @@ export type MutationResetPasswordArgs = {
 
 export type MutationResetPasswordRequestArgs = {
   email: Scalars['String'];
+};
+
+
+export type MutationSetPasswordArgs = {
+  password: Scalars['String'];
 };
 
 
@@ -253,6 +270,7 @@ export type Query = {
   chartExpenses: ChartExpensesPayload;
   expenses: Array<Expense>;
   generateReport: Scalars['String'];
+  googleAuthUrl: GoogleAuthUrl;
   investment?: Maybe<Investment>;
   investments: Array<Investment>;
   me: User;
@@ -344,14 +362,17 @@ export type User = {
   emailConfirmed?: Maybe<Scalars['Boolean']>;
   expenses?: Maybe<Array<Maybe<Expense>>>;
   id: Scalars['ID'];
-  password: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  password?: Maybe<Scalars['String']>;
+  picture?: Maybe<Scalars['String']>;
+  provider?: Maybe<Scalars['String']>;
   weeklyReminder?: Maybe<Scalars['Boolean']>;
 };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: string, email: string, currency?: string | null, weeklyReminder?: boolean | null } };
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: string, email: string, currency?: string | null, weeklyReminder?: boolean | null, name?: string | null, picture?: string | null, provider?: string | null } };
 
 export type CategoriesListQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -470,6 +491,13 @@ export type DeleteExpenseMutationVariables = Exact<{
 
 export type DeleteExpenseMutation = { __typename?: 'Mutation', deleteExpense: { __typename?: 'Expense', id: string } };
 
+export type GoogleLoginMutationVariables = Exact<{
+  code: Scalars['String'];
+}>;
+
+
+export type GoogleLoginMutation = { __typename?: 'Mutation', googleLogin: { __typename?: 'AuthPayload', token?: string | null, user?: { __typename?: 'User', id: string, email: string, name?: string | null, picture?: string | null, provider?: string | null } | null } };
+
 export type InvestmentsListQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -502,7 +530,7 @@ export type SignupMutationVariables = Exact<{
 }>;
 
 
-export type SignupMutation = { __typename?: 'Mutation', signup?: { __typename?: 'AuthPayload', token?: string | null, user?: { __typename?: 'User', id: string, email: string } | null } | null };
+export type SignupMutation = { __typename?: 'Mutation', signup?: { __typename?: 'AuthPayload', token?: string | null, user?: { __typename?: 'User', id: string, email: string, name?: string | null, picture?: string | null, provider?: string | null } | null } | null };
 
 export type LoginMutationVariables = Exact<{
   email: Scalars['String'];
@@ -510,7 +538,12 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login?: { __typename?: 'AuthPayload', token?: string | null, user?: { __typename?: 'User', id: string, email: string } | null } | null };
+export type LoginMutation = { __typename?: 'Mutation', login?: { __typename?: 'AuthPayload', token?: string | null, user?: { __typename?: 'User', id: string, email: string, name?: string | null, picture?: string | null, provider?: string | null } | null } | null };
+
+export type GoogleAuthUrlQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GoogleAuthUrlQuery = { __typename?: 'Query', googleAuthUrl: { __typename?: 'GoogleAuthUrl', url: string } };
 
 export type ResetPasswordRequestMutationVariables = Exact<{
   email: Scalars['String'];
@@ -589,6 +622,9 @@ export const MeDocument = gql`
     email
     currency
     weeklyReminder
+    name
+    picture
+    provider
   }
 }
     `;
@@ -1210,6 +1246,46 @@ export function useDeleteExpenseMutation(baseOptions?: Apollo.MutationHookOption
 export type DeleteExpenseMutationHookResult = ReturnType<typeof useDeleteExpenseMutation>;
 export type DeleteExpenseMutationResult = Apollo.MutationResult<DeleteExpenseMutation>;
 export type DeleteExpenseMutationOptions = Apollo.BaseMutationOptions<DeleteExpenseMutation, DeleteExpenseMutationVariables>;
+export const GoogleLoginDocument = gql`
+    mutation GoogleLogin($code: String!) {
+  googleLogin(code: $code) {
+    token
+    user {
+      id
+      email
+      name
+      picture
+      provider
+    }
+  }
+}
+    `;
+export type GoogleLoginMutationFn = Apollo.MutationFunction<GoogleLoginMutation, GoogleLoginMutationVariables>;
+
+/**
+ * __useGoogleLoginMutation__
+ *
+ * To run a mutation, you first call `useGoogleLoginMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useGoogleLoginMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [googleLoginMutation, { data, loading, error }] = useGoogleLoginMutation({
+ *   variables: {
+ *      code: // value for 'code'
+ *   },
+ * });
+ */
+export function useGoogleLoginMutation(baseOptions?: Apollo.MutationHookOptions<GoogleLoginMutation, GoogleLoginMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<GoogleLoginMutation, GoogleLoginMutationVariables>(GoogleLoginDocument, options);
+      }
+export type GoogleLoginMutationHookResult = ReturnType<typeof useGoogleLoginMutation>;
+export type GoogleLoginMutationResult = Apollo.MutationResult<GoogleLoginMutation>;
+export type GoogleLoginMutationOptions = Apollo.BaseMutationOptions<GoogleLoginMutation, GoogleLoginMutationVariables>;
 export const InvestmentsListDocument = gql`
     query InvestmentsList {
   investments {
@@ -1360,6 +1436,9 @@ export const SignupDocument = gql`
     user {
       id
       email
+      name
+      picture
+      provider
     }
   }
 }
@@ -1398,6 +1477,9 @@ export const LoginDocument = gql`
     user {
       id
       email
+      name
+      picture
+      provider
     }
   }
 }
@@ -1429,6 +1511,40 @@ export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginM
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
 export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
+export const GoogleAuthUrlDocument = gql`
+    query GoogleAuthUrl {
+  googleAuthUrl {
+    url
+  }
+}
+    `;
+
+/**
+ * __useGoogleAuthUrlQuery__
+ *
+ * To run a query within a React component, call `useGoogleAuthUrlQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGoogleAuthUrlQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGoogleAuthUrlQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGoogleAuthUrlQuery(baseOptions?: Apollo.QueryHookOptions<GoogleAuthUrlQuery, GoogleAuthUrlQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GoogleAuthUrlQuery, GoogleAuthUrlQueryVariables>(GoogleAuthUrlDocument, options);
+      }
+export function useGoogleAuthUrlLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GoogleAuthUrlQuery, GoogleAuthUrlQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GoogleAuthUrlQuery, GoogleAuthUrlQueryVariables>(GoogleAuthUrlDocument, options);
+        }
+export type GoogleAuthUrlQueryHookResult = ReturnType<typeof useGoogleAuthUrlQuery>;
+export type GoogleAuthUrlLazyQueryHookResult = ReturnType<typeof useGoogleAuthUrlLazyQuery>;
+export type GoogleAuthUrlQueryResult = Apollo.QueryResult<GoogleAuthUrlQuery, GoogleAuthUrlQueryVariables>;
 export const ResetPasswordRequestDocument = gql`
     mutation ResetPasswordRequest($email: String!) {
   resetPasswordRequest(email: $email) {

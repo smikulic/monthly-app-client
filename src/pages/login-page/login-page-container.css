@@ -60,3 +60,43 @@
   border-bottom: 1px solid #f199c0;
   cursor: pointer;
 }
+
+.loginPage .divider {
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.loginPage .divider::before,
+.loginPage .divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #e0e0e0;
+}
+
+.loginPage .divider span {
+  padding: 0 16px;
+  color: #666;
+  font-size: 14px;
+}
+
+.loginPage .google-signin-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 12px;
+  width: 100%;
+  font-size: 16px;
+  color: #3c4043;
+  background-color: #fff;
+  border: 1px solid #dadce0;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.loginPage .google-signin-button:hover {
+  background-color: #f8f9fa;
+  border-color: #dadce0;
+}
