@@ -9,7 +9,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { BackButtonStyled, HeaderStyled } from "./header-style";
 import { Box } from "@/components/ui/Box";
 import { MenuItem } from "@/components/ui/MenuItem";
-import { Avatar } from "@mui/material";
+import { Avatar } from "@/components/ui/Avatar";
 
 export const Header = ({
   onLogout,

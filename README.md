@@ -95,6 +95,40 @@ The Vite config is in `vite.config.ts`. Key points:
   }
   ```
 
+## Component Architecture
+
+This project uses the **Barrel Export Patter (otherwise knows as Facade Pattern)n** for UI components to create a consistent abstraction layer over Material-UI. And if we want to switch from Material-UI to another library, we only change *ONE* file instead of hundreds!
+
+### Pattern Overview
+- Wrap external library components in `src/components/ui/`
+- Use path aliases (`@/`) for clean imports
+- Enable easy customization and library migration
+
+### Example
+
+```typescript
+// src/components/ui/Avatar.tsx
+import { Avatar as MuiAvatar, AvatarProps } from "@mui/material";
+
+export const Avatar: React.FC<AvatarProps> = (props) => (
+  <MuiAvatar {...props} />
+);
+```
+
+```typescript
+// Usage in components
+import { Avatar } from "@/components/ui/Avatar";
+
+// Instead of direct Material-UI import:
+// import { Avatar } from "@mui/material";
+```
+
+### Benefits
+- **Consistent API**: Single interface for all UI components
+- **Easy Migration**: Change library by updating wrapper files only
+- **Custom Defaults**: Add styling/behavior without changing imports
+- **Design System**: Enforce consistent theming across the app
+
 ## Testing
 
 * Tests are written with **Vitest** and **React Testing Library**.
