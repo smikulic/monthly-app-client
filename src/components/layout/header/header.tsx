@@ -9,8 +9,15 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { BackButtonStyled, HeaderStyled } from "./header-style";
 import { Box } from "@/components/ui/Box";
 import { MenuItem } from "@/components/ui/MenuItem";
+import { Avatar } from "@mui/material";
 
-export const Header = ({ onLogout }: { onLogout: () => void }) => {
+export const Header = ({
+  onLogout,
+  userData,
+}: {
+  onLogout: () => void;
+  userData?: any;
+}) => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -26,27 +33,49 @@ export const Header = ({ onLogout }: { onLogout: () => void }) => {
     setAnchorEl(null);
   };
 
-  const userName = localStorage.getItem(AUTH_TOKEN_USER)
+  // Use Google name if available, otherwise fall back to email prefix
+  const emailPrefix = localStorage.getItem(AUTH_TOKEN_USER)
     ? localStorage.getItem(AUTH_TOKEN_USER)!.split("@")[0]
     : null;
+  const userName = userData?.name || emailPrefix;
+  const userPicture = userData?.picture;
   const isHome = location.pathname === "/";
 
   return (
     <HeaderStyled>
       {!isHome && (
-        <BackButtonStyled onClick={() => navigate("/")} data-testId="back-button">
+        <BackButtonStyled
+          onClick={() => navigate("/")}
+          data-testId="back-button"
+        >
           <ChevronLeftIcon />
           back
         </BackButtonStyled>
       )}
 
-      <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          textAlign: "center",
+          gap: 1,
+        }}
+      >
         {userName}
-        <Button
-          color="secondary"
-          endIcon={<MenuIcon />}
-          onClick={handleMenuClick}
-        />
+        {userPicture ? (
+          <Avatar
+            src={userPicture}
+            alt={userName || "User"}
+            sx={{ width: 32, height: 32, cursor: "pointer" }}
+            onClick={handleMenuClick}
+          />
+        ) : (
+          <Button
+            color="secondary"
+            endIcon={<MenuIcon />}
+            onClick={handleMenuClick}
+          />
+        )}
       </Box>
       <Menu
         anchorEl={anchorEl}

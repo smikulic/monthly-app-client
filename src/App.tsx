@@ -6,6 +6,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { WelcomePageContainer } from "./pages/welcome-page/welcome-page-container";
 import { LoginPageContainer } from "./pages/login-page/login-page-container";
 import { ResetPasswordPageContainer } from "./pages/reset-password-page/reset-password-page-container";
+import { GoogleCallbackPageContainer } from "./pages/google-callback-page/google-callback-page-container";
 import { HomePageContainer } from "./pages/home-page/home-page-container";
 import { ExpensesPageContainer } from "./pages/expenses-page/expenses-page-container";
 import { CategoriesPageContainer } from "./pages/categories-page/categories-page-container";
@@ -56,6 +57,9 @@ export const GET_USER_ME = gql`
       email
       currency
       weeklyReminder
+      name
+      picture
+      provider
     }
   }
 `;
@@ -161,6 +165,11 @@ function App() {
                   element={<ConfirmEmailPageContainer />}
                 />
 
+                <Route
+                  path="/auth/google/callback"
+                  element={<GoogleCallbackPageContainer setToken={setToken} />}
+                />
+
                 {!token && (
                   <Route
                     path="/"
@@ -173,7 +182,7 @@ function App() {
                     <Route
                       element={
                         <UserContext.Provider value={userData?.me.currency}>
-                          <Header onLogout={handleLogout} />
+                          <Header onLogout={handleLogout} userData={userData?.me} />
                           <FooterPaddingStyled>
                             <Outlet />
                           </FooterPaddingStyled>
