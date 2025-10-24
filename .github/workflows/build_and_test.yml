@@ -27,23 +27,23 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout repository
-      - uses: actions/checkout@v4
-      
+        uses: actions/checkout@v4
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: "22.15.0"
           cache: "yarn"
-      
+
       - name: Install dependencies
         run: yarn install --frozen-lockfile
-      
+
       # Optional: restore Turbo’s remote cache for faster CI
       - name: Setup Turbo cache
         uses: dtinth/setup-github-actions-turbo-cache@v1
         with:
           cache-prefix: build-test
-      
+
       - name: Build web app
         run: yarn build --filter=@monthly/web
 
