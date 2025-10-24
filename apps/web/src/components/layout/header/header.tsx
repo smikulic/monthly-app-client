@@ -46,7 +46,7 @@ export const Header = ({
       {!isHome && (
         <BackButtonStyled
           onClick={() => navigate("/")}
-          data-testId="back-button"
+          data-testid="back-button"
         >
           <ChevronLeftIcon />
           back
