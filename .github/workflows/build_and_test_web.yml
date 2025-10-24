@@ -38,11 +38,16 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      # Optional: restore Turbo’s remote cache for faster CI
-      - name: Setup Turbo cache
-        uses: dtinth/setup-github-actions-turbo-cache@v1
+      # Cache Turborepo build artifacts
+      - name: Cache Turbo
+        uses: actions/cache@v4
         with:
-          cache-prefix: build-test
+          path: |
+            .turbo
+            node_modules/.cache/turbo
+          key: turbo-${{ runner.os }}-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}
+          restore-keys: |
+            turbo-${{ runner.os }}-
 
       - name: Build web app
         run: yarn build --filter=@monthly/web
