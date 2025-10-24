@@ -1,13 +1,21 @@
-name: Build and Test
+name: Build and Test (Web)
 
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
     branches:
       - master
+    paths:
+      - "apps/web/**"
+      - "packages/**"
+      - ".github/workflows/build_and_test.yml"
   pull_request:
     branches:
       - master
+    paths:
+      - "apps/web/**"
+      - "packages/**"
+      - ".github/workflows/build_and_test.yml"
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -18,14 +26,26 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout repository
       - uses: actions/checkout@v4
+      
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: "22.15.0"
           cache: "yarn"
-      - name: npm ci, build and test
-        run: |
-          yarn install --frozen-lockfile
-          yarn build
-          yarn test
+      
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      
+      # Optional: restore Turbo’s remote cache for faster CI
+      - name: Setup Turbo cache
+        uses: dtinth/setup-github-actions-turbo-cache@v1
+        with:
+          cache-prefix: build-test
+      
+      - name: Build web app
+        run: yarn build --filter=@monthly/web
+
+      - name: Run tests
+        run: yarn test --filter=@monthly/web

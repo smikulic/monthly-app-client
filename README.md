@@ -18,9 +18,7 @@ password: password123
 1. **Install dependencies**
 
    ```bash
-   npm install
-   # or
-   yarn install
+   yarn install # Install all apps dependencies
    ```
 
 2. **Set up environment variables**
@@ -42,9 +40,7 @@ password: password123
 3. **Run in development mode**
 
    ```bash
-   npm run dev
-   # or
-   yarn dev
+   yarn dev:web
    ```
 
    Vite will start a dev server on `http://localhost:3000` (default) with hot module replacement.
@@ -52,10 +48,7 @@ password: password123
 4. **Preview production build**
 
    ```bash
-   npm run build
-   npm run preview
-   # or
-   yarn build
+   yarn build:web
    yarn preview
    ```
 
@@ -63,12 +56,14 @@ password: password123
 
 ## Scripts
 
-* `npm run dev` or `npm run start` — start Vite dev server
-* `npm run build` — create production build
-* `npm run preview` — preview production build locally
-* `npm run codegen` — generate GraphQL types/hooks
-* `npm run test` — run unit tests with Vitest
-* `npm run test:coverage` — run tests with coverage report
+* `yarn dev:web` — start Vite dev server for web client
+* `yarn build:web` — create production build for web client
+* `yarn build` — create production build for all apps
+* `yarn preview` — preview production build locally
+* `yarn codegen` — generate GraphQL types/hooks
+* `yarn test:web` — run unit tests with Vitest for web client
+* `yarn test` — run tests for all apps
+* `yarn test:coverage` — run tests with coverage report
 
 ## Vite Configuration
 
