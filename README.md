@@ -19,6 +19,9 @@ password: password123
 
    ```bash
    yarn install # Install all apps dependencies
+  cd apps/native && npx expo install expo-dev-client # add the Expo dev client to support native modules in the iOS simulator
+   # or adding new dependencies
+   yarn workspace @monthly/native add <DEPENDENCY_NAME>
    ```
 
 2. **Set up environment variables**
@@ -39,11 +42,20 @@ password: password123
 
 3. **Run in development mode**
 
+  ### Web
+   
    ```bash
    yarn dev:web
    ```
 
    Vite will start a dev server on `http://localhost:3000` (default) with hot module replacement.
+
+  ### Native
+  ```bash
+  yarn build:native:initial # builds and installs the dev client on the iOS Simulator
+  yarn dev:native # after that we can run it in dev mode with watch for changes mode
+  yarn dev:native:clean # resets the .expo in case major dependencies need to be rebuilt
+  ```
 
 4. **Preview production build**
 
