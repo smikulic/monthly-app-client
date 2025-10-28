@@ -1,6 +1,7 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { gql } from "@apollo/client";
+import { useLocation } from "react-router";
 import { AUTH_TOKEN, AUTH_TOKEN_USER } from "../../constants";
 import {
   useLoginMutation,
@@ -77,10 +78,17 @@ export const LoginPageContainer = ({
 }: {
   setToken: Dispatch<SetStateAction<string | null>>;
 }) => {
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+
+  // Check URL parameters for initial state
+  const mode = searchParams.get("mode"); // "signup" or "reset"
+  const emailParam = searchParams.get("email");
+
   const [formState, setFormState] = useState({
-    login: true,
-    passwordReset: false,
-    email: "",
+    login: mode !== "signup", // If mode=signup, set login to false
+    passwordReset: mode === "reset", // If mode=reset, set passwordReset to true
+    email: emailParam || "",
     password: "",
   });
 

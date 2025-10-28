@@ -1,70 +1,23 @@
 import { useState } from "react";
-import { Redirect } from "expo-router";
-import * as SecureStore from "expo-secure-store";
-import { Pressable, Text, View } from "react-native";
-import { gql, ServerError, useQuery } from "@apollo/client";
-import { AUTH_TOKEN, AUTH_TOKEN_USER } from "../constants";
-import { handleLogout } from "@/utils/handleLogout";
+import { View, StyleSheet } from "react-native";
+import { useAuth } from "@/providers/AuthProvider";
 import { LoginPageContainer } from "@/pages/login-page/login-page-container";
+import { Header } from "@/components/layout";
+import { HomePageContainer } from "@/pages/home-page/home-page-container";
 
-const GET_USER_ME = gql`
-  query {
-    me {
-      id
-      email
-      currency
-      weeklyReminder
-      name
-      picture
-      provider
-    }
-  }
-`;
-
+/**
+ * Main App Screen
+ * Shows login page if not authenticated, otherwise shows the home page
+ */
 export default function App() {
+  // Get auth state from context
+  const { token, loading } = useAuth();
+
+  // Date navigation state (for expenses/budget filtering)
   const currentDate = new Date();
   const [pageDate, setPageDate] = useState(currentDate);
-  const [token, setToken] = useState<string | null>(
-    SecureStore.getItem(AUTH_TOKEN)
-  );
 
-  const {
-    data: userData,
-    loading: userMeLoading,
-    error: userMeError,
-    refetch: refetchUserData,
-  } = useQuery(GET_USER_ME, {
-    skip: !token,
-    // onCompleted: (data) => {
-    //   if (data?.me) {
-    //     // Identify user in Mixpanel
-    //     analytics.identify(data.me.id);
-    //     analytics.setUserProperties({
-    //       $email: data.me.email,
-    //       currency: data.me.currency || "USD",
-    //       // Add any other user properties here
-    //     });
-    //   }
-    // },
-  });
-
-  if (userMeLoading) {
-    return null;
-  }
-
-  if (userMeError?.networkError) {
-    const serverError = userMeError?.networkError as ServerError;
-    const errorMessage = serverError.result;
-
-    if (errorMessage?.includes("invalid token")) {
-      handleLogout();
-    }
-  }
-
-  if (token && !SecureStore.getItem(AUTH_TOKEN_USER)) {
-    handleLogout();
-  }
-
+  // Navigate to next month
   const onClickNext = () => {
     const nextDate = new Date(
       pageDate.getFullYear(),
@@ -74,6 +27,7 @@ export default function App() {
     setPageDate(nextDate);
   };
 
+  // Navigate to previous month
   const onClickPrevious = () => {
     const previousDate = new Date(
       pageDate.getFullYear(),
@@ -83,18 +37,35 @@ export default function App() {
     setPageDate(previousDate);
   };
 
-  console.log({ userData });
-
-  if (!token) {
-    return <LoginPageContainer setToken={setToken} />;
+  // Show loading while checking auth
+  if (loading) {
+    return null;
   }
 
+  // Show login page if not authenticated
+  if (!token) {
+    return <LoginPageContainer />;
+  }
+
+  // Main app content (authenticated user)
   return (
-    <View style={{ padding: 36 }}>
-      <Text>Hi ! {userData?.me?.email}</Text>
-      <Pressable onPress={() => handleLogout()}>
-        <Text>Logout</Text>
-      </Pressable>
+    <View style={styles.container}>
+      {/* Header with user info and menu */}
+      <Header />
+
+      {/* Home Page with Dashboard */}
+      <HomePageContainer
+        pageDate={pageDate}
+        onClickNext={onClickNext}
+        onClickPrevious={onClickPrevious}
+      />
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
+});
