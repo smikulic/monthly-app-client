@@ -1,11 +1,15 @@
-import { Dispatch, SetStateAction, useState } from "react";
-import { View, Text, TextInput, Pressable, Alert } from "react-native";
+import { useState, useEffect } from "react";
+import { View, Text, TextInput, Pressable, Alert, Linking } from "react-native";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import * as SecureStore from "expo-secure-store";
-import { router } from "expo-router";
 import * as WebBrowser from "expo-web-browser";
-import { AUTH_TOKEN, AUTH_TOKEN_USER } from "@/constants";
+import { AUTH_TOKEN_USER } from "@/constants";
+import { useAuth } from "@/providers/AuthProvider";
 import { loginPageStyles as styles } from "./login-page-styles";
+
+// ============================================================================
+// GraphQL Operations
+// ============================================================================
 
 export const LOGIN_MUTATION = gql`
   mutation Login($email: String!, $password: String!) {
@@ -45,21 +49,31 @@ export const GOOGLE_AUTH_URL_QUERY = gql`
   }
 `;
 
-const WEB_BASE_URL = "https://app.yourmonthly.app";
-const SIGNUP_URL = `${WEB_BASE_URL}/`;
-const RESET_URL = `${WEB_BASE_URL}/`;
+// ============================================================================
+// Constants
+// ============================================================================
 
-export function LoginPageContainer({
-  setToken,
-}: {
-  setToken: Dispatch<SetStateAction<string | null>>;
-}) {
+const WEB_BASE_URL = "https://app.yourmonthly.app";
+const SIGNUP_URL = `${WEB_BASE_URL}/?mode=signup`;
+const RESET_URL = `${WEB_BASE_URL}/?mode=reset`;
+
+// ============================================================================
+// Login Page Component
+// ============================================================================
+
+/**
+ * Login Page Container
+ * Handles email/password login and Google OAuth
+ */
+export function LoginPageContainer() {
+  // Get setToken from auth context
+  const { setToken } = useAuth();
   const [formState, setFormState] = useState({
     email: "",
     password: "",
   });
 
-  // Login
+  // Email/Password Login Mutation
   const [loginAction, loginState] = useMutation(LOGIN_MUTATION, {
     variables: {
       email: formState.email,
@@ -75,21 +89,76 @@ export function LoginPageContainer({
         Alert.alert(error.message);
       }
     },
-    onCompleted: ({ login }) => {
-      SecureStore.setItem(AUTH_TOKEN, login?.token!);
-      SecureStore.setItem(AUTH_TOKEN_USER, login?.user?.email!);
-      setToken(login?.token!);
+    onCompleted: async ({ login }) => {
+      // Store user email for fallback display
+      await SecureStore.setItemAsync(AUTH_TOKEN_USER, login?.user?.email!);
+      // Set token in auth context (this triggers refetch of user data)
+      await setToken(login?.token!);
 
-      router.replace("/");
+      // Navigation handled by app/index.tsx automatically
     },
   });
 
+  // Get Google OAuth URL
   const { data: googleAuthUrlData } = useQuery(GOOGLE_AUTH_URL_QUERY);
 
-  // Open web signup
+  // Google Login Mutation
+  const [googleLoginAction] = useMutation(GOOGLE_LOGIN_MUTATION, {
+    onError: (error) => {
+      Alert.alert("Google login failed", error.message);
+    },
+    onCompleted: async ({ googleLogin }) => {
+      // Store user email
+      await SecureStore.setItemAsync(
+        AUTH_TOKEN_USER,
+        googleLogin?.user?.email!
+      );
+      // Set token in auth context
+      await setToken(googleLogin?.token!);
+      // Navigation handled by app/index.tsx automatically
+    },
+  });
+
+  // Listen for deep links (Google OAuth callback)
+  useEffect(() => {
+    const handleDeepLink = ({ url }: { url: string }) => {
+      const parsedUrl = new URL(url);
+
+      // Check if this is a Google OAuth callback
+      if (parsedUrl.pathname === "/auth/google/callback") {
+        const code = parsedUrl.searchParams.get("code");
+        const error = parsedUrl.searchParams.get("error");
+
+        if (error) {
+          Alert.alert("Google authentication failed", error);
+          return;
+        }
+
+        if (code) {
+          // Call Google login mutation with the authorization code
+          googleLoginAction({ variables: { code } });
+        }
+      }
+    };
+
+    // Get initial URL (app opened via deep link)
+    Linking.getInitialURL().then((url) => {
+      if (url) handleDeepLink({ url });
+    });
+
+    // Listen for deep link events while app is running
+    const subscription = Linking.addEventListener("url", handleDeepLink);
+
+    return () => subscription.remove();
+  }, [googleLoginAction]);
+
+  /**
+   * Open signup page in browser
+   * Uses web app for account creation with mode=signup parameter
+   */
   const openSignupInBrowser = async () => {
     try {
-      // you can pass email as a hint to your web page
+      // Pass email as a hint to the web page
       const url =
         formState.email?.length > 0
           ? `${SIGNUP_URL}&email=${encodeURIComponent(formState.email)}`
@@ -100,12 +169,15 @@ export function LoginPageContainer({
     }
   };
 
-  // Open web reset
+  /**
+   * Open password reset page in browser
+   * Uses web app for password reset flow with mode=reset parameter
+   */
   const openResetInBrowser = async () => {
     try {
       const url =
         formState.email?.length > 0
-          ? `${RESET_URL}?email=${encodeURIComponent(formState.email)}`
+          ? `${RESET_URL}&email=${encodeURIComponent(formState.email)}`
           : RESET_URL;
       await WebBrowser.openBrowserAsync(url);
     } catch (e) {
@@ -113,16 +185,57 @@ export function LoginPageContainer({
     }
   };
 
+  /**
+   * Handle Google OAuth login
+   * Opens OAuth flow using auth session which automatically handles callback
+   */
   const handleGoogleLogin = async () => {
     const url = googleAuthUrlData?.googleAuthUrl?.url;
     if (!url) {
       Alert.alert("Google authentication is not available right now");
       return;
     }
-    // Open OAuth in system browser
-    await WebBrowser.openBrowserAsync(url);
-    // You’ll likely finish the OAuth with a deep link back into the app,
-    // then call GOOGLE_LOGIN_MUTATION({ variables: { code } })
+
+    try {
+      // Use openAuthSessionAsync for OAuth flows
+      // Backend redirects to: https://app.yourmonthly.app/auth/google/callback?code=xxx
+      // iOS will intercept this via universal links and open our app
+      const result = await WebBrowser.openAuthSessionAsync(
+        url,
+        "https://app.yourmonthly.app/auth/google/callback" // Web redirect URI (universal link)
+      );
+
+      console.log("OAuth result:", result);
+
+      if (result.type === "success" && result.url) {
+        console.log("Callback URL:", result.url);
+
+        // Parse the callback URL
+        const parsedUrl = new URL(result.url);
+        const code = parsedUrl.searchParams.get("code");
+        const error = parsedUrl.searchParams.get("error");
+
+        if (error) {
+          Alert.alert("Google authentication failed", error);
+          return;
+        }
+
+        if (code) {
+          console.log("Got authorization code, calling googleLogin mutation");
+          // Call Google login mutation with the authorization code
+          await googleLoginAction({ variables: { code } });
+        } else {
+          console.log("No code in callback URL");
+        }
+      } else if (result.type === "cancel") {
+        console.log("User cancelled OAuth flow");
+      } else {
+        console.log("OAuth result type:", result.type);
+      }
+    } catch (error) {
+      console.error("Authentication error:", error);
+      Alert.alert("Authentication error", String(error));
+    }
   };
 
   return (
@@ -163,11 +276,12 @@ export function LoginPageContainer({
 
             <View style={styles.divider} />
 
-            <Pressable onPress={handleGoogleLogin} style={styles.button}>
+            {/* TODO: Fix Google OAuth deep linking */}
+            {/* <Pressable onPress={handleGoogleLogin} style={styles.button}>
               <Text>Sign in with Google</Text>
             </Pressable>
 
-            <View style={styles.divider} />
+            <View style={styles.divider} /> */}
 
             {/* Create account → open browser */}
             <Pressable onPress={openSignupInBrowser}>

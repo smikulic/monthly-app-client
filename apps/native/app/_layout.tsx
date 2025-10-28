@@ -1,38 +1,18 @@
 import "react-native-reanimated"; // MUST be the first line
 import { Slot } from "expo-router";
-import * as SecureStore from "expo-secure-store";
-import {
-  ApolloClient,
-  InMemoryCache,
-  ApolloProvider,
-  createHttpLink,
-} from "@apollo/client";
-import { setContext } from "@apollo/client/link/context";
-import { API_URL, AUTH_TOKEN } from "../constants";
+import { AuthProvider } from "@/providers/AuthProvider";
 
-const httpLink = createHttpLink({
-  uri: API_URL,
-});
-
-const authLink = setContext((_, { headers }) => {
-  const token = SecureStore.getItem(AUTH_TOKEN);
-  return {
-    headers: {
-      ...headers,
-      authorization: token ? `Bearer ${token}` : "",
-    },
-  };
-});
-
-const client = new ApolloClient({
-  link: authLink.concat(httpLink),
-  cache: new InMemoryCache(),
-});
-
+/**
+ * Root Layout - Entry point for the app
+ * Wraps entire app with AuthProvider which provides:
+ * - Apollo Client for GraphQL
+ * - Authentication state (token, user)
+ * - UserContext (currency, similar to web app)
+ */
 export default function RootLayout() {
   return (
-    <ApolloProvider client={client}>
+    <AuthProvider>
       <Slot />
-    </ApolloProvider>
+    </AuthProvider>
   );
 }
