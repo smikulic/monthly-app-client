@@ -36,8 +36,8 @@ Sentry.init({
   replaysSessionSampleRate: 0.1,
   replaysOnErrorSampleRate: 1.0,
 
-  // (Optional) backfill IP addresses for grouping & user context
-  sendDefaultPii: true,
+  // Finance app: don't backfill PII (IP addresses, etc.) into Sentry
+  sendDefaultPii: false,
 });
 
 const apiUrl =

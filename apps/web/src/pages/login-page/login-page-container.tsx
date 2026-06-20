@@ -123,8 +123,7 @@ export const LoginPageContainer = ({
     onError: (error) => {
       toast.error(error.message);
     },
-    onCompleted: ({ signup }) => {
-      console.log({ signup });
+    onCompleted: () => {
       // Track user signup
       analytics.trackUserSignup(formState.email);
       toast.success("Email with confirmation instructions is sent!");
@@ -138,8 +137,7 @@ export const LoginPageContainer = ({
     onError: (error) => {
       toast.error(error.message);
     },
-    onCompleted: ({ resetPasswordRequest }) => {
-      console.log({ resetPasswordRequest });
+    onCompleted: () => {
       toast.success("Email with reset password instructions is sent!");
     },
   });
