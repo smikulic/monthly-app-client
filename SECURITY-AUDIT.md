@@ -79,11 +79,8 @@ Revisit these when the parent packages catch up, so they don't silently hold a d
 
 ## B. Runtime / platform
 
-- **Node v22.15.0 installed.** Node 22 ("Jod") is in **Maintenance LTS until 2027-04-30**,
-  so it still gets security patches. Two actions:
-  1. Bump to the latest 22.x patch (the pinned `22.15.0` is behind several 22.x security
-     releases). Update `engines.node` + `.github` workflow `node-version` + DO runtime.
-  2. Plan migration to **Node 24** (current Active LTS) before April 2027.
+- **Both repos pinned to Node 24.11.1** (Active LTS) in `engines`, CI `node-version`, and
+  `.nvmrc`. Keep the DO runtime in sync, and track the LTS line over time.
 - **Lockfiles**: keep `--frozen-lockfile` in CI (already done in both workflows). Good.
 
 ---
@@ -101,9 +98,10 @@ handling money" and "fintech-grade". Pick top-down.
    token cannot be revoked and stays valid for 90 days. Options (cheapest first): shorten to
    hours/days; add a `tokenVersion` column on User bumped on password change/logout to
    invalidate old tokens; or move to short access token + refresh token.
-3. **GraphQL DoS guards**: introspection is not disabled in prod and there is no query
-   depth/complexity limit. Add `introspection: process.env.NODE_ENV !== "production"` and a
-   depth/complexity plugin (e.g. graphql-depth-limit / graphql-armor).
+3. **GraphQL DoS guards**: depth limit `depthLimit(10)` added and introspection gated on
+   `NODE_ENV !== "production"` (`src/index.ts`). REMAINING: set `NODE_ENV=production` on the
+   DO server so introspection is actually off in prod (verify via a prod introspection query).
+   Optional later: add a query cost/complexity limit on top of depth.
 4. **MFA/2FA**: none. Users expect at least optional TOTP for a money app. Medium effort;
    gate behind "if users ask".
 5. **Security event audit trail**: no record of logins, password changes, email changes,
@@ -145,8 +143,7 @@ handling money" and "fintech-grade". Pick top-down.
 ---
 
 ## Suggested order of attack (remaining work, solo-friendly)
-1. (Optional) Add a Snyk CI gate so dependency CVEs stay at zero (Snyk App already alerts).
-2. Bump Node to latest 22.x patch.
-3. Disable GraphQL introspection in prod + add depth limit (small, high value).
-4. The express + helmet + rate-limit migration (unblocks brute-force protection, headers, CORS).
-5. JWT lifetime/revocation, then audit log, then optional MFA, as the product warrants.
+1. Set `NODE_ENV=production` on the DO server (finishes the introspection guard). (Optional)
+   add a Snyk CI gate so dependency CVEs stay at zero (Snyk App already alerts).
+2. The express + helmet + rate-limit migration (unblocks brute-force protection, headers, CORS).
+3. JWT lifetime/revocation, then audit log, then optional MFA, as the product warrants.

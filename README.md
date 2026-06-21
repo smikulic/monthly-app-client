@@ -10,7 +10,7 @@ password: password123
 
 ## Prerequisites
 
-* **Node.js** v22.15.0 (as specified in `package.json`)
+* **Node.js** v24.11.1 (as specified in `package.json`)
 * **npm** v9+ or **yarn** v1.22+
 
 ## Getting Started
