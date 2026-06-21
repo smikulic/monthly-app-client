@@ -2,7 +2,7 @@
   "name": "monthly-app-clients",
   "private": true,
   "engines": {
-    "node": "22.15.0"
+    "node": "24.11.1"
   },
   "packageManager": "yarn@1.22.22",
   "workspaces": [
