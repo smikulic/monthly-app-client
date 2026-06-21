@@ -70,6 +70,20 @@ export type GoogleAuthUrl = {
   url: Scalars['String'];
 };
 
+export enum ImportMode {
+  Merge = 'MERGE',
+  Replace = 'REPLACE'
+}
+
+export type ImportResult = {
+  __typename?: 'ImportResult';
+  categories: Scalars['Int'];
+  expenses: Scalars['Int'];
+  investments: Scalars['Int'];
+  savingGoals: Scalars['Int'];
+  subcategories: Scalars['Int'];
+};
+
 export type Investment = {
   __typename?: 'Investment';
   amount: Scalars['Int'];
@@ -99,6 +113,7 @@ export type Mutation = {
   deleteSavingGoal: SavingGoal;
   deleteSubcategory: Subcategory;
   googleLogin: AuthPayload;
+  importData: ImportResult;
   login?: Maybe<AuthPayload>;
   resetPassword: User;
   resetPasswordRequest: PasswordResetRequestPayload;
@@ -181,6 +196,12 @@ export type MutationDeleteSubcategoryArgs = {
 
 export type MutationGoogleLoginArgs = {
   code: Scalars['String'];
+};
+
+
+export type MutationImportDataArgs = {
+  mode: ImportMode;
+  payload: Scalars['String'];
 };
 
 
@@ -269,6 +290,8 @@ export type Query = {
   category: Category;
   chartExpenses: ChartExpensesPayload;
   expenses: Array<Expense>;
+  generateCsvReport: Scalars['String'];
+  generateDataExport: Scalars['String'];
   generateReport: Scalars['String'];
   googleAuthUrl: GoogleAuthUrl;
   investment?: Maybe<Investment>;
@@ -294,6 +317,11 @@ export type QueryChartExpensesArgs = {
 
 export type QueryExpensesArgs = {
   filter?: InputMaybe<ExpenseFilterInput>;
+};
+
+
+export type QueryGenerateCsvReportArgs = {
+  year: Scalars['Int'];
 };
 
 
@@ -572,6 +600,26 @@ export type GenerateReportQueryVariables = Exact<{
 
 
 export type GenerateReportQuery = { __typename?: 'Query', generateReport: string };
+
+export type GenerateCsvReportQueryVariables = Exact<{
+  year: Scalars['Int'];
+}>;
+
+
+export type GenerateCsvReportQuery = { __typename?: 'Query', generateCsvReport: string };
+
+export type GenerateDataExportQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GenerateDataExportQuery = { __typename?: 'Query', generateDataExport: string };
+
+export type ImportDataMutationVariables = Exact<{
+  payload: Scalars['String'];
+  mode: ImportMode;
+}>;
+
+
+export type ImportDataMutation = { __typename?: 'Mutation', importData: { __typename?: 'ImportResult', categories: number, subcategories: number, expenses: number, savingGoals: number, investments: number } };
 
 export type ResetPasswordMutationVariables = Exact<{
   token: Scalars['String'];
@@ -1678,6 +1726,109 @@ export function useGenerateReportLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type GenerateReportQueryHookResult = ReturnType<typeof useGenerateReportQuery>;
 export type GenerateReportLazyQueryHookResult = ReturnType<typeof useGenerateReportLazyQuery>;
 export type GenerateReportQueryResult = Apollo.QueryResult<GenerateReportQuery, GenerateReportQueryVariables>;
+export const GenerateCsvReportDocument = gql`
+    query GenerateCsvReport($year: Int!) {
+  generateCsvReport(year: $year)
+}
+    `;
+
+/**
+ * __useGenerateCsvReportQuery__
+ *
+ * To run a query within a React component, call `useGenerateCsvReportQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGenerateCsvReportQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGenerateCsvReportQuery({
+ *   variables: {
+ *      year: // value for 'year'
+ *   },
+ * });
+ */
+export function useGenerateCsvReportQuery(baseOptions: Apollo.QueryHookOptions<GenerateCsvReportQuery, GenerateCsvReportQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GenerateCsvReportQuery, GenerateCsvReportQueryVariables>(GenerateCsvReportDocument, options);
+      }
+export function useGenerateCsvReportLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GenerateCsvReportQuery, GenerateCsvReportQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GenerateCsvReportQuery, GenerateCsvReportQueryVariables>(GenerateCsvReportDocument, options);
+        }
+export type GenerateCsvReportQueryHookResult = ReturnType<typeof useGenerateCsvReportQuery>;
+export type GenerateCsvReportLazyQueryHookResult = ReturnType<typeof useGenerateCsvReportLazyQuery>;
+export type GenerateCsvReportQueryResult = Apollo.QueryResult<GenerateCsvReportQuery, GenerateCsvReportQueryVariables>;
+export const GenerateDataExportDocument = gql`
+    query GenerateDataExport {
+  generateDataExport
+}
+    `;
+
+/**
+ * __useGenerateDataExportQuery__
+ *
+ * To run a query within a React component, call `useGenerateDataExportQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGenerateDataExportQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGenerateDataExportQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGenerateDataExportQuery(baseOptions?: Apollo.QueryHookOptions<GenerateDataExportQuery, GenerateDataExportQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GenerateDataExportQuery, GenerateDataExportQueryVariables>(GenerateDataExportDocument, options);
+      }
+export function useGenerateDataExportLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GenerateDataExportQuery, GenerateDataExportQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GenerateDataExportQuery, GenerateDataExportQueryVariables>(GenerateDataExportDocument, options);
+        }
+export type GenerateDataExportQueryHookResult = ReturnType<typeof useGenerateDataExportQuery>;
+export type GenerateDataExportLazyQueryHookResult = ReturnType<typeof useGenerateDataExportLazyQuery>;
+export type GenerateDataExportQueryResult = Apollo.QueryResult<GenerateDataExportQuery, GenerateDataExportQueryVariables>;
+export const ImportDataDocument = gql`
+    mutation ImportData($payload: String!, $mode: ImportMode!) {
+  importData(payload: $payload, mode: $mode) {
+    categories
+    subcategories
+    expenses
+    savingGoals
+    investments
+  }
+}
+    `;
+export type ImportDataMutationFn = Apollo.MutationFunction<ImportDataMutation, ImportDataMutationVariables>;
+
+/**
+ * __useImportDataMutation__
+ *
+ * To run a mutation, you first call `useImportDataMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useImportDataMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [importDataMutation, { data, loading, error }] = useImportDataMutation({
+ *   variables: {
+ *      payload: // value for 'payload'
+ *      mode: // value for 'mode'
+ *   },
+ * });
+ */
+export function useImportDataMutation(baseOptions?: Apollo.MutationHookOptions<ImportDataMutation, ImportDataMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ImportDataMutation, ImportDataMutationVariables>(ImportDataDocument, options);
+      }
+export type ImportDataMutationHookResult = ReturnType<typeof useImportDataMutation>;
+export type ImportDataMutationResult = Apollo.MutationResult<ImportDataMutation>;
+export type ImportDataMutationOptions = Apollo.BaseMutationOptions<ImportDataMutation, ImportDataMutationVariables>;
 export const ResetPasswordDocument = gql`
     mutation ResetPassword($token: String!, $password: String!) {
   resetPassword(token: $token, password: $password) {
