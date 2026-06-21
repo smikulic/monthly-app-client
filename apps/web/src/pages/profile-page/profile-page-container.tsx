@@ -1,4 +1,4 @@
-// src/components/ProfilePageContainer.tsx
+// src/pages/profile-page/profile-page-container.tsx
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
@@ -21,7 +21,15 @@ import { Typography } from "@/components/ui/Typography";
 import { Switch } from "@/components/ui/Switch";
 import { FormGroup } from "@/components/ui/FormGroup";
 import { FormControlLabel } from "@/components/ui/FormControl";
-import { ProminentButtonStyled, SelectStyled, TextFieldStyled } from "@/shared";
+import {
+  ProminentButtonStyled,
+  SelectStyled,
+  TextFieldStyled,
+  PageWrapperStyled,
+  SectionDividerStyled,
+  HelperTextStyled,
+  ButtonGroupStyled,
+} from "@/shared";
 import { CURRENCY_OPTIONS } from "@/constants/forms";
 
 export const ProfilePageContainer = ({
@@ -34,14 +42,14 @@ export const ProfilePageContainer = ({
   const navigate = useNavigate();
   const [currency, setCurrency] = useState(userData.currency || "EUR");
   const [weeklyReminder, setWeeklyReminder] = useState(
-    userData.weeklyReminder || false
+    userData.weeklyReminder || false,
   );
   const [openDialog, setOpenDialog] = useState(false);
 
   const [updateUser] = useUpdateUserMutation({
     onCompleted: () => {
       refetchUserData();
-      toast.success("Profile updated");
+      toast.success("Settings saved");
     },
   });
 
@@ -61,10 +69,10 @@ export const ProfilePageContainer = ({
   });
 
   return (
-    <>
-      <Container>
-        <Typography variant="h5">Profile information</Typography>
-        <TextFieldStyled placeholder={userData.email} disabled />
+    <Container>
+      <PageWrapperStyled>
+        <Typography variant="h5">Account</Typography>
+        <TextFieldStyled label="Email" defaultValue={userData.email} disabled />
         <SelectStyled
           id="userCurrency"
           label="Currency"
@@ -80,48 +88,50 @@ export const ProfilePageContainer = ({
         <FormGroup>
           <FormControlLabel
             control={
-              <>
-                <Switch
-                  aria-describedby="weekly-help"
-                  checked={weeklyReminder}
-                  onChange={(e) => setWeeklyReminder(!weeklyReminder)}
-                />
-              </>
+              <Switch
+                aria-describedby="weekly-help"
+                checked={weeklyReminder}
+                onChange={() => setWeeklyReminder(!weeklyReminder)}
+              />
             }
             label="Weekly expense email (Saturday recap: total spent & budget left)"
           />
         </FormGroup>
-        <ProminentButtonStyled
-          onClick={() =>
-            updateUser({
-              variables: { id: userData.id, currency, weeklyReminder },
-            })
-          }
-          disabled={
-            currency === userData.currency &&
-            weeklyReminder === userData.weeklyReminder
-          }
-          textCenter
-        >
-          Save
-        </ProminentButtonStyled>
-      </Container>
+        <ButtonGroupStyled>
+          <ProminentButtonStyled
+            onClick={() =>
+              updateUser({
+                variables: { id: userData.id, currency, weeklyReminder },
+              })
+            }
+            disabled={
+              currency === userData.currency &&
+              weeklyReminder === userData.weeklyReminder
+            }
+            textCenter
+          >
+            Save
+          </ProminentButtonStyled>
+        </ButtonGroupStyled>
 
-      <Container>
+        <SectionDividerStyled />
+
         <Typography variant="h5" color="error">
           Danger Zone
         </Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+        <HelperTextStyled>
           Permanently delete your account and all data.
-        </Typography>
-        <ProminentButtonStyled
-          onClick={() => setOpenDialog(true)}
-          color="error"
-          textCenter
-          outline
-        >
-          Delete my account
-        </ProminentButtonStyled>
+        </HelperTextStyled>
+        <ButtonGroupStyled>
+          <ProminentButtonStyled
+            onClick={() => setOpenDialog(true)}
+            color="error"
+            textCenter
+            outline
+          >
+            Delete my account
+          </ProminentButtonStyled>
+        </ButtonGroupStyled>
 
         <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
           <DialogTitle>Confirm account deletion</DialogTitle>
@@ -131,20 +141,24 @@ export const ProfilePageContainer = ({
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <ProminentButtonStyled onClick={() => setOpenDialog(false)}>
+            <ProminentButtonStyled
+              onClick={() => setOpenDialog(false)}
+              textCenter
+              outline
+            >
               Cancel
             </ProminentButtonStyled>
             <ProminentButtonStyled
               onClick={() => deleteAccount()}
               disabled={deleting}
               color="error"
-              outline
+              textCenter
             >
               {deleting ? "Deleting…" : "Delete my account"}
             </ProminentButtonStyled>
           </DialogActions>
         </Dialog>
-      </Container>
-    </>
+      </PageWrapperStyled>
+    </Container>
   );
 };
