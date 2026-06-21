@@ -1,7 +1,22 @@
 # Shared Budgets (Groups)
 
-Status: design / not yet built. Scope: **expenses, categories, subcategories only** (saving
+Status: **shipped (v1)**. Scope: **expenses, categories, subcategories only** (saving
 goals and investments stay personal for now).
+
+As-built notes (where the shipped feature differs from the original design below):
+- **No feature flag.** Shipped as one PR per repo; the surfaces are live, not gated.
+- **Scope args, not a `BudgetScope` input.** Queries take `scope: ScopeMode` (`ALL | MINE | GROUP`)
+  plus an optional `groupId: ID`, rather than a wrapping input object.
+- **Global "View" filter.** A single compact "View" dropdown in the page toolbar (with the month
+  navigator centered next to it) drives All / Personal / group across Home, Expenses, and Budget.
+  Selection lives in React context (per session), not localStorage.
+- **Manage rule = enterer or group owner/admin.** Creating in a shared category is open to any
+  member; editing/removing a category, subcategory, or expense is allowed only for the person who
+  created/entered it OR a group OWNER/ADMIN. The UI hides Edit/Remove affordances accordingly.
+- **Roles partially live.** Invites default to MEMBER and OWNER/ADMIN get manage rights; the
+  ADMIN/VIEWER role-management UI and VIEWER read-only enforcement are deferred (see §8).
+- **Shared-category badge.** In the "All" view, shared categories show their group name as a small
+  badge next to the title on both Budget and Expenses.
 
 ## 1. Goal
 
@@ -104,7 +119,11 @@ A `scope` argument on the expenses and budget queries:
 
 The filter is dynamic: it always shows All and Personal, then one entry per group the user
 belongs to. Totals, charts, and monthly budgets all respect the active filter. Shared expense
-rows display who paid (member avatar/initial).
+rows record who paid (the paid-by member).
+
+As shipped, this is a single global **"View"** dropdown in the page toolbar (the month navigator
+sits centered beside it), shared across Home, Expenses, and Budget. It is hidden entirely for
+users who belong to no groups.
 
 ## 8. Roles and permissions
 
@@ -113,8 +132,13 @@ rows display who paid (member avatar/initial).
 - **MEMBER**: add/edit expenses and categories in the group.
 - **VIEWER** (e.g. a kid, or a parent you only report to): read-only.
 
-v1 can ship with OWNER + MEMBER only and add ADMIN/VIEWER when needed. Kids are just members
-(or VIEWERs) of the family group; no separate "child account" concept required initially.
+**As shipped (v1):** the role enum exists and `inviteToGroup` accepts a role (defaulting to
+MEMBER), and the manage rule honors OWNER/ADMIN (they can edit/remove any member's items, on top
+of the original enterer). Not yet built: a UI to change a member's role after they join, and
+VIEWER read-only enforcement on create. So in practice today groups run as OWNER + MEMBER. Adding
+ADMIN/VIEWER later is additive: the plumbing and permission checks already account for them.
+Kids are just members (or future VIEWERs) of the family group; no separate "child account"
+concept required.
 
 ## 9. Pricing and limits (future)
 
@@ -172,12 +196,13 @@ expense rows, which is the main reason to prefer this shape.
 
 ## 13. Phased rollout (solo-maintainer friendly)
 
-- **Phase 0:** Group + GroupMember + GroupInvite models and the invite/accept flow. No sharing
-  surface yet; just links accounts into groups.
-- **Phase 1:** `Category.groupId` + access rules + the **All / Mine / Group** scope filter on
-  Expenses and Budget. Delivers the combined household view (the core value).
-- **Phase 2:** `paidBy` selector and display in shared categories.
-- **Phase 3:** roles (ADMIN/VIEWER), and pricing limits + upgrade prompts.
+- **Phase 0 (done):** Group + GroupMember + GroupInvite models and the invite/accept flow. No
+  sharing surface yet; just links accounts into groups.
+- **Phase 1 (done):** `Category.groupId` + access rules + the **All / Mine / Group** scope filter on
+  Expenses, Budget, and Home. Delivers the combined household view (the core value).
+- **Phase 2 (done):** `paidBy` selector and display in shared categories.
+- **Phase 3 (deferred):** role management UI + VIEWER enforcement, and pricing limits + upgrade
+  prompts.
 - **Later:** settle-up / splitting, shared saving goals, group-level reports.
 
 ## 14. Open questions / gotchas

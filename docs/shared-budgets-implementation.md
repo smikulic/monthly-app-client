@@ -4,14 +4,34 @@ Engineering companion to [`shared-budgets.md`](./shared-budgets.md). Scope: expe
 categories, subcategories. Stack: `monthly-app-server` (Apollo + Prisma + Postgres) and
 `monthly-app-client` (React + Apollo + codegen).
 
+## Status: shipped (v1)
+
+Phases 0-2 are built and shipped (one PR per repo). Phase 3 (role-management UI, VIEWER
+enforcement, pricing limits) is deferred. Notable deviations from the plan below:
+
+- **No feature flag.** `VITE_FEATURE_GROUPS` was not used; the whole feature shipped in a single
+  PR per repo, so the surfaces are live rather than gated.
+- **Scope args instead of `BudgetScope` input.** Scoped queries take `scope: ScopeMode`
+  (`ALL | MINE | GROUP`) + optional `groupId: ID` directly, not a wrapping input object.
+- **Scope helper** lives in `src/utils/scope.ts` as `categoryScopeWhere(args, context)`,
+  `canAccessCategory(category, context)` (read), and `canManage(ownerUserId, category, context)`
+  (edit/remove = the enterer OR a group OWNER/ADMIN). The auth context carries
+  `groups: { groupId, role }[]`, loaded once in `src/context.ts`.
+- **Global "View" toolbar control.** Instead of a per-page filter, a single compact "View"
+  dropdown sits in the shared toolbar (`ActionsBar`) with the month navigator centered beside it,
+  on Home, Expenses, and Budget. Scope is held in `ScopeContext` per session (no localStorage).
+- **Manage gating in the UI.** `useCanManage()` hides Edit/Remove affordances on categories,
+  subcategories, and expenses the user cannot manage; the server enforces the same rule.
+- **Shared-category badge** (`SharedGroupBadge`) shows the group name in the "All" view.
+
 ## Cross-cutting notes (read first)
 
 - **Deploys are automatic on `master`** (DO runs `prisma migrate deploy`). Every schema change
   must be additive and safe to deploy while old code runs. New tables and **nullable** columns
   are safe; avoid NOT-NULL-without-default in the same migration as code that needs backfill.
-- **Feature flag the UI.** Gate all client surfaces behind `VITE_FEATURE_GROUPS` so we can ship
-  backend + partial UI to master without exposing a half-built feature. Backend additions are
-  inert until called.
+- **Feature flag the UI.** (Original plan; **not used as shipped** - the feature went out as one
+  PR per repo without a flag.) The idea was to gate client surfaces behind `VITE_FEATURE_GROUPS`
+  so backend + partial UI could ship to master without exposing a half-built feature.
 - **Codegen**: any new/changed GraphQL operation needs `yarn codegen` (dev server running).
 - **Scoping discipline**: reuse the ownership pattern from the IDOR fixes, but the rule becomes
   "owner OR group member." Centralize it in one helper and unit-test denials.
@@ -138,10 +158,11 @@ it, Paid by = partner, both see it).
 
 ## Migration & rollout summary
 
-1. Phase 0 migration: new tables only. Deploy + ship group management behind the flag.
+1. Phase 0 migration: new tables only. Deploy + ship group management.
 2. Phase 1 migration: nullable `Category.groupId`. Deploy resolvers with scope-aware reads
    (default scope `ALL` keeps current behavior for solo users, who only have personal data).
-3. Flip `VITE_FEATURE_GROUPS` on once Phases 1-2 are verified on prod with a test couple.
+3. Phases 0-2 shipped together (one PR per repo, no flag); verified on prod with a test pair of
+   accounts.
 4. No expense backfill at any point (scope derives from category).
 
 ## Risk checklist
