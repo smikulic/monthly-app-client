@@ -8,7 +8,6 @@ import {
 } from "@/features/categories";
 import { ActionsBar } from "@/components/layout";
 import { useScope, scopeVariables } from "@/features/groups/scope-context";
-import { ScopeFilter } from "@/features/groups/scope-filter";
 import { useCategoriesActions } from "./use-categories-actions-hook";
 
 export const CategoriesPageContainer = () => {
@@ -44,11 +43,9 @@ export const CategoriesPageContainer = () => {
 
   return (
     <>
-      <ScopeFilter />
-      <ActionsBar>
-        {/* Empty span to push button to the right */}
-        <span></span>
+      <ActionsBar showScope>
         <ProminentButtonStyled
+          small
           onClick={() => setCreateModalCategory(true)}
           data-testid="add-category-button"
         >

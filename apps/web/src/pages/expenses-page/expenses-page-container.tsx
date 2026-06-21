@@ -7,7 +7,6 @@ import { GET_EXPENSES_LIST } from "@/pages/expenses-page/expenses-page-queries";
 import { GET_CATEGORIES_LIST } from "@/pages/categories-page/categories-page-queries";
 import { ActionsBar } from "@/components/layout";
 import { useScope, scopeVariables } from "@/features/groups/scope-context";
-import { ScopeFilter } from "@/features/groups/scope-filter";
 import { useExpensesActions } from "./use-expenses-actions-hook";
 
 export const ExpensesPageContainer = ({
@@ -59,8 +58,8 @@ export const ExpensesPageContainer = ({
 
   return (
     <>
-      <ScopeFilter />
       <ActionsBar
+        showScope
         pageDate={pageDate}
         onClickNext={onClickNext}
         onClickPrevious={onClickPrevious}

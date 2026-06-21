@@ -13,7 +13,6 @@ import { ActionsBar } from "@/components/layout";
 import { GET_SAVING_GOALS_LIST } from "@/pages/saving-goals-page/saving-goals-page-queries";
 import { GET_INVESTMENTS_LIST } from "@/pages/investments-page/investments-page-queries";
 import { useScope, scopeVariables } from "@/features/groups/scope-context";
-import { ScopeFilter } from "@/features/groups/scope-filter";
 
 export const HomePageContainer = ({
   pageDate,
@@ -72,8 +71,8 @@ export const HomePageContainer = ({
 
   return (
     <Sentry.ErrorBoundary fallback={<p>An error has occurred</p>}>
-      <ScopeFilter />
       <ActionsBar
+        showScope
         pageDate={pageDate}
         onClickNext={onClickNext}
         onClickPrevious={onClickPrevious}

@@ -1,45 +1,98 @@
+import { useState, MouseEvent } from "react";
 import { useQuery } from "@apollo/client";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import CheckIcon from "@mui/icons-material/Check";
+import { Menu, ListItemIcon } from "@/components/ui/Menu";
 import { MenuItem } from "@/components/ui/MenuItem";
-import { SelectStyled } from "@/shared";
 import { MY_GROUPS } from "./groups-queries";
 import { useScope } from "./scope-context";
-import { ScopeFilterStyled } from "./scope-filter-style";
+import {
+  ScopeTriggerStyled,
+  ScopeTriggerLabelStyled,
+  ScopeTriggerValueStyled,
+} from "./scope-filter-style";
 
-// Lets the user view All (personal + groups), Personal only, or a specific group.
-// Hidden entirely when the user belongs to no groups.
+// Lets the user view All (personal + groups), Personal only, or a specific
+// group. Hidden entirely when the user belongs to no groups.
 export const ScopeFilter = () => {
   const { mode, groupId, setScope } = useScope();
   const { data } = useQuery(MY_GROUPS, { fetchPolicy: "cache-and-network" });
-  const groups = data?.myGroups ?? [];
+  const groups: { id: string; name: string }[] = data?.myGroups ?? [];
+
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
 
   if (groups.length === 0) return null;
 
-  const value = mode === "GROUP" && groupId ? `group:${groupId}` : mode;
+  const activeLabel =
+    mode === "MINE"
+      ? "Personal"
+      : mode === "GROUP"
+        ? (groups.find((g) => g.id === groupId)?.name ?? "All")
+        : "All";
 
-  const handleChange = (next: string) => {
-    if (next.startsWith("group:")) {
-      setScope("GROUP", next.slice("group:".length));
-    } else {
-      setScope(next as "ALL" | "MINE");
-    }
+  const handleOpen = (event: MouseEvent<HTMLElement>) =>
+    setAnchorEl(event.currentTarget);
+  const handleClose = () => setAnchorEl(null);
+
+  const select = (next: () => void) => {
+    next();
+    handleClose();
   };
 
+  const check = (active: boolean) => (
+    <ListItemIcon>{active && <CheckIcon fontSize="small" />}</ListItemIcon>
+  );
+
   return (
-    <ScopeFilterStyled>
-      <SelectStyled
-        id="scope-select"
-        label="View"
-        value={value}
-        onChange={(e) => handleChange(e.target.value as string)}
+    <>
+      <ScopeTriggerStyled
+        onClick={handleOpen}
+        aria-haspopup="true"
+        aria-expanded={open}
+        data-testid="scope-filter"
       >
-        <MenuItem value="ALL">All</MenuItem>
-        <MenuItem value="MINE">Personal</MenuItem>
-        {groups.map((g: { id: string; name: string }) => (
-          <MenuItem key={g.id} value={`group:${g.id}`}>
-            {g.name}
-          </MenuItem>
-        ))}
-      </SelectStyled>
-    </ScopeFilterStyled>
+        <ScopeTriggerLabelStyled>View</ScopeTriggerLabelStyled>
+        <ScopeTriggerValueStyled>{activeLabel}</ScopeTriggerValueStyled>
+        <ExpandMoreIcon />
+      </ScopeTriggerStyled>
+
+      <Menu
+        anchorEl={anchorEl}
+        id="scope-menu"
+        open={open}
+        onClose={handleClose}
+        transformOrigin={{ horizontal: "left", vertical: "top" }}
+        anchorOrigin={{ horizontal: "left", vertical: "bottom" }}
+      >
+        <MenuItem
+          selected={mode === "ALL"}
+          onClick={() => select(() => setScope("ALL"))}
+        >
+          {check(mode === "ALL")}
+          All
+        </MenuItem>
+        <MenuItem
+          selected={mode === "MINE"}
+          onClick={() => select(() => setScope("MINE"))}
+        >
+          {check(mode === "MINE")}
+          Personal
+        </MenuItem>
+        {groups.map((g) => {
+          const active = mode === "GROUP" && groupId === g.id;
+          return (
+            <MenuItem
+              key={g.id}
+              selected={active}
+              onClick={() => select(() => setScope("GROUP", g.id))}
+            >
+              {check(active)}
+              {g.name}
+            </MenuItem>
+          );
+        })}
+      </Menu>
+    </>
   );
 };

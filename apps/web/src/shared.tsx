@@ -56,6 +56,7 @@ interface ProminentButtonProps {
   disabled?: boolean;
   color?: "primary" | "error";
   outline?: boolean;
+  small?: boolean;
 }
 
 export const ProminentButtonStyled = styled("div")<ProminentButtonProps>(({
@@ -64,6 +65,7 @@ export const ProminentButtonStyled = styled("div")<ProminentButtonProps>(({
   disabled,
   color = "primary",
   outline = false,
+  small = false,
 }) => {
   const palette = theme.palette[color];
 
@@ -90,13 +92,13 @@ export const ProminentButtonStyled = styled("div")<ProminentButtonProps>(({
   }
 
   return {
-    padding: "8px 16px",
+    padding: small ? "6px 14px" : "8px 16px",
     display: "flex",
     alignItems: "center",
     justifyContent: textCenter ? "center" : "flex-start",
     textAlign: textCenter ? "center" : "left",
-    height: "40px",
-    fontSize: "16px",
+    height: small ? "36px" : "40px",
+    fontSize: small ? "14px" : "16px",
 
     color: textColor,
     background: bgColor,
