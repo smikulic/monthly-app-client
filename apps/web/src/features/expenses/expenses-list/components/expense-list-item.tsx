@@ -2,6 +2,8 @@ import { FC } from "react";
 import { Expense } from "@/generated/graphql";
 import { MainListItemStyled } from "@/shared";
 import { ListItemHeader } from "@/components/list-item-header/list-item-header";
+import { SharedGroupBadge } from "@/features/groups/shared-group-badge";
+import { useScope } from "@/features/groups/scope-context";
 import { ListItemDetails } from "@/components/list-item-details/list-item-details";
 import { SubcategoryListItem } from "@/components/subcategory-list-item/subcategory-list-item";
 import { ListAddField } from "@/components/list-add-field/list-add-field";
@@ -31,6 +33,7 @@ export const ExpenseListItem: FC<Props> = ({
   setUpdateModalExpense,
   refetchExpenses,
 }) => {
+  const { mode } = useScope();
   const categoryId = category.id;
   const showSubcategories = openCategory === categoryId;
   const subcategoriesExist = category.subcategories.length > 0;
@@ -48,6 +51,11 @@ export const ExpenseListItem: FC<Props> = ({
               setOpenCategory(showSubcategories ? "" : categoryId);
             }
           }}
+          badge={
+            mode === "ALL" ? (
+              <SharedGroupBadge groupId={category.groupId} />
+            ) : undefined
+          }
         />
         {category.totalExpenseAmount > 0 && (
           <ListItemDetails expenseValue={category.totalExpenseAmount} />
@@ -73,6 +81,7 @@ export const ExpenseListItem: FC<Props> = ({
                     subcategorySelected={subcategorySelected}
                     currentDate={pageDate}
                     showRolloverBudget={showRolloverBudget}
+                    categoryGroupId={category.groupId}
                     refetchExpenses={refetchExpenses}
                     setUpdateModalExpense={(expense: Expense) =>
                       setUpdateModalExpense(expense)

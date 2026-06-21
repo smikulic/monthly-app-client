@@ -31,6 +31,7 @@ import {
   ButtonGroupStyled,
 } from "@/shared";
 import { CURRENCY_OPTIONS } from "@/constants/forms";
+import { GroupsManager } from "@/features/groups/groups-manager";
 
 export const ProfilePageContainer = ({
   userData,
@@ -69,96 +70,104 @@ export const ProfilePageContainer = ({
   });
 
   return (
-    <Container>
-      <PageWrapperStyled>
-        <Typography variant="h5">Account</Typography>
-        <TextFieldStyled label="Email" defaultValue={userData.email} disabled />
-        <SelectStyled
-          id="userCurrency"
-          label="Currency"
-          value={currency}
-          onChange={(e) => setCurrency(e.target.value as string)}
-        >
-          {CURRENCY_OPTIONS.map((opt) => (
-            <MenuItem key={opt.value} value={opt.value}>
-              {opt.value} ({opt.label})
-            </MenuItem>
-          ))}
-        </SelectStyled>
-        <FormGroup>
-          <FormControlLabel
-            control={
-              <Switch
-                aria-describedby="weekly-help"
-                checked={weeklyReminder}
-                onChange={() => setWeeklyReminder(!weeklyReminder)}
-              />
-            }
-            label="Weekly expense email (Saturday recap: total spent & budget left)"
+    <>
+      <Container>
+        <PageWrapperStyled>
+          <Typography variant="h5">Account</Typography>
+          <TextFieldStyled
+            label="Email"
+            defaultValue={userData.email}
+            disabled
           />
-        </FormGroup>
-        <ButtonGroupStyled>
-          <ProminentButtonStyled
-            onClick={() =>
-              updateUser({
-                variables: { id: userData.id, currency, weeklyReminder },
-              })
-            }
-            disabled={
-              currency === userData.currency &&
-              weeklyReminder === userData.weeklyReminder
-            }
-            textCenter
+          <SelectStyled
+            id="userCurrency"
+            label="Currency"
+            value={currency}
+            onChange={(e) => setCurrency(e.target.value as string)}
           >
-            Save
-          </ProminentButtonStyled>
-        </ButtonGroupStyled>
-
-        <SectionDividerStyled />
-
-        <Typography variant="h5" color="error">
-          Danger Zone
-        </Typography>
-        <HelperTextStyled>
-          Permanently delete your account and all data.
-        </HelperTextStyled>
-        <ButtonGroupStyled>
-          <ProminentButtonStyled
-            onClick={() => setOpenDialog(true)}
-            color="error"
-            textCenter
-            outline
-          >
-            Delete my account
-          </ProminentButtonStyled>
-        </ButtonGroupStyled>
-
-        <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
-          <DialogTitle>Confirm account deletion</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Are you sure? This action <strong>cannot</strong> be undone.
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
+            {CURRENCY_OPTIONS.map((opt) => (
+              <MenuItem key={opt.value} value={opt.value}>
+                {opt.value} ({opt.label})
+              </MenuItem>
+            ))}
+          </SelectStyled>
+          <FormGroup>
+            <FormControlLabel
+              control={
+                <Switch
+                  aria-describedby="weekly-help"
+                  checked={weeklyReminder}
+                  onChange={() => setWeeklyReminder(!weeklyReminder)}
+                />
+              }
+              label="Weekly expense email (Saturday recap: total spent & budget left)"
+            />
+          </FormGroup>
+          <ButtonGroupStyled>
             <ProminentButtonStyled
-              onClick={() => setOpenDialog(false)}
+              onClick={() =>
+                updateUser({
+                  variables: { id: userData.id, currency, weeklyReminder },
+                })
+              }
+              disabled={
+                currency === userData.currency &&
+                weeklyReminder === userData.weeklyReminder
+              }
+              textCenter
+            >
+              Save
+            </ProminentButtonStyled>
+          </ButtonGroupStyled>
+
+          <SectionDividerStyled />
+
+          <Typography variant="h5" color="error">
+            Danger Zone
+          </Typography>
+          <HelperTextStyled>
+            Permanently delete your account and all data.
+          </HelperTextStyled>
+          <ButtonGroupStyled>
+            <ProminentButtonStyled
+              onClick={() => setOpenDialog(true)}
+              color="error"
               textCenter
               outline
             >
-              Cancel
+              Delete my account
             </ProminentButtonStyled>
-            <ProminentButtonStyled
-              onClick={() => deleteAccount()}
-              disabled={deleting}
-              color="error"
-              textCenter
-            >
-              {deleting ? "Deleting…" : "Delete my account"}
-            </ProminentButtonStyled>
-          </DialogActions>
-        </Dialog>
-      </PageWrapperStyled>
-    </Container>
+          </ButtonGroupStyled>
+
+          <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
+            <DialogTitle>Confirm account deletion</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                Are you sure? This action <strong>cannot</strong> be undone.
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <ProminentButtonStyled
+                onClick={() => setOpenDialog(false)}
+                textCenter
+                outline
+              >
+                Cancel
+              </ProminentButtonStyled>
+              <ProminentButtonStyled
+                onClick={() => deleteAccount()}
+                disabled={deleting}
+                color="error"
+                textCenter
+              >
+                {deleting ? "Deleting…" : "Delete my account"}
+              </ProminentButtonStyled>
+            </DialogActions>
+          </Dialog>
+        </PageWrapperStyled>
+      </Container>
+
+      <GroupsManager currentUserId={userData.id} />
+    </>
   );
 };

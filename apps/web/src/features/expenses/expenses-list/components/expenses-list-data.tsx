@@ -56,6 +56,7 @@ export const ExpensesListData: FC<Props> = ({
                     <CreateExpenseForm
                       open={createModalExpense}
                       subcategories={category?.subcategories}
+                      categoryGroupId={category.groupId}
                       currentDate={pageDate}
                       closeForm={() => {
                         refetchExpenses();
@@ -68,6 +69,7 @@ export const ExpensesListData: FC<Props> = ({
                       open={Boolean(updateModalExpense)}
                       formData={updateModalExpense}
                       subcategories={category?.subcategories}
+                      categoryGroupId={category.groupId}
                       closeForm={() => {
                         refetchExpenses();
                         setUpdateModalExpense(null);

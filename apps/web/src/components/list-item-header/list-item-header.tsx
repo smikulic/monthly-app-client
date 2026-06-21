@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { IconStyled, ListItemHeaderStyled } from "./list-item-header-style";
@@ -9,6 +9,8 @@ interface Props {
   showExpand?: boolean;
   showCollapse?: boolean;
   onToggleExpand?: () => void;
+  // Optional marker rendered next to the title (e.g. a shared-group badge).
+  badge?: ReactNode;
 }
 
 export const ListItemHeader: FC<Props> = ({
@@ -16,6 +18,7 @@ export const ListItemHeader: FC<Props> = ({
   showExpand,
   showCollapse,
   onToggleExpand,
+  badge,
 }) => {
   return (
     <>
@@ -25,6 +28,7 @@ export const ListItemHeader: FC<Props> = ({
             {showExpand && <ExpandMoreIcon />}
             {showCollapse && <ChevronRightIcon />}
             <Typography noWrap>{title}</Typography>
+            {badge}
           </IconStyled>
         </ListItemHeaderStyled>
       )}
@@ -32,6 +36,7 @@ export const ListItemHeader: FC<Props> = ({
         <ListItemHeaderStyled>
           <IconStyled>
             <Typography noWrap>{title}</Typography>
+            {badge}
           </IconStyled>
         </ListItemHeaderStyled>
       )}

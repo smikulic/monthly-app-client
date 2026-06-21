@@ -32,20 +32,23 @@ export const GET_ALL_EXPENSES = gql`
 `;
 
 export const GET_EXPENSES_LIST = gql`
-  query ExpensesList($date: String!) {
-    expenses(filter: { date: $date }) {
+  query ExpensesList($date: String!, $scope: ScopeMode, $groupId: ID) {
+    expenses(filter: { date: $date }, scope: $scope, groupId: $groupId) {
       id
       subcategoryId
       amount
       description
       date
+      paidBy {
+        id
+      }
     }
   }
 `;
 
 export const GET_CHART_EXPENSES_LIST = gql`
-  query ChartExpensesList($date: String!) {
-    chartExpenses(filter: { date: $date }) {
+  query ChartExpensesList($date: String!, $scope: ScopeMode, $groupId: ID) {
+    chartExpenses(filter: { date: $date }, scope: $scope, groupId: $groupId) {
       monthlyTotals
       categoryExpenseTotals {
         categoryName
@@ -62,17 +65,22 @@ export const CREATE_EXPENSE_MUTATION = gql`
     $amount: Int!
     $description: String
     $date: String!
+    $paidByUserId: ID
   ) {
     createExpense(
       subcategoryId: $subcategoryId
       amount: $amount
       description: $description
       date: $date
+      paidByUserId: $paidByUserId
     ) {
       id
       amount
       description
       date
+      paidBy {
+        id
+      }
     }
   }
 `;
@@ -83,6 +91,7 @@ export const UPDATE_EXPENSE_MUTATION = gql`
     $amount: Int!
     $description: String
     $date: String!
+    $paidByUserId: ID
   ) {
     updateExpense(
       id: $id
@@ -90,11 +99,15 @@ export const UPDATE_EXPENSE_MUTATION = gql`
       amount: $amount
       description: $description
       date: $date
+      paidByUserId: $paidByUserId
     ) {
       id
       amount
       description
       date
+      paidBy {
+        id
+      }
     }
   }
 `;
