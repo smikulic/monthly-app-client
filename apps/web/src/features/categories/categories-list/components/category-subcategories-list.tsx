@@ -13,6 +13,7 @@ import {
 
 interface Props {
   subcategories: Subcategory[];
+  canManage: boolean;
   anchorActionDropdownEl: AnchorActionDropdownElProps;
   handleOnEditSubcategory: (subcategory: Subcategory) => void;
   handleOnRemoveSubcategory: (subcategoryId: string) => void;
@@ -25,6 +26,7 @@ interface Props {
 
 export const CategorySubcategoriesList: FC<Props> = ({
   subcategories,
+  canManage,
   anchorActionDropdownEl,
   handleOnEditSubcategory,
   handleOnRemoveSubcategory,
@@ -48,20 +50,22 @@ export const CategorySubcategoriesList: FC<Props> = ({
                 <CategoryAmountStyled>
                   {formatAmount(subcategory.budgetAmount || 0, userCurrency)}
                 </CategoryAmountStyled>
-                <IconMenu
-                  itemId={subcategoryId}
-                  anchorActionDropdownEl={anchorActionDropdownEl}
-                  handleOnEdit={() => handleOnEditSubcategory(subcategory)}
-                  handleOnRemove={() =>
-                    handleOnRemoveSubcategory(subcategoryId)
-                  }
-                  handleOnOpenMenu={(event: MouseEvent<HTMLElement>) =>
-                    handleActionsDropdownClick(event, subcategoryId)
-                  }
-                  handleOnCloseMenu={() =>
-                    handleActionsDropdownClose(subcategoryId)
-                  }
-                />
+                {canManage && (
+                  <IconMenu
+                    itemId={subcategoryId}
+                    anchorActionDropdownEl={anchorActionDropdownEl}
+                    handleOnEdit={() => handleOnEditSubcategory(subcategory)}
+                    handleOnRemove={() =>
+                      handleOnRemoveSubcategory(subcategoryId)
+                    }
+                    handleOnOpenMenu={(event: MouseEvent<HTMLElement>) =>
+                      handleActionsDropdownClick(event, subcategoryId)
+                    }
+                    handleOnCloseMenu={() =>
+                      handleActionsDropdownClose(subcategoryId)
+                    }
+                  />
+                )}
               </CategoryDetailsStyled>
             </SubcategoryListItemStyled>
           </span>

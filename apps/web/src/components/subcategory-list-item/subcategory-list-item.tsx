@@ -16,6 +16,7 @@ interface Props {
   subcategorySelected: SubcategoryDecoratedWithExpenses;
   currentDate: Date;
   showRolloverBudget: boolean;
+  categoryGroupId?: string | null;
   refetchExpenses: () => Promise<unknown>;
   setUpdateModalExpense: (expense: Expense) => void;
 }
@@ -25,6 +26,7 @@ export const SubcategoryListItem: FC<Props> = ({
   subcategorySelected,
   currentDate,
   showRolloverBudget,
+  categoryGroupId,
   refetchExpenses,
   setUpdateModalExpense,
 }) => {
@@ -108,6 +110,7 @@ export const SubcategoryListItem: FC<Props> = ({
           {!!subcategorySelected && (
             <ExpandedExpenses
               expenses={subcategorySelected.expenses}
+              categoryGroupId={categoryGroupId}
               setUpdateModalExpense={setUpdateModalExpense}
               refetchExpenses={refetchExpenses}
             />

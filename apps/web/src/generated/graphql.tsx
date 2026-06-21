@@ -23,6 +23,7 @@ export type AuthPayload = {
 
 export type Category = {
   __typename?: 'Category';
+  groupId?: Maybe<Scalars['ID']>;
   icon?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   name: Scalars['String'];
@@ -58,6 +59,7 @@ export type Expense = {
   date: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
+  paidBy?: Maybe<User>;
   subcategoryId: Scalars['ID'];
 };
 
@@ -69,6 +71,38 @@ export type GoogleAuthUrl = {
   __typename?: 'GoogleAuthUrl';
   url: Scalars['String'];
 };
+
+export type Group = {
+  __typename?: 'Group';
+  createdAt: Scalars['String'];
+  id: Scalars['ID'];
+  invites: Array<GroupInvite>;
+  members: Array<GroupMember>;
+  name: Scalars['String'];
+};
+
+export type GroupInvite = {
+  __typename?: 'GroupInvite';
+  email: Scalars['String'];
+  expiresAt: Scalars['String'];
+  id: Scalars['ID'];
+  role: GroupRole;
+  status: InviteStatus;
+};
+
+export type GroupMember = {
+  __typename?: 'GroupMember';
+  id: Scalars['ID'];
+  role: GroupRole;
+  user: User;
+};
+
+export enum GroupRole {
+  Admin = 'ADMIN',
+  Member = 'MEMBER',
+  Owner = 'OWNER',
+  Viewer = 'VIEWER'
+}
 
 export enum ImportMode {
   Merge = 'MERGE',
@@ -97,34 +131,56 @@ export type Investment = {
   updatedAt: Scalars['String'];
 };
 
+export enum InviteStatus {
+  Accepted = 'ACCEPTED',
+  Expired = 'EXPIRED',
+  Pending = 'PENDING',
+  Revoked = 'REVOKED'
+}
+
 export type Mutation = {
   __typename?: 'Mutation';
   _empty?: Maybe<Scalars['String']>;
+  acceptGroupInvite: Group;
   confirmEmail: AuthPayload;
   createCategory: Category;
   createExpense: Expense;
+  createGroup: Group;
   createInvestment: Investment;
   createSavingGoal: SavingGoal;
   createSubcategory: Subcategory;
   deleteAccount: Scalars['Boolean'];
   deleteCategory: Category;
   deleteExpense: Expense;
+  deleteGroup: Scalars['Boolean'];
   deleteInvestment: Scalars['Boolean'];
   deleteSavingGoal: SavingGoal;
   deleteSubcategory: Subcategory;
   googleLogin: AuthPayload;
   importData: ImportResult;
+  inviteToGroup: GroupInvite;
+  leaveGroup: Scalars['Boolean'];
   login?: Maybe<AuthPayload>;
+  removeGroupMember: Scalars['Boolean'];
   resetPassword: User;
   resetPasswordRequest: PasswordResetRequestPayload;
+  revokeGroupInvite: Scalars['Boolean'];
   setPassword: User;
+  shareCategory: Category;
   signup?: Maybe<AuthPayload>;
+  unshareCategory: Category;
   updateCategory: Category;
   updateExpense: Expense;
+  updateGroup: Group;
   updateInvestment: Investment;
   updateSavingGoal: SavingGoal;
   updateSubcategory: Subcategory;
   updateUser: User;
+};
+
+
+export type MutationAcceptGroupInviteArgs = {
+  token: Scalars['String'];
 };
 
 
@@ -134,6 +190,7 @@ export type MutationConfirmEmailArgs = {
 
 
 export type MutationCreateCategoryArgs = {
+  groupId?: InputMaybe<Scalars['ID']>;
   icon?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
 };
@@ -143,7 +200,13 @@ export type MutationCreateExpenseArgs = {
   amount: Scalars['Int'];
   date: Scalars['String'];
   description?: InputMaybe<Scalars['String']>;
+  paidByUserId?: InputMaybe<Scalars['ID']>;
   subcategoryId: Scalars['ID'];
+};
+
+
+export type MutationCreateGroupArgs = {
+  name: Scalars['String'];
 };
 
 
@@ -179,6 +242,11 @@ export type MutationDeleteExpenseArgs = {
 };
 
 
+export type MutationDeleteGroupArgs = {
+  id: Scalars['ID'];
+};
+
+
 export type MutationDeleteInvestmentArgs = {
   id: Scalars['ID'];
 };
@@ -205,9 +273,27 @@ export type MutationImportDataArgs = {
 };
 
 
+export type MutationInviteToGroupArgs = {
+  email: Scalars['String'];
+  groupId: Scalars['ID'];
+  role?: InputMaybe<GroupRole>;
+};
+
+
+export type MutationLeaveGroupArgs = {
+  groupId: Scalars['ID'];
+};
+
+
 export type MutationLoginArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
+};
+
+
+export type MutationRemoveGroupMemberArgs = {
+  groupId: Scalars['ID'];
+  userId: Scalars['ID'];
 };
 
 
@@ -222,14 +308,30 @@ export type MutationResetPasswordRequestArgs = {
 };
 
 
+export type MutationRevokeGroupInviteArgs = {
+  inviteId: Scalars['ID'];
+};
+
+
 export type MutationSetPasswordArgs = {
   password: Scalars['String'];
+};
+
+
+export type MutationShareCategoryArgs = {
+  categoryId: Scalars['ID'];
+  groupId: Scalars['ID'];
 };
 
 
 export type MutationSignupArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
+};
+
+
+export type MutationUnshareCategoryArgs = {
+  categoryId: Scalars['ID'];
 };
 
 
@@ -245,7 +347,14 @@ export type MutationUpdateExpenseArgs = {
   date: Scalars['String'];
   description?: InputMaybe<Scalars['String']>;
   id: Scalars['ID'];
+  paidByUserId?: InputMaybe<Scalars['ID']>;
   subcategoryId: Scalars['ID'];
+};
+
+
+export type MutationUpdateGroupArgs = {
+  id: Scalars['ID'];
+  name: Scalars['String'];
 };
 
 
@@ -294,14 +403,22 @@ export type Query = {
   generateDataExport: Scalars['String'];
   generateReport: Scalars['String'];
   googleAuthUrl: GoogleAuthUrl;
+  group: Group;
   investment?: Maybe<Investment>;
   investments: Array<Investment>;
   me: User;
+  myGroups: Array<Group>;
   savingGoals: Array<SavingGoal>;
   subcategories: Array<Subcategory>;
   subcategory: Subcategory;
   user: User;
   users: Array<User>;
+};
+
+
+export type QueryCategoriesArgs = {
+  groupId?: InputMaybe<Scalars['ID']>;
+  scope?: InputMaybe<ScopeMode>;
 };
 
 
@@ -312,11 +429,15 @@ export type QueryCategoryArgs = {
 
 export type QueryChartExpensesArgs = {
   filter?: InputMaybe<ExpenseFilterInput>;
+  groupId?: InputMaybe<Scalars['ID']>;
+  scope?: InputMaybe<ScopeMode>;
 };
 
 
 export type QueryExpensesArgs = {
   filter?: InputMaybe<ExpenseFilterInput>;
+  groupId?: InputMaybe<Scalars['ID']>;
+  scope?: InputMaybe<ScopeMode>;
 };
 
 
@@ -327,6 +448,11 @@ export type QueryGenerateCsvReportArgs = {
 
 export type QueryGenerateReportArgs = {
   year: Scalars['Int'];
+};
+
+
+export type QueryGroupArgs = {
+  id: Scalars['ID'];
 };
 
 
@@ -354,6 +480,12 @@ export type SavingGoal = {
   name: Scalars['String'];
   user?: Maybe<User>;
 };
+
+export enum ScopeMode {
+  All = 'ALL',
+  Group = 'GROUP',
+  Mine = 'MINE'
+}
 
 export type Subcategory = {
   __typename?: 'Subcategory';
@@ -402,10 +534,13 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: string, email: string, currency?: string | null, weeklyReminder?: boolean | null, name?: string | null, picture?: string | null, provider?: string | null } };
 
-export type CategoriesListQueryVariables = Exact<{ [key: string]: never; }>;
+export type CategoriesListQueryVariables = Exact<{
+  scope?: InputMaybe<ScopeMode>;
+  groupId?: InputMaybe<Scalars['ID']>;
+}>;
 
 
-export type CategoriesListQuery = { __typename?: 'Query', categories: Array<{ __typename?: 'Category', id: string, name: string, subcategories?: Array<{ __typename?: 'Subcategory', id: string, categoryId: string, createdAt: string, rolloverDate: string, name: string, budgetAmount?: number | null } | null> | null }> };
+export type CategoriesListQuery = { __typename?: 'Query', categories: Array<{ __typename?: 'Category', id: string, name: string, groupId?: string | null, user?: { __typename?: 'User', id: string } | null, subcategories?: Array<{ __typename?: 'Subcategory', id: string, categoryId: string, createdAt: string, rolloverDate: string, name: string, budgetAmount?: number | null } | null> | null }> };
 
 export type CreateCategoryMutationVariables = Exact<{
   name: Scalars['String'];
@@ -479,13 +614,17 @@ export type ExpensesQuery = { __typename?: 'Query', expenses: Array<{ __typename
 
 export type ExpensesListQueryVariables = Exact<{
   date: Scalars['String'];
+  scope?: InputMaybe<ScopeMode>;
+  groupId?: InputMaybe<Scalars['ID']>;
 }>;
 
 
-export type ExpensesListQuery = { __typename?: 'Query', expenses: Array<{ __typename?: 'Expense', id: string, subcategoryId: string, amount: number, description?: string | null, date: string }> };
+export type ExpensesListQuery = { __typename?: 'Query', expenses: Array<{ __typename?: 'Expense', id: string, subcategoryId: string, amount: number, description?: string | null, date: string, paidBy?: { __typename?: 'User', id: string } | null }> };
 
 export type ChartExpensesListQueryVariables = Exact<{
   date: Scalars['String'];
+  scope?: InputMaybe<ScopeMode>;
+  groupId?: InputMaybe<Scalars['ID']>;
 }>;
 
 
@@ -496,10 +635,11 @@ export type CreateExpenseMutationVariables = Exact<{
   amount: Scalars['Int'];
   description?: InputMaybe<Scalars['String']>;
   date: Scalars['String'];
+  paidByUserId?: InputMaybe<Scalars['ID']>;
 }>;
 
 
-export type CreateExpenseMutation = { __typename?: 'Mutation', createExpense: { __typename?: 'Expense', id: string, amount: number, description?: string | null, date: string } };
+export type CreateExpenseMutation = { __typename?: 'Mutation', createExpense: { __typename?: 'Expense', id: string, amount: number, description?: string | null, date: string, paidBy?: { __typename?: 'User', id: string } | null } };
 
 export type UpdateExpenseMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -507,10 +647,11 @@ export type UpdateExpenseMutationVariables = Exact<{
   amount: Scalars['Int'];
   description?: InputMaybe<Scalars['String']>;
   date: Scalars['String'];
+  paidByUserId?: InputMaybe<Scalars['ID']>;
 }>;
 
 
-export type UpdateExpenseMutation = { __typename?: 'Mutation', updateExpense: { __typename?: 'Expense', id: string, amount: number, description?: string | null, date: string } };
+export type UpdateExpenseMutation = { __typename?: 'Mutation', updateExpense: { __typename?: 'Expense', id: string, amount: number, description?: string | null, date: string, paidBy?: { __typename?: 'User', id: string } | null } };
 
 export type DeleteExpenseMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -704,10 +845,14 @@ export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
 export const CategoriesListDocument = gql`
-    query CategoriesList {
-  categories {
+    query CategoriesList($scope: ScopeMode, $groupId: ID) {
+  categories(scope: $scope, groupId: $groupId) {
     id
     name
+    groupId
+    user {
+      id
+    }
     subcategories {
       id
       categoryId
@@ -732,6 +877,8 @@ export const CategoriesListDocument = gql`
  * @example
  * const { data, loading, error } = useCategoriesListQuery({
  *   variables: {
+ *      scope: // value for 'scope'
+ *      groupId: // value for 'groupId'
  *   },
  * });
  */
@@ -1093,13 +1240,16 @@ export type ExpensesQueryHookResult = ReturnType<typeof useExpensesQuery>;
 export type ExpensesLazyQueryHookResult = ReturnType<typeof useExpensesLazyQuery>;
 export type ExpensesQueryResult = Apollo.QueryResult<ExpensesQuery, ExpensesQueryVariables>;
 export const ExpensesListDocument = gql`
-    query ExpensesList($date: String!) {
-  expenses(filter: {date: $date}) {
+    query ExpensesList($date: String!, $scope: ScopeMode, $groupId: ID) {
+  expenses(filter: {date: $date}, scope: $scope, groupId: $groupId) {
     id
     subcategoryId
     amount
     description
     date
+    paidBy {
+      id
+    }
   }
 }
     `;
@@ -1117,6 +1267,8 @@ export const ExpensesListDocument = gql`
  * const { data, loading, error } = useExpensesListQuery({
  *   variables: {
  *      date: // value for 'date'
+ *      scope: // value for 'scope'
+ *      groupId: // value for 'groupId'
  *   },
  * });
  */
@@ -1132,8 +1284,8 @@ export type ExpensesListQueryHookResult = ReturnType<typeof useExpensesListQuery
 export type ExpensesListLazyQueryHookResult = ReturnType<typeof useExpensesListLazyQuery>;
 export type ExpensesListQueryResult = Apollo.QueryResult<ExpensesListQuery, ExpensesListQueryVariables>;
 export const ChartExpensesListDocument = gql`
-    query ChartExpensesList($date: String!) {
-  chartExpenses(filter: {date: $date}) {
+    query ChartExpensesList($date: String!, $scope: ScopeMode, $groupId: ID) {
+  chartExpenses(filter: {date: $date}, scope: $scope, groupId: $groupId) {
     monthlyTotals
     categoryExpenseTotals {
       categoryName
@@ -1157,6 +1309,8 @@ export const ChartExpensesListDocument = gql`
  * const { data, loading, error } = useChartExpensesListQuery({
  *   variables: {
  *      date: // value for 'date'
+ *      scope: // value for 'scope'
+ *      groupId: // value for 'groupId'
  *   },
  * });
  */
@@ -1172,17 +1326,21 @@ export type ChartExpensesListQueryHookResult = ReturnType<typeof useChartExpense
 export type ChartExpensesListLazyQueryHookResult = ReturnType<typeof useChartExpensesListLazyQuery>;
 export type ChartExpensesListQueryResult = Apollo.QueryResult<ChartExpensesListQuery, ChartExpensesListQueryVariables>;
 export const CreateExpenseDocument = gql`
-    mutation CreateExpense($subcategoryId: ID!, $amount: Int!, $description: String, $date: String!) {
+    mutation CreateExpense($subcategoryId: ID!, $amount: Int!, $description: String, $date: String!, $paidByUserId: ID) {
   createExpense(
     subcategoryId: $subcategoryId
     amount: $amount
     description: $description
     date: $date
+    paidByUserId: $paidByUserId
   ) {
     id
     amount
     description
     date
+    paidBy {
+      id
+    }
   }
 }
     `;
@@ -1205,6 +1363,7 @@ export type CreateExpenseMutationFn = Apollo.MutationFunction<CreateExpenseMutat
  *      amount: // value for 'amount'
  *      description: // value for 'description'
  *      date: // value for 'date'
+ *      paidByUserId: // value for 'paidByUserId'
  *   },
  * });
  */
@@ -1216,18 +1375,22 @@ export type CreateExpenseMutationHookResult = ReturnType<typeof useCreateExpense
 export type CreateExpenseMutationResult = Apollo.MutationResult<CreateExpenseMutation>;
 export type CreateExpenseMutationOptions = Apollo.BaseMutationOptions<CreateExpenseMutation, CreateExpenseMutationVariables>;
 export const UpdateExpenseDocument = gql`
-    mutation UpdateExpense($id: ID!, $subcategoryId: ID!, $amount: Int!, $description: String, $date: String!) {
+    mutation UpdateExpense($id: ID!, $subcategoryId: ID!, $amount: Int!, $description: String, $date: String!, $paidByUserId: ID) {
   updateExpense(
     id: $id
     subcategoryId: $subcategoryId
     amount: $amount
     description: $description
     date: $date
+    paidByUserId: $paidByUserId
   ) {
     id
     amount
     description
     date
+    paidBy {
+      id
+    }
   }
 }
     `;
@@ -1251,6 +1414,7 @@ export type UpdateExpenseMutationFn = Apollo.MutationFunction<UpdateExpenseMutat
  *      amount: // value for 'amount'
  *      description: // value for 'description'
  *      date: // value for 'date'
+ *      paidByUserId: // value for 'paidByUserId'
  *   },
  * });
  */

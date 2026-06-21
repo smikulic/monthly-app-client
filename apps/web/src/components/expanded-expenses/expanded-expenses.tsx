@@ -11,21 +11,25 @@ import {
   ExpenseListItemStyled,
 } from "./expanded-expenses-style";
 import { IconMenu } from "../icon-menu/icon-menu";
+import { useCanManage } from "@/features/groups/use-can-manage";
 import { TOAST_MESSAGES, ENTITY_NAMES } from "@/constants/forms";
 
 interface Props {
   expenses: Expense[];
+  categoryGroupId?: string | null;
   setUpdateModalExpense: (expense: Expense) => void;
   refetchExpenses: () => Promise<unknown>;
 }
 
 export const ExpandedExpenses: FC<Props> = ({
   expenses,
+  categoryGroupId,
   setUpdateModalExpense,
   refetchExpenses,
 }) => {
   const userCurrency = useContext(UserContext);
   const client = useApolloClient();
+  const canManage = useCanManage();
 
   const {
     anchorActionDropdownEl,
@@ -66,22 +70,26 @@ export const ExpandedExpenses: FC<Props> = ({
                 {formatAmount(expense.amount, userCurrency)}
                 {expenseDescription && <> - {expenseDescription}</>}
               </ExpenseFieldStyled>
-              <IconMenu
-                itemId={expenseId}
-                anchorActionDropdownEl={anchorActionDropdownEl}
-                handleOnEdit={() => {
-                  setUpdateModalExpense(expense);
-                  handleActionsDropdownClose(expenseId);
-                }}
-                handleOnRemove={() => {
-                  deleteExpense({ variables: { id: expenseId } });
-                  handleActionsDropdownClose(expenseId);
-                }}
-                handleOnOpenMenu={(event: MouseEvent<HTMLElement>) =>
-                  handleActionsDropdownClick(event, expenseId)
-                }
-                handleOnCloseMenu={() => handleActionsDropdownClose(expenseId)}
-              />
+              {canManage(expense.paidBy?.id, categoryGroupId) && (
+                <IconMenu
+                  itemId={expenseId}
+                  anchorActionDropdownEl={anchorActionDropdownEl}
+                  handleOnEdit={() => {
+                    setUpdateModalExpense(expense);
+                    handleActionsDropdownClose(expenseId);
+                  }}
+                  handleOnRemove={() => {
+                    deleteExpense({ variables: { id: expenseId } });
+                    handleActionsDropdownClose(expenseId);
+                  }}
+                  handleOnOpenMenu={(event: MouseEvent<HTMLElement>) =>
+                    handleActionsDropdownClick(event, expenseId)
+                  }
+                  handleOnCloseMenu={() =>
+                    handleActionsDropdownClose(expenseId)
+                  }
+                />
+              )}
             </ExpenseListItemStyled>
           </span>
         );

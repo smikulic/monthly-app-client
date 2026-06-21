@@ -1,4 +1,4 @@
-import { FC, MouseEvent } from "react";
+import { FC, MouseEvent, ReactNode } from "react";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -12,6 +12,8 @@ interface Props {
   handleOnRemove: () => void;
   handleOnOpenMenu: (event: MouseEvent<HTMLElement>) => void;
   handleOnCloseMenu: () => void;
+  // Optional extra menu entries (e.g. share/unshare for categories).
+  extraItems?: ReactNode;
 }
 
 export const IconMenu: FC<Props> = ({
@@ -21,6 +23,7 @@ export const IconMenu: FC<Props> = ({
   handleOnRemove,
   handleOnOpenMenu,
   handleOnCloseMenu,
+  extraItems,
 }) => {
   return (
     <div>
@@ -41,6 +44,7 @@ export const IconMenu: FC<Props> = ({
         onClose={handleOnCloseMenu}
       >
         <MenuItem onClick={handleOnEdit}>Edit</MenuItem>
+        {extraItems}
         <MenuItem onClick={handleOnRemove}>Remove</MenuItem>
       </Menu>
     </div>

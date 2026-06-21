@@ -22,6 +22,9 @@ import { TermsPageContainer } from "./pages/terms-page/terms-page-container";
 import { AboutPageContainer } from "./pages/about-page/about-page-container";
 import { ProfilePageContainer } from "./pages/profile-page/profile-page-container";
 import { ReportsPageContainer } from "./pages/reports-page/reports-page-container";
+import { AcceptInvitePageContainer } from "./pages/accept-invite-page/accept-invite-page-container";
+import { PendingInviteResume } from "./pages/accept-invite-page/pending-invite-resume";
+import { ScopeProvider } from "./features/groups/scope-context";
 import { analytics } from "./utils/mixpanel";
 
 const muiTheme = createTheme({
@@ -166,6 +169,11 @@ function App() {
                 />
 
                 <Route
+                  path="/accept-invite"
+                  element={<AcceptInvitePageContainer />}
+                />
+
+                <Route
                   path="/auth/google/callback"
                   element={<GoogleCallbackPageContainer setToken={setToken} />}
                 />
@@ -186,9 +194,12 @@ function App() {
                             onLogout={handleLogout}
                             userData={userData?.me}
                           />
-                          <FooterPaddingStyled>
-                            <Outlet />
-                          </FooterPaddingStyled>
+                          <PendingInviteResume />
+                          <ScopeProvider>
+                            <FooterPaddingStyled>
+                              <Outlet />
+                            </FooterPaddingStyled>
+                          </ScopeProvider>
                           <Footer />
                         </UserContext.Provider>
                       }

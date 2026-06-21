@@ -1,10 +1,14 @@
 import { gql } from "@apollo/client";
 
 export const GET_CATEGORIES_LIST = gql`
-  query CategoriesList {
-    categories {
+  query CategoriesList($scope: ScopeMode, $groupId: ID) {
+    categories(scope: $scope, groupId: $groupId) {
       id
       name
+      groupId
+      user {
+        id
+      }
       subcategories {
         id
         categoryId

@@ -7,16 +7,19 @@ import {
   SubcategoryFormFactory,
 } from "@/features/categories";
 import { ActionsBar } from "@/components/layout";
+import { useScope, scopeVariables } from "@/features/groups/scope-context";
 import { useCategoriesActions } from "./use-categories-actions-hook";
 
 export const CategoriesPageContainer = () => {
   const [createModalCategory, setCreateModalCategory] = useState(false);
 
+  const scope = useScope();
+
   const {
     data: categoriesData,
     loading: loadingCategories,
     refetch: refetchCategories,
-  } = useCategoriesListQuery();
+  } = useCategoriesListQuery({ variables: scopeVariables(scope) });
 
   const {
     openCategory,
@@ -40,10 +43,9 @@ export const CategoriesPageContainer = () => {
 
   return (
     <>
-      <ActionsBar>
-        {/* Empty span to push button to the right */}
-        <span></span>
+      <ActionsBar showScope>
         <ProminentButtonStyled
+          small
           onClick={() => setCreateModalCategory(true)}
           data-testid="add-category-button"
         >

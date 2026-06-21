@@ -12,12 +12,14 @@ import { SelectChangeEvent } from "@/components/ui/Select";
 import { DatePickerStyled } from "@/components/ui/DatePickerStyled";
 import { FormDialog } from "@/components/form-dialog/form-dialog";
 import { MenuItem } from "@/components/ui/MenuItem";
+import { PaidBySelect } from "@/features/groups/paid-by-select";
 import dayjs from "dayjs";
 
 interface Props {
   open: boolean;
   formData: Expense;
   subcategories: Subcategory[];
+  categoryGroupId?: string | null;
   closeForm: () => void;
 }
 
@@ -25,6 +27,7 @@ export const UpdateExpenseForm: React.FC<Props> = ({
   open,
   formData,
   subcategories,
+  categoryGroupId,
   closeForm,
 }) => {
   const client = useApolloClient();
@@ -40,6 +43,7 @@ export const UpdateExpenseForm: React.FC<Props> = ({
   const [expenseSubcategoryId, setExpenseSubcategoryId] = useState(
     formData.subcategoryId
   );
+  const [paidByUserId, setPaidByUserId] = useState(formData.paidBy?.id ?? "");
 
   const [updateExpense] = useUpdateExpenseMutation({
     onCompleted: () => {
@@ -81,6 +85,7 @@ export const UpdateExpenseForm: React.FC<Props> = ({
             description: expenseDescription,
             date: dayjs(expenseDate).format("YYYY-MM-DD"),
             subcategoryId: expenseSubcategoryId,
+            paidByUserId: categoryGroupId ? paidByUserId : undefined,
           },
         })
       }
@@ -131,6 +136,12 @@ export const UpdateExpenseForm: React.FC<Props> = ({
           );
         })}
       </SelectStyled>
+
+      <PaidBySelect
+        groupId={categoryGroupId}
+        value={paidByUserId}
+        onChange={setPaidByUserId}
+      />
     </FormDialog>
   );
 };

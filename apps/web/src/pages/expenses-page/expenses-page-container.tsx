@@ -6,6 +6,7 @@ import { ExpensesList } from "@/features/expenses";
 import { GET_EXPENSES_LIST } from "@/pages/expenses-page/expenses-page-queries";
 import { GET_CATEGORIES_LIST } from "@/pages/categories-page/categories-page-queries";
 import { ActionsBar } from "@/components/layout";
+import { useScope, scopeVariables } from "@/features/groups/scope-context";
 import { useExpensesActions } from "./use-expenses-actions-hook";
 
 export const ExpensesPageContainer = ({
@@ -19,6 +20,7 @@ export const ExpensesPageContainer = ({
 }) => {
   const [showRolloverBudget, setShowRolloverBudget] = useState(true);
 
+  const scope = useScope();
   const formattedDate = dayjs(pageDate).format("MM-DD-YYYY");
 
   const {
@@ -28,11 +30,16 @@ export const ExpensesPageContainer = ({
   } = useQuery(GET_EXPENSES_LIST, {
     variables: {
       date: formattedDate,
+      ...scopeVariables(scope),
     },
   });
 
-  const { data: categoriesData, loading: loadingCategories } =
-    useQuery(GET_CATEGORIES_LIST);
+  const { data: categoriesData, loading: loadingCategories } = useQuery(
+    GET_CATEGORIES_LIST,
+    {
+      variables: scopeVariables(scope),
+    },
+  );
 
   const {
     openCategory,
@@ -52,6 +59,7 @@ export const ExpensesPageContainer = ({
   return (
     <>
       <ActionsBar
+        showScope
         pageDate={pageDate}
         onClickNext={onClickNext}
         onClickPrevious={onClickPrevious}

@@ -81,6 +81,17 @@ export const WelcomePageContainer = () => {
             worth, without ever connecting an account.
           </p>
         </div>
+        <div className="feature-box">
+          <h3 className="feature-box-title">
+            Budget together, stay in control
+          </h3>
+          <p className="feature-box-description">
+            Share just the categories you choose with your partner, family, or
+            roommates, and switch any view between All, Personal, and each
+            group. Every shared expense records who paid, while your personal
+            budget stays private.
+          </p>
+        </div>
       </div>
 
       {/* new feature presentation grid */}

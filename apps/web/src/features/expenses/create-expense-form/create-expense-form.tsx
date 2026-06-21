@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useApolloClient } from "@apollo/client";
+import { useApolloClient, useQuery } from "@apollo/client";
 import { toast } from "react-toastify";
 import { Subcategory, useCreateExpenseMutation } from "@/generated/graphql";
 import { FORM_ACTIONS, TOAST_MESSAGES, ENTITY_NAMES } from "@/constants/forms";
@@ -9,12 +9,15 @@ import { SelectChangeEvent } from "@/components/ui/Select";
 import { FormDialog } from "@/components/form-dialog/form-dialog";
 import { DatePickerStyled } from "@/components/ui/DatePickerStyled";
 import { MenuItem } from "@/components/ui/MenuItem";
+import { PaidBySelect } from "@/features/groups/paid-by-select";
+import { ME } from "@/features/groups/groups-queries";
 import { SubcategoryDecoratedWithExpenses } from "../expenses-list/expenses-list";
 import dayjs from "dayjs";
 
 interface Props {
   open: boolean;
   subcategories: SubcategoryDecoratedWithExpenses[];
+  categoryGroupId?: string | null;
   currentDate: Date;
   closeForm: () => void;
 }
@@ -22,10 +25,13 @@ interface Props {
 export const CreateExpenseForm: React.FC<Props> = ({
   open,
   subcategories,
+  categoryGroupId,
   currentDate,
   closeForm,
 }) => {
   const client = useApolloClient();
+  const { data: meData } = useQuery(ME, { fetchPolicy: "cache-first" });
+  const myId: string | undefined = meData?.me?.id;
 
   const [formInvalid, setFormInvalid] = useState(true);
   const [expenseAmount, setExpenseAmount] = useState("");
@@ -34,6 +40,12 @@ export const CreateExpenseForm: React.FC<Props> = ({
   const [expenseSubcategoryId, setExpenseSubcategoryId] = useState(
     subcategories[0].id
   );
+  const [paidByUserId, setPaidByUserId] = useState("");
+
+  // Default the payer to the current user once known.
+  useEffect(() => {
+    if (myId && !paidByUserId) setPaidByUserId(myId);
+  }, [myId, paidByUserId]);
 
   const [createExpense] = useCreateExpenseMutation({
     onCompleted: ({ createExpense }) => {
@@ -87,6 +99,7 @@ export const CreateExpenseForm: React.FC<Props> = ({
             amount: Number(expenseAmount),
             description: expenseDescription,
             date: dayjs(expenseDate).format("YYYY-MM-DD"),
+            paidByUserId: categoryGroupId ? paidByUserId : undefined,
           },
         })
       }
@@ -138,6 +151,12 @@ export const CreateExpenseForm: React.FC<Props> = ({
           );
         })}
       </SelectStyled>
+
+      <PaidBySelect
+        groupId={categoryGroupId}
+        value={paidByUserId}
+        onChange={setPaidByUserId}
+      />
     </FormDialog>
   );
 };

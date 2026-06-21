@@ -8,6 +8,10 @@ import { CategorySubcategoriesList } from "./category-subcategories-list";
 import { ListItemHeader } from "@/components/list-item-header/list-item-header";
 import { ListAddField } from "@/components/list-add-field/list-add-field";
 import { IconMenu } from "@/components/icon-menu/icon-menu";
+import { CategoryShareMenuItems } from "@/features/groups/category-share-control";
+import { SharedGroupBadge } from "@/features/groups/shared-group-badge";
+import { useCanManage } from "@/features/groups/use-can-manage";
+import { useScope } from "@/features/groups/scope-context";
 import {
   CategoryAmountStyled,
   CategoryDetailsStyled,
@@ -25,7 +29,7 @@ interface Props {
   onRemoveSubcategory: (subcategoryId: string) => void;
   onActionsDropdownClick: (
     event: MouseEvent<HTMLElement>,
-    anchorIndex: string
+    anchorIndex: string,
   ) => void;
   onActionsDropdownClose: (anchorIndex: string) => void;
 }
@@ -44,6 +48,8 @@ export const CategoriesListData: FC<Props> = ({
   onActionsDropdownClose,
 }) => {
   const userCurrency = useContext(UserContext);
+  const canManage = useCanManage();
+  const { mode } = useScope();
 
   return (
     <>
@@ -52,12 +58,13 @@ export const CategoriesListData: FC<Props> = ({
         const categoryName = category.name;
         const expanded = openCategory === categoryId;
         const subcategories = category.subcategories as Subcategory[];
+        const manageable = canManage(category.user?.id, category.groupId);
 
         const initialValue = 0;
         const totalBudgetAmount = subcategories.reduce(
           (accumulator, currentValue) =>
             accumulator + currentValue?.budgetAmount!,
-          initialValue
+          initialValue,
         );
 
         return (
@@ -70,21 +77,36 @@ export const CategoriesListData: FC<Props> = ({
                 onToggleExpand={() =>
                   setOpenCategory(expanded ? "" : categoryId)
                 }
+                badge={
+                  mode === "ALL" ? (
+                    <SharedGroupBadge groupId={category.groupId} />
+                  ) : undefined
+                }
               />
               <CategoryDetailsStyled>
                 <CategoryAmountStyled>
                   {formatAmount(totalBudgetAmount || 0, userCurrency)}
                 </CategoryAmountStyled>
-                <IconMenu
-                  itemId={categoryId}
-                  anchorActionDropdownEl={anchorActionDropdownEl}
-                  handleOnEdit={() => onEditCategory(category)}
-                  handleOnRemove={() => onRemoveCategory(categoryId)}
-                  handleOnOpenMenu={(event: MouseEvent<HTMLElement>) =>
-                    onActionsDropdownClick(event, categoryId)
-                  }
-                  handleOnCloseMenu={() => onActionsDropdownClose(categoryId)}
-                />
+                {manageable && (
+                  <IconMenu
+                    itemId={categoryId}
+                    anchorActionDropdownEl={anchorActionDropdownEl}
+                    handleOnEdit={() => onEditCategory(category)}
+                    handleOnRemove={() => onRemoveCategory(categoryId)}
+                    handleOnOpenMenu={(event: MouseEvent<HTMLElement>) =>
+                      onActionsDropdownClick(event, categoryId)
+                    }
+                    handleOnCloseMenu={() => onActionsDropdownClose(categoryId)}
+                    extraItems={
+                      <CategoryShareMenuItems
+                        categoryId={categoryId}
+                        groupId={category.groupId}
+                        creatorId={category.user?.id}
+                        onDone={() => onActionsDropdownClose(categoryId)}
+                      />
+                    }
+                  />
+                )}
               </CategoryDetailsStyled>
             </MainListItemStyled>
 
@@ -93,6 +115,7 @@ export const CategoriesListData: FC<Props> = ({
                 {subcategories && (
                   <CategorySubcategoriesList
                     subcategories={subcategories}
+                    canManage={manageable}
                     anchorActionDropdownEl={anchorActionDropdownEl}
                     handleOnEditSubcategory={onEditSubcategory}
                     handleOnRemoveSubcategory={onRemoveSubcategory}
