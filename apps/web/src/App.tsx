@@ -13,7 +13,11 @@ import { CategoriesPageContainer } from "./pages/categories-page/categories-page
 import { SavingGoalsPageContainer } from "./pages/saving-goals-page/saving-goals-page-container";
 import { InvestmentsPageContainer } from "./pages/investments-page/investments-page-container";
 import { ConfirmEmailPageContainer } from "./pages/confirm-email-page/confirm-email-page-container";
-import { Header, Footer } from "./components/layout";
+import { Header, Footer, Sidebar } from "./components/layout";
+import {
+  AppShellStyled,
+  MainContentStyled,
+} from "./components/layout/sidebar/sidebar-style";
 import { AUTH_TOKEN, AUTH_TOKEN_USER } from "./constants";
 import { handleLogout } from "./utils/handleLogout";
 import { FooterPaddingStyled } from "./shared";
@@ -186,9 +190,14 @@ function App() {
                             onLogout={handleLogout}
                             userData={userData?.me}
                           />
-                          <FooterPaddingStyled>
-                            <Outlet />
-                          </FooterPaddingStyled>
+                          <AppShellStyled>
+                            <Sidebar />
+                            <MainContentStyled>
+                              <FooterPaddingStyled>
+                                <Outlet />
+                              </FooterPaddingStyled>
+                            </MainContentStyled>
+                          </AppShellStyled>
                           <Footer />
                         </UserContext.Provider>
                       }

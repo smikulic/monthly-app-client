@@ -1,6 +1,7 @@
 import { useState, MouseEvent } from "react";
 import { useNavigate, useLocation } from "react-router";
 import { AUTH_TOKEN_USER } from "@/constants";
+import { useResponsive } from "@/hooks/useResponsive";
 import { ListItemIcon, Menu } from "@/components/ui/Menu";
 import { MenuItem } from "@/components/ui/MenuItem";
 import { Logout, AccountCircle, AssessmentOutlined } from "@mui/icons-material";
@@ -28,6 +29,7 @@ export const Header = ({
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { isMobile } = useResponsive();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const openMenu = Boolean(anchorEl);
@@ -51,9 +53,7 @@ export const Header = ({
   return (
     <HeaderStyled>
       <HeaderLeftStyled>
-        {isHome ? (
-          <BrandStyled onClick={() => navigate("/")}>Monthly</BrandStyled>
-        ) : (
+        {isMobile && !isHome ? (
           <BackButtonStyled
             onClick={() => navigate("/")}
             data-testid="back-button"
@@ -61,6 +61,8 @@ export const Header = ({
             <ChevronLeftIcon />
             back
           </BackButtonStyled>
+        ) : (
+          <BrandStyled onClick={() => navigate("/")}>Monthly</BrandStyled>
         )}
       </HeaderLeftStyled>
 
