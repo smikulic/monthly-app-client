@@ -18,13 +18,16 @@ import {
   DialogContentText,
   DialogActions,
 } from "@/components/ui/Dialog";
-import { ProminentButtonStyled, SelectStyled } from "@/shared";
 import {
-  ReportsWrapperStyled,
-  YearSelectStyled,
+  ProminentButtonStyled,
+  SelectStyled,
+  PageWrapperStyled,
   ButtonGroupStyled,
   SectionDividerStyled,
   HelperTextStyled,
+} from "@/shared";
+import {
+  YearSelectStyled,
   HiddenFileInputStyled,
   FileRowStyled,
   FileNameStyled,
@@ -177,7 +180,7 @@ export const ReportsPageContainer = ({ userData }: { userData: User }) => {
 
   return (
     <Container>
-      <ReportsWrapperStyled>
+      <PageWrapperStyled>
         <Typography variant="h5">Generate Report</Typography>
 
         <YearSelectStyled>
@@ -264,6 +267,7 @@ export const ReportsPageContainer = ({ userData }: { userData: User }) => {
             onClick={() => requestImport("REPLACE")}
             textCenter
             outline
+            color="error"
             disabled={!fileName || importing}
           >
             {importingMode === "REPLACE" ? "Importing…" : "Replace all"}
@@ -299,7 +303,7 @@ export const ReportsPageContainer = ({ userData }: { userData: User }) => {
             </ProminentButtonStyled>
           </DialogActions>
         </Dialog>
-      </ReportsWrapperStyled>
+      </PageWrapperStyled>
     </Container>
   );
 };

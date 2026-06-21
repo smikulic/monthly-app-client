@@ -70,7 +70,7 @@ function App() {
   const currentDate = new Date();
   const [pageDate, setPageDate] = useState(currentDate);
   const [token, setToken] = useState<string | null>(
-    localStorage.getItem(AUTH_TOKEN)
+    localStorage.getItem(AUTH_TOKEN),
   );
 
   const {
@@ -114,7 +114,7 @@ function App() {
     const nextDate = new Date(
       pageDate.getFullYear(),
       pageDate.getMonth() + 1,
-      pageDate.getDate()
+      pageDate.getDate(),
     );
     setPageDate(nextDate);
   };
@@ -123,7 +123,7 @@ function App() {
     const previousDate = new Date(
       pageDate.getFullYear(),
       pageDate.getMonth() - 1,
-      pageDate.getDate()
+      pageDate.getDate(),
     );
     setPageDate(previousDate);
   };
@@ -182,7 +182,10 @@ function App() {
                     <Route
                       element={
                         <UserContext.Provider value={userData?.me.currency}>
-                          <Header onLogout={handleLogout} userData={userData?.me} />
+                          <Header
+                            onLogout={handleLogout}
+                            userData={userData?.me}
+                          />
                           <FooterPaddingStyled>
                             <Outlet />
                           </FooterPaddingStyled>
@@ -223,7 +226,7 @@ function App() {
                         element={<InvestmentsPageContainer />}
                       />
                       <Route
-                        path="/profile"
+                        path="/settings"
                         element={
                           <ProfilePageContainer
                             userData={userData?.me}

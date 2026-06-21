@@ -58,58 +58,62 @@ interface ProminentButtonProps {
   outline?: boolean;
 }
 
-export const ProminentButtonStyled = styled("div")<ProminentButtonProps>(
-  ({ theme, textCenter, disabled, color = "primary", outline = false }) => {
-    const palette = theme.palette[color];
+export const ProminentButtonStyled = styled("div")<ProminentButtonProps>(({
+  theme,
+  textCenter,
+  disabled,
+  color = "primary",
+  outline = false,
+}) => {
+  const palette = theme.palette[color];
 
-    // Determine colors based on disabled and outline flags
-    let textColor: string;
-    let bgColor: string;
-    let borderColor: string;
+  // Determine colors based on disabled and outline flags
+  let textColor: string;
+  let bgColor: string;
+  let borderColor: string;
 
-    if (disabled) {
-      // disabled state overrides outline
-      textColor = theme.palette.action.disabled;
-      bgColor = theme.palette.action.disabledBackground;
-      borderColor = theme.palette.action.disabled;
-    } else if (outline) {
-      // outline variant
-      textColor = palette.main;
-      bgColor = "transparent";
-      borderColor = palette.main;
-    } else {
-      // filled variant
-      textColor = palette.contrastText;
-      bgColor = palette.main;
-      borderColor = palette.contrastText;
-    }
-
-    return {
-      padding: "8px 16px",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: textCenter ? "center" : "flex-start",
-      textAlign: textCenter ? "center" : "left",
-      height: "40px",
-      fontSize: "16px",
-
-      color: textColor,
-      background: bgColor,
-      border: `1px solid ${borderColor}`,
-      borderRadius: "10px",
-
-      cursor: disabled ? "not-allowed" : "pointer",
-      pointerEvents: disabled ? "none" : "auto",
-      opacity: disabled ? 0.5 : 1,
-
-      "&:hover": disabled
-        ? {}
-        : {
-            opacity: 0.7,
-          },
-    };
+  if (disabled) {
+    // disabled state overrides outline
+    textColor = theme.palette.action.disabled;
+    bgColor = theme.palette.action.disabledBackground;
+    borderColor = theme.palette.action.disabled;
+  } else if (outline) {
+    // outline variant
+    textColor = palette.main;
+    bgColor = "transparent";
+    borderColor = palette.main;
+  } else {
+    // filled variant
+    textColor = palette.contrastText;
+    bgColor = palette.main;
+    borderColor = palette.contrastText;
   }
-);
+
+  return {
+    padding: "8px 16px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: textCenter ? "center" : "flex-start",
+    textAlign: textCenter ? "center" : "left",
+    height: "40px",
+    fontSize: "16px",
+
+    color: textColor,
+    background: bgColor,
+    border: `1px solid ${borderColor}`,
+    borderRadius: "10px",
+
+    cursor: disabled ? "not-allowed" : "pointer",
+    pointerEvents: disabled ? "none" : "auto",
+    opacity: disabled ? 0.5 : 1,
+
+    "&:hover": disabled
+      ? {}
+      : {
+          opacity: 0.7,
+        },
+  };
+});
 
 export const FooterPaddingStyled = styled("div")({
   marginBottom: "68px",
@@ -126,6 +130,41 @@ export const UnderlineTextStyled = styled("span")(({ theme }) => ({
   borderBottom: `1px dotted ${theme.palette.primary.contrastText}`,
 }));
 
+// ---- Shared page layout primitives (Reports, Settings, ...) ----
+
+export const PageWrapperStyled = styled("div")(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  gap: theme.spacing(2),
+}));
+
+export const SectionDividerStyled = styled("hr")(({ theme }) => ({
+  width: "100%",
+  margin: 0,
+  border: "none",
+  borderTop: `1px solid ${theme.palette.divider}`,
+}));
+
+export const HelperTextStyled = styled("p")(({ theme }) => ({
+  margin: 0,
+  color: theme.palette.text.secondary,
+  fontSize: "0.875rem",
+}));
+
+// Stacked + full-width on mobile; inline on larger screens with a consistent
+// minimum button width so actions line up evenly (labels can still grow).
+export const ButtonGroupStyled = styled("div")(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  gap: theme.spacing(2),
+  [theme.breakpoints.up("sm")]: {
+    flexDirection: "row",
+    "& > *": {
+      minWidth: 160,
+    },
+  },
+}));
+
 export const TabsStyled = styled((props: TabsProps) => <Tabs {...props} />)(
   ({ theme }) => ({
     marginLeft: theme.spacing(2),
@@ -135,7 +174,7 @@ export const TabsStyled = styled((props: TabsProps) => <Tabs {...props} />)(
       borderRadius: 2,
       backgroundColor: theme.palette.primary.main,
     },
-  })
+  }),
 );
 
 export const TabStyled = styled((props: TabProps) => (
