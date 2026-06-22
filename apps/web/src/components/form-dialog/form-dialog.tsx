@@ -13,7 +13,7 @@ const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
     children: React.ReactElement;
   },
-  ref: React.Ref<unknown>
+  ref: React.Ref<unknown>,
 ) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -39,10 +39,20 @@ export const FormDialog: React.FC<Props> = ({
 }) => {
   return (
     <Dialog
-      fullScreen
       open={open}
       onClose={closeForm}
+      fullWidth
+      maxWidth="xs"
       TransitionComponent={Transition}
+      PaperProps={{
+        sx: {
+          borderRadius: "16px",
+          overflow: "hidden",
+          // Tighter margins + more width on small screens; comfortable on desktop.
+          m: { xs: 1.5, sm: 4 },
+          width: { xs: "calc(100% - 24px)", sm: "100%" },
+        },
+      }}
     >
       <AppBar
         sx={{
@@ -53,30 +63,33 @@ export const FormDialog: React.FC<Props> = ({
         color="transparent"
       >
         <Toolbar>
+          <Typography sx={{ flex: 1 }} variant="h6" component="div">
+            {title}
+          </Typography>
           <IconButton
-            edge="start"
+            edge="end"
             color="inherit"
             onClick={closeForm}
             aria-label="close"
           >
             <CloseIcon />
           </IconButton>
-          <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-            {title}
-          </Typography>
-          <ProminentButtonStyled
-            onClick={formAction}
-            disabled={disabled}
-            autoFocus
-            data-testid="create-button"
-          >
-            {formActionText}
-          </ProminentButtonStyled>
         </Toolbar>
       </AppBar>
       <DialogContent>
-        <Stack spacing={1}>{children}</Stack>
+        <Stack spacing={2} sx={{ mt: 1 }}>
+          {children}
+        </Stack>
       </DialogContent>
+      <ProminentButtonStyled
+        textCenter
+        onClick={formAction}
+        disabled={disabled}
+        data-testid="create-button"
+        sx={{ width: "100%", height: 52, borderRadius: 0, fontSize: "16px" }}
+      >
+        {formActionText}
+      </ProminentButtonStyled>
     </Dialog>
   );
 };

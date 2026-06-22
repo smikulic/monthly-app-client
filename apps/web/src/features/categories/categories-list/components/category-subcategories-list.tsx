@@ -3,7 +3,7 @@ import { Maybe, Subcategory } from "@/generated/graphql";
 import { UserContext } from "@/App";
 import { formatAmount } from "@/utils/format";
 import { AnchorActionDropdownElProps } from "@/hooks/useActionDropdown";
-import { SubcategoryListItemStyled } from "@/shared";
+import { GroupRowStyled } from "@/components/list-group/list-group-style";
 import { ListItemHeader } from "@/components/list-item-header/list-item-header";
 import { IconMenu } from "@/components/icon-menu/icon-menu";
 import {
@@ -19,7 +19,7 @@ interface Props {
   handleOnRemoveSubcategory: (subcategoryId: string) => void;
   handleActionsDropdownClick: (
     event: MouseEvent<HTMLElement>,
-    anchorIndex: string
+    anchorIndex: string,
   ) => void;
   handleActionsDropdownClose: (anchorIndex: string) => void;
 }
@@ -44,7 +44,7 @@ export const CategorySubcategoriesList: FC<Props> = ({
 
         return (
           <span key={subcategoryId}>
-            <SubcategoryListItemStyled>
+            <GroupRowStyled>
               <ListItemHeader title={subcategory.name} />
               <CategoryDetailsStyled>
                 <CategoryAmountStyled>
@@ -67,7 +67,7 @@ export const CategorySubcategoriesList: FC<Props> = ({
                   />
                 )}
               </CategoryDetailsStyled>
-            </SubcategoryListItemStyled>
+            </GroupRowStyled>
           </span>
         );
       })}

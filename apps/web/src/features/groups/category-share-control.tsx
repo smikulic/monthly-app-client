@@ -1,5 +1,8 @@
 import { useQuery, useMutation } from "@apollo/client";
 import { toast } from "react-toastify";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import GroupAddOutlinedIcon from "@mui/icons-material/GroupAddOutlined";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { MenuItem } from "@/components/ui/MenuItem";
 import {
   ME,
@@ -51,6 +54,9 @@ export const CategoryShareMenuItems = ({
           run(() => unshareCategory({ variables: { categoryId } }))
         }
       >
+        <ListItemIcon>
+          <LockOutlinedIcon fontSize="small" />
+        </ListItemIcon>
         Make personal
       </MenuItem>
     );
@@ -67,6 +73,9 @@ export const CategoryShareMenuItems = ({
             )
           }
         >
+          <ListItemIcon>
+            <GroupAddOutlinedIcon fontSize="small" />
+          </ListItemIcon>
           Share with {g.name}
         </MenuItem>
       ))}

@@ -9,19 +9,27 @@ export const ListAddFieldStyled = styled("div")<ListAddFieldStyledProps>(
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    height: "48px",
+    gap: "6px",
+    height: "40px",
     position: "relative",
-    margin: indent ? "12px 12px 12px 48px" : "12px",
-    padding: "14px 24px",
+    margin: indent ? "8px 12px 8px 48px" : "8px 12px",
+    padding: "8px 16px",
+    fontWeight: 500,
 
     color: theme.palette.primary.contrastText,
-    border: `1px solid ${theme.palette.primary.contrastText}`,
-    background: theme.palette.primary.main,
-    borderRadius: "16px",
+    border: `1px solid ${theme.palette.primary.main}`,
+    background: "transparent",
+    borderRadius: "12px",
     cursor: "pointer",
 
-    "&:hover": {
-      opacity: 0.7,
+    "& svg": {
+      fontSize: "18px",
+      color: theme.palette.primary.main,
     },
-  })
+
+    "&:hover": {
+      borderColor: theme.palette.primary.main,
+      background: "rgba(59, 206, 177, 0.08)",
+    },
+  }),
 );
