@@ -1,12 +1,16 @@
-import { Fragment, FC, MouseEvent, useContext } from "react";
+import { FC, MouseEvent, useContext } from "react";
+import AddIcon from "@mui/icons-material/Add";
 import { Category, Subcategory } from "@/generated/graphql";
 import { UserContext } from "@/App";
 import { formatAmount } from "@/utils/format";
 import { AnchorActionDropdownElProps } from "@/hooks/useActionDropdown";
-import { MainListItemStyled } from "@/shared";
+import {
+  GroupCardStyled,
+  GroupHeaderRowStyled,
+  GroupAddRowStyled,
+} from "@/components/list-group/list-group-style";
 import { CategorySubcategoriesList } from "./category-subcategories-list";
 import { ListItemHeader } from "@/components/list-item-header/list-item-header";
-import { ListAddField } from "@/components/list-add-field/list-add-field";
 import { IconMenu } from "@/components/icon-menu/icon-menu";
 import { CategoryShareMenuItems } from "@/features/groups/category-share-control";
 import { SharedGroupBadge } from "@/features/groups/shared-group-badge";
@@ -68,8 +72,8 @@ export const CategoriesListData: FC<Props> = ({
         );
 
         return (
-          <Fragment key={categoryId}>
-            <MainListItemStyled active={expanded}>
+          <GroupCardStyled key={categoryId} active={expanded}>
+            <GroupHeaderRowStyled>
               <ListItemHeader
                 title={categoryName}
                 showExpand={!expanded}
@@ -108,7 +112,7 @@ export const CategoriesListData: FC<Props> = ({
                   />
                 )}
               </CategoryDetailsStyled>
-            </MainListItemStyled>
+            </GroupHeaderRowStyled>
 
             {expanded && (
               <>
@@ -124,13 +128,15 @@ export const CategoriesListData: FC<Props> = ({
                   />
                 )}
 
-                <ListAddField
-                  text={`Add ${categoryName} subcategory`}
+                <GroupAddRowStyled
                   onClick={() => setCreateModalSubcategory(categoryId)}
-                />
+                >
+                  <AddIcon />
+                  Add subcategory
+                </GroupAddRowStyled>
               </>
             )}
-          </Fragment>
+          </GroupCardStyled>
         );
       })}
     </>

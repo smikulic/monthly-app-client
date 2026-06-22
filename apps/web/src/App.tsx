@@ -33,7 +33,7 @@ const muiTheme = createTheme({
     // dark: will be calculated from palette.primary.main,
     // contrastText: will be calculated to contrast with palette.primary.main
     primary: {
-      main: "#41efcd",
+      main: "#3bceb1",
       contrastText: "#181818",
     },
     secondary: {
@@ -49,6 +49,47 @@ const muiTheme = createTheme({
     text: {
       secondary: "#878BAC",
       disabled: "#d6d7e0",
+    },
+  },
+  components: {
+    // Modern dropdown menus: rounded paper, soft shadow, padded list, and
+    // rounded item highlights. Applies to every Menu (account, row actions,
+    // scope filter, ...).
+    MuiMenu: {
+      styleOverrides: {
+        paper: ({ theme }) => ({
+          borderRadius: 12,
+          marginTop: 6,
+          minWidth: 184,
+          border: `1px solid ${theme.palette.divider}`,
+          boxShadow: "0 8px 28px rgba(24, 24, 24, 0.12)",
+        }),
+        list: {
+          padding: 6,
+        },
+      },
+    },
+    MuiMenuItem: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          borderRadius: 8,
+          padding: "8px 12px",
+          fontSize: 14,
+          "&:hover": {
+            backgroundColor: theme.palette.action.hover,
+          },
+          "&.Mui-selected": {
+            backgroundColor: theme.palette.action.selected,
+          },
+        }),
+      },
+    },
+    MuiListItemIcon: {
+      styleOverrides: {
+        root: {
+          minWidth: 32,
+        },
+      },
     },
   },
 });

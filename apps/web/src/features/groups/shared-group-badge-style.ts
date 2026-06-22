@@ -3,10 +3,10 @@ import { styled } from "@mui/material/styles";
 export const SharedGroupBadgeStyled = styled("span")(({ theme }) => ({
   marginLeft: theme.spacing(1),
   padding: "2px 8px",
-  borderRadius: "10px",
+  borderRadius: "6px",
   fontSize: "11px",
-  fontWeight: 500,
+  letterSpacing: "0.02em",
   whiteSpace: "nowrap",
-  color: theme.palette.secondary.main,
-  border: `1px solid ${theme.palette.secondary.main}`,
+  color: "#c43d80",
+  background: "rgba(241, 153, 192, 0.18)",
 }));

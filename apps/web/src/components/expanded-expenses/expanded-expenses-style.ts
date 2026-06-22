@@ -1,25 +1,21 @@
 import { styled } from "@mui/material/styles";
 import { ListItemStyled } from "../../shared";
 
-export const ExpenseListItemStyled = styled(ListItemStyled)({
-  height: "44px",
-  margin: "8px 12px",
-  padding: "8px 18px 8px 38px",
-  fontSize: "15px",
-  border: "1px solid #d6d7e0",
-  borderRadius: "16px",
-});
+// Expense leaf row (level 2): borderless, indented deepest, divided by a
+// hairline. Sits inside the category group card under its subcategory.
+export const ExpenseListItemStyled = styled(ListItemStyled)(({ theme }) => ({
+  minHeight: "40px",
+  padding: "8px 16px 8px 50px",
+  fontSize: "14px",
+  borderTop: `1px solid ${theme.palette.divider}`,
+}));
 
 export const ExpenseFieldStyled = styled("div")({
-  position: "relative",
-  display: "flex",
-  justifyContent: "space-between",
-  paddingLeft: "24px",
   color: "#878BAC",
   fontSize: "14px",
-  whiteSpace: 'nowrap',
-  overflow: 'hidden',
-  textOverflow: 'ellipsis',
-  width: "90%",
-
+  whiteSpace: "nowrap",
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  minWidth: 0,
+  flex: 1,
 });

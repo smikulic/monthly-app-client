@@ -21,7 +21,7 @@ export const PrivacyPageContainer = () => {
           left: 0,
           right: 0,
           height: "200px",
-          background: "linear-gradient(135deg, #41efcd 0%, #96fcd2 100%)",
+          background: "linear-gradient(135deg, #3bceb1 0%, #96fcd2 100%)",
           opacity: 0.03,
           zIndex: -1,
         }}
@@ -64,7 +64,7 @@ export const PrivacyPageContainer = () => {
           fontSize: "26px",
           marginBottom: "16px",
           fontWeight: "500",
-          borderBottom: "2px solid #41efcd",
+          borderBottom: "2px solid #3bceb1",
           paddingBottom: "8px",
           display: "inline-block",
         }}
@@ -166,7 +166,7 @@ export const PrivacyPageContainer = () => {
           fontSize: "26px",
           marginBottom: "16px",
           fontWeight: "500",
-          borderBottom: "2px solid #41efcd",
+          borderBottom: "2px solid #3bceb1",
           paddingBottom: "8px",
           display: "inline-block",
         }}
@@ -523,7 +523,7 @@ export const PrivacyPageContainer = () => {
           fontSize: "26px",
           marginBottom: "16px",
           fontWeight: "500",
-          borderBottom: "2px solid #41efcd",
+          borderBottom: "2px solid #3bceb1",
           paddingBottom: "8px",
           display: "inline-block",
         }}
@@ -551,7 +551,7 @@ export const PrivacyPageContainer = () => {
           fontSize: "26px",
           marginBottom: "16px",
           fontWeight: "500",
-          borderBottom: "2px solid #41efcd",
+          borderBottom: "2px solid #3bceb1",
           paddingBottom: "8px",
           display: "inline-block",
         }}
@@ -574,7 +574,7 @@ export const PrivacyPageContainer = () => {
           fontSize: "26px",
           marginBottom: "16px",
           fontWeight: "500",
-          borderBottom: "2px solid #41efcd",
+          borderBottom: "2px solid #3bceb1",
           paddingBottom: "8px",
           display: "inline-block",
         }}
@@ -601,7 +601,7 @@ export const PrivacyPageContainer = () => {
           fontSize: "26px",
           marginBottom: "16px",
           fontWeight: "500",
-          borderBottom: "2px solid #41efcd",
+          borderBottom: "2px solid #3bceb1",
           paddingBottom: "8px",
           display: "inline-block",
         }}

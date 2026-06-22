@@ -2,8 +2,8 @@ import { FC, useState } from "react";
 import { useQuery } from "@apollo/client";
 import dayjs from "dayjs";
 import { Expense } from "@/generated/graphql";
-import { SubcategoryListItemStyled } from "@/shared";
 import { getRemainingRolloverBudget } from "@/utils/getRolloverBudget";
+import { GroupRowStyled } from "@/components/list-group/list-group-style";
 import { GET_ALL_EXPENSES } from "../../pages/expenses-page/expenses-page-queries";
 import { ExpandedExpenses } from "../expanded-expenses/expanded-expenses";
 import { ListItemHeader } from "../list-item-header/list-item-header";
@@ -47,13 +47,13 @@ export const SubcategoryListItem: FC<Props> = ({
         dt <= monthEnd && // up to end of viewed month
         expense.subcategoryId === subcategory.id
       );
-    }
+    },
   );
 
   // Summing the filtered expenses
   const totalExpensesSinceRollover = expensesSinceRollover.reduce(
     (acc: number, expense: { amount: number }) => acc + expense.amount,
-    0
+    0,
   );
 
   // Remaining rollover for the viewed month
@@ -69,7 +69,7 @@ export const SubcategoryListItem: FC<Props> = ({
   const totalSubcategoryExpenses = subcategory.expenses.reduce(
     (accumulator: number, currentValue: Expense) =>
       accumulator + currentValue.amount,
-    0
+    0,
   );
 
   const expensesExist = totalSubcategoryExpenses > 0;
@@ -88,7 +88,7 @@ export const SubcategoryListItem: FC<Props> = ({
 
   return (
     <>
-      <SubcategoryListItemStyled actionable={expensesExist}>
+      <GroupRowStyled actionable={expensesExist}>
         <ListItemHeader
           title={subcategory.name}
           showExpand={!showExpenses && expensesExist}
@@ -104,7 +104,7 @@ export const SubcategoryListItem: FC<Props> = ({
           expenseValue={totalSubcategoryExpenses}
           budgetValue={isCurrentDateMonthAfterOrEqual ? budgetValue : undefined}
         />
-      </SubcategoryListItemStyled>
+      </GroupRowStyled>
       {showExpenses && (
         <>
           {!!subcategorySelected && (

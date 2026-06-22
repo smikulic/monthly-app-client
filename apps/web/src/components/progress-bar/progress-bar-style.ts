@@ -15,18 +15,18 @@ export const ProgressBarStyled = styled("div")<ProgressBartSyledProps>(
     left: "0",
     width: "100%",
     height: "100%",
-    backgroundColor: reverse ? "#fff" : "#41efcd",
+    backgroundColor: reverse ? "#fff" : "#3bceb1",
     overflow: "hidden",
     opacity: "0.1",
     zIndex: "-1",
-  })
+  }),
 );
 
 export const ProgressBarInnerStyled = styled(
-  "div"
+  "div",
 )<ProgressBarInnerStyledProps>(({ width, reverse }) => ({
   width: `${width || 0}%`,
   height: "100%",
-  backgroundColor: reverse ? "#41efcd" : "#ffb6bd",
+  backgroundColor: reverse ? "#3bceb1" : "#ffb6bd",
   transition: "width 0.3s ease-in-out",
 }));

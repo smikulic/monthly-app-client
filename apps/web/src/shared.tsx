@@ -18,12 +18,13 @@ export const MainListItemStyled = styled(ListItemStyled, {
   // Configure which props should be forwarded on DOM
   shouldForwardProp: (prop) => prop !== "active",
 })<MainListItemStyledProps>(({ theme, active }) => ({
-  margin: "10px 12px",
-  padding: "16px 20px",
+  margin: "8px 12px",
+  padding: "14px 18px",
   border: active
     ? `1px solid ${theme.palette.text.secondary}`
     : `1px solid ${theme.palette.text.disabled}`,
-  borderRadius: "16px",
+  borderRadius: "12px",
+  background: active ? "rgba(59, 206, 177, 0.08)" : "transparent",
 
   "&:hover": {
     borderColor: theme.palette.text.secondary,
@@ -38,11 +39,11 @@ export const SubcategoryListItemStyled = styled(ListItemStyled, {
   // Configure which props should be forwarded on DOM
   shouldForwardProp: (prop) => prop !== "actionable",
 })<SubcategoryListItemStyledProps>(({ theme, actionable }) => ({
-  height: "52px",
+  height: "48px",
   margin: "6px 12px",
-  padding: "8px 24px 8px 38px",
+  padding: "8px 20px 8px 36px",
   border: `1px solid ${theme.palette.text.disabled}`,
-  borderRadius: "16px",
+  borderRadius: "12px",
 
   "&:hover": {
     borderColor: actionable
@@ -85,10 +86,10 @@ export const ProminentButtonStyled = styled("div")<ProminentButtonProps>(({
     bgColor = "transparent";
     borderColor = palette.main;
   } else {
-    // filled variant
+    // filled variant: borderless (border matches the fill) for a cleaner look
     textColor = palette.contrastText;
     bgColor = palette.main;
-    borderColor = palette.contrastText;
+    borderColor = palette.main;
   }
 
   return {

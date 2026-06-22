@@ -2,7 +2,10 @@ import { FC, MouseEvent, ReactNode } from "react";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { AnchorActionDropdownElProps } from "../../hooks/useActionDropdown";
 
 interface Props {
@@ -43,9 +46,19 @@ export const IconMenu: FC<Props> = ({
         open={Boolean(anchorActionDropdownEl[itemId])}
         onClose={handleOnCloseMenu}
       >
-        <MenuItem onClick={handleOnEdit}>Edit</MenuItem>
+        <MenuItem onClick={handleOnEdit}>
+          <ListItemIcon>
+            <EditOutlinedIcon fontSize="small" />
+          </ListItemIcon>
+          Edit
+        </MenuItem>
         {extraItems}
-        <MenuItem onClick={handleOnRemove}>Remove</MenuItem>
+        <MenuItem onClick={handleOnRemove} sx={{ color: "error.main" }}>
+          <ListItemIcon>
+            <DeleteOutlineIcon fontSize="small" sx={{ color: "error.main" }} />
+          </ListItemIcon>
+          Remove
+        </MenuItem>
       </Menu>
     </div>
   );

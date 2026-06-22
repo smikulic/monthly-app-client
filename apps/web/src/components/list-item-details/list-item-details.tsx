@@ -1,6 +1,7 @@
 import { FC, useContext } from "react";
 import { ProgressBar } from "../progress-bar/progress-bar";
 import {
+  AmountColumnStyled,
   BudgetAmountStyled,
   ExpenseAmountStyled,
 } from "./list-item-details-style";
@@ -19,15 +20,17 @@ export const ListItemDetails: FC<Props> = ({ expenseValue, budgetValue }) => {
 
   return (
     <>
-      {hasBudget && (
-        <BudgetAmountStyled positive={budgetValue > 0}>
-          {formatAmount(budgetValue, userCurrency)}
-        </BudgetAmountStyled>
-      )}
+      <AmountColumnStyled>
+        <ExpenseAmountStyled prominent={!hasBudget}>
+          {formatAmount(expenseValue, userCurrency)}
+        </ExpenseAmountStyled>
 
-      <ExpenseAmountStyled prominent={!hasBudget}>
-        {formatAmount(expenseValue, userCurrency)}
-      </ExpenseAmountStyled>
+        {hasBudget && (
+          <BudgetAmountStyled positive={budgetValue > 0}>
+            {formatAmount(budgetValue, userCurrency)}
+          </BudgetAmountStyled>
+        )}
+      </AmountColumnStyled>
 
       {isPositiveBudget && (
         <ProgressBar value={expenseValue} maxValue={budgetValue} />

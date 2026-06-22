@@ -36,7 +36,7 @@
   text-decoration: none;
   color: #fff;
   background: #03d17c;
-  border: 1px solid #41efcd;
+  border: 1px solid #3bceb1;
   border-radius: 25px;
   transition: all 0.2s ease-in-out;
   cursor: pointer;
@@ -44,7 +44,7 @@
 .button-start:hover,
 .button-start:active,
 .button-start:focus {
-  color: #41efcd;
+  color: #3bceb1;
   background: white;
   text-decoration: none;
 }
