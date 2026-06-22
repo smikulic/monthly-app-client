@@ -18,10 +18,14 @@ export const HomeListItemLink = ({
   linkTo: string;
   title: string;
   loading: boolean;
-  value: number;
+  // A number is rendered as a formatted amount; a string is shown verbatim
+  // (e.g. the Insights summary line).
+  value: number | string;
   valueColor?: string;
 }) => {
   const userCurrency = useContext(UserContext);
+  const displayValue =
+    typeof value === "number" ? formatAmount(value, userCurrency) : value;
 
   return (
     <Link to={linkTo}>
@@ -47,7 +51,7 @@ export const HomeListItemLink = ({
               <Skeleton animation="wave" width={60} height={24} />
             ) : (
               <Typography variant="body1" color="text.secondary">
-                {formatAmount(value, userCurrency)}
+                {displayValue}
               </Typography>
             )}
           </div>

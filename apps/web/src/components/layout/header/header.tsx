@@ -3,7 +3,12 @@ import { useNavigate, useLocation } from "react-router";
 import { AUTH_TOKEN_USER } from "@/constants";
 import { ListItemIcon, Menu } from "@/components/ui/Menu";
 import { MenuItem } from "@/components/ui/MenuItem";
-import { Logout, AccountCircle, AssessmentOutlined } from "@mui/icons-material";
+import {
+  Logout,
+  AccountCircle,
+  AssessmentOutlined,
+  InsightsOutlined,
+} from "@mui/icons-material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
@@ -91,6 +96,12 @@ export const Header = ({
 
         <MenuDividerStyled />
 
+        <MenuItem onClick={() => navigate("/insights")}>
+          <ListItemIcon>
+            <InsightsOutlined fontSize="small" />
+          </ListItemIcon>
+          Insights
+        </MenuItem>
         <MenuItem onClick={() => navigate("/settings")}>
           <ListItemIcon>
             <AccountCircle fontSize="small" />
