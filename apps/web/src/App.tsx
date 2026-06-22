@@ -9,6 +9,7 @@ import { ResetPasswordPageContainer } from "./pages/reset-password-page/reset-pa
 import { GoogleCallbackPageContainer } from "./pages/google-callback-page/google-callback-page-container";
 import { HomePageContainer } from "./pages/home-page/home-page-container";
 import { ExpensesPageContainer } from "./pages/expenses-page/expenses-page-container";
+import { InsightsPageContainer } from "./pages/insights-page/insights-page-container";
 import { CategoriesPageContainer } from "./pages/categories-page/categories-page-container";
 import { SavingGoalsPageContainer } from "./pages/saving-goals-page/saving-goals-page-container";
 import { InvestmentsPageContainer } from "./pages/investments-page/investments-page-container";
@@ -268,6 +269,16 @@ function App() {
                       <Route
                         path="/budget"
                         element={<CategoriesPageContainer />}
+                      />
+                      <Route
+                        path="/insights"
+                        element={
+                          <InsightsPageContainer
+                            pageDate={pageDate}
+                            onClickNext={onClickNext}
+                            onClickPrevious={onClickPrevious}
+                          />
+                        }
                       />
                       <Route
                         path="/saving-goals"

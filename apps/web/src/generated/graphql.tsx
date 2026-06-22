@@ -21,6 +21,14 @@ export type AuthPayload = {
   user?: Maybe<User>;
 };
 
+export type BudgetStreak = {
+  __typename?: 'BudgetStreak';
+  categoryName: Scalars['String'];
+  monthsUnderBudget: Scalars['Int'];
+  subcategoryId: Scalars['ID'];
+  subcategoryName: Scalars['String'];
+};
+
 export type Category = {
   __typename?: 'Category';
   groupId?: Maybe<Scalars['ID']>;
@@ -36,6 +44,28 @@ export type CategoryExpenseTotal = {
   categoryName: Scalars['String'];
   subcategoryName: Scalars['String'];
   total: Scalars['Int'];
+};
+
+export type CategoryMover = {
+  __typename?: 'CategoryMover';
+  categoryId: Scalars['ID'];
+  categoryName: Scalars['String'];
+  currentTotal: Scalars['Int'];
+  delta: Scalars['Int'];
+  percentChange?: Maybe<Scalars['Float']>;
+  previousTotal: Scalars['Int'];
+};
+
+export type CategoryPace = {
+  __typename?: 'CategoryPace';
+  budget: Scalars['Int'];
+  categoryId: Scalars['ID'];
+  categoryName: Scalars['String'];
+  groupId?: Maybe<Scalars['ID']>;
+  percentUsed: Scalars['Float'];
+  projected: Scalars['Int'];
+  safeToSpend: Scalars['Int'];
+  spent: Scalars['Int'];
 };
 
 export type ChartExpensesPayload = {
@@ -116,6 +146,24 @@ export type ImportResult = {
   investments: Scalars['Int'];
   savingGoals: Scalars['Int'];
   subcategories: Scalars['Int'];
+};
+
+export type InsightsPayload = {
+  __typename?: 'InsightsPayload';
+  biggestMovers: Array<CategoryMover>;
+  currentMonthTotal: Scalars['Int'];
+  daysElapsed: Scalars['Int'];
+  daysInMonth: Scalars['Int'];
+  monthOverMonthDelta: Scalars['Int'];
+  monthOverMonthPercent?: Maybe<Scalars['Float']>;
+  pace: Array<CategoryPace>;
+  previousMonthTotal: Scalars['Int'];
+  streaks: Array<BudgetStreak>;
+  topExpenses: Array<TopExpense>;
+  totalBudget: Scalars['Int'];
+  totalProjected: Scalars['Int'];
+  totalSafeToSpend: Scalars['Int'];
+  totalSpent: Scalars['Int'];
 };
 
 export type Investment = {
@@ -404,6 +452,7 @@ export type Query = {
   generateReport: Scalars['String'];
   googleAuthUrl: GoogleAuthUrl;
   group: Group;
+  insights: InsightsPayload;
   investment?: Maybe<Investment>;
   investments: Array<Investment>;
   me: User;
@@ -456,6 +505,13 @@ export type QueryGroupArgs = {
 };
 
 
+export type QueryInsightsArgs = {
+  date: Scalars['String'];
+  groupId?: InputMaybe<Scalars['ID']>;
+  scope?: InputMaybe<ScopeMode>;
+};
+
+
 export type QueryInvestmentArgs = {
   id: Scalars['ID'];
 };
@@ -502,6 +558,17 @@ export type Subcategory = {
 
 export type SubcategoryExpensesArgs = {
   filter?: InputMaybe<ExpenseFilterInput>;
+};
+
+export type TopExpense = {
+  __typename?: 'TopExpense';
+  amount: Scalars['Int'];
+  categoryName: Scalars['String'];
+  date: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  paidByName?: Maybe<Scalars['String']>;
+  subcategoryName: Scalars['String'];
 };
 
 export type UpdateInvestmentInput = {
@@ -666,6 +733,15 @@ export type GoogleLoginMutationVariables = Exact<{
 
 
 export type GoogleLoginMutation = { __typename?: 'Mutation', googleLogin: { __typename?: 'AuthPayload', token?: string | null, user?: { __typename?: 'User', id: string, email: string, name?: string | null, picture?: string | null, provider?: string | null } | null } };
+
+export type InsightsQueryVariables = Exact<{
+  date: Scalars['String'];
+  scope?: InputMaybe<ScopeMode>;
+  groupId?: InputMaybe<Scalars['ID']>;
+}>;
+
+
+export type InsightsQuery = { __typename?: 'Query', insights: { __typename?: 'InsightsPayload', daysElapsed: number, daysInMonth: number, totalBudget: number, totalSpent: number, totalProjected: number, totalSafeToSpend: number, currentMonthTotal: number, previousMonthTotal: number, monthOverMonthDelta: number, monthOverMonthPercent?: number | null, pace: Array<{ __typename?: 'CategoryPace', categoryId: string, categoryName: string, budget: number, spent: number, projected: number, safeToSpend: number, percentUsed: number }>, biggestMovers: Array<{ __typename?: 'CategoryMover', categoryId: string, categoryName: string, currentTotal: number, previousTotal: number, delta: number, percentChange?: number | null }>, topExpenses: Array<{ __typename?: 'TopExpense', id: string, amount: number, description?: string | null, date: string, subcategoryName: string, categoryName: string, paidByName?: string | null }>, streaks: Array<{ __typename?: 'BudgetStreak', subcategoryId: string, subcategoryName: string, categoryName: string, monthsUnderBudget: number }> } };
 
 export type InvestmentsListQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1498,6 +1574,84 @@ export function useGoogleLoginMutation(baseOptions?: Apollo.MutationHookOptions<
 export type GoogleLoginMutationHookResult = ReturnType<typeof useGoogleLoginMutation>;
 export type GoogleLoginMutationResult = Apollo.MutationResult<GoogleLoginMutation>;
 export type GoogleLoginMutationOptions = Apollo.BaseMutationOptions<GoogleLoginMutation, GoogleLoginMutationVariables>;
+export const InsightsDocument = gql`
+    query Insights($date: String!, $scope: ScopeMode, $groupId: ID) {
+  insights(date: $date, scope: $scope, groupId: $groupId) {
+    daysElapsed
+    daysInMonth
+    totalBudget
+    totalSpent
+    totalProjected
+    totalSafeToSpend
+    currentMonthTotal
+    previousMonthTotal
+    monthOverMonthDelta
+    monthOverMonthPercent
+    pace {
+      categoryId
+      categoryName
+      budget
+      spent
+      projected
+      safeToSpend
+      percentUsed
+    }
+    biggestMovers {
+      categoryId
+      categoryName
+      currentTotal
+      previousTotal
+      delta
+      percentChange
+    }
+    topExpenses {
+      id
+      amount
+      description
+      date
+      subcategoryName
+      categoryName
+      paidByName
+    }
+    streaks {
+      subcategoryId
+      subcategoryName
+      categoryName
+      monthsUnderBudget
+    }
+  }
+}
+    `;
+
+/**
+ * __useInsightsQuery__
+ *
+ * To run a query within a React component, call `useInsightsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useInsightsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useInsightsQuery({
+ *   variables: {
+ *      date: // value for 'date'
+ *      scope: // value for 'scope'
+ *      groupId: // value for 'groupId'
+ *   },
+ * });
+ */
+export function useInsightsQuery(baseOptions: Apollo.QueryHookOptions<InsightsQuery, InsightsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<InsightsQuery, InsightsQueryVariables>(InsightsDocument, options);
+      }
+export function useInsightsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<InsightsQuery, InsightsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<InsightsQuery, InsightsQueryVariables>(InsightsDocument, options);
+        }
+export type InsightsQueryHookResult = ReturnType<typeof useInsightsQuery>;
+export type InsightsLazyQueryHookResult = ReturnType<typeof useInsightsLazyQuery>;
+export type InsightsQueryResult = Apollo.QueryResult<InsightsQuery, InsightsQueryVariables>;
 export const InvestmentsListDocument = gql`
     query InvestmentsList {
   investments {
