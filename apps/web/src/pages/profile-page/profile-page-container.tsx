@@ -31,7 +31,6 @@ import {
   ButtonGroupStyled,
 } from "@/shared";
 import { CURRENCY_OPTIONS } from "@/constants/forms";
-import { GroupsManager } from "@/features/groups/groups-manager";
 
 export const ProfilePageContainer = ({
   userData,
@@ -166,8 +165,6 @@ export const ProfilePageContainer = ({
           </Dialog>
         </PageWrapperStyled>
       </Container>
-
-      <GroupsManager currentUserId={userData.id} />
     </>
   );
 };

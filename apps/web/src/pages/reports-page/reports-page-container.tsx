@@ -83,7 +83,6 @@ export const ReportsPageContainer = ({ userData }: { userData: User }) => {
   }
 
   const [loadReport, { loading }] = useLazyQuery(GENERATE_REPORT, {
-    variables: { year },
     fetchPolicy: "network-only",
     onError: (err) => toast.error(err.message),
     onCompleted: ({ generateReport }) => {
@@ -96,7 +95,6 @@ export const ReportsPageContainer = ({ userData }: { userData: User }) => {
   });
 
   const [loadCsv, { loading: loadingCsv }] = useLazyQuery(GENERATE_CSV_REPORT, {
-    variables: { year },
     fetchPolicy: "network-only",
     onError: (err) => toast.error(err.message),
     onCompleted: ({ generateCsvReport }) => {
@@ -200,14 +198,18 @@ export const ReportsPageContainer = ({ userData }: { userData: User }) => {
 
         <ButtonGroupStyled>
           <ProminentButtonStyled
-            onClick={() => loadReport()}
+            onClick={() => loadReport({ variables: { year } })}
             textCenter
             outline
           >
             {loading ? "Generating…" : "Download PDF"}
           </ProminentButtonStyled>
 
-          <ProminentButtonStyled onClick={() => loadCsv()} textCenter outline>
+          <ProminentButtonStyled
+            onClick={() => loadCsv({ variables: { year } })}
+            textCenter
+            outline
+          >
             {loadingCsv ? "Generating…" : "Download CSV"}
           </ProminentButtonStyled>
         </ButtonGroupStyled>

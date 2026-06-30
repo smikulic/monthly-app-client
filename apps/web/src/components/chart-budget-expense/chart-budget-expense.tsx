@@ -66,7 +66,7 @@ export const ChartBudgetExpense = ({
 
     // Create absolutely safe data arrays
     const safeExpensesData = chartExpensesData.map((val) =>
-      typeof val === "number" && !isNaN(val) ? val : 0
+      typeof val === "number" && !isNaN(val) ? val : 0,
     );
     const safeBudgetAmount =
       typeof totalBudgetAmount === "number" && !isNaN(totalBudgetAmount)
@@ -83,7 +83,7 @@ export const ChartBudgetExpense = ({
         Array.isArray(safeExpensesData) &&
         safeExpensesData.length === 12 &&
         safeExpensesData.every(
-          (val) => typeof val === "number" && !isNaN(val) && isFinite(val)
+          (val) => typeof val === "number" && !isNaN(val) && isFinite(val),
         );
 
       const isValidBudgetAmount =
@@ -93,18 +93,17 @@ export const ChartBudgetExpense = ({
 
       const isValidMonthsData = Array.isArray(months) && months.length === 12;
 
-      console.log("Chart validation:", {
-        isValidExpensesData,
-        isValidBudgetAmount,
-        isValidMonthsData,
-        safeExpensesData,
-        safeBudgetAmount,
-      });
+      // console.log("Chart validation:", {
+      //   isValidExpensesData,
+      //   isValidBudgetAmount,
+      //   isValidMonthsData,
+      //   safeExpensesData,
+      //   safeBudgetAmount,
+      // });
 
       if (isValidExpensesData && isValidBudgetAmount && isValidMonthsData) {
         // Add small delay to ensure all data is stable
         const timer = setTimeout(() => {
-          console.log("Setting chart ready to true");
           setChartReady(true);
         }, 200);
         return () => clearTimeout(timer);
@@ -183,7 +182,7 @@ export const ChartBudgetExpense = ({
           },
         ],
       }),
-      [safeExpensesData, safeBudgetAmount, userCurrency, theme]
+      [safeExpensesData, safeBudgetAmount, userCurrency, theme],
     );
 
     return (

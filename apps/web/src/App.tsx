@@ -23,6 +23,7 @@ import { TermsPageContainer } from "./pages/terms-page/terms-page-container";
 import { AboutPageContainer } from "./pages/about-page/about-page-container";
 import { ProfilePageContainer } from "./pages/profile-page/profile-page-container";
 import { ReportsPageContainer } from "./pages/reports-page/reports-page-container";
+import { GroupsPageContainer } from "./pages/groups-page/groups-page-container";
 import { AcceptInvitePageContainer } from "./pages/accept-invite-page/accept-invite-page-container";
 import { PendingInviteResume } from "./pages/accept-invite-page/pending-invite-resume";
 import { ScopeProvider } from "./features/groups/scope-context";
@@ -301,6 +302,12 @@ function App() {
                         path="/reports"
                         element={
                           <ReportsPageContainer userData={userData?.me} />
+                        }
+                      />
+                      <Route
+                        path="/groups"
+                        element={
+                          <GroupsPageContainer userData={userData?.me} />
                         }
                       />
                     </Route>

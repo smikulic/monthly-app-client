@@ -7,7 +7,7 @@ import {
   Logout,
   AccountCircle,
   AssessmentOutlined,
-  InsightsOutlined,
+  GroupOutlined,
 } from "@mui/icons-material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -96,11 +96,11 @@ export const Header = ({
 
         <MenuDividerStyled />
 
-        <MenuItem onClick={() => navigate("/insights")}>
+        <MenuItem onClick={() => navigate("/groups")}>
           <ListItemIcon>
-            <InsightsOutlined fontSize="small" />
+            <GroupOutlined fontSize="small" />
           </ListItemIcon>
-          Insights
+          Groups
         </MenuItem>
         <MenuItem onClick={() => navigate("/settings")}>
           <ListItemIcon>
