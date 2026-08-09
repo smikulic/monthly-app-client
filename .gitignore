@@ -34,3 +34,6 @@ test-results/
 playwright-report/
 blob-report/
 playwright/.cache/
+
+# Private operational security log - never commit
+SECURITY-AUDIT.local.md
