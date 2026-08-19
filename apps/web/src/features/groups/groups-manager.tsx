@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { useQuery, useMutation } from "@apollo/client";
 import { Container } from "@/components/ui/Container";
 import { Typography } from "@/components/ui/Typography";
 import {
@@ -11,14 +10,16 @@ import {
   ButtonGroupStyled,
 } from "@/shared";
 import {
-  MY_GROUPS,
-  CREATE_GROUP,
-  INVITE_TO_GROUP,
-  REVOKE_GROUP_INVITE,
-  REMOVE_GROUP_MEMBER,
-  LEAVE_GROUP,
-  DELETE_GROUP,
-} from "./groups-queries";
+  GroupRole,
+  useMyGroupsQuery,
+  useCreateGroupMutation,
+  useInviteToGroupMutation,
+  useRevokeGroupInviteMutation,
+  useRemoveGroupMemberMutation,
+  useLeaveGroupMutation,
+  useDeleteGroupMutation,
+  type MyGroupsQuery,
+} from "@/generated/graphql";
 import {
   GroupCardStyled,
   GroupNameStyled,
@@ -28,20 +29,15 @@ import {
   RowActionStyled,
 } from "./groups-manager-style";
 
-type Member = {
-  id: string;
-  role: string;
-  user: { id: string; name?: string | null; email: string };
-};
-type Invite = { id: string; email: string; status: string };
-type Group = { id: string; name: string; members: Member[]; invites: Invite[] };
+// Derived from the schema rather than hand-mirrored, so it cannot drift.
+type Group = MyGroupsQuery["myGroups"][number];
 
 export const GroupsManager = ({
   currentUserId,
 }: {
   currentUserId?: string;
 }) => {
-  const { data, loading, refetch } = useQuery(MY_GROUPS, {
+  const { data, loading, refetch } = useMyGroupsQuery({
     fetchPolicy: "cache-and-network",
   });
   const [newGroupName, setNewGroupName] = useState("");
@@ -50,7 +46,7 @@ export const GroupsManager = ({
   const onError = (e: any) => toast.error(e.message);
   const refresh = () => refetch();
 
-  const [createGroup, { loading: creating }] = useMutation(CREATE_GROUP, {
+  const [createGroup, { loading: creating }] = useCreateGroupMutation({
     onError,
     onCompleted: () => {
       setNewGroupName("");
@@ -58,29 +54,29 @@ export const GroupsManager = ({
       refresh();
     },
   });
-  const [inviteToGroup] = useMutation(INVITE_TO_GROUP, {
+  const [inviteToGroup] = useInviteToGroupMutation({
     onError,
     onCompleted: () => {
       toast.success("Invitation sent");
       refresh();
     },
   });
-  const [revokeInvite] = useMutation(REVOKE_GROUP_INVITE, {
+  const [revokeInvite] = useRevokeGroupInviteMutation({
     onError,
     onCompleted: refresh,
   });
-  const [removeMember] = useMutation(REMOVE_GROUP_MEMBER, {
+  const [removeMember] = useRemoveGroupMemberMutation({
     onError,
     onCompleted: refresh,
   });
-  const [leaveGroup] = useMutation(LEAVE_GROUP, {
+  const [leaveGroup] = useLeaveGroupMutation({
     onError,
     onCompleted: () => {
       toast.success("Left group");
       refresh();
     },
   });
-  const [deleteGroup] = useMutation(DELETE_GROUP, {
+  const [deleteGroup] = useDeleteGroupMutation({
     onError,
     onCompleted: () => {
       toast.success("Group deleted");
@@ -94,7 +90,7 @@ export const GroupsManager = ({
     g.members.find((m) => m.user.id === currentUserId)?.role;
   const canManage = (g: Group) => {
     const role = myRole(g);
-    return role === "OWNER" || role === "ADMIN";
+    return role === GroupRole.Owner || role === GroupRole.Admin;
   };
 
   const handleInvite = (groupId: string) => {
@@ -212,7 +208,7 @@ export const GroupsManager = ({
               >
                 Leave group
               </ProminentButtonStyled>
-              {myRole(g) === "OWNER" && (
+              {myRole(g) === GroupRole.Owner && (
                 <ProminentButtonStyled
                   textCenter
                   outline

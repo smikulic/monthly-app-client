@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useApolloClient, useQuery } from "@apollo/client";
+import { useApolloClient } from "@apollo/client";
 import { toast } from "react-toastify";
-import { Subcategory, useCreateExpenseMutation } from "@/generated/graphql";
+import {
+  Subcategory,
+  useCreateExpenseMutation,
+  useMeIdQuery,
+} from "@/generated/graphql";
 import { FORM_ACTIONS, TOAST_MESSAGES, ENTITY_NAMES } from "@/constants/forms";
 import { analytics } from "@/utils/mixpanel";
 import { SelectStyled, TextFieldStyled } from "@/shared";
@@ -10,7 +14,6 @@ import { FormDialog } from "@/components/form-dialog/form-dialog";
 import { DatePickerStyled } from "@/components/ui/DatePickerStyled";
 import { MenuItem } from "@/components/ui/MenuItem";
 import { PaidBySelect } from "@/features/groups/paid-by-select";
-import { ME } from "@/features/groups/groups-queries";
 import { SubcategoryDecoratedWithExpenses } from "../expenses-list/expenses-list";
 import dayjs from "dayjs";
 
@@ -30,8 +33,8 @@ export const CreateExpenseForm: React.FC<Props> = ({
   closeForm,
 }) => {
   const client = useApolloClient();
-  const { data: meData } = useQuery(ME, { fetchPolicy: "cache-first" });
-  const myId: string | undefined = meData?.me?.id;
+  const { data: meData } = useMeIdQuery({ fetchPolicy: "cache-first" });
+  const myId = meData?.me?.id;
 
   const [formInvalid, setFormInvalid] = useState(true);
   const [expenseAmount, setExpenseAmount] = useState("");

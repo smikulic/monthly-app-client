@@ -1,20 +1,16 @@
-import { useQuery } from "@apollo/client";
-import { ME, MY_GROUPS } from "./groups-queries";
-
-type Member = { role: string; user: { id: string } };
-type Group = { id: string; members: Member[] };
+import { GroupRole, useMeIdQuery, useMyGroupsQuery } from "@/generated/graphql";
 
 // Mirrors the server's `canManage`: you can manage an item you created/entered,
 // or any item in a group where you're an OWNER/ADMIN. Returns a predicate
 // `(ownerUserId, categoryGroupId) => boolean` for gating edit/remove in the UI.
 export const useCanManage = () => {
-  const { data: meData } = useQuery(ME, { fetchPolicy: "cache-first" });
-  const { data: groupsData } = useQuery(MY_GROUPS, {
+  const { data: meData } = useMeIdQuery({ fetchPolicy: "cache-first" });
+  const { data: groupsData } = useMyGroupsQuery({
     fetchPolicy: "cache-first",
   });
 
-  const myId: string | undefined = meData?.me?.id;
-  const groups: Group[] = groupsData?.myGroups ?? [];
+  const myId = meData?.me?.id;
+  const groups = groupsData?.myGroups ?? [];
 
   return (
     ownerUserId?: string | null,
@@ -25,7 +21,7 @@ export const useCanManage = () => {
     if (categoryGroupId) {
       const group = groups.find((g) => g.id === categoryGroupId);
       const me = group?.members.find((m) => m.user.id === myId);
-      return me?.role === "OWNER" || me?.role === "ADMIN";
+      return me?.role === GroupRole.Owner || me?.role === GroupRole.Admin;
     }
     return false;
   };
