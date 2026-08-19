@@ -1,17 +1,14 @@
-import { useQuery, useMutation } from "@apollo/client";
 import { toast } from "react-toastify";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import GroupAddOutlinedIcon from "@mui/icons-material/GroupAddOutlined";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { MenuItem } from "@/components/ui/MenuItem";
 import {
-  ME,
-  MY_GROUPS,
-  SHARE_CATEGORY,
-  UNSHARE_CATEGORY,
-} from "./groups-queries";
-
-type Group = { id: string; name: string };
+  useMeIdQuery,
+  useMyGroupsQuery,
+  useShareCategoryMutation,
+  useUnshareCategoryMutation,
+} from "@/generated/graphql";
 
 // Renders share/unshare entries for a category's actions (⋮) menu.
 // Self-contained: queries groups, mutates, and refetches the categories list by
@@ -27,17 +24,17 @@ export const CategoryShareMenuItems = ({
   creatorId?: string | null;
   onDone?: () => void;
 }) => {
-  const { data: meData } = useQuery(ME, { fetchPolicy: "cache-first" });
-  const { data } = useQuery(MY_GROUPS, { fetchPolicy: "cache-first" });
-  const myId: string | undefined = meData?.me?.id;
-  const groups: Group[] = data?.myGroups ?? [];
+  const { data: meData } = useMeIdQuery({ fetchPolicy: "cache-first" });
+  const { data } = useMyGroupsQuery({ fetchPolicy: "cache-first" });
+  const myId = meData?.me?.id;
+  const groups = data?.myGroups ?? [];
 
   const mutationOpts = {
     refetchQueries: ["CategoriesList"],
     onError: (e: { message: string }) => toast.error(e.message),
   };
-  const [shareCategory] = useMutation(SHARE_CATEGORY, mutationOpts);
-  const [unshareCategory] = useMutation(UNSHARE_CATEGORY, mutationOpts);
+  const [shareCategory] = useShareCategoryMutation(mutationOpts);
+  const [unshareCategory] = useUnshareCategoryMutation(mutationOpts);
 
   // Sharing/unsharing is creator-only (matches the server), and needs a group.
   if (groups.length === 0 || !creatorId || creatorId !== myId) return null;

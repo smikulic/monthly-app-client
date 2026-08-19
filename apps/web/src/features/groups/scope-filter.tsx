@@ -1,10 +1,9 @@
 import { useState, MouseEvent } from "react";
-import { useQuery } from "@apollo/client";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CheckIcon from "@mui/icons-material/Check";
 import { Menu, ListItemIcon } from "@/components/ui/Menu";
 import { MenuItem } from "@/components/ui/MenuItem";
-import { MY_GROUPS } from "./groups-queries";
+import { useMyGroupsQuery } from "@/generated/graphql";
 import { useScope } from "./scope-context";
 import {
   ScopeTriggerStyled,
@@ -16,8 +15,8 @@ import {
 // group. Hidden entirely when the user belongs to no groups.
 export const ScopeFilter = () => {
   const { mode, groupId, setScope } = useScope();
-  const { data } = useQuery(MY_GROUPS, { fetchPolicy: "cache-and-network" });
-  const groups: { id: string; name: string }[] = data?.myGroups ?? [];
+  const { data } = useMyGroupsQuery({ fetchPolicy: "cache-and-network" });
+  const groups = data?.myGroups ?? [];
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);

@@ -601,6 +601,82 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: string, email: string, currency?: string | null, weeklyReminder?: boolean | null, name?: string | null, picture?: string | null, provider?: string | null } };
 
+export type MeIdQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MeIdQuery = { __typename?: 'Query', me: { __typename?: 'User', id: string } };
+
+export type MyGroupsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MyGroupsQuery = { __typename?: 'Query', myGroups: Array<{ __typename?: 'Group', id: string, name: string, members: Array<{ __typename?: 'GroupMember', id: string, role: GroupRole, user: { __typename?: 'User', id: string, name?: string | null, email: string } }>, invites: Array<{ __typename?: 'GroupInvite', id: string, email: string, status: InviteStatus }> }> };
+
+export type CreateGroupMutationVariables = Exact<{
+  name: Scalars['String'];
+}>;
+
+
+export type CreateGroupMutation = { __typename?: 'Mutation', createGroup: { __typename?: 'Group', id: string, name: string } };
+
+export type InviteToGroupMutationVariables = Exact<{
+  groupId: Scalars['ID'];
+  email: Scalars['String'];
+}>;
+
+
+export type InviteToGroupMutation = { __typename?: 'Mutation', inviteToGroup: { __typename?: 'GroupInvite', id: string, email: string, status: InviteStatus } };
+
+export type AcceptGroupInviteMutationVariables = Exact<{
+  token: Scalars['String'];
+}>;
+
+
+export type AcceptGroupInviteMutation = { __typename?: 'Mutation', acceptGroupInvite: { __typename?: 'Group', id: string, name: string } };
+
+export type RevokeGroupInviteMutationVariables = Exact<{
+  inviteId: Scalars['ID'];
+}>;
+
+
+export type RevokeGroupInviteMutation = { __typename?: 'Mutation', revokeGroupInvite: boolean };
+
+export type RemoveGroupMemberMutationVariables = Exact<{
+  groupId: Scalars['ID'];
+  userId: Scalars['ID'];
+}>;
+
+
+export type RemoveGroupMemberMutation = { __typename?: 'Mutation', removeGroupMember: boolean };
+
+export type LeaveGroupMutationVariables = Exact<{
+  groupId: Scalars['ID'];
+}>;
+
+
+export type LeaveGroupMutation = { __typename?: 'Mutation', leaveGroup: boolean };
+
+export type DeleteGroupMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type DeleteGroupMutation = { __typename?: 'Mutation', deleteGroup: boolean };
+
+export type ShareCategoryMutationVariables = Exact<{
+  categoryId: Scalars['ID'];
+  groupId: Scalars['ID'];
+}>;
+
+
+export type ShareCategoryMutation = { __typename?: 'Mutation', shareCategory: { __typename?: 'Category', id: string, groupId?: string | null } };
+
+export type UnshareCategoryMutationVariables = Exact<{
+  categoryId: Scalars['ID'];
+}>;
+
+
+export type UnshareCategoryMutation = { __typename?: 'Mutation', unshareCategory: { __typename?: 'Category', id: string, groupId?: string | null } };
+
 export type CategoriesListQueryVariables = Exact<{
   scope?: InputMaybe<ScopeMode>;
   groupId?: InputMaybe<Scalars['ID']>;
@@ -920,6 +996,387 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const MeIdDocument = gql`
+    query MeId {
+  me {
+    id
+  }
+}
+    `;
+
+/**
+ * __useMeIdQuery__
+ *
+ * To run a query within a React component, call `useMeIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMeIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMeIdQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMeIdQuery(baseOptions?: Apollo.QueryHookOptions<MeIdQuery, MeIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MeIdQuery, MeIdQueryVariables>(MeIdDocument, options);
+      }
+export function useMeIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeIdQuery, MeIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MeIdQuery, MeIdQueryVariables>(MeIdDocument, options);
+        }
+export type MeIdQueryHookResult = ReturnType<typeof useMeIdQuery>;
+export type MeIdLazyQueryHookResult = ReturnType<typeof useMeIdLazyQuery>;
+export type MeIdQueryResult = Apollo.QueryResult<MeIdQuery, MeIdQueryVariables>;
+export const MyGroupsDocument = gql`
+    query MyGroups {
+  myGroups {
+    id
+    name
+    members {
+      id
+      role
+      user {
+        id
+        name
+        email
+      }
+    }
+    invites {
+      id
+      email
+      status
+    }
+  }
+}
+    `;
+
+/**
+ * __useMyGroupsQuery__
+ *
+ * To run a query within a React component, call `useMyGroupsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyGroupsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyGroupsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMyGroupsQuery(baseOptions?: Apollo.QueryHookOptions<MyGroupsQuery, MyGroupsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MyGroupsQuery, MyGroupsQueryVariables>(MyGroupsDocument, options);
+      }
+export function useMyGroupsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyGroupsQuery, MyGroupsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MyGroupsQuery, MyGroupsQueryVariables>(MyGroupsDocument, options);
+        }
+export type MyGroupsQueryHookResult = ReturnType<typeof useMyGroupsQuery>;
+export type MyGroupsLazyQueryHookResult = ReturnType<typeof useMyGroupsLazyQuery>;
+export type MyGroupsQueryResult = Apollo.QueryResult<MyGroupsQuery, MyGroupsQueryVariables>;
+export const CreateGroupDocument = gql`
+    mutation CreateGroup($name: String!) {
+  createGroup(name: $name) {
+    id
+    name
+  }
+}
+    `;
+export type CreateGroupMutationFn = Apollo.MutationFunction<CreateGroupMutation, CreateGroupMutationVariables>;
+
+/**
+ * __useCreateGroupMutation__
+ *
+ * To run a mutation, you first call `useCreateGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateGroupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createGroupMutation, { data, loading, error }] = useCreateGroupMutation({
+ *   variables: {
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useCreateGroupMutation(baseOptions?: Apollo.MutationHookOptions<CreateGroupMutation, CreateGroupMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateGroupMutation, CreateGroupMutationVariables>(CreateGroupDocument, options);
+      }
+export type CreateGroupMutationHookResult = ReturnType<typeof useCreateGroupMutation>;
+export type CreateGroupMutationResult = Apollo.MutationResult<CreateGroupMutation>;
+export type CreateGroupMutationOptions = Apollo.BaseMutationOptions<CreateGroupMutation, CreateGroupMutationVariables>;
+export const InviteToGroupDocument = gql`
+    mutation InviteToGroup($groupId: ID!, $email: String!) {
+  inviteToGroup(groupId: $groupId, email: $email) {
+    id
+    email
+    status
+  }
+}
+    `;
+export type InviteToGroupMutationFn = Apollo.MutationFunction<InviteToGroupMutation, InviteToGroupMutationVariables>;
+
+/**
+ * __useInviteToGroupMutation__
+ *
+ * To run a mutation, you first call `useInviteToGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useInviteToGroupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [inviteToGroupMutation, { data, loading, error }] = useInviteToGroupMutation({
+ *   variables: {
+ *      groupId: // value for 'groupId'
+ *      email: // value for 'email'
+ *   },
+ * });
+ */
+export function useInviteToGroupMutation(baseOptions?: Apollo.MutationHookOptions<InviteToGroupMutation, InviteToGroupMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<InviteToGroupMutation, InviteToGroupMutationVariables>(InviteToGroupDocument, options);
+      }
+export type InviteToGroupMutationHookResult = ReturnType<typeof useInviteToGroupMutation>;
+export type InviteToGroupMutationResult = Apollo.MutationResult<InviteToGroupMutation>;
+export type InviteToGroupMutationOptions = Apollo.BaseMutationOptions<InviteToGroupMutation, InviteToGroupMutationVariables>;
+export const AcceptGroupInviteDocument = gql`
+    mutation AcceptGroupInvite($token: String!) {
+  acceptGroupInvite(token: $token) {
+    id
+    name
+  }
+}
+    `;
+export type AcceptGroupInviteMutationFn = Apollo.MutationFunction<AcceptGroupInviteMutation, AcceptGroupInviteMutationVariables>;
+
+/**
+ * __useAcceptGroupInviteMutation__
+ *
+ * To run a mutation, you first call `useAcceptGroupInviteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAcceptGroupInviteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [acceptGroupInviteMutation, { data, loading, error }] = useAcceptGroupInviteMutation({
+ *   variables: {
+ *      token: // value for 'token'
+ *   },
+ * });
+ */
+export function useAcceptGroupInviteMutation(baseOptions?: Apollo.MutationHookOptions<AcceptGroupInviteMutation, AcceptGroupInviteMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AcceptGroupInviteMutation, AcceptGroupInviteMutationVariables>(AcceptGroupInviteDocument, options);
+      }
+export type AcceptGroupInviteMutationHookResult = ReturnType<typeof useAcceptGroupInviteMutation>;
+export type AcceptGroupInviteMutationResult = Apollo.MutationResult<AcceptGroupInviteMutation>;
+export type AcceptGroupInviteMutationOptions = Apollo.BaseMutationOptions<AcceptGroupInviteMutation, AcceptGroupInviteMutationVariables>;
+export const RevokeGroupInviteDocument = gql`
+    mutation RevokeGroupInvite($inviteId: ID!) {
+  revokeGroupInvite(inviteId: $inviteId)
+}
+    `;
+export type RevokeGroupInviteMutationFn = Apollo.MutationFunction<RevokeGroupInviteMutation, RevokeGroupInviteMutationVariables>;
+
+/**
+ * __useRevokeGroupInviteMutation__
+ *
+ * To run a mutation, you first call `useRevokeGroupInviteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRevokeGroupInviteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [revokeGroupInviteMutation, { data, loading, error }] = useRevokeGroupInviteMutation({
+ *   variables: {
+ *      inviteId: // value for 'inviteId'
+ *   },
+ * });
+ */
+export function useRevokeGroupInviteMutation(baseOptions?: Apollo.MutationHookOptions<RevokeGroupInviteMutation, RevokeGroupInviteMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RevokeGroupInviteMutation, RevokeGroupInviteMutationVariables>(RevokeGroupInviteDocument, options);
+      }
+export type RevokeGroupInviteMutationHookResult = ReturnType<typeof useRevokeGroupInviteMutation>;
+export type RevokeGroupInviteMutationResult = Apollo.MutationResult<RevokeGroupInviteMutation>;
+export type RevokeGroupInviteMutationOptions = Apollo.BaseMutationOptions<RevokeGroupInviteMutation, RevokeGroupInviteMutationVariables>;
+export const RemoveGroupMemberDocument = gql`
+    mutation RemoveGroupMember($groupId: ID!, $userId: ID!) {
+  removeGroupMember(groupId: $groupId, userId: $userId)
+}
+    `;
+export type RemoveGroupMemberMutationFn = Apollo.MutationFunction<RemoveGroupMemberMutation, RemoveGroupMemberMutationVariables>;
+
+/**
+ * __useRemoveGroupMemberMutation__
+ *
+ * To run a mutation, you first call `useRemoveGroupMemberMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveGroupMemberMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeGroupMemberMutation, { data, loading, error }] = useRemoveGroupMemberMutation({
+ *   variables: {
+ *      groupId: // value for 'groupId'
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useRemoveGroupMemberMutation(baseOptions?: Apollo.MutationHookOptions<RemoveGroupMemberMutation, RemoveGroupMemberMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RemoveGroupMemberMutation, RemoveGroupMemberMutationVariables>(RemoveGroupMemberDocument, options);
+      }
+export type RemoveGroupMemberMutationHookResult = ReturnType<typeof useRemoveGroupMemberMutation>;
+export type RemoveGroupMemberMutationResult = Apollo.MutationResult<RemoveGroupMemberMutation>;
+export type RemoveGroupMemberMutationOptions = Apollo.BaseMutationOptions<RemoveGroupMemberMutation, RemoveGroupMemberMutationVariables>;
+export const LeaveGroupDocument = gql`
+    mutation LeaveGroup($groupId: ID!) {
+  leaveGroup(groupId: $groupId)
+}
+    `;
+export type LeaveGroupMutationFn = Apollo.MutationFunction<LeaveGroupMutation, LeaveGroupMutationVariables>;
+
+/**
+ * __useLeaveGroupMutation__
+ *
+ * To run a mutation, you first call `useLeaveGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLeaveGroupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [leaveGroupMutation, { data, loading, error }] = useLeaveGroupMutation({
+ *   variables: {
+ *      groupId: // value for 'groupId'
+ *   },
+ * });
+ */
+export function useLeaveGroupMutation(baseOptions?: Apollo.MutationHookOptions<LeaveGroupMutation, LeaveGroupMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LeaveGroupMutation, LeaveGroupMutationVariables>(LeaveGroupDocument, options);
+      }
+export type LeaveGroupMutationHookResult = ReturnType<typeof useLeaveGroupMutation>;
+export type LeaveGroupMutationResult = Apollo.MutationResult<LeaveGroupMutation>;
+export type LeaveGroupMutationOptions = Apollo.BaseMutationOptions<LeaveGroupMutation, LeaveGroupMutationVariables>;
+export const DeleteGroupDocument = gql`
+    mutation DeleteGroup($id: ID!) {
+  deleteGroup(id: $id)
+}
+    `;
+export type DeleteGroupMutationFn = Apollo.MutationFunction<DeleteGroupMutation, DeleteGroupMutationVariables>;
+
+/**
+ * __useDeleteGroupMutation__
+ *
+ * To run a mutation, you first call `useDeleteGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteGroupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteGroupMutation, { data, loading, error }] = useDeleteGroupMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteGroupMutation(baseOptions?: Apollo.MutationHookOptions<DeleteGroupMutation, DeleteGroupMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteGroupMutation, DeleteGroupMutationVariables>(DeleteGroupDocument, options);
+      }
+export type DeleteGroupMutationHookResult = ReturnType<typeof useDeleteGroupMutation>;
+export type DeleteGroupMutationResult = Apollo.MutationResult<DeleteGroupMutation>;
+export type DeleteGroupMutationOptions = Apollo.BaseMutationOptions<DeleteGroupMutation, DeleteGroupMutationVariables>;
+export const ShareCategoryDocument = gql`
+    mutation ShareCategory($categoryId: ID!, $groupId: ID!) {
+  shareCategory(categoryId: $categoryId, groupId: $groupId) {
+    id
+    groupId
+  }
+}
+    `;
+export type ShareCategoryMutationFn = Apollo.MutationFunction<ShareCategoryMutation, ShareCategoryMutationVariables>;
+
+/**
+ * __useShareCategoryMutation__
+ *
+ * To run a mutation, you first call `useShareCategoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useShareCategoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [shareCategoryMutation, { data, loading, error }] = useShareCategoryMutation({
+ *   variables: {
+ *      categoryId: // value for 'categoryId'
+ *      groupId: // value for 'groupId'
+ *   },
+ * });
+ */
+export function useShareCategoryMutation(baseOptions?: Apollo.MutationHookOptions<ShareCategoryMutation, ShareCategoryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ShareCategoryMutation, ShareCategoryMutationVariables>(ShareCategoryDocument, options);
+      }
+export type ShareCategoryMutationHookResult = ReturnType<typeof useShareCategoryMutation>;
+export type ShareCategoryMutationResult = Apollo.MutationResult<ShareCategoryMutation>;
+export type ShareCategoryMutationOptions = Apollo.BaseMutationOptions<ShareCategoryMutation, ShareCategoryMutationVariables>;
+export const UnshareCategoryDocument = gql`
+    mutation UnshareCategory($categoryId: ID!) {
+  unshareCategory(categoryId: $categoryId) {
+    id
+    groupId
+  }
+}
+    `;
+export type UnshareCategoryMutationFn = Apollo.MutationFunction<UnshareCategoryMutation, UnshareCategoryMutationVariables>;
+
+/**
+ * __useUnshareCategoryMutation__
+ *
+ * To run a mutation, you first call `useUnshareCategoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUnshareCategoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [unshareCategoryMutation, { data, loading, error }] = useUnshareCategoryMutation({
+ *   variables: {
+ *      categoryId: // value for 'categoryId'
+ *   },
+ * });
+ */
+export function useUnshareCategoryMutation(baseOptions?: Apollo.MutationHookOptions<UnshareCategoryMutation, UnshareCategoryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UnshareCategoryMutation, UnshareCategoryMutationVariables>(UnshareCategoryDocument, options);
+      }
+export type UnshareCategoryMutationHookResult = ReturnType<typeof useUnshareCategoryMutation>;
+export type UnshareCategoryMutationResult = Apollo.MutationResult<UnshareCategoryMutation>;
+export type UnshareCategoryMutationOptions = Apollo.BaseMutationOptions<UnshareCategoryMutation, UnshareCategoryMutationVariables>;
 export const CategoriesListDocument = gql`
     query CategoriesList($scope: ScopeMode, $groupId: ID) {
   categories(scope: $scope, groupId: $groupId) {

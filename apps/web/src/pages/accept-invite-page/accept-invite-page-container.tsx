@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
-import { useMutation } from "@apollo/client";
 import { AUTH_TOKEN } from "@/constants";
 import { Container } from "@/components/ui/Container";
 import { Typography } from "@/components/ui/Typography";
@@ -9,7 +8,7 @@ import {
   PageWrapperStyled,
   HelperTextStyled,
 } from "@/shared";
-import { ACCEPT_GROUP_INVITE } from "@/features/groups/groups-queries";
+import { useAcceptGroupInviteMutation } from "@/generated/graphql";
 
 // Where we stash an invite token while the user signs in / registers, so the
 // flow can resume once they're authenticated.
@@ -27,7 +26,7 @@ export const AcceptInvitePageContainer = () => {
   );
   const [message, setMessage] = useState("");
 
-  const [acceptInvite] = useMutation(ACCEPT_GROUP_INVITE, {
+  const [acceptInvite] = useAcceptGroupInviteMutation({
     onError: (e) => {
       localStorage.removeItem(PENDING_INVITE_KEY);
       setStatus("error");
