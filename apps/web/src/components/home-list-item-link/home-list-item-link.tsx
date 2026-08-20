@@ -13,7 +13,6 @@ export const HomeListItemLink = ({
   title,
   loading,
   value,
-  valueColor,
 }: {
   linkTo: string;
   title: string;
@@ -21,7 +20,6 @@ export const HomeListItemLink = ({
   // A number is rendered as a formatted amount; a string is shown verbatim
   // (e.g. the Insights summary line).
   value: number | string;
-  valueColor?: string;
 }) => {
   const userCurrency = useContext(UserContext);
   const displayValue =
@@ -31,11 +29,14 @@ export const HomeListItemLink = ({
     <Link to={linkTo}>
       <MainListItemStyled>
         <Box sx={{ display: "flex" }}>
+          {/* One brand rail on every row, marking these as the app's main
+              navigation targets. Previously each row had its own hue, which
+              encoded nothing: the rows are destinations, not a scale. */}
           <Box
             sx={{
               marginRight: "10px",
               width: "6px",
-              background: valueColor,
+              background: (theme) => theme.palette.primary.main,
               borderRadius: "10px",
             }}
           />

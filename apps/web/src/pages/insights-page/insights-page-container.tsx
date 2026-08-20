@@ -32,7 +32,7 @@ import {
 } from "./insights-page-style";
 
 const TEAL = "#3bceb1";
-const RED = "#ff7777";
+const RED = "#b42318";
 
 interface Props {
   pageDate: Date;

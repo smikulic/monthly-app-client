@@ -13,10 +13,9 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { API_PRODUCTION, AUTH_TOKEN, SENTRY_DSN } from "./constants";
 import { analytics } from "./utils/mixpanel";
-import "@fontsource/roboto/300.css";
-import "@fontsource/roboto/400.css";
-import "@fontsource/roboto/500.css";
-// import "@fontsource/roboto/700.css";
+
+import "@fontsource-variable/inter";
+import "@fontsource/instrument-serif";
 
 Sentry.init({
   dsn: SENTRY_DSN,
@@ -68,12 +67,12 @@ const client = new ApolloClient({
 analytics.init();
 
 const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
+  document.getElementById("root") as HTMLElement,
 );
 root.render(
   <ApolloProvider client={client}>
     <App />
-  </ApolloProvider>
+  </ApolloProvider>,
 );
 
 // If you want to start measuring performance in your app, pass a function

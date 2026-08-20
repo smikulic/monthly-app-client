@@ -13,10 +13,10 @@ export const InvestmentInitialAmountStyled = styled("div")({
 
 export const InvestmentCurrentValueStyled = styled(
   "div"
-)<InvestmentCurrentValueStyledProps>(({ positive }) => ({
+)<InvestmentCurrentValueStyledProps>(({ theme, positive }) => ({
   position: "relative",
   fontSize: "12px",
-  color: positive ? "#7fb77e" : "#ff7777",
+  color: positive ? theme.palette.success.main : theme.palette.error.main,
   fontWeight: 500,
 }));
 

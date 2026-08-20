@@ -64,10 +64,10 @@ export const InvestmentsListData: FC<Props> = ({
                     alignItems: "center",
                   }}
                 >
-                  <Typography variant="body2" color="secondary">
+                  <Typography variant="body2" color="text.secondary">
                     Qty: {investment.quantity}
                   </Typography>
-                  <Typography variant="body2" color="secondary">
+                  <Typography variant="body2" color="text.secondary">
                     , Held:{" "}
                     {dayjs()
                       .diff(dayjs(Number(investment.startDate)), "year", true) // get fractional years
