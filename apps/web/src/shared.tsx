@@ -31,24 +31,52 @@ export const MainListItemStyled = styled(ListItemStyled, {
   },
 }));
 
-type SubcategoryListItemStyledProps = {
-  actionable?: boolean;
-};
-
-export const SubcategoryListItemStyled = styled(ListItemStyled, {
-  // Configure which props should be forwarded on DOM
-  shouldForwardProp: (prop) => prop !== "actionable",
-})<SubcategoryListItemStyledProps>(({ theme, actionable }) => ({
-  height: "48px",
-  margin: "6px 12px",
-  padding: "8px 20px 8px 36px",
-  border: `1px solid ${theme.palette.text.disabled}`,
+// A pressable tile.
+//
+// Touch has no hover, and :active only fires *during* a press, so it confirms a
+// tap rather than advertising one. The signals that work at rest on mobile are
+// the persistent chevron and the mint label (mint = interactive); the offset
+// shadow and the press-into-shadow motion are confirmation on top of those.
+export const BoxItemStyled = styled("div")(({ theme }) => ({
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  gap: "10px",
+  // Must be 0, not a fixed floor: flex and grid children default to
+  // `min-width: auto`, which refuses to shrink below their content width.
+  minWidth: 0,
+  width: "100%",
+  height: "132px",
+  padding: "16px 18px",
+  [theme.breakpoints.up("sm")]: {
+    height: "160px",
+    padding: "18px 20px",
+  },
+  border: `2px solid ${theme.palette.text.primary}`,
   borderRadius: "12px",
+  boxShadow: `4px 4px 0 ${theme.palette.text.primary}`,
+  transition: "transform 120ms ease, box-shadow 120ms ease",
 
-  "&:hover": {
-    borderColor: actionable
-      ? theme.palette.text.secondary
-      : theme.palette.text.disabled,
+  "& .tile-chevron": {
+    color: theme.palette.primary.main,
+    flexShrink: 0,
+    transition: "transform 120ms ease",
+  },
+
+  "&:hover .tile-chevron": {
+    transform: "translateX(3px)",
+  },
+
+  // Drops into its own shadow, so the tile behaves like a physical key.
+  "&:active": {
+    transform: "translate(4px, 4px)",
+    boxShadow: `0 0 0 ${theme.palette.text.primary}`,
+  },
+
+  "@media (prefers-reduced-motion: reduce)": {
+    transition: "none",
+    "& .tile-chevron": { transition: "none" },
+    "&:active": { transform: "none" },
   },
 }));
 

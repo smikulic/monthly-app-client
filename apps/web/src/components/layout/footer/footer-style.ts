@@ -6,10 +6,9 @@ export const FooterStyled = styled("div")({
   padding: "10px",
   width: "100%",
   textAlign: "center",
-  background: "white",
 
   a: {
-    color: "#f199c0",
+    color: "rgba(106, 31, 222, 1)",
     fontSize: "13px",
     textDecoration: "none",
   },
