@@ -30,6 +30,15 @@ import { ScopeProvider } from "./features/groups/scope-context";
 import { analytics } from "./utils/mixpanel";
 
 const muiTheme = createTheme({
+  // Radius scale: 8 for small/nested elements, 10 for controls and rows,
+  // 12 for overlays and cards, 999 for pills. Do not introduce other values.
+  shape: {
+    borderRadius: 10,
+  },
+  typography: {
+    fontFamily:
+      '"Inter Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+  },
   palette: {
     // light: will be calculated from palette.primary.main,
     // dark: will be calculated from palette.primary.main,
@@ -40,13 +49,19 @@ const muiTheme = createTheme({
     },
     secondary: {
       main: "#f199c0",
-      contrastText: "#6a1fde",
+      contrastText: "#181818",
     },
     warning: {
       main: "#eec22f",
     },
+    // Gain/loss and error text render on white, so these are text-weight
+    // values (>= 4.5:1 on #fff). The lighter #ff7777 / #7fb77e they replaced
+    // were fill-weight colours failing WCAG AA as text.
+    success: {
+      main: "#15803d",
+    },
     error: {
-      main: "#ff7777",
+      main: "#b42318",
     },
     text: {
       secondary: "#878BAC",

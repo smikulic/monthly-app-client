@@ -81,13 +81,14 @@ export const BarTrackStyled = styled("div")(({ theme }) => ({
 
 export const DeltaStyled = styled("div", {
   shouldForwardProp: (prop) => prop !== "up",
-})<{ up?: boolean }>(({ up }) => ({
+})<{ up?: boolean }>(({ theme, up }) => ({
   display: "flex",
   alignItems: "center",
   gap: 2,
   fontSize: 15,
   fontWeight: 600,
-  color: up ? "#ff7777" : "#7fb77e",
+  // Spending up is bad, so `up` takes the loss colour.
+  color: up ? theme.palette.error.main : theme.palette.success.main,
 
   "& svg": {
     fontSize: 18,

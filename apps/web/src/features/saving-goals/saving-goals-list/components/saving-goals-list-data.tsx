@@ -68,7 +68,7 @@ export const SavingGoalsListData: FC<Props> = ({
                     alignItems: "center",
                   }}
                 >
-                  <Typography variant="body2" color="secondary">
+                  <Typography variant="body2" color="text.secondary">
                     {monthsLeftToSave <= 0 && (
                       <>You have reached your goal date!</>
                     )}

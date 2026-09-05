@@ -13,15 +13,21 @@ export const GroupCardStyled = styled("div", {
   shouldForwardProp: (prop) => prop !== "active",
 })<ActiveProps>(({ theme, active }) => ({
   margin: "8px 12px",
-  border: `1px solid ${
-    active ? theme.palette.text.secondary : theme.palette.text.disabled
-  }`,
+  // border: `1px solid ${
+  //   active ? theme.palette.text.secondary : theme.palette.text.disabled
+  // }`,
+  border: `1px solid ${theme.palette.text.primary}`,
+  borderBottom: `2px solid ${theme.palette.text.primary}`,
+  borderRight: `1px solid ${theme.palette.text.primary}`,
+
   borderRadius: "12px",
   overflow: "hidden",
   transition: "border-color 0.15s ease",
 
   "&:hover": {
-    borderColor: theme.palette.text.secondary,
+    border: `1px solid ${theme.palette.text.secondary}`,
+    borderBottom: `2px solid ${theme.palette.text.secondary}`,
+    borderRight: `1px solid ${theme.palette.text.secondary}`,
   },
 }));
 

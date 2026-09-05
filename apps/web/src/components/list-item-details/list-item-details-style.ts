@@ -21,9 +21,9 @@ export const AmountColumnStyled = styled("div")({
 });
 
 export const BudgetAmountStyled = styled("div")<BudgetAmountStyledProps>(
-  ({ positive }) => ({
+  ({ theme, positive }) => ({
     fontSize: "14px",
-    color: positive ? "#7fb77e" : "#ff7777",
+    color: positive ? theme.palette.success.main : theme.palette.error.main,
   }),
 );
 

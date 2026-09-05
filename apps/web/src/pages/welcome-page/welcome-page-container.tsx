@@ -34,7 +34,7 @@ export const WelcomePageContainer = () => {
           <h1 className="title">
             <span>An easier way to </span>
             <br />
-            <span>track your personal finances!</span>
+            <span>track your personal finances</span>
           </h1>
           <img
             className="product-demo-image"

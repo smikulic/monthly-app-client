@@ -11,10 +11,10 @@ type SavingGoalExpenseAmountStyledProps = {
 
 export const SavingGoalBudgetAmountStyled = styled(
   "div"
-)<SavingGoalBudgetAmountStyledProps>(({ positive }) => ({
+)<SavingGoalBudgetAmountStyledProps>(({ theme, positive }) => ({
   position: "relative",
   fontSize: "14px",
-  color: positive ? "#7fb77e" : "#ff7777",
+  color: positive ? theme.palette.success.main : theme.palette.error.main,
 }));
 
 export const SavingGoalExpenseAmountStyled = styled(
