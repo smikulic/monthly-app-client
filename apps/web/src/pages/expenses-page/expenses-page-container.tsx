@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useQuery } from "@apollo/client";
+import { useCallback, useState } from "react";
+import { useApolloClient, useQuery } from "@apollo/client";
 import dayjs from "dayjs";
 import { getDecoratedCategoriesWithExpenses } from "@/utils/getDecoratedCategoriesWithExpenses";
 import { ExpensesList } from "@/features/expenses";
@@ -23,16 +23,29 @@ export const ExpensesPageContainer = ({
   const scope = useScope();
   const formattedDate = dayjs(pageDate).format("MM-DD-YYYY");
 
-  const {
-    data: expensesData,
-    loading: loadingExpenses,
-    refetch: refetchExpenses,
-  } = useQuery(GET_EXPENSES_LIST, {
-    variables: {
-      date: formattedDate,
-      ...scopeVariables(scope),
+  const client = useApolloClient();
+
+  const { data: expensesData, loading: loadingExpenses } = useQuery(
+    GET_EXPENSES_LIST,
+    {
+      variables: {
+        date: formattedDate,
+        ...scopeVariables(scope),
+      },
     },
-  });
+  );
+
+  /*
+   * Two queries read expenses on this page and both go stale on a write:
+   * `ExpensesList` is the viewed month, and `Expenses` is every expense ever,
+   * which each subcategory row uses to work out what the rollover has already
+   * been spent against. Refetching only the first left the rollover figure
+   * showing pre-edit numbers until a hard refresh.
+   */
+  const refetchExpenses = useCallback(
+    () => client.refetchQueries({ include: ["ExpensesList", "Expenses"] }),
+    [client],
+  );
 
   const { data: categoriesData, loading: loadingCategories } = useQuery(
     GET_CATEGORIES_LIST,

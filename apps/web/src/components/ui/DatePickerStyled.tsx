@@ -25,6 +25,9 @@ export function DatePickerStyled<
   value: Date | null;
   onChange: (date: Date | null) => void;
   label?: string;
+  /** Budget periods start on a month, so those drop the day view. */
+  views?: ("year" | "month" | "day")[];
+  format?: string;
   // …any other DatePicker props you need
 }) {
   const { value, onChange, ...other } = props;

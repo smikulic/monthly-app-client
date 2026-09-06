@@ -2,7 +2,10 @@ import { FC, useState } from "react";
 import { useQuery } from "@apollo/client";
 import dayjs from "dayjs";
 import { Expense } from "@/generated/graphql";
-import { getRemainingRolloverBudget } from "@/utils/getRolloverBudget";
+import {
+  getAmountForMonth,
+  getRemainingRolloverBudget,
+} from "@/utils/getRolloverBudget";
 import { GroupRowStyled } from "@/components/list-group/list-group-style";
 import { GET_ALL_EXPENSES } from "../../pages/expenses-page/expenses-page-queries";
 import { ExpandedExpenses } from "../expanded-expenses/expanded-expenses";
@@ -34,7 +37,20 @@ export const SubcategoryListItem: FC<Props> = ({
 
   const { data: expensesData } = useQuery(GET_ALL_EXPENSES);
 
-  const rolloverDate = new Date(Number(subcategory.rolloverDate));
+  // The amount schedule. Older cached responses may not carry it, in which case
+  // everything below falls back to the flat pair and behaves as it always did.
+  const periods = (subcategory.budgets ?? []).map((budget) => ({
+    amount: budget.amount,
+    validFrom: new Date(Number(budget.validFrom)),
+  }));
+
+  // Where the schedule opens is where accrual starts. The server keeps
+  // rolloverDate in step with it, so this only differs on stale data.
+  const rolloverDate = periods.length
+    ? periods.reduce((earliest, period) =>
+        period.validFrom < earliest.validFrom ? period : earliest
+      ).validFrom
+    : new Date(Number(subcategory.rolloverDate));
 
   // Where we build the expenses list for the viewed month
   const monthEnd = getEndOfMonth(currentDate);
@@ -62,6 +78,7 @@ export const SubcategoryListItem: FC<Props> = ({
     rolloverDate,
     budgetAmount: subcategory.budgetAmount || 0,
     totalExpensesSinceRollover,
+    periods,
   });
 
   const subcategoryId = subcategory.id;
@@ -73,7 +90,11 @@ export const SubcategoryListItem: FC<Props> = ({
   );
 
   const expensesExist = totalSubcategoryExpenses > 0;
-  const budgetAmount = subcategory.budgetAmount || 0;
+  // What the budget was in the month being viewed, so looking back at a month
+  // before a raise reports the figure that actually applied then.
+  const budgetAmount = periods.length
+    ? (getAmountForMonth({ periods, currentDate }) ?? 0)
+    : subcategory.budgetAmount || 0;
 
   const budgetValue = showRolloverBudget
     ? remainingRolloverBudget

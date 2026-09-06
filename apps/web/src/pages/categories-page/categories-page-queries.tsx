@@ -16,6 +16,11 @@ export const GET_CATEGORIES_LIST = gql`
         rolloverDate
         name
         budgetAmount
+        budgets {
+          id
+          amount
+          validFrom
+        }
       }
     }
   }
@@ -70,8 +75,8 @@ export const UPDATE_SUBCATEGORY_MUTATION = gql`
     $id: ID!
     $categoryId: ID!
     $name: String!
-    $budgetAmount: Int!
-    $rolloverDate: String!
+    $budgetAmount: Int
+    $rolloverDate: String
   ) {
     updateSubcategory(
       id: $id
@@ -84,6 +89,45 @@ export const UPDATE_SUBCATEGORY_MUTATION = gql`
       categoryId
       name
       budgetAmount
+    }
+  }
+`;
+export const SET_SUBCATEGORY_BUDGET_MUTATION = gql`
+  mutation SetSubcategoryBudget(
+    $subcategoryId: ID!
+    $amount: Int!
+    $validFrom: String!
+  ) {
+    setSubcategoryBudget(
+      subcategoryId: $subcategoryId
+      amount: $amount
+      validFrom: $validFrom
+    ) {
+      id
+      budgetAmount
+      rolloverDate
+      budgets {
+        id
+        amount
+        validFrom
+      }
+    }
+  }
+`;
+export const DELETE_SUBCATEGORY_BUDGET_MUTATION = gql`
+  mutation DeleteSubcategoryBudget($subcategoryId: ID!, $validFrom: String!) {
+    deleteSubcategoryBudget(
+      subcategoryId: $subcategoryId
+      validFrom: $validFrom
+    ) {
+      id
+      budgetAmount
+      rolloverDate
+      budgets {
+        id
+        amount
+        validFrom
+      }
     }
   }
 `;

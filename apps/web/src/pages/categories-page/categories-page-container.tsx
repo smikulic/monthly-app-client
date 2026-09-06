@@ -111,6 +111,7 @@ export const CategoriesPageContainer = () => {
           presetCategoryId={""}
           categories={categories!}
           formData={updateModalSubcategory}
+          refetchCategories={refetchCategories}
         />
       )}
     </>
