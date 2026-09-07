@@ -98,7 +98,8 @@ describe("<SubcategoryFormFactory />", () => {
         categoryId: presetCategoryId,
         name: "New Subcategory",
         budgetAmount: 500,
-        rolloverDate: FROZEN_ISO,
+        // The opening period's month, named to match the schedule.
+        validFrom: FROZEN_ISO,
       },
     });
   });
@@ -111,6 +112,8 @@ describe("<SubcategoryFormFactory />", () => {
       budgetAmount: 1000,
       rolloverDate: FROZEN_ISO,
       categoryId: "test-category-id",
+      budgetForMonth: 1000,
+      rolloverRemaining: 1000,
       budgets: [],
       __typename: "Subcategory",
     };
@@ -155,6 +158,8 @@ describe("<SubcategoryFormFactory />", () => {
       budgetAmount: 700,
       rolloverDate: FROZEN_ISO,
       categoryId: "test-category-id",
+      budgetForMonth: 700,
+      rolloverRemaining: 700,
       budgets: [
         {
           id: "period-1",

@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
 export const GET_CATEGORIES_LIST = gql`
-  query CategoriesList($scope: ScopeMode, $groupId: ID) {
+  query CategoriesList($scope: ScopeMode, $groupId: ID, $date: String!) {
     categories(scope: $scope, groupId: $groupId) {
       id
       name
@@ -13,9 +13,13 @@ export const GET_CATEGORIES_LIST = gql`
         id
         categoryId
         createdAt
-        rolloverDate
         name
         budgetAmount
+        # Both worked out server-side for the month being viewed, so nothing
+        # here has to know how the schedule accrues.
+        budgetForMonth(date: $date)
+        rolloverRemaining(date: $date)
+        # Only the schedule editor reads these.
         budgets {
           id
           amount
@@ -55,13 +59,13 @@ export const CREATE_SUBCATEGORY_MUTATION = gql`
     $categoryId: ID!
     $name: String!
     $budgetAmount: Int!
-    $rolloverDate: String!
+    $validFrom: String!
   ) {
     createSubcategory(
       categoryId: $categoryId
       name: $name
       budgetAmount: $budgetAmount
-      rolloverDate: $rolloverDate
+      validFrom: $validFrom
     ) {
       id
       categoryId
@@ -71,20 +75,8 @@ export const CREATE_SUBCATEGORY_MUTATION = gql`
   }
 `;
 export const UPDATE_SUBCATEGORY_MUTATION = gql`
-  mutation UpdateSubcategory(
-    $id: ID!
-    $categoryId: ID!
-    $name: String!
-    $budgetAmount: Int
-    $rolloverDate: String
-  ) {
-    updateSubcategory(
-      id: $id
-      categoryId: $categoryId
-      name: $name
-      budgetAmount: $budgetAmount
-      rolloverDate: $rolloverDate
-    ) {
+  mutation UpdateSubcategory($id: ID!, $categoryId: ID!, $name: String!) {
+    updateSubcategory(id: $id, categoryId: $categoryId, name: $name) {
       id
       categoryId
       name

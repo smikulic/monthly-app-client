@@ -36,21 +36,19 @@ export const ExpensesPageContainer = ({
   );
 
   /*
-   * Two queries read expenses on this page and both go stale on a write:
-   * `ExpensesList` is the viewed month, and `Expenses` is every expense ever,
-   * which each subcategory row uses to work out what the rollover has already
-   * been spent against. Refetching only the first left the rollover figure
-   * showing pre-edit numbers until a hard refresh.
+   * The rollover figure now comes back on the categories query, computed by the
+   * server, so a write has to refresh that too. Refetching only the expense
+   * list left the rollover showing pre-edit numbers until a hard refresh.
    */
   const refetchExpenses = useCallback(
-    () => client.refetchQueries({ include: ["ExpensesList", "Expenses"] }),
+    () => client.refetchQueries({ include: ["ExpensesList", "CategoriesList"] }),
     [client],
   );
 
   const { data: categoriesData, loading: loadingCategories } = useQuery(
     GET_CATEGORIES_LIST,
     {
-      variables: scopeVariables(scope),
+      variables: { date: formattedDate, ...scopeVariables(scope) },
     },
   );
 

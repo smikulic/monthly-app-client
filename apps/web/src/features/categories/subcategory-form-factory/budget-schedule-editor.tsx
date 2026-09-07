@@ -1,10 +1,7 @@
 import { useState } from "react";
 import dayjs from "dayjs";
 import { toast } from "react-toastify";
-import CheckIcon from "@mui/icons-material/Check";
-import CloseIcon from "@mui/icons-material/Close";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import {
   SubcategoryBudget,
   useDeleteSubcategoryBudgetMutation,
@@ -18,33 +15,10 @@ import { Typography } from "@/components/ui/Typography";
 import { DatePickerStyled } from "@/components/ui/DatePickerStyled";
 import { TextFieldStyled } from "@/shared";
 
-// The API sends dates as millisecond timestamps in a string, the same as
-// rolloverDate and createdAt.
+// The API sends dates as millisecond timestamps in a string.
 const toDate = (timestamp: string): Date => new Date(parseInt(timestamp, 10));
-
-const monthLabel = (date: Date): string => dayjs(date).format("MMM YYYY");
-
-const monthStart = (date: Date): Date =>
-  new Date(date.getFullYear(), date.getMonth(), 1);
-
-/**
- * Which period applies today: the last one that has started. Expects the list
- * already sorted by start month.
- */
-const currentPeriodId = (periods: SubcategoryBudget[]): string | undefined => {
-  const thisMonth = monthStart(new Date());
-  const started = periods.filter(
-    (period) => monthStart(toDate(period.validFrom)) <= thisMonth
-  );
-  return started[started.length - 1]?.id;
-};
-
-interface DraftPeriod {
-  /** Absent when adding rather than editing. */
-  id?: string;
-  amount: string;
-  validFrom: Date;
-}
+const monthLabel = (date: Date) => dayjs(date).format("MMM YYYY");
+const apiMonth = (date: Date) => dayjs(date).format("YYYY-MM-DD");
 
 interface Props {
   subcategoryId: string;
@@ -55,37 +29,45 @@ interface Props {
 /**
  * The subcategory's amount schedule.
  *
- * Shown as a list rather than a single figure because there is genuinely more
- * than one number: a budget that changed in January still has to say what it
- * was in December, and a schedule you cannot see is a schedule you cannot
- * correct.
+ * Shown as a list because there is genuinely more than one number: a budget
+ * that changed in January still has to say what it was in December, and a
+ * schedule you cannot see is one you cannot correct.
  *
- * Rows save on their own rather than with the surrounding form. Each one is an
- * independent mutation, and batching them would mean inventing a shape for
- * "the whole schedule at once" that nothing else needs.
+ * There is no edit mode. `setSubcategoryBudget` upserts on the month, so
+ * changing an existing period and adding a new one are the same call; clicking
+ * a row just loads it into the form below. Rows save on their own rather than
+ * with the surrounding dialog, since each is an independent mutation.
  */
 export const BudgetScheduleEditor = ({
   subcategoryId,
   periods,
   onChanged,
 }: Props) => {
-  const [draft, setDraft] = useState<DraftPeriod | null>(null);
-  // The dialog is opened with a snapshot of the subcategory, so the schedule is
-  // tracked here and replaced from each mutation's own result. Refetching the
-  // list behind would not reach that snapshot.
+  // The dialog opens with a snapshot of the subcategory, so the schedule is
+  // tracked here and replaced from each mutation's own result.
   const [rows, setRows] = useState<SubcategoryBudget[]>(periods);
+  const [amount, setAmount] = useState("");
+  const [validFrom, setValidFrom] = useState<Date>(
+    dayjs().startOf("month").toDate()
+  );
 
   const sorted = [...rows].sort(
     (a, b) => toDate(a.validFrom).getTime() - toDate(b.validFrom).getTime()
   );
-  const activeId = currentPeriodId(sorted);
-  const isOnlyPeriod = sorted.length <= 1;
+  const thisMonth = dayjs().startOf("month");
+  const activeId = sorted
+    .filter((row) => !dayjs(toDate(row.validFrom)).isAfter(thisMonth, "month"))
+    .slice(-1)[0]?.id;
+
+  const applied = () => {
+    setAmount("");
+    onChanged();
+  };
 
   const [setBudget, { loading: saving }] = useSetSubcategoryBudgetMutation({
     onCompleted: ({ setSubcategoryBudget }) => {
       setRows(setSubcategoryBudget.budgets);
-      setDraft(null);
-      onChanged();
+      applied();
     },
     onError: (error) => toast.error(error.message),
   });
@@ -94,80 +76,24 @@ export const BudgetScheduleEditor = ({
     useDeleteSubcategoryBudgetMutation({
       onCompleted: ({ deleteSubcategoryBudget }) => {
         setRows(deleteSubcategoryBudget.budgets);
-        onChanged();
+        applied();
       },
       onError: (error) => toast.error(error.message),
     });
 
   const busy = saving || deleting;
 
-  const commitDraft = () => {
-    if (!draft) return;
-
-    const amount = Number(draft.amount);
-    if (!amount || amount < 0) {
+  const save = () => {
+    const value = Number(amount);
+    if (!value || value < 0) {
       toast.error("Enter a budget amount above zero");
       return;
     }
 
     setBudget({
-      variables: {
-        subcategoryId,
-        amount,
-        validFrom: dayjs(draft.validFrom).format("YYYY-MM-DD"),
-      },
+      variables: { subcategoryId, amount: value, validFrom: apiMonth(validFrom) },
     });
   };
-
-  const removePeriod = (period: SubcategoryBudget) =>
-    deleteBudget({
-      variables: {
-        subcategoryId,
-        validFrom: dayjs(toDate(period.validFrom)).format("YYYY-MM-DD"),
-      },
-    });
-
-  const renderDraft = () => (
-    <Stack direction="row" spacing={1} alignItems="center" sx={{ py: 1 }}>
-      <TextFieldStyled
-        autoFocus
-        id="budget-period-amount"
-        label="Budget"
-        size="small"
-        margin="none"
-        autoComplete="off"
-        value={draft?.amount ?? ""}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          setDraft((current) =>
-            current ? { ...current, amount: e.target.value } : current
-          )
-        }
-        data-testid="budget-period-amount-input"
-      />
-      <DatePickerStyled
-        label="From"
-        views={["year", "month"]}
-        format="MMM YYYY"
-        value={draft?.validFrom ?? null}
-        onChange={(date: Date | null) =>
-          date &&
-          setDraft((current) =>
-            current ? { ...current, validFrom: date } : current
-          )
-        }
-      />
-      <IconButton
-        aria-label="Save budget period"
-        disabled={busy}
-        onClick={commitDraft}
-      >
-        <CheckIcon fontSize="small" />
-      </IconButton>
-      <IconButton aria-label="Cancel" onClick={() => setDraft(null)}>
-        <CloseIcon fontSize="small" />
-      </IconButton>
-    </Stack>
-  );
 
   return (
     <Box sx={{ mt: 1 }}>
@@ -175,76 +101,76 @@ export const BudgetScheduleEditor = ({
         Budget history
       </Typography>
 
-      {sorted.map((period) =>
-        draft?.id === period.id ? (
-          <Box key={period.id}>{renderDraft()}</Box>
-        ) : (
+      {sorted.map((row) => {
+        const from = toDate(row.validFrom);
+
+        return (
           <Stack
-            key={period.id}
+            key={row.id}
             direction="row"
             spacing={1}
             alignItems="center"
-            sx={{ py: 0.5 }}
+            sx={{ py: 0.5, cursor: "pointer" }}
+            onClick={() => {
+              setAmount(String(row.amount));
+              setValidFrom(from);
+            }}
           >
             <Typography variant="body2" sx={{ minWidth: 72 }}>
-              {period.amount}
+              {row.amount}
             </Typography>
             <Typography
               variant="body2"
               color="text.secondary"
               sx={{ flexGrow: 1 }}
             >
-              from {monthLabel(toDate(period.validFrom))}
-              {period.id === activeId && " · now"}
+              from {monthLabel(from)}
+              {row.id === activeId && " · now"}
             </Typography>
             <IconButton
-              aria-label={`Edit budget from ${monthLabel(
-                toDate(period.validFrom)
-              )}`}
-              disabled={busy}
-              onClick={() =>
-                setDraft({
-                  id: period.id,
-                  amount: String(period.amount),
-                  validFrom: toDate(period.validFrom),
-                })
-              }
-            >
-              <EditOutlinedIcon fontSize="small" />
-            </IconButton>
-            <IconButton
-              aria-label={`Remove budget from ${monthLabel(
-                toDate(period.validFrom)
-              )}`}
+              aria-label={`Remove budget from ${monthLabel(from)}`}
               // The last one cannot go: a subcategory with no period has no
               // budget in any month, and the form offers no way back.
-              disabled={busy || isOnlyPeriod}
-              onClick={() => removePeriod(period)}
+              disabled={busy || sorted.length <= 1}
+              onClick={(event: React.MouseEvent) => {
+                event.stopPropagation();
+                deleteBudget({
+                  variables: { subcategoryId, validFrom: apiMonth(from) },
+                });
+              }}
             >
               <DeleteOutlineIcon fontSize="small" />
             </IconButton>
           </Stack>
-        )
-      )}
+        );
+      })}
 
-      {draft && !draft.id && renderDraft()}
-
-      {!draft && (
-        <Button
+      <Stack direction="row" spacing={1} alignItems="center" sx={{ pt: 1.5 }}>
+        <TextFieldStyled
+          id="budget-period-amount"
+          label="Budget"
           size="small"
-          disabled={busy}
-          onClick={() =>
-            // Defaults to this month, so the common edit ("it is going up from
-            // now") never reaches back and re-costs months already recorded.
-            setDraft({
-              amount: "",
-              validFrom: dayjs().startOf("month").toDate(),
-            })
+          margin="none"
+          autoComplete="off"
+          value={amount}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setAmount(e.target.value)
           }
-        >
-          + Add a change
+          data-testid="budget-period-amount-input"
+        />
+        {/* Defaults to this month, so the ordinary change never reaches back
+            and re-costs months already recorded. */}
+        <DatePickerStyled
+          label="From"
+          views={["year", "month"]}
+          format="MMM YYYY"
+          value={validFrom}
+          onChange={(date: Date | null) => date && setValidFrom(date)}
+        />
+        <Button size="small" disabled={busy || !amount} onClick={save}>
+          Apply
         </Button>
-      )}
+      </Stack>
     </Box>
   );
 };

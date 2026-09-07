@@ -34,7 +34,7 @@ export const HomePageContainer = ({
   );
   const { data: categoriesData, loading: loadingCategories } = useQuery(
     GET_CATEGORIES_LIST,
-    { variables: scopeVariables(scope) },
+    { variables: { date: formattedDate, ...scopeVariables(scope) } },
   );
   const { data: savingGoalsData, loading: loadingSavingGoals } = useQuery(
     GET_SAVING_GOALS_LIST,

@@ -33,9 +33,8 @@ const useSubcategoryForm = (
   const [subcategoryBudget, setSubcategoryBudget] = useState(
     formData?.budgetAmount
   );
-  const [subcategoryRolloverDate, setSubcategoryRolloverDate] = useState(
-    formData ? new Date(parseInt(formData.rolloverDate, 10)) : new Date()
-  );
+  // Only asked for on create, where it opens the schedule.
+  const [subcategoryValidFrom, setSubcategoryValidFrom] = useState(new Date());
 
   const [createSubcategory] = useCreateSubcategoryMutation({
     onCompleted: ({ createSubcategory }) => {
@@ -104,7 +103,7 @@ const useSubcategoryForm = (
           categoryId,
           name: subcategoryName,
           budgetAmount: subcategoryBudget as number,
-          rolloverDate: dayjs(subcategoryRolloverDate).format("YYYY-MM-DD"),
+          validFrom: dayjs(subcategoryValidFrom).format("YYYY-MM-DD"),
         },
       });
       return;
@@ -123,11 +122,11 @@ const useSubcategoryForm = (
     categoryId,
     subcategoryName,
     subcategoryBudget,
-    subcategoryRolloverDate,
+    subcategoryValidFrom,
     setCategoryId,
     setSubcategoryName,
     setSubcategoryBudget,
-    setSubcategoryRolloverDate,
+    setSubcategoryValidFrom,
     handleFormAction,
     formActionText: isCreateMode ? FORM_ACTIONS.CREATE : FORM_ACTIONS.SAVE,
   };
@@ -154,11 +153,11 @@ export const SubcategoryFormFactory = ({
     categoryId,
     subcategoryName,
     subcategoryBudget,
-    subcategoryRolloverDate,
+    subcategoryValidFrom,
     setCategoryId,
     setSubcategoryName,
     setSubcategoryBudget,
-    setSubcategoryRolloverDate,
+    setSubcategoryValidFrom,
     handleFormAction,
     formActionText,
   } = useSubcategoryForm(
@@ -233,9 +232,9 @@ export const SubcategoryFormFactory = ({
             label="Starts from"
             views={["year", "month"]}
             format="MMM YYYY"
-            value={subcategoryRolloverDate}
+            value={subcategoryValidFrom}
             onChange={(date: Date | null) =>
-              date && setSubcategoryRolloverDate(date)
+              date && setSubcategoryValidFrom(date)
             }
           />
         </>
