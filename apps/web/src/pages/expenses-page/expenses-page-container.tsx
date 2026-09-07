@@ -7,6 +7,7 @@ import { GET_EXPENSES_LIST } from "@/pages/expenses-page/expenses-page-queries";
 import { GET_CATEGORIES_LIST } from "@/pages/categories-page/categories-page-queries";
 import { ActionsBar } from "@/components/layout";
 import { useScope, scopeVariables } from "@/features/groups/scope-context";
+import { invalidateBudgetFigures } from "@/utils/invalidateBudgetFigures";
 import { useExpensesActions } from "./use-expenses-actions-hook";
 
 export const ExpensesPageContainer = ({
@@ -36,14 +37,17 @@ export const ExpensesPageContainer = ({
   );
 
   /*
-   * The rollover figure now comes back on the categories query, computed by the
-   * server, so a write has to refresh that too. Refetching only the expense
-   * list left the rollover showing pre-edit numbers until a hard refresh.
+   * The rollover figure comes back on the categories query now, so a write has
+   * to refresh that as well as the expense list. The eviction covers the months
+   * that are cached but not on screen: rollover is cumulative, so an expense
+   * recorded here also moves every month after it.
    */
-  const refetchExpenses = useCallback(
-    () => client.refetchQueries({ include: ["ExpensesList", "CategoriesList"] }),
-    [client],
-  );
+  const refetchExpenses = useCallback(() => {
+    invalidateBudgetFigures(client);
+    return client.refetchQueries({
+      include: ["ExpensesList", "CategoriesList"],
+    });
+  }, [client]);
 
   const { data: categoriesData, loading: loadingCategories } = useQuery(
     GET_CATEGORIES_LIST,

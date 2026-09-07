@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useApolloClient } from "@apollo/client";
 import dayjs from "dayjs";
 import { toast } from "react-toastify";
+import { invalidateBudgetFigures } from "@/utils/invalidateBudgetFigures";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import {
   SubcategoryBudget,
@@ -59,8 +61,13 @@ export const BudgetScheduleEditor = ({
     .filter((row) => !dayjs(toDate(row.validFrom)).isAfter(thisMonth, "month"))
     .slice(-1)[0]?.id;
 
+  const client = useApolloClient();
+
   const applied = () => {
     setAmount("");
+    // A new period changes the figures for every month from it onwards, not
+    // just the one the page happens to be showing.
+    invalidateBudgetFigures(client);
     onChanged();
   };
 

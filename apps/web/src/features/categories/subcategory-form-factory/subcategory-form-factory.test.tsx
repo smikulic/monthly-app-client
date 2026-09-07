@@ -1,4 +1,9 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import {
+  render as rtlRender,
+  screen,
+  fireEvent,
+} from "@testing-library/react";
+import { MockedProvider } from "@apollo/client/testing";
 import "@testing-library/jest-dom";
 import {
   afterAll,
@@ -24,6 +29,11 @@ vi.mock("@/generated/graphql", () => ({
   useSetSubcategoryBudgetMutation: vi.fn(),
   useDeleteSubcategoryBudgetMutation: vi.fn(),
 }));
+
+// The schedule editor reaches for the client to drop cached month figures, so
+// the tree needs a provider even though every mutation here is mocked.
+const render = (ui: React.ReactElement) =>
+  rtlRender(<MockedProvider addTypename={false}>{ui}</MockedProvider>);
 
 describe("<SubcategoryFormFactory />", () => {
   const presetCategoryId = "test-category-id";
