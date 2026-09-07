@@ -152,7 +152,18 @@ export const BudgetScheduleEditor = ({
         );
       })}
 
-      <Stack direction="row" spacing={1} alignItems="center" sx={{ pt: 1.5 }}>
+      {/* An amount is a few digits and a month is a fixed "MMM YYYY", so both
+          are sized to their content rather than sharing the row evenly. Left to
+          flex, the amount field took the slack and clipped the month. Wraps on
+          a narrow screen instead of squeezing. */}
+      <Stack
+        direction="row"
+        spacing={1}
+        alignItems="center"
+        useFlexGap
+        flexWrap="wrap"
+        sx={{ pt: 1.5 }}
+      >
         <TextFieldStyled
           id="budget-period-amount"
           label="Budget"
@@ -164,6 +175,7 @@ export const BudgetScheduleEditor = ({
             setAmount(e.target.value)
           }
           data-testid="budget-period-amount-input"
+          sx={{ flex: "0 0 116px" }}
         />
         {/* Defaults to this month, so the ordinary change never reaches back
             and re-costs months already recorded. */}
@@ -173,8 +185,14 @@ export const BudgetScheduleEditor = ({
           format="MMM YYYY"
           value={validFrom}
           onChange={(date: Date | null) => date && setValidFrom(date)}
+          sx={{ flex: "1 1 156px", minWidth: 156 }}
         />
-        <Button size="small" disabled={busy || !amount} onClick={save}>
+        <Button
+          size="small"
+          disabled={busy || !amount}
+          onClick={save}
+          sx={{ flexShrink: 0 }}
+        >
           Apply
         </Button>
       </Stack>

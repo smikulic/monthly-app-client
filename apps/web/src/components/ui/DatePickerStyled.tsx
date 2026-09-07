@@ -3,6 +3,7 @@ import dayjs, { Dayjs } from "dayjs";
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { TextField } from "@mui/material";
+import type { SxProps, Theme } from "@mui/material";
 import { styled } from "@mui/system";
 
 // 1) Create a TextField styled exactly like your SelectStyled
@@ -28,6 +29,8 @@ export function DatePickerStyled<
   /** Budget periods start on a month, so those drop the day view. */
   views?: ("year" | "month" | "day")[];
   format?: string;
+  /** Sizing when the picker shares a row with other controls. */
+  sx?: SxProps<Theme>;
   // …any other DatePicker props you need
 }) {
   const { value, onChange, ...other } = props;
