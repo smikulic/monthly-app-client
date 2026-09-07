@@ -802,14 +802,6 @@ export type ConfirmEmailMutationVariables = Exact<{
 
 export type ConfirmEmailMutation = { __typename?: 'Mutation', confirmEmail: { __typename?: 'AuthPayload', token?: string | null, user?: { __typename?: 'User', email: string } | null } };
 
-export type CategoryQueryVariables = Exact<{
-  id: Scalars['ID'];
-  date: Scalars['String'];
-}>;
-
-
-export type CategoryQuery = { __typename?: 'Query', category: { __typename?: 'Category', id: string, name: string, subcategories?: Array<{ __typename?: 'Subcategory', id: string, name: string, budgetAmount?: number | null, expenses?: Array<{ __typename?: 'Expense', id: string, amount: number, date: string } | null> | null } | null> | null } };
-
 export type ExpensesListQueryVariables = Exact<{
   date: Scalars['String'];
   scope?: InputMaybe<ScopeMode>;
@@ -1828,53 +1820,6 @@ export function useConfirmEmailMutation(baseOptions?: Apollo.MutationHookOptions
 export type ConfirmEmailMutationHookResult = ReturnType<typeof useConfirmEmailMutation>;
 export type ConfirmEmailMutationResult = Apollo.MutationResult<ConfirmEmailMutation>;
 export type ConfirmEmailMutationOptions = Apollo.BaseMutationOptions<ConfirmEmailMutation, ConfirmEmailMutationVariables>;
-export const CategoryDocument = gql`
-    query Category($id: ID!, $date: String!) {
-  category(id: $id) {
-    id
-    name
-    subcategories {
-      id
-      name
-      budgetAmount
-      expenses(filter: {date: $date}) {
-        id
-        amount
-        date
-      }
-    }
-  }
-}
-    `;
-
-/**
- * __useCategoryQuery__
- *
- * To run a query within a React component, call `useCategoryQuery` and pass it any options that fit your needs.
- * When your component renders, `useCategoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useCategoryQuery({
- *   variables: {
- *      id: // value for 'id'
- *      date: // value for 'date'
- *   },
- * });
- */
-export function useCategoryQuery(baseOptions: Apollo.QueryHookOptions<CategoryQuery, CategoryQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<CategoryQuery, CategoryQueryVariables>(CategoryDocument, options);
-      }
-export function useCategoryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CategoryQuery, CategoryQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<CategoryQuery, CategoryQueryVariables>(CategoryDocument, options);
-        }
-export type CategoryQueryHookResult = ReturnType<typeof useCategoryQuery>;
-export type CategoryLazyQueryHookResult = ReturnType<typeof useCategoryLazyQuery>;
-export type CategoryQueryResult = Apollo.QueryResult<CategoryQuery, CategoryQueryVariables>;
 export const ExpensesListDocument = gql`
     query ExpensesList($date: String!, $scope: ScopeMode, $groupId: ID) {
   expenses(filter: {date: $date}, scope: $scope, groupId: $groupId) {
