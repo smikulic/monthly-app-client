@@ -1,4 +1,9 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import {
+  render as rtlRender,
+  screen,
+  fireEvent,
+} from "@testing-library/react";
+import { MockedProvider } from "@apollo/client/testing";
 import "@testing-library/jest-dom";
 import {
   afterAll,
@@ -20,7 +25,15 @@ const FROZEN_ISO = "1970-01-01";
 vi.mock("@/generated/graphql", () => ({
   useCreateSubcategoryMutation: vi.fn(),
   useUpdateSubcategoryMutation: vi.fn(),
+  // Update mode renders the budget schedule, which reaches for these.
+  useSetSubcategoryBudgetMutation: vi.fn(),
+  useDeleteSubcategoryBudgetMutation: vi.fn(),
 }));
+
+// The schedule editor reaches for the client to drop cached month figures, so
+// the tree needs a provider even though every mutation here is mocked.
+const render = (ui: React.ReactElement) =>
+  rtlRender(<MockedProvider addTypename={false}>{ui}</MockedProvider>);
 
 describe("<SubcategoryFormFactory />", () => {
   const presetCategoryId = "test-category-id";
@@ -55,6 +68,14 @@ describe("<SubcategoryFormFactory />", () => {
       mockUpdate,
       { data: null, loading: false, error: undefined },
     ]);
+    (gql.useSetSubcategoryBudgetMutation as any).mockReturnValue([
+      vi.fn(),
+      { loading: false },
+    ]);
+    (gql.useDeleteSubcategoryBudgetMutation as any).mockReturnValue([
+      vi.fn(),
+      { loading: false },
+    ]);
   });
 
   it("disables Create until name and budget are filled, then calls create mutation", () => {
@@ -87,7 +108,8 @@ describe("<SubcategoryFormFactory />", () => {
         categoryId: presetCategoryId,
         name: "New Subcategory",
         budgetAmount: 500,
-        rolloverDate: FROZEN_ISO,
+        // The opening period's month, named to match the schedule.
+        validFrom: FROZEN_ISO,
       },
     });
   });
@@ -100,6 +122,9 @@ describe("<SubcategoryFormFactory />", () => {
       budgetAmount: 1000,
       rolloverDate: FROZEN_ISO,
       categoryId: "test-category-id",
+      budgetForMonth: 1000,
+      rolloverRemaining: 1000,
+      budgets: [],
       __typename: "Subcategory",
     };
 
@@ -116,26 +141,66 @@ describe("<SubcategoryFormFactory />", () => {
     const saveBtn = screen.getByTestId("create-button");
     expect(saveBtn).toBeEnabled();
 
-    // Change Name and Budget
     fireEvent.change(screen.getByLabelText(/Name/i), {
       target: { value: "Updated Subcategory" },
-    });
-    fireEvent.change(screen.getByLabelText(/Budget/i), {
-      target: { value: "750" },
     });
 
     // Click Save
     fireEvent.click(saveBtn);
 
+    // No amount in the payload: the schedule owns it, and its rows save
+    // themselves rather than waiting for this button.
     expect(mockUpdate).toHaveBeenCalledTimes(1);
     expect(mockUpdate).toHaveBeenCalledWith({
       variables: {
         id: "1",
         categoryId: "test-category-id",
         name: "Updated Subcategory",
-        budgetAmount: 750,
-        rolloverDate: FROZEN_ISO,
       },
     });
+  });
+
+  it("shows the budget schedule instead of a single amount when editing", () => {
+    const existing: Subcategory = {
+      id: "1",
+      createdAt: FROZEN_ISO,
+      name: "Groceries",
+      budgetAmount: 700,
+      rolloverDate: FROZEN_ISO,
+      categoryId: "test-category-id",
+      budgetForMonth: 700,
+      rolloverRemaining: 700,
+      budgets: [
+        {
+          id: "period-1",
+          amount: 100,
+          validFrom: String(Date.UTC(2023, 5, 1)),
+          __typename: "SubcategoryBudget",
+        },
+        {
+          id: "period-2",
+          amount: 700,
+          validFrom: String(Date.UTC(2026, 0, 1)),
+          __typename: "SubcategoryBudget",
+        },
+      ],
+      __typename: "Subcategory",
+    };
+
+    render(
+      <SubcategoryFormFactory
+        open={true}
+        closeForm={closeForm}
+        presetCategoryId={presetCategoryId}
+        categories={categories}
+        formData={existing}
+      />
+    );
+
+    expect(screen.getByText("Budget history")).toBeInTheDocument();
+    expect(screen.getByText("100")).toBeInTheDocument();
+    expect(screen.getByText("700")).toBeInTheDocument();
+    expect(screen.getByText(/from Jun 2023/)).toBeInTheDocument();
+    expect(screen.getByText(/from Jan 2026/)).toBeInTheDocument();
   });
 });

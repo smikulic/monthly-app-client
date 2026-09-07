@@ -1,15 +1,10 @@
 import { FC, useState } from "react";
-import { useQuery } from "@apollo/client";
-import dayjs from "dayjs";
 import { Expense } from "@/generated/graphql";
-import { getRemainingRolloverBudget } from "@/utils/getRolloverBudget";
 import { GroupRowStyled } from "@/components/list-group/list-group-style";
-import { GET_ALL_EXPENSES } from "../../pages/expenses-page/expenses-page-queries";
 import { ExpandedExpenses } from "../expanded-expenses/expanded-expenses";
 import { ListItemHeader } from "../list-item-header/list-item-header";
 import { ListItemDetails } from "../list-item-details/list-item-details";
 import { SubcategoryDecoratedWithExpenses } from "@/features/expenses/expenses-list/expenses-list";
-import { getEndOfMonth } from "@/utils/getEndOfMonth";
 
 interface Props {
   subcategory: SubcategoryDecoratedWithExpenses;
@@ -32,38 +27,6 @@ export const SubcategoryListItem: FC<Props> = ({
 }) => {
   const [openSubcategory, setOpenSubcategory] = useState("");
 
-  const { data: expensesData } = useQuery(GET_ALL_EXPENSES);
-
-  const rolloverDate = new Date(Number(subcategory.rolloverDate));
-
-  // Where we build the expenses list for the viewed month
-  const monthEnd = getEndOfMonth(currentDate);
-
-  const expensesSinceRollover = (expensesData?.expenses || []).filter(
-    (expense: Expense) => {
-      const dt = new Date(Number(expense.date));
-      return (
-        dt >= rolloverDate && // from rollover start
-        dt <= monthEnd && // up to end of viewed month
-        expense.subcategoryId === subcategory.id
-      );
-    },
-  );
-
-  // Summing the filtered expenses
-  const totalExpensesSinceRollover = expensesSinceRollover.reduce(
-    (acc: number, expense: { amount: number }) => acc + expense.amount,
-    0,
-  );
-
-  // Remaining rollover for the viewed month
-  const remainingRolloverBudget = getRemainingRolloverBudget({
-    currentDate,
-    rolloverDate,
-    budgetAmount: subcategory.budgetAmount || 0,
-    totalExpensesSinceRollover,
-  });
-
   const subcategoryId = subcategory.id;
   const showExpenses = openSubcategory === subcategoryId;
   const totalSubcategoryExpenses = subcategory.expenses.reduce(
@@ -73,18 +36,14 @@ export const SubcategoryListItem: FC<Props> = ({
   );
 
   const expensesExist = totalSubcategoryExpenses > 0;
-  const budgetAmount = subcategory.budgetAmount || 0;
 
+  // Both figures come from the server, which owns the schedule and the accrual.
   const budgetValue = showRolloverBudget
-    ? remainingRolloverBudget
-    : budgetAmount;
+    ? subcategory.rolloverRemaining
+    : subcategory.budgetForMonth;
 
-  const current = dayjs(currentDate);
-  const rollover = dayjs(rolloverDate);
-
-  const isCurrentDateMonthAfterOrEqual =
-    current.year() > rollover.year() ||
-    (current.year() === rollover.year() && current.month() >= rollover.month());
+  // Nothing to show for a month the budget did not exist in yet.
+  const hasStarted = subcategory.budgetForMonth > 0;
 
   return (
     <>
@@ -102,7 +61,7 @@ export const SubcategoryListItem: FC<Props> = ({
 
         <ListItemDetails
           expenseValue={totalSubcategoryExpenses}
-          budgetValue={isCurrentDateMonthAfterOrEqual ? budgetValue : undefined}
+          budgetValue={hasStarted ? budgetValue : undefined}
         />
       </GroupRowStyled>
       {showExpenses && (

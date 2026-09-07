@@ -1,36 +1,5 @@
 import { gql } from "@apollo/client";
 
-export const GET_CATEGORY = gql`
-  query Category($id: ID!, $date: String!) {
-    category(id: $id) {
-      id
-      name
-      subcategories {
-        id
-        name
-        budgetAmount
-        expenses(filter: { date: $date }) {
-          id
-          amount
-          date
-        }
-      }
-    }
-  }
-`;
-
-export const GET_ALL_EXPENSES = gql`
-  query Expenses {
-    expenses {
-      id
-      subcategoryId
-      amount
-      description
-      date
-    }
-  }
-`;
-
 export const GET_EXPENSES_LIST = gql`
   query ExpensesList($date: String!, $scope: ScopeMode, $groupId: ID) {
     expenses(filter: { date: $date }, scope: $scope, groupId: $groupId) {

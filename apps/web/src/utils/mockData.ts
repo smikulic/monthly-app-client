@@ -13,6 +13,9 @@ export const categoryMock1 = {
       createdAt: "",
       rolloverDate: "",
       budgetAmount: 100,
+      budgetForMonth: 100,
+      rolloverRemaining: 100,
+      budgets: [],
     },
     {
       id: mockSubcategoryId2,
@@ -21,6 +24,9 @@ export const categoryMock1 = {
       createdAt: "",
       rolloverDate: "",
       budgetAmount: 200,
+      budgetForMonth: 200,
+      rolloverRemaining: 200,
+      budgets: [],
     },
   ],
 };

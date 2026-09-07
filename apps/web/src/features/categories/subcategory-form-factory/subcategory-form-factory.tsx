@@ -14,6 +14,7 @@ import { FormControl } from "@/components/ui/FormControl";
 import { DatePickerStyled } from "@/components/ui/DatePickerStyled";
 import { MenuItem } from "@/components/ui/MenuItem";
 import { FormDialog } from "@/components/form-dialog/form-dialog";
+import { BudgetScheduleEditor } from "./budget-schedule-editor";
 import dayjs from "dayjs";
 
 const useSubcategoryForm = (
@@ -32,9 +33,8 @@ const useSubcategoryForm = (
   const [subcategoryBudget, setSubcategoryBudget] = useState(
     formData?.budgetAmount
   );
-  const [subcategoryRolloverDate, setSubcategoryRolloverDate] = useState(
-    formData ? new Date(parseInt(formData.rolloverDate, 10)) : new Date()
-  );
+  // Only asked for on create, where it opens the schedule.
+  const [subcategoryValidFrom, setSubcategoryValidFrom] = useState(new Date());
 
   const [createSubcategory] = useCreateSubcategoryMutation({
     onCompleted: ({ createSubcategory }) => {
@@ -97,18 +97,24 @@ const useSubcategoryForm = (
   }, [subcategoryName, subcategoryBudget]);
 
   const handleFormAction = () => {
-    const variables = {
-      categoryId,
-      name: subcategoryName,
-      budgetAmount: subcategoryBudget as number,
-      rolloverDate: dayjs(subcategoryRolloverDate).format("YYYY-MM-DD"),
-    };
-
     if (isCreateMode) {
-      createSubcategory({ variables });
-    } else {
-      updateSubcategory({ variables: { ...variables, id: formData!.id } });
+      createSubcategory({
+        variables: {
+          categoryId,
+          name: subcategoryName,
+          budgetAmount: subcategoryBudget as number,
+          validFrom: dayjs(subcategoryValidFrom).format("YYYY-MM-DD"),
+        },
+      });
+      return;
     }
+
+    // No amount here: the schedule owns it, and the rows in the editor have
+    // already saved themselves. Sending one would correct the current period
+    // to whatever this form happened to be holding.
+    updateSubcategory({
+      variables: { id: formData!.id, categoryId, name: subcategoryName },
+    });
   };
 
   return {
@@ -116,11 +122,11 @@ const useSubcategoryForm = (
     categoryId,
     subcategoryName,
     subcategoryBudget,
-    subcategoryRolloverDate,
+    subcategoryValidFrom,
     setCategoryId,
     setSubcategoryName,
     setSubcategoryBudget,
-    setSubcategoryRolloverDate,
+    setSubcategoryValidFrom,
     handleFormAction,
     formActionText: isCreateMode ? FORM_ACTIONS.CREATE : FORM_ACTIONS.SAVE,
   };
@@ -132,12 +138,14 @@ export const SubcategoryFormFactory = ({
   categories,
   closeForm,
   formData,
+  refetchCategories,
 }: {
   open: boolean;
   presetCategoryId: string;
   categories: Category[];
   closeForm: () => void;
   formData?: Subcategory;
+  refetchCategories?: () => void;
 }) => {
   const type = formData ? "update" : "create";
   const {
@@ -145,11 +153,11 @@ export const SubcategoryFormFactory = ({
     categoryId,
     subcategoryName,
     subcategoryBudget,
-    subcategoryRolloverDate,
+    subcategoryValidFrom,
     setCategoryId,
     setSubcategoryName,
     setSubcategoryBudget,
-    setSubcategoryRolloverDate,
+    setSubcategoryValidFrom,
     handleFormAction,
     formActionText,
   } = useSubcategoryForm(
@@ -203,25 +211,40 @@ export const SubcategoryFormFactory = ({
           data-testid="subcategory-name-input"
         />
       </FormControl>
-      <TextFieldStyled
-        required
-        id="subcategoryBudget"
-        label="Budget"
-        size="small"
-        margin="none"
-        autoComplete="off"
-        value={subcategoryBudget}
-        onChange={(e) => setSubcategoryBudget(Number(e.target.value))}
-        data-testid="subcategory-budget-input"
-      />
+      {/* Creating asks for one amount and when it starts, which is the opening
+          period. Editing shows the whole schedule instead: by then there can be
+          more than one amount, and a single field cannot say which it means. */}
+      {type === "create" ? (
+        <>
+          <TextFieldStyled
+            required
+            id="subcategoryBudget"
+            label="Budget"
+            size="small"
+            margin="none"
+            autoComplete="off"
+            value={subcategoryBudget}
+            onChange={(e) => setSubcategoryBudget(Number(e.target.value))}
+            data-testid="subcategory-budget-input"
+          />
 
-      <DatePickerStyled
-        label="Rollover Date"
-        value={subcategoryRolloverDate}
-        onChange={(date: Date | null) =>
-          date && setSubcategoryRolloverDate(date)
-        }
-      />
+          <DatePickerStyled
+            label="Starts from"
+            views={["year", "month"]}
+            format="MMM YYYY"
+            value={subcategoryValidFrom}
+            onChange={(date: Date | null) =>
+              date && setSubcategoryValidFrom(date)
+            }
+          />
+        </>
+      ) : (
+        <BudgetScheduleEditor
+          subcategoryId={formData!.id}
+          periods={formData!.budgets ?? []}
+          onChanged={() => refetchCategories?.()}
+        />
+      )}
     </FormDialog>
   );
 };

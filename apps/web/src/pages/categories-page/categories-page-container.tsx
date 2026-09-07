@@ -1,4 +1,5 @@
 import { useState } from "react";
+import dayjs from "dayjs";
 import { useCategoriesListQuery } from "@/generated/graphql";
 import { ProminentButtonStyled } from "@/shared";
 import {
@@ -19,7 +20,14 @@ export const CategoriesPageContainer = () => {
     data: categoriesData,
     loading: loadingCategories,
     refetch: refetchCategories,
-  } = useCategoriesListQuery({ variables: scopeVariables(scope) });
+    // This page lists budgets rather than months, so it asks about the current
+    // one. The figures are only shown on the expenses and home pages.
+  } = useCategoriesListQuery({
+    variables: {
+      date: dayjs().format("MM-DD-YYYY"),
+      ...scopeVariables(scope),
+    },
+  });
 
   const {
     openCategory,
@@ -111,6 +119,7 @@ export const CategoriesPageContainer = () => {
           presetCategoryId={""}
           categories={categories!}
           formData={updateModalSubcategory}
+          refetchCategories={refetchCategories}
         />
       )}
     </>

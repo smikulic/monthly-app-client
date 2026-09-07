@@ -204,6 +204,8 @@ export type Mutation = {
   deleteInvestment: Scalars['Boolean'];
   deleteSavingGoal: SavingGoal;
   deleteSubcategory: Subcategory;
+  /** Removes the period starting in that month. The last remaining one cannot go. */
+  deleteSubcategoryBudget: Subcategory;
   googleLogin: AuthPayload;
   importData: ImportResult;
   inviteToGroup: GroupInvite;
@@ -214,6 +216,11 @@ export type Mutation = {
   resetPasswordRequest: PasswordResetRequestPayload;
   revokeGroupInvite: Scalars['Boolean'];
   setPassword: User;
+  /**
+   * Adds or replaces the amount effective from validFrom, leaving every earlier
+   * month on the amount it already had.
+   */
+  setSubcategoryBudget: Subcategory;
   shareCategory: Category;
   signup?: Maybe<AuthPayload>;
   unshareCategory: Category;
@@ -222,6 +229,7 @@ export type Mutation = {
   updateGroup: Group;
   updateInvestment: Investment;
   updateSavingGoal: SavingGoal;
+  /** Renames or re-files. Amounts live on the schedule. */
   updateSubcategory: Subcategory;
   updateUser: User;
 };
@@ -276,7 +284,7 @@ export type MutationCreateSubcategoryArgs = {
   categoryId: Scalars['ID'];
   icon?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
-  rolloverDate?: InputMaybe<Scalars['String']>;
+  validFrom: Scalars['String'];
 };
 
 
@@ -307,6 +315,12 @@ export type MutationDeleteSavingGoalArgs = {
 
 export type MutationDeleteSubcategoryArgs = {
   id: Scalars['ID'];
+};
+
+
+export type MutationDeleteSubcategoryBudgetArgs = {
+  subcategoryId: Scalars['ID'];
+  validFrom: Scalars['String'];
 };
 
 
@@ -366,6 +380,13 @@ export type MutationSetPasswordArgs = {
 };
 
 
+export type MutationSetSubcategoryBudgetArgs = {
+  amount: Scalars['Int'];
+  subcategoryId: Scalars['ID'];
+  validFrom: Scalars['String'];
+};
+
+
 export type MutationShareCategoryArgs = {
   categoryId: Scalars['ID'];
   groupId: Scalars['ID'];
@@ -421,11 +442,9 @@ export type MutationUpdateSavingGoalArgs = {
 
 
 export type MutationUpdateSubcategoryArgs = {
-  budgetAmount: Scalars['Int'];
   categoryId: Scalars['ID'];
   id: Scalars['ID'];
   name: Scalars['String'];
-  rolloverDate?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -545,19 +564,44 @@ export enum ScopeMode {
 
 export type Subcategory = {
   __typename?: 'Subcategory';
+  /** The amount in force today. For any other month use budgetForMonth. */
   budgetAmount?: Maybe<Scalars['Int']>;
+  /** The amount that applied in the given month, 0 before the schedule opens. */
+  budgetForMonth: Scalars['Int'];
+  /** The amount schedule, oldest first. */
+  budgets: Array<SubcategoryBudget>;
   categoryId: Scalars['ID'];
   createdAt: Scalars['String'];
   expenses?: Maybe<Array<Maybe<Expense>>>;
   icon?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   name: Scalars['String'];
+  /** The month the schedule opens. Mirrors the earliest budget period. */
   rolloverDate: Scalars['String'];
+  /** Everything accrued up to the end of that month, minus everything spent. */
+  rolloverRemaining: Scalars['Int'];
+};
+
+
+export type SubcategoryBudgetForMonthArgs = {
+  date: Scalars['String'];
 };
 
 
 export type SubcategoryExpensesArgs = {
   filter?: InputMaybe<ExpenseFilterInput>;
+};
+
+
+export type SubcategoryRolloverRemainingArgs = {
+  date: Scalars['String'];
+};
+
+export type SubcategoryBudget = {
+  __typename?: 'SubcategoryBudget';
+  amount: Scalars['Int'];
+  id: Scalars['ID'];
+  validFrom: Scalars['String'];
 };
 
 export type TopExpense = {
@@ -680,10 +724,11 @@ export type UnshareCategoryMutation = { __typename?: 'Mutation', unshareCategory
 export type CategoriesListQueryVariables = Exact<{
   scope?: InputMaybe<ScopeMode>;
   groupId?: InputMaybe<Scalars['ID']>;
+  date: Scalars['String'];
 }>;
 
 
-export type CategoriesListQuery = { __typename?: 'Query', categories: Array<{ __typename?: 'Category', id: string, name: string, groupId?: string | null, user?: { __typename?: 'User', id: string } | null, subcategories?: Array<{ __typename?: 'Subcategory', id: string, categoryId: string, createdAt: string, rolloverDate: string, name: string, budgetAmount?: number | null } | null> | null }> };
+export type CategoriesListQuery = { __typename?: 'Query', categories: Array<{ __typename?: 'Category', id: string, name: string, groupId?: string | null, user?: { __typename?: 'User', id: string } | null, subcategories?: Array<{ __typename?: 'Subcategory', id: string, categoryId: string, createdAt: string, name: string, budgetAmount?: number | null, budgetForMonth: number, rolloverRemaining: number, budgets: Array<{ __typename?: 'SubcategoryBudget', id: string, amount: number, validFrom: string }> } | null> | null }> };
 
 export type CreateCategoryMutationVariables = Exact<{
   name: Scalars['String'];
@@ -711,7 +756,7 @@ export type CreateSubcategoryMutationVariables = Exact<{
   categoryId: Scalars['ID'];
   name: Scalars['String'];
   budgetAmount: Scalars['Int'];
-  rolloverDate: Scalars['String'];
+  validFrom: Scalars['String'];
 }>;
 
 
@@ -721,12 +766,27 @@ export type UpdateSubcategoryMutationVariables = Exact<{
   id: Scalars['ID'];
   categoryId: Scalars['ID'];
   name: Scalars['String'];
-  budgetAmount: Scalars['Int'];
-  rolloverDate: Scalars['String'];
 }>;
 
 
 export type UpdateSubcategoryMutation = { __typename?: 'Mutation', updateSubcategory: { __typename?: 'Subcategory', id: string, categoryId: string, name: string, budgetAmount?: number | null } };
+
+export type SetSubcategoryBudgetMutationVariables = Exact<{
+  subcategoryId: Scalars['ID'];
+  amount: Scalars['Int'];
+  validFrom: Scalars['String'];
+}>;
+
+
+export type SetSubcategoryBudgetMutation = { __typename?: 'Mutation', setSubcategoryBudget: { __typename?: 'Subcategory', id: string, budgetAmount?: number | null, rolloverDate: string, budgets: Array<{ __typename?: 'SubcategoryBudget', id: string, amount: number, validFrom: string }> } };
+
+export type DeleteSubcategoryBudgetMutationVariables = Exact<{
+  subcategoryId: Scalars['ID'];
+  validFrom: Scalars['String'];
+}>;
+
+
+export type DeleteSubcategoryBudgetMutation = { __typename?: 'Mutation', deleteSubcategoryBudget: { __typename?: 'Subcategory', id: string, budgetAmount?: number | null, rolloverDate: string, budgets: Array<{ __typename?: 'SubcategoryBudget', id: string, amount: number, validFrom: string }> } };
 
 export type DeleteSubcategoryMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -741,19 +801,6 @@ export type ConfirmEmailMutationVariables = Exact<{
 
 
 export type ConfirmEmailMutation = { __typename?: 'Mutation', confirmEmail: { __typename?: 'AuthPayload', token?: string | null, user?: { __typename?: 'User', email: string } | null } };
-
-export type CategoryQueryVariables = Exact<{
-  id: Scalars['ID'];
-  date: Scalars['String'];
-}>;
-
-
-export type CategoryQuery = { __typename?: 'Query', category: { __typename?: 'Category', id: string, name: string, subcategories?: Array<{ __typename?: 'Subcategory', id: string, name: string, budgetAmount?: number | null, expenses?: Array<{ __typename?: 'Expense', id: string, amount: number, date: string } | null> | null } | null> | null } };
-
-export type ExpensesQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type ExpensesQuery = { __typename?: 'Query', expenses: Array<{ __typename?: 'Expense', id: string, subcategoryId: string, amount: number, description?: string | null, date: string }> };
 
 export type ExpensesListQueryVariables = Exact<{
   date: Scalars['String'];
@@ -1378,7 +1425,7 @@ export type UnshareCategoryMutationHookResult = ReturnType<typeof useUnshareCate
 export type UnshareCategoryMutationResult = Apollo.MutationResult<UnshareCategoryMutation>;
 export type UnshareCategoryMutationOptions = Apollo.BaseMutationOptions<UnshareCategoryMutation, UnshareCategoryMutationVariables>;
 export const CategoriesListDocument = gql`
-    query CategoriesList($scope: ScopeMode, $groupId: ID) {
+    query CategoriesList($scope: ScopeMode, $groupId: ID, $date: String!) {
   categories(scope: $scope, groupId: $groupId) {
     id
     name
@@ -1390,9 +1437,15 @@ export const CategoriesListDocument = gql`
       id
       categoryId
       createdAt
-      rolloverDate
       name
       budgetAmount
+      budgetForMonth(date: $date)
+      rolloverRemaining(date: $date)
+      budgets {
+        id
+        amount
+        validFrom
+      }
     }
   }
 }
@@ -1412,10 +1465,11 @@ export const CategoriesListDocument = gql`
  *   variables: {
  *      scope: // value for 'scope'
  *      groupId: // value for 'groupId'
+ *      date: // value for 'date'
  *   },
  * });
  */
-export function useCategoriesListQuery(baseOptions?: Apollo.QueryHookOptions<CategoriesListQuery, CategoriesListQueryVariables>) {
+export function useCategoriesListQuery(baseOptions: Apollo.QueryHookOptions<CategoriesListQuery, CategoriesListQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<CategoriesListQuery, CategoriesListQueryVariables>(CategoriesListDocument, options);
       }
@@ -1529,12 +1583,12 @@ export type DeleteCategoryMutationHookResult = ReturnType<typeof useDeleteCatego
 export type DeleteCategoryMutationResult = Apollo.MutationResult<DeleteCategoryMutation>;
 export type DeleteCategoryMutationOptions = Apollo.BaseMutationOptions<DeleteCategoryMutation, DeleteCategoryMutationVariables>;
 export const CreateSubcategoryDocument = gql`
-    mutation CreateSubcategory($categoryId: ID!, $name: String!, $budgetAmount: Int!, $rolloverDate: String!) {
+    mutation CreateSubcategory($categoryId: ID!, $name: String!, $budgetAmount: Int!, $validFrom: String!) {
   createSubcategory(
     categoryId: $categoryId
     name: $name
     budgetAmount: $budgetAmount
-    rolloverDate: $rolloverDate
+    validFrom: $validFrom
   ) {
     id
     categoryId
@@ -1561,7 +1615,7 @@ export type CreateSubcategoryMutationFn = Apollo.MutationFunction<CreateSubcateg
  *      categoryId: // value for 'categoryId'
  *      name: // value for 'name'
  *      budgetAmount: // value for 'budgetAmount'
- *      rolloverDate: // value for 'rolloverDate'
+ *      validFrom: // value for 'validFrom'
  *   },
  * });
  */
@@ -1573,14 +1627,8 @@ export type CreateSubcategoryMutationHookResult = ReturnType<typeof useCreateSub
 export type CreateSubcategoryMutationResult = Apollo.MutationResult<CreateSubcategoryMutation>;
 export type CreateSubcategoryMutationOptions = Apollo.BaseMutationOptions<CreateSubcategoryMutation, CreateSubcategoryMutationVariables>;
 export const UpdateSubcategoryDocument = gql`
-    mutation UpdateSubcategory($id: ID!, $categoryId: ID!, $name: String!, $budgetAmount: Int!, $rolloverDate: String!) {
-  updateSubcategory(
-    id: $id
-    categoryId: $categoryId
-    name: $name
-    budgetAmount: $budgetAmount
-    rolloverDate: $rolloverDate
-  ) {
+    mutation UpdateSubcategory($id: ID!, $categoryId: ID!, $name: String!) {
+  updateSubcategory(id: $id, categoryId: $categoryId, name: $name) {
     id
     categoryId
     name
@@ -1606,8 +1654,6 @@ export type UpdateSubcategoryMutationFn = Apollo.MutationFunction<UpdateSubcateg
  *      id: // value for 'id'
  *      categoryId: // value for 'categoryId'
  *      name: // value for 'name'
- *      budgetAmount: // value for 'budgetAmount'
- *      rolloverDate: // value for 'rolloverDate'
  *   },
  * });
  */
@@ -1618,6 +1664,93 @@ export function useUpdateSubcategoryMutation(baseOptions?: Apollo.MutationHookOp
 export type UpdateSubcategoryMutationHookResult = ReturnType<typeof useUpdateSubcategoryMutation>;
 export type UpdateSubcategoryMutationResult = Apollo.MutationResult<UpdateSubcategoryMutation>;
 export type UpdateSubcategoryMutationOptions = Apollo.BaseMutationOptions<UpdateSubcategoryMutation, UpdateSubcategoryMutationVariables>;
+export const SetSubcategoryBudgetDocument = gql`
+    mutation SetSubcategoryBudget($subcategoryId: ID!, $amount: Int!, $validFrom: String!) {
+  setSubcategoryBudget(
+    subcategoryId: $subcategoryId
+    amount: $amount
+    validFrom: $validFrom
+  ) {
+    id
+    budgetAmount
+    rolloverDate
+    budgets {
+      id
+      amount
+      validFrom
+    }
+  }
+}
+    `;
+export type SetSubcategoryBudgetMutationFn = Apollo.MutationFunction<SetSubcategoryBudgetMutation, SetSubcategoryBudgetMutationVariables>;
+
+/**
+ * __useSetSubcategoryBudgetMutation__
+ *
+ * To run a mutation, you first call `useSetSubcategoryBudgetMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetSubcategoryBudgetMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setSubcategoryBudgetMutation, { data, loading, error }] = useSetSubcategoryBudgetMutation({
+ *   variables: {
+ *      subcategoryId: // value for 'subcategoryId'
+ *      amount: // value for 'amount'
+ *      validFrom: // value for 'validFrom'
+ *   },
+ * });
+ */
+export function useSetSubcategoryBudgetMutation(baseOptions?: Apollo.MutationHookOptions<SetSubcategoryBudgetMutation, SetSubcategoryBudgetMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetSubcategoryBudgetMutation, SetSubcategoryBudgetMutationVariables>(SetSubcategoryBudgetDocument, options);
+      }
+export type SetSubcategoryBudgetMutationHookResult = ReturnType<typeof useSetSubcategoryBudgetMutation>;
+export type SetSubcategoryBudgetMutationResult = Apollo.MutationResult<SetSubcategoryBudgetMutation>;
+export type SetSubcategoryBudgetMutationOptions = Apollo.BaseMutationOptions<SetSubcategoryBudgetMutation, SetSubcategoryBudgetMutationVariables>;
+export const DeleteSubcategoryBudgetDocument = gql`
+    mutation DeleteSubcategoryBudget($subcategoryId: ID!, $validFrom: String!) {
+  deleteSubcategoryBudget(subcategoryId: $subcategoryId, validFrom: $validFrom) {
+    id
+    budgetAmount
+    rolloverDate
+    budgets {
+      id
+      amount
+      validFrom
+    }
+  }
+}
+    `;
+export type DeleteSubcategoryBudgetMutationFn = Apollo.MutationFunction<DeleteSubcategoryBudgetMutation, DeleteSubcategoryBudgetMutationVariables>;
+
+/**
+ * __useDeleteSubcategoryBudgetMutation__
+ *
+ * To run a mutation, you first call `useDeleteSubcategoryBudgetMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteSubcategoryBudgetMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteSubcategoryBudgetMutation, { data, loading, error }] = useDeleteSubcategoryBudgetMutation({
+ *   variables: {
+ *      subcategoryId: // value for 'subcategoryId'
+ *      validFrom: // value for 'validFrom'
+ *   },
+ * });
+ */
+export function useDeleteSubcategoryBudgetMutation(baseOptions?: Apollo.MutationHookOptions<DeleteSubcategoryBudgetMutation, DeleteSubcategoryBudgetMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteSubcategoryBudgetMutation, DeleteSubcategoryBudgetMutationVariables>(DeleteSubcategoryBudgetDocument, options);
+      }
+export type DeleteSubcategoryBudgetMutationHookResult = ReturnType<typeof useDeleteSubcategoryBudgetMutation>;
+export type DeleteSubcategoryBudgetMutationResult = Apollo.MutationResult<DeleteSubcategoryBudgetMutation>;
+export type DeleteSubcategoryBudgetMutationOptions = Apollo.BaseMutationOptions<DeleteSubcategoryBudgetMutation, DeleteSubcategoryBudgetMutationVariables>;
 export const DeleteSubcategoryDocument = gql`
     mutation DeleteSubcategory($id: ID!) {
   deleteSubcategory(id: $id) {
@@ -1687,91 +1820,6 @@ export function useConfirmEmailMutation(baseOptions?: Apollo.MutationHookOptions
 export type ConfirmEmailMutationHookResult = ReturnType<typeof useConfirmEmailMutation>;
 export type ConfirmEmailMutationResult = Apollo.MutationResult<ConfirmEmailMutation>;
 export type ConfirmEmailMutationOptions = Apollo.BaseMutationOptions<ConfirmEmailMutation, ConfirmEmailMutationVariables>;
-export const CategoryDocument = gql`
-    query Category($id: ID!, $date: String!) {
-  category(id: $id) {
-    id
-    name
-    subcategories {
-      id
-      name
-      budgetAmount
-      expenses(filter: {date: $date}) {
-        id
-        amount
-        date
-      }
-    }
-  }
-}
-    `;
-
-/**
- * __useCategoryQuery__
- *
- * To run a query within a React component, call `useCategoryQuery` and pass it any options that fit your needs.
- * When your component renders, `useCategoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useCategoryQuery({
- *   variables: {
- *      id: // value for 'id'
- *      date: // value for 'date'
- *   },
- * });
- */
-export function useCategoryQuery(baseOptions: Apollo.QueryHookOptions<CategoryQuery, CategoryQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<CategoryQuery, CategoryQueryVariables>(CategoryDocument, options);
-      }
-export function useCategoryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CategoryQuery, CategoryQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<CategoryQuery, CategoryQueryVariables>(CategoryDocument, options);
-        }
-export type CategoryQueryHookResult = ReturnType<typeof useCategoryQuery>;
-export type CategoryLazyQueryHookResult = ReturnType<typeof useCategoryLazyQuery>;
-export type CategoryQueryResult = Apollo.QueryResult<CategoryQuery, CategoryQueryVariables>;
-export const ExpensesDocument = gql`
-    query Expenses {
-  expenses {
-    id
-    subcategoryId
-    amount
-    description
-    date
-  }
-}
-    `;
-
-/**
- * __useExpensesQuery__
- *
- * To run a query within a React component, call `useExpensesQuery` and pass it any options that fit your needs.
- * When your component renders, `useExpensesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useExpensesQuery({
- *   variables: {
- *   },
- * });
- */
-export function useExpensesQuery(baseOptions?: Apollo.QueryHookOptions<ExpensesQuery, ExpensesQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ExpensesQuery, ExpensesQueryVariables>(ExpensesDocument, options);
-      }
-export function useExpensesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ExpensesQuery, ExpensesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ExpensesQuery, ExpensesQueryVariables>(ExpensesDocument, options);
-        }
-export type ExpensesQueryHookResult = ReturnType<typeof useExpensesQuery>;
-export type ExpensesLazyQueryHookResult = ReturnType<typeof useExpensesLazyQuery>;
-export type ExpensesQueryResult = Apollo.QueryResult<ExpensesQuery, ExpensesQueryVariables>;
 export const ExpensesListDocument = gql`
     query ExpensesList($date: String!, $scope: ScopeMode, $groupId: ID) {
   expenses(filter: {date: $date}, scope: $scope, groupId: $groupId) {
