@@ -2,6 +2,7 @@ import { useContext, useMemo } from "react";
 import { useTheme } from "@/hooks/useTheme";
 import { UserContext } from "@/App";
 import { formatAmount } from "@/utils/format";
+import { getPersonColors } from "@/utils/personColors";
 import { Box } from "@/components/ui/Box";
 import { Typography } from "@/components/ui/Typography";
 
@@ -39,31 +40,10 @@ export const SharedSpendSplit = ({
   const fmt = (n: number) => formatAmount(n, userCurrency);
   const { palette } = theme;
 
-  const colorFor = useMemo(() => {
-    const colors = [
-      palette.primary.main,
-      palette.secondary.main,
-      palette.warning.main,
-      palette.info.main,
-      palette.success.main,
-      palette.error.main,
-    ];
-    // Sorted by id so the assignment does not shift when spend does.
-    const ids = [...totalsByUser.map((u) => u.userId)].sort();
-    const map: Record<string, string> = {};
-    ids.forEach((id, i) => {
-      map[id] = colors[i % colors.length];
-    });
-    return map;
-  }, [
-    totalsByUser,
-    palette.primary.main,
-    palette.secondary.main,
-    palette.warning.main,
-    palette.info.main,
-    palette.success.main,
-    palette.error.main,
-  ]);
+  const colorFor = useMemo(
+    () => getPersonColors(totalsByUser.map((u) => u.userId), palette),
+    [totalsByUser, palette],
+  );
 
   const Bar = ({
     segments,

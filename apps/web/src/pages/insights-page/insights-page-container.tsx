@@ -141,6 +141,9 @@ export const InsightsPageContainer = ({
                   return (
                     <ChartBudgetExpense
                       monthlyBudgets={monthlyBudgets}
+                      sharedByUser={
+                        chartData?.chartExpenses?.sharedMonthlyByUser || []
+                      }
                       chartExpensesData={chartExpensesData}
                       pageDate={pageDate}
                     />

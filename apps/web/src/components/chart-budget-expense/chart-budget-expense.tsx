@@ -19,6 +19,7 @@ import { useTheme } from "@/hooks/useTheme";
 import { UserContext } from "@/App";
 import { months } from "@/constants";
 import { formatAmount } from "@/utils/format";
+import { getPersonColors } from "@/utils/personColors";
 import {
   ErrorTextStyled,
   UnderlineTextStyled,
@@ -42,14 +43,24 @@ const isTwelveNumbers = (values: unknown): values is number[] =>
   values.length === 12 &&
   values.every((v) => typeof v === "number" && !isNaN(v));
 
+export interface SharedUserSeries {
+  userId: string;
+  name: string;
+  monthlyTotals: number[];
+  total: number;
+}
+
 export const ChartBudgetExpense = ({
   monthlyBudgets,
   chartExpensesData,
+  sharedByUser = [],
   pageDate,
 }: {
   /** Budget in force in each month, so a mid-year change draws as a step. */
   monthlyBudgets: number[];
   chartExpensesData: number[];
+  /** Shared-category spend per person. Empty when nothing is shared. */
+  sharedByUser?: SharedUserSeries[];
   pageDate: Date;
 }) => {
   try {
@@ -93,6 +104,10 @@ export const ChartBudgetExpense = ({
     const theme = useTheme();
     const userCurrency = useContext(UserContext);
     const selectedYear = pageDate.getFullYear();
+    const personColors = useMemo(
+      () => getPersonColors(sharedByUser.map((u) => u.userId), theme.palette),
+      [sharedByUser, theme.palette],
+    );
 
     // Totals & formatting
     const totalExpensePerYear = safeExpensesData.reduce((sum, v) => sum + v, 0);
@@ -111,22 +126,23 @@ export const ChartBudgetExpense = ({
       () => ({
         tooltip: {
           trigger: "axis",
-          formatter: ({
-            0: a,
-            1: b,
-          }: {
-            0: { seriesName: string; data: number };
-            1: { seriesName: string; data: number };
-          }) =>
-            `${a.seriesName}: ${formatAmount(a.data, userCurrency)}<br/>` +
-            `${b.seriesName}: ${formatAmount(b.data, userCurrency)}`,
+          // Written over all series rather than a fixed pair: the number of
+          // lines depends on how many people share categories.
+          formatter: (params: { seriesName: string; data: number }[]) =>
+            params
+              .map(
+                (p) =>
+                  `${p.seriesName}: ${formatAmount(p.data, userCurrency)}`,
+              )
+              .join("<br/>"),
           textStyle: { fontSize: 12 },
           axisPointer: { type: "line" },
         },
         legend: {
-          data: ["Expenses", "Budget"],
+          data: ["Expenses", "Budget", ...sharedByUser.map((u) => u.name)],
           top: 0,
           textStyle: { fontSize: 12 },
+          type: "scroll",
         },
         grid: { top: 30, left: 40, right: 20, bottom: 30 },
         xAxis: {
@@ -163,9 +179,24 @@ export const ChartBudgetExpense = ({
             showSymbol: false,
             itemStyle: { color: "#eec22f" },
           },
+          /*
+           * One thin line per person, covering shared categories only. Kept
+           * subordinate to the two totals: these answer "who paid" and sit
+           * below the Expenses line by definition, since shared spend is a
+           * subset of it.
+           */
+          ...sharedByUser.map((u) => ({
+            name: u.name,
+            type: "line",
+            data: u.monthlyTotals,
+            smooth: true,
+            showSymbol: false,
+            lineStyle: { width: 1.5, type: "dashed" },
+            itemStyle: { color: personColors[u.userId] },
+          })),
         ],
       }),
-      [safeExpensesData, safeBudgetsData, userCurrency, theme],
+      [safeExpensesData, safeBudgetsData, sharedByUser, personColors, userCurrency, theme],
     );
 
     return (
