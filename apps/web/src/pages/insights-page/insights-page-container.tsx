@@ -11,6 +11,7 @@ import { TabsStyled, TabStyled } from "@/shared";
 import { Box } from "@/components/ui/Box";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { ChartBudgetExpense } from "@/components/chart-budget-expense/chart-budget-expense";
+import { SharedSpendSplit } from "@/components/shared-spend-split/shared-spend-split";
 import { ChartPie } from "@/components/chart-pie/chart-pie";
 import { useScope, scopeVariables } from "@/features/groups/scope-context";
 import { GET_CHART_EXPENSES_LIST } from "@/pages/expenses-page/expenses-page-queries";
@@ -277,6 +278,24 @@ export const InsightsPageContainer = ({
                 </RowStyled>
               ))}
             </SectionStyled>
+
+            {/* Who paid, in shared categories. Hidden entirely when nothing is
+                shared, since there is then nobody to compare against. */}
+            {insights.sharedTotalsByUser.length > 0 && (
+              <SectionStyled>
+                <SectionTitleStyled>Shared spend by person</SectionTitleStyled>
+                {insights.sharedSplits.length === 0 ? (
+                  <EmptyTextStyled>
+                    No shared spending this month.
+                  </EmptyTextStyled>
+                ) : (
+                  <SharedSpendSplit
+                    totalsByUser={insights.sharedTotalsByUser}
+                    splits={insights.sharedSplits}
+                  />
+                )}
+              </SectionStyled>
+            )}
 
             {/* Pace by category */}
             <SectionStyled>

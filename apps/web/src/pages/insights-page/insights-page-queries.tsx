@@ -45,6 +45,22 @@ export const GET_INSIGHTS = gql`
         categoryName
         monthsUnderBudget
       }
+      sharedTotalsByUser {
+        userId
+        name
+        spent
+      }
+      sharedSplits {
+        subcategoryId
+        subcategoryName
+        categoryName
+        total
+        perUser {
+          userId
+          name
+          spent
+        }
+      }
     }
   }
 `;
