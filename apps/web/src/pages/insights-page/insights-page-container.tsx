@@ -69,7 +69,9 @@ export const InsightsPageContainer = ({
     chartData?.chartExpenses?.monthlyTotals || [];
   const chartCategoriesData =
     chartData?.chartExpenses?.categoryExpenseTotals || [];
-  const budgetForChart = insights?.totalBudget ?? 0;
+  // Per-month, from the schedule. `insights.totalBudget` is the viewed month
+  // only and would flatten a year that contains a budget change.
+  const monthlyBudgets: number[] = chartData?.chartExpenses?.monthlyBudgets || [];
   const [tabIndex, setTabIndex] = useState(0);
   const handleTabChange = (_: SyntheticEvent, next: number) =>
     setTabIndex(next);
@@ -137,7 +139,7 @@ export const InsightsPageContainer = ({
                 if (tabIndex === 0) {
                   return (
                     <ChartBudgetExpense
-                      totalBudgetAmount={budgetForChart}
+                      monthlyBudgets={monthlyBudgets}
                       chartExpensesData={chartExpensesData}
                       pageDate={pageDate}
                     />

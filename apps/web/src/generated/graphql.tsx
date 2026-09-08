@@ -71,6 +71,8 @@ export type CategoryPace = {
 export type ChartExpensesPayload = {
   __typename?: 'ChartExpensesPayload';
   categoryExpenseTotals: Array<CategoryExpenseTotal>;
+  /** Budget in force in each month of the year, so a mid-year change shows as a step. */
+  monthlyBudgets: Array<Scalars['Int']>;
   monthlyTotals: Array<Scalars['Int']>;
 };
 
@@ -818,7 +820,7 @@ export type ChartExpensesListQueryVariables = Exact<{
 }>;
 
 
-export type ChartExpensesListQuery = { __typename?: 'Query', chartExpenses: { __typename?: 'ChartExpensesPayload', monthlyTotals: Array<number>, categoryExpenseTotals: Array<{ __typename?: 'CategoryExpenseTotal', categoryName: string, subcategoryName: string, total: number }> } };
+export type ChartExpensesListQuery = { __typename?: 'Query', chartExpenses: { __typename?: 'ChartExpensesPayload', monthlyTotals: Array<number>, monthlyBudgets: Array<number>, categoryExpenseTotals: Array<{ __typename?: 'CategoryExpenseTotal', categoryName: string, subcategoryName: string, total: number }> } };
 
 export type CreateExpenseMutationVariables = Exact<{
   subcategoryId: Scalars['ID'];
@@ -1868,6 +1870,7 @@ export const ChartExpensesListDocument = gql`
     query ChartExpensesList($date: String!, $scope: ScopeMode, $groupId: ID) {
   chartExpenses(filter: {date: $date}, scope: $scope, groupId: $groupId) {
     monthlyTotals
+    monthlyBudgets
     categoryExpenseTotals {
       categoryName
       subcategoryName

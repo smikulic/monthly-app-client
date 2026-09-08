@@ -19,6 +19,7 @@ export const GET_CHART_EXPENSES_LIST = gql`
   query ChartExpensesList($date: String!, $scope: ScopeMode, $groupId: ID) {
     chartExpenses(filter: { date: $date }, scope: $scope, groupId: $groupId) {
       monthlyTotals
+      monthlyBudgets
       categoryExpenseTotals {
         categoryName
         subcategoryName
