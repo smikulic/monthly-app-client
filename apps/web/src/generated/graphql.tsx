@@ -74,6 +74,8 @@ export type ChartExpensesPayload = {
   /** Budget in force in each month of the year, so a mid-year change shows as a step. */
   monthlyBudgets: Array<Scalars['Int']>;
   monthlyTotals: Array<Scalars['Int']>;
+  /** Spend in shared categories only, one series per member. Empty when nothing is shared. */
+  sharedMonthlyByUser: Array<SharedUserSeries>;
 };
 
 export type CreateInvestmentInput = {
@@ -586,6 +588,15 @@ export type SharedSubcategorySplit = {
   total: Scalars['Int'];
 };
 
+/** One person's shared spend across the year, month by month. */
+export type SharedUserSeries = {
+  __typename?: 'SharedUserSeries';
+  monthlyTotals: Array<Scalars['Int']>;
+  name: Scalars['String'];
+  total: Scalars['Int'];
+  userId: Scalars['ID'];
+};
+
 export type Subcategory = {
   __typename?: 'Subcategory';
   /** The amount in force today. For any other month use budgetForMonth. */
@@ -842,7 +853,7 @@ export type ChartExpensesListQueryVariables = Exact<{
 }>;
 
 
-export type ChartExpensesListQuery = { __typename?: 'Query', chartExpenses: { __typename?: 'ChartExpensesPayload', monthlyTotals: Array<number>, monthlyBudgets: Array<number>, categoryExpenseTotals: Array<{ __typename?: 'CategoryExpenseTotal', categoryName: string, subcategoryName: string, total: number }> } };
+export type ChartExpensesListQuery = { __typename?: 'Query', chartExpenses: { __typename?: 'ChartExpensesPayload', monthlyTotals: Array<number>, monthlyBudgets: Array<number>, sharedMonthlyByUser: Array<{ __typename?: 'SharedUserSeries', userId: string, name: string, monthlyTotals: Array<number>, total: number }>, categoryExpenseTotals: Array<{ __typename?: 'CategoryExpenseTotal', categoryName: string, subcategoryName: string, total: number }> } };
 
 export type CreateExpenseMutationVariables = Exact<{
   subcategoryId: Scalars['ID'];
@@ -1893,6 +1904,12 @@ export const ChartExpensesListDocument = gql`
   chartExpenses(filter: {date: $date}, scope: $scope, groupId: $groupId) {
     monthlyTotals
     monthlyBudgets
+    sharedMonthlyByUser {
+      userId
+      name
+      monthlyTotals
+      total
+    }
     categoryExpenseTotals {
       categoryName
       subcategoryName
