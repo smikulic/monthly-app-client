@@ -71,6 +71,8 @@ export type CategoryPace = {
 export type ChartExpensesPayload = {
   __typename?: 'ChartExpensesPayload';
   categoryExpenseTotals: Array<CategoryExpenseTotal>;
+  /** Budget in force in each month of the year, so a mid-year change shows as a step. */
+  monthlyBudgets: Array<Scalars['Int']>;
   monthlyTotals: Array<Scalars['Int']>;
 };
 
@@ -158,6 +160,10 @@ export type InsightsPayload = {
   monthOverMonthPercent?: Maybe<Scalars['Float']>;
   pace: Array<CategoryPace>;
   previousMonthTotal: Scalars['Int'];
+  /** The same spend broken down per shared subcategory. Empty when nothing is shared. */
+  sharedSplits: Array<SharedSubcategorySplit>;
+  /** Spend in shared categories only, per member, across the viewed month. */
+  sharedTotalsByUser: Array<SharedSpender>;
   streaks: Array<BudgetStreak>;
   topExpenses: Array<TopExpense>;
   totalBudget: Scalars['Int'];
@@ -562,6 +568,24 @@ export enum ScopeMode {
   Mine = 'MINE'
 }
 
+/** One member's spend. Present with 0 when they spent nothing, so a comparison is not ambiguous. */
+export type SharedSpender = {
+  __typename?: 'SharedSpender';
+  name: Scalars['String'];
+  spent: Scalars['Int'];
+  userId: Scalars['ID'];
+};
+
+/** A shared subcategory, split by who paid. */
+export type SharedSubcategorySplit = {
+  __typename?: 'SharedSubcategorySplit';
+  categoryName: Scalars['String'];
+  perUser: Array<SharedSpender>;
+  subcategoryId: Scalars['ID'];
+  subcategoryName: Scalars['String'];
+  total: Scalars['Int'];
+};
+
 export type Subcategory = {
   __typename?: 'Subcategory';
   /** The amount in force today. For any other month use budgetForMonth. */
@@ -818,7 +842,7 @@ export type ChartExpensesListQueryVariables = Exact<{
 }>;
 
 
-export type ChartExpensesListQuery = { __typename?: 'Query', chartExpenses: { __typename?: 'ChartExpensesPayload', monthlyTotals: Array<number>, categoryExpenseTotals: Array<{ __typename?: 'CategoryExpenseTotal', categoryName: string, subcategoryName: string, total: number }> } };
+export type ChartExpensesListQuery = { __typename?: 'Query', chartExpenses: { __typename?: 'ChartExpensesPayload', monthlyTotals: Array<number>, monthlyBudgets: Array<number>, categoryExpenseTotals: Array<{ __typename?: 'CategoryExpenseTotal', categoryName: string, subcategoryName: string, total: number }> } };
 
 export type CreateExpenseMutationVariables = Exact<{
   subcategoryId: Scalars['ID'];
@@ -864,7 +888,7 @@ export type InsightsQueryVariables = Exact<{
 }>;
 
 
-export type InsightsQuery = { __typename?: 'Query', insights: { __typename?: 'InsightsPayload', daysElapsed: number, daysInMonth: number, totalBudget: number, totalSpent: number, totalProjected: number, totalSafeToSpend: number, currentMonthTotal: number, previousMonthTotal: number, monthOverMonthDelta: number, monthOverMonthPercent?: number | null, pace: Array<{ __typename?: 'CategoryPace', categoryId: string, categoryName: string, budget: number, spent: number, projected: number, safeToSpend: number, percentUsed: number }>, biggestMovers: Array<{ __typename?: 'CategoryMover', categoryId: string, categoryName: string, currentTotal: number, previousTotal: number, delta: number, percentChange?: number | null }>, topExpenses: Array<{ __typename?: 'TopExpense', id: string, amount: number, description?: string | null, date: string, subcategoryName: string, categoryName: string, paidByName?: string | null }>, streaks: Array<{ __typename?: 'BudgetStreak', subcategoryId: string, subcategoryName: string, categoryName: string, monthsUnderBudget: number }> } };
+export type InsightsQuery = { __typename?: 'Query', insights: { __typename?: 'InsightsPayload', daysElapsed: number, daysInMonth: number, totalBudget: number, totalSpent: number, totalProjected: number, totalSafeToSpend: number, currentMonthTotal: number, previousMonthTotal: number, monthOverMonthDelta: number, monthOverMonthPercent?: number | null, pace: Array<{ __typename?: 'CategoryPace', categoryId: string, categoryName: string, budget: number, spent: number, projected: number, safeToSpend: number, percentUsed: number }>, biggestMovers: Array<{ __typename?: 'CategoryMover', categoryId: string, categoryName: string, currentTotal: number, previousTotal: number, delta: number, percentChange?: number | null }>, topExpenses: Array<{ __typename?: 'TopExpense', id: string, amount: number, description?: string | null, date: string, subcategoryName: string, categoryName: string, paidByName?: string | null }>, streaks: Array<{ __typename?: 'BudgetStreak', subcategoryId: string, subcategoryName: string, categoryName: string, monthsUnderBudget: number }>, sharedTotalsByUser: Array<{ __typename?: 'SharedSpender', userId: string, name: string, spent: number }>, sharedSplits: Array<{ __typename?: 'SharedSubcategorySplit', subcategoryId: string, subcategoryName: string, categoryName: string, total: number, perUser: Array<{ __typename?: 'SharedSpender', userId: string, name: string, spent: number }> }> } };
 
 export type InvestmentsListQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1868,6 +1892,7 @@ export const ChartExpensesListDocument = gql`
     query ChartExpensesList($date: String!, $scope: ScopeMode, $groupId: ID) {
   chartExpenses(filter: {date: $date}, scope: $scope, groupId: $groupId) {
     monthlyTotals
+    monthlyBudgets
     categoryExpenseTotals {
       categoryName
       subcategoryName
@@ -2123,6 +2148,22 @@ export const InsightsDocument = gql`
       subcategoryName
       categoryName
       monthsUnderBudget
+    }
+    sharedTotalsByUser {
+      userId
+      name
+      spent
+    }
+    sharedSplits {
+      subcategoryId
+      subcategoryName
+      categoryName
+      total
+      perUser {
+        userId
+        name
+        spent
+      }
     }
   }
 }

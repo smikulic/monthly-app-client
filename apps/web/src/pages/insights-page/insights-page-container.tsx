@@ -11,6 +11,7 @@ import { TabsStyled, TabStyled } from "@/shared";
 import { Box } from "@/components/ui/Box";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { ChartBudgetExpense } from "@/components/chart-budget-expense/chart-budget-expense";
+import { SharedSpendSplit } from "@/components/shared-spend-split/shared-spend-split";
 import { ChartPie } from "@/components/chart-pie/chart-pie";
 import { useScope, scopeVariables } from "@/features/groups/scope-context";
 import { GET_CHART_EXPENSES_LIST } from "@/pages/expenses-page/expenses-page-queries";
@@ -69,7 +70,9 @@ export const InsightsPageContainer = ({
     chartData?.chartExpenses?.monthlyTotals || [];
   const chartCategoriesData =
     chartData?.chartExpenses?.categoryExpenseTotals || [];
-  const budgetForChart = insights?.totalBudget ?? 0;
+  // Per-month, from the schedule. `insights.totalBudget` is the viewed month
+  // only and would flatten a year that contains a budget change.
+  const monthlyBudgets: number[] = chartData?.chartExpenses?.monthlyBudgets || [];
   const [tabIndex, setTabIndex] = useState(0);
   const handleTabChange = (_: SyntheticEvent, next: number) =>
     setTabIndex(next);
@@ -137,7 +140,7 @@ export const InsightsPageContainer = ({
                 if (tabIndex === 0) {
                   return (
                     <ChartBudgetExpense
-                      totalBudgetAmount={budgetForChart}
+                      monthlyBudgets={monthlyBudgets}
                       chartExpensesData={chartExpensesData}
                       pageDate={pageDate}
                     />
@@ -275,6 +278,24 @@ export const InsightsPageContainer = ({
                 </RowStyled>
               ))}
             </SectionStyled>
+
+            {/* Who paid, in shared categories. Hidden entirely when nothing is
+                shared, since there is then nobody to compare against. */}
+            {insights.sharedTotalsByUser.length > 0 && (
+              <SectionStyled>
+                <SectionTitleStyled>Shared spend by person</SectionTitleStyled>
+                {insights.sharedSplits.length === 0 ? (
+                  <EmptyTextStyled>
+                    No shared spending this month.
+                  </EmptyTextStyled>
+                ) : (
+                  <SharedSpendSplit
+                    totalsByUser={insights.sharedTotalsByUser}
+                    splits={insights.sharedSplits}
+                  />
+                )}
+              </SectionStyled>
+            )}
 
             {/* Pace by category */}
             <SectionStyled>

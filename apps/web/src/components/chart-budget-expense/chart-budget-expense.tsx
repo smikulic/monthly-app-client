@@ -37,24 +37,24 @@ echarts.use([
   CanvasRenderer,
 ]);
 
+const isTwelveNumbers = (values: unknown): values is number[] =>
+  Array.isArray(values) &&
+  values.length === 12 &&
+  values.every((v) => typeof v === "number" && !isNaN(v));
+
 export const ChartBudgetExpense = ({
-  totalBudgetAmount,
+  monthlyBudgets,
   chartExpensesData,
   pageDate,
 }: {
-  totalBudgetAmount: number;
+  /** Budget in force in each month, so a mid-year change draws as a step. */
+  monthlyBudgets: number[];
   chartExpensesData: number[];
   pageDate: Date;
 }) => {
   try {
     // Immediate safety check - bail out completely if data is invalid
-    if (
-      !Array.isArray(chartExpensesData) ||
-      chartExpensesData.length !== 12 ||
-      typeof totalBudgetAmount !== "number" ||
-      isNaN(totalBudgetAmount) ||
-      chartExpensesData.some((val) => typeof val !== "number" || isNaN(val))
-    ) {
+    if (!isTwelveNumbers(chartExpensesData) || !isTwelveNumbers(monthlyBudgets)) {
       return (
         <Box sx={{ p: 2, textAlign: "center" }}>
           <Typography variant="subtitle1" color="textSecondary">
@@ -64,44 +64,21 @@ export const ChartBudgetExpense = ({
       );
     }
 
-    // Create absolutely safe data arrays
-    const safeExpensesData = chartExpensesData.map((val) =>
-      typeof val === "number" && !isNaN(val) ? val : 0,
-    );
-    const safeBudgetAmount =
-      typeof totalBudgetAmount === "number" && !isNaN(totalBudgetAmount)
-        ? totalBudgetAmount
-        : 0;
+    // Both arrays are already validated as twelve finite numbers above.
+    const safeExpensesData = chartExpensesData;
+    const safeBudgetsData = monthlyBudgets;
 
     // State to control when ECharts should render
     const [chartReady, setChartReady] = useState(false);
 
     // Only set chart ready when data is absolutely valid
     useEffect(() => {
-      // Extra strict validation
-      const isValidExpensesData =
-        Array.isArray(safeExpensesData) &&
-        safeExpensesData.length === 12 &&
-        safeExpensesData.every(
-          (val) => typeof val === "number" && !isNaN(val) && isFinite(val),
-        );
-
-      const isValidBudgetAmount =
-        typeof safeBudgetAmount === "number" &&
-        !isNaN(safeBudgetAmount) &&
-        isFinite(safeBudgetAmount);
-
       const isValidMonthsData = Array.isArray(months) && months.length === 12;
+      const allFinite = [...safeExpensesData, ...safeBudgetsData].every(
+        (val) => isFinite(val),
+      );
 
-      // console.log("Chart validation:", {
-      //   isValidExpensesData,
-      //   isValidBudgetAmount,
-      //   isValidMonthsData,
-      //   safeExpensesData,
-      //   safeBudgetAmount,
-      // });
-
-      if (isValidExpensesData && isValidBudgetAmount && isValidMonthsData) {
+      if (allFinite && isValidMonthsData) {
         // Add small delay to ensure all data is stable
         const timer = setTimeout(() => {
           setChartReady(true);
@@ -111,7 +88,7 @@ export const ChartBudgetExpense = ({
         console.log("Chart not ready, keeping false");
         setChartReady(false);
       }
-    }, [safeExpensesData, safeBudgetAmount]);
+    }, [safeExpensesData, safeBudgetsData]);
 
     const theme = useTheme();
     const userCurrency = useContext(UserContext);
@@ -119,7 +96,10 @@ export const ChartBudgetExpense = ({
 
     // Totals & formatting
     const totalExpensePerYear = safeExpensesData.reduce((sum, v) => sum + v, 0);
-    const totalBudgetPerYear = safeBudgetAmount * 12;
+    // Summed, not one month multiplied by twelve: the budget can change during
+    // the year, and a year before it opened should total zero rather than
+    // twelve months of today's figure.
+    const totalBudgetPerYear = safeBudgetsData.reduce((sum, v) => sum + v, 0);
     const formattedExpense = formatAmount(totalExpensePerYear, userCurrency);
     const formattedBudget = formatAmount(totalBudgetPerYear, userCurrency);
     const diff = totalBudgetPerYear - totalExpensePerYear;
@@ -175,14 +155,17 @@ export const ChartBudgetExpense = ({
           {
             name: "Budget",
             type: "line",
-            data: new Array(12).fill(safeBudgetAmount),
-            smooth: true,
+            data: safeBudgetsData,
+            // Not smoothed: a budget holds flat within a month and jumps at the
+            // boundary, so a rounded curve would imply a gradual change.
+            smooth: false,
+            step: "middle",
             showSymbol: false,
             itemStyle: { color: "#eec22f" },
           },
         ],
       }),
-      [safeExpensesData, safeBudgetAmount, userCurrency, theme],
+      [safeExpensesData, safeBudgetsData, userCurrency, theme],
     );
 
     return (
