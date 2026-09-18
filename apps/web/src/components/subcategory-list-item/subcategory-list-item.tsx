@@ -1,6 +1,7 @@
 import { FC, useState } from "react";
 import { Expense } from "@/generated/graphql";
 import { GroupRowStyled } from "@/components/list-group/list-group-style";
+import { Collapse } from "@/components/ui/Collapse";
 import { ExpandedExpenses } from "../expanded-expenses/expanded-expenses";
 import { ListItemHeader } from "../list-item-header/list-item-header";
 import { ListItemDetails } from "../list-item-details/list-item-details";
@@ -45,6 +46,16 @@ export const SubcategoryListItem: FC<Props> = ({
   // Nothing to show for a month the budget did not exist in yet.
   const hasStarted = subcategory.budgetForMonth > 0;
 
+  // What counts as over differs by mode, and only here are both figures known:
+  // with rollover on `budgetValue` is what remains, so over means it went
+  // negative; with it off `budgetValue` is the month's budget, so over means
+  // spend passed it.
+  const overBudget =
+    hasStarted &&
+    (showRolloverBudget
+      ? budgetValue < 0
+      : totalSubcategoryExpenses > budgetValue);
+
   return (
     <>
       <GroupRowStyled actionable={expensesExist}>
@@ -62,20 +73,20 @@ export const SubcategoryListItem: FC<Props> = ({
         <ListItemDetails
           expenseValue={totalSubcategoryExpenses}
           budgetValue={hasStarted ? budgetValue : undefined}
+          budgetLabel={showRolloverBudget ? "left" : "budget"}
+          over={overBudget}
         />
       </GroupRowStyled>
-      {showExpenses && (
-        <>
-          {!!subcategorySelected && (
-            <ExpandedExpenses
-              expenses={subcategorySelected.expenses}
-              categoryGroupId={categoryGroupId}
-              setUpdateModalExpense={setUpdateModalExpense}
-              refetchExpenses={refetchExpenses}
-            />
-          )}
-        </>
-      )}
+      <Collapse in={showExpenses}>
+        {!!subcategorySelected && (
+          <ExpandedExpenses
+            expenses={subcategorySelected.expenses}
+            categoryGroupId={categoryGroupId}
+            setUpdateModalExpense={setUpdateModalExpense}
+            refetchExpenses={refetchExpenses}
+          />
+        )}
+      </Collapse>
     </>
   );
 };

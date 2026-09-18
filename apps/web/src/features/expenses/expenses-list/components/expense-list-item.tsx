@@ -6,6 +6,7 @@ import { SharedGroupBadge } from "@/features/groups/shared-group-badge";
 import { useScope } from "@/features/groups/scope-context";
 import { ListItemDetails } from "@/components/list-item-details/list-item-details";
 import { SubcategoryListItem } from "@/components/subcategory-list-item/subcategory-list-item";
+import { Collapse } from "@/components/ui/Collapse";
 import {
   CategoryDecoratedWithExpenses,
   SubcategoryDecoratedWithExpenses,
@@ -66,7 +67,7 @@ export const ExpenseListItem: FC<Props> = ({
         )}
       </GroupHeaderRowStyled>
 
-      {showSubcategories && (
+      <Collapse in={showSubcategories}>
         <>
           {subcategoriesExist &&
             category.subcategories.map(
@@ -101,7 +102,7 @@ export const ExpenseListItem: FC<Props> = ({
             Add expense
           </GroupAddRowStyled>
         </>
-      )}
+      </Collapse>
     </GroupCardStyled>
   );
 };

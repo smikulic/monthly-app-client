@@ -108,6 +108,24 @@ export const tokens = {
   },
 
   /**
+   * Width of the app's content column. Rows are `space-between`, so uncapped
+   * on a wide monitor a label sits against one edge and its amount against the
+   * other with a metre of empty paper between them.
+   *
+   * Full-bleed bars keep their own edge-to-edge border and centre their
+   * contents on this instead, so the chrome spans the window while everything
+   * inside it lines up with the cards.
+   */
+  contentMaxWidth: 960,
+
+  /**
+   * Horizontal inset of a card inside the content column. Full-bleed bars
+   * align to the cards' edge (`contentMaxWidth - cardInset * 2`) rather than
+   * the column's, or their contents sit out by exactly this much.
+   */
+  cardInset: 12,
+
+  /**
    * Personality lives in the display face, neutrality in the text face. The
    * sans does the dense-table work at 13-14px where character is a liability;
    * Literata appears a handful of times per screen at large sizes, which is
@@ -169,6 +187,9 @@ export const cssVariables: Record<string, string> = {
   ...Object.fromEntries(
     tokens.section.map((color, i) => [`--section-${i + 1}`, color]),
   ),
+
+  "--content-max-width": `${tokens.contentMaxWidth}px`,
+  "--card-inset": `${tokens.cardInset}px`,
 
   "--radius-sm": `${tokens.radius.sm}px`,
   "--radius-md": `${tokens.radius.md}px`,

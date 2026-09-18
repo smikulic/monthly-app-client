@@ -16,6 +16,7 @@ import { CategoryShareMenuItems } from "@/features/groups/category-share-control
 import { SharedGroupBadge } from "@/features/groups/shared-group-badge";
 import { useCanManage } from "@/features/groups/use-can-manage";
 import { useScope } from "@/features/groups/scope-context";
+import { Collapse } from "@/components/ui/Collapse";
 import {
   CategoryAmountStyled,
   CategoryDetailsStyled,
@@ -114,7 +115,7 @@ export const CategoriesListData: FC<Props> = ({
               </CategoryDetailsStyled>
             </GroupHeaderRowStyled>
 
-            {expanded && (
+            <Collapse in={expanded}>
               <>
                 {subcategories && (
                   <CategorySubcategoriesList
@@ -135,7 +136,7 @@ export const CategoriesListData: FC<Props> = ({
                   Add subcategory
                 </GroupAddRowStyled>
               </>
-            )}
+            </Collapse>
           </GroupCardStyled>
         );
       })}

@@ -2,6 +2,7 @@ import { styled } from "@mui/material/styles";
 import { Tab, TabProps, Tabs, TabsProps } from "./components/ui/Tabs";
 import { SelectField } from "./components/ui/Select";
 import { TextField } from "./components/ui/TextField";
+import { tokens } from "./theme/tokens";
 
 export const ListItemStyled = styled("div")({
   display: "flex",
@@ -21,13 +22,17 @@ export const MainListItemStyled = styled(ListItemStyled, {
   margin: "8px 12px",
   padding: "14px 18px",
   border: active
-    ? `1px solid ${theme.palette.text.secondary}`
-    : `1px solid ${theme.palette.text.disabled}`,
+    ? `1px solid ${theme.palette.primary.main}`
+    : `1px solid ${theme.palette.divider}`,
   borderRadius: "12px",
-  background: active ? "rgba(59, 206, 177, 0.08)" : "transparent",
+  // Surface, not transparent: on a warm ground an unfilled row is just an
+  // outline on beige, so nothing reads as a card.
+  background: theme.palette.surface,
+  boxShadow: active ? "none" : "0 1px 2px rgba(20, 18, 15, 0.04)",
 
   "&:hover": {
-    borderColor: theme.palette.text.secondary,
+    borderColor: theme.palette.primary.main,
+    boxShadow: "0 2px 8px rgba(20, 18, 15, 0.06)",
   },
 }));
 
@@ -118,9 +123,35 @@ export const ProminentButtonStyled = styled("div")<ProminentButtonProps>(({
   };
 });
 
+/**
+ * The main content column. Also caps the width: rows are `space-between`, so
+ * on a wide monitor the label sat against one edge of the viewport and its
+ * amount against the other, with a metre of empty paper between them.
+ */
 export const FooterPaddingStyled = styled("div")({
   marginBottom: "68px",
+  maxWidth: `${tokens.contentMaxWidth}px`,
+  marginInline: "auto",
 });
+
+/**
+ * Holds the previous month on screen while the next one loads, dimmed just
+ * enough to read as pending.
+ *
+ * Changing month changes the query variables, so Apollo has no data for them
+ * and the list used to collapse to three skeleton rows before re-expanding to
+ * a dozen. That height collapse was the jumpiness — a transition would only
+ * have animated the jump.
+ */
+export const RefreshingStyled = styled("div", {
+  shouldForwardProp: (prop) => prop !== "refreshing",
+})<{ refreshing?: boolean }>(({ refreshing }) => ({
+  opacity: refreshing ? 0.55 : 1,
+  transition: "opacity 150ms ease",
+  // The old month is still painted, so it must not accept clicks that would
+  // act on the month being navigated away from.
+  pointerEvents: refreshing ? "none" : "auto",
+}));
 
 export const ErrorTextStyled = styled("span")(({ theme }) => ({
   color: theme.palette.error.main,

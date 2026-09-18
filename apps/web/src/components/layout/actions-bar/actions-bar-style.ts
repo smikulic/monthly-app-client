@@ -11,15 +11,19 @@ export const ActionsBarStyled = styled("div")({
   fontSize: "18px",
 });
 
-// Toolbar: a bordered control row that sits directly under the topbar.
+// Toolbar: a control row that sits directly under the topbar.
 // Three balanced zones — View filter (left), month nav (center), action (right).
+//
+// No bottom border. The toolbar lives inside the capped content column while
+// the topbar is full-bleed, so its rule stopped short of the window and read
+// as a broken line under the topbar's full-width one. The topbar rule already
+// separates the chrome, and the cards carry their own edges.
 export const ToolbarStyled = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   gap: theme.spacing(1),
   padding: "6px 16px",
   minHeight: "48px",
-  borderBottom: `1px solid ${theme.palette.divider}`,
 }));
 
 export const ToolbarLeftStyled = styled("div")({

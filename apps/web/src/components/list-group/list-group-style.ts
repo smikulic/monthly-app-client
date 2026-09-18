@@ -8,7 +8,7 @@ type RowProps = { actionable?: boolean };
 // expenses) live inside this same card as indented rows separated by hairline
 // dividers, instead of separate floating pills. No background fill: a row's
 // budget ProgressBar wash sits at z-index -1 and must show through to the
-// (white) page behind the card.
+// page ground behind the card.
 export const GroupCardStyled = styled("div", {
   shouldForwardProp: (prop) => prop !== "active",
 })<ActiveProps>(({ theme, active }) => ({
@@ -40,7 +40,9 @@ export const GroupRowStyled = styled(ListItemStyled, {
   cursor: actionable ? "pointer" : "default",
 }));
 
-// Bottom "add" action, rendered as a solid teal footer row inside the group.
+// Bottom "add" action inside the group. Matches the filled variant of
+// ProminentButtonStyled — the same treatment as Create in the dialogs — so a
+// primary action looks the same wherever it appears.
 export const GroupAddRowStyled = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
@@ -59,6 +61,6 @@ export const GroupAddRowStyled = styled("div")(({ theme }) => ({
   },
 
   "&:hover": {
-    opacity: 0.9,
+    opacity: 0.7,
   },
 }));

@@ -1,11 +1,18 @@
 import { styled } from "@mui/material/styles";
 import { Avatar } from "@/components/ui/Avatar";
+import { tokens } from "@/theme/tokens";
 
 export const HeaderStyled = styled("div")(({ theme }) => ({
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
-  padding: "12px 16px",
+  // Full-bleed bar, centred contents: the border still spans the window while
+  // the brand and avatar line up with the cards below.
+  //
+  // Aligned against the cards' own edge, not the column's. Cards sit 12px
+  // inside the content column, so centring on the raw column width left the
+  // header out by exactly that much.
+  padding: `12px max(16px, calc((100% - ${tokens.contentMaxWidth - tokens.cardInset * 2}px) / 2))`,
   height: "64px",
   borderBottom: `1px solid ${theme.palette.divider}`,
 }));

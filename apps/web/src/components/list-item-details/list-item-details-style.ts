@@ -20,18 +20,27 @@ export const AmountColumnStyled = styled("div")({
   fontVariantNumeric: "tabular-nums",
 });
 
+// The budget line: either the month's budget or what is left of it, depending
+// on the rollover toggle. Context for the figure above it, so it sits smaller
+// and quieter — and coloured only once the budget runs out. Every row is
+// normally under budget, so colouring the healthy case painted the whole list
+// green and left nothing to mark the row that actually needs attention.
 export const BudgetAmountStyled = styled("div")<BudgetAmountStyledProps>(
   ({ theme, positive }) => ({
-    fontSize: "14px",
+    fontSize: "13px",
     color: positive
-      ? theme.palette.money.positive
+      ? theme.palette.text.secondary
       : theme.palette.money.negative,
   }),
 );
 
+// Amount spent — the figure of the row, so it takes ink and a little weight.
+// It was previously the same size and colour as the line beneath it, which
+// left no way to tell which number was the subject.
 export const ExpenseAmountStyled = styled("div")<ExpenseAmountStyledProps>(
   ({ theme, prominent }) => ({
-    fontSize: prominent ? "16px" : "14px",
-    color: theme.palette.text.secondary,
+    fontSize: prominent ? "16px" : "15px",
+    fontWeight: 500,
+    color: theme.palette.text.primary,
   }),
 );

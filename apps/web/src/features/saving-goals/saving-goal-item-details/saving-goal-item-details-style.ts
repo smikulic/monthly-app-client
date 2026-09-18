@@ -14,7 +14,11 @@ export const SavingGoalBudgetAmountStyled = styled(
 )<SavingGoalBudgetAmountStyledProps>(({ theme, positive }) => ({
   position: "relative",
   fontSize: "14px",
-  color: positive ? theme.palette.money.positive : theme.palette.money.negative,
+  // Quiet while on track, coloured only when it is not — same reason as the
+  // budget rows: colouring the healthy case makes the colour meaningless.
+  color: positive
+    ? theme.palette.text.secondary
+    : theme.palette.money.negative,
 }));
 
 export const SavingGoalExpenseAmountStyled = styled(

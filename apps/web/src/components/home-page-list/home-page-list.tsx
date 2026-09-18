@@ -14,14 +14,18 @@ export const HomePageList = ({
   totalBudgetAmount,
   totalSavingGoalsAmount,
   totalInvestmentsValue,
-  insightsSummary,
+  insightsValue,
+  insightsCaption,
+  insightsTone = "neutral",
 }: {
   loading: boolean;
   totalExpensesAmount: number;
   totalBudgetAmount: number;
   totalSavingGoalsAmount: number;
   totalInvestmentsValue: number;
-  insightsSummary?: string;
+  insightsValue: number | string;
+  insightsCaption?: string;
+  insightsTone?: "neutral" | "negative";
 }) => {
   return (
     <HomeContainerStyled>
@@ -58,7 +62,9 @@ export const HomePageList = ({
           linkTo="/insights"
           title="Insights"
           loading={loading}
-          value={insightsSummary || "Spending pace, trends & streaks"}
+          value={insightsValue}
+          caption={insightsCaption}
+          tone={insightsTone}
           valueColor={insights}
         />
       </Box>
