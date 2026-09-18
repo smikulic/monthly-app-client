@@ -40,11 +40,7 @@ export const HomeListItemLink = ({
             }}
           />
           <div>
-            <Typography
-              variant="body1"
-              fontSize="18px"
-              color="primary.contrastText"
-            >
+            <Typography variant="body1" fontSize="18px" color="text.primary">
               {title}
             </Typography>
             {loading ? (

@@ -1,6 +1,12 @@
 import { HomeListItemLink } from "../home-list-item-link/home-list-item-link";
 import { Box } from "@/components/ui/Box";
+import { tokens } from "@/theme/tokens";
 import { HomeContainerStyled } from "./home-page-list-style";
+
+// Wayfinding markers, in row order. Deliberately one hue in five steps rather
+// than five arbitrary colours: the old set gave Expenses red and Investments
+// green, which told the user spending was a failure and investing a success.
+const [expenses, budget, savingGoals, investments, insights] = tokens.section;
 
 export const HomePageList = ({
   loading,
@@ -25,35 +31,35 @@ export const HomePageList = ({
           title="Expenses"
           loading={loading}
           value={totalExpensesAmount}
-          valueColor="#ff7777"
+          valueColor={expenses}
         />
         <HomeListItemLink
           linkTo="/budget"
           title="Budget"
           loading={loading}
           value={totalBudgetAmount}
-          valueColor="#eec22f"
+          valueColor={budget}
         />
         <HomeListItemLink
           linkTo="/saving-goals"
           title="Saving Goals"
           loading={loading}
           value={totalSavingGoalsAmount}
-          valueColor="#6a1fde"
+          valueColor={savingGoals}
         />
         <HomeListItemLink
           linkTo="/investments"
           title="Investments"
           loading={loading}
           value={totalInvestmentsValue}
-          valueColor="#7fb77e"
+          valueColor={investments}
         />
         <HomeListItemLink
           linkTo="/insights"
           title="Insights"
           loading={loading}
           value={insightsSummary || "Spending pace, trends & streaks"}
-          valueColor="#3bceb1"
+          valueColor={insights}
         />
       </Box>
     </HomeContainerStyled>

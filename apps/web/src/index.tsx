@@ -12,10 +12,14 @@ import "react-toastify/dist/ReactToastify.min.css";
 import App from "./App";
 import { API_PRODUCTION, AUTH_TOKEN, SENTRY_DSN } from "./constants";
 import { analytics } from "./utils/mixpanel";
-import "@fontsource/roboto/300.css";
-import "@fontsource/roboto/400.css";
-import "@fontsource/roboto/500.css";
-// import "@fontsource/roboto/700.css";
+// Self-hosted rather than the Google Fonts CDN, which transmits the visitor's
+// IP to a third party — avoided deliberately for an EU-facing finance app.
+//
+// Variable faces, so one file per family covers every weight. Subsetting by
+// `unicode-range` means the `latin-ext` payload (Croatian č ć đ š ž, Slovenian,
+// Hungarian ő ű) only downloads when those characters actually render.
+import "@fontsource-variable/source-sans-3";
+import "@fontsource-variable/literata";
 
 Sentry.init({
   dsn: SENTRY_DSN,

@@ -5,7 +5,7 @@ export const CategoryDetailsStyled = styled("div")({
   alignItems: "center",
 });
 
-export const CategoryAmountStyled = styled("div")({
+export const CategoryAmountStyled = styled("div")(({ theme }) => ({
   fontSize: "16px",
-  color: "#eec22f",
-});
+  color: theme.palette.money.neutral,
+}));

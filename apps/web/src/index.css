@@ -1,11 +1,12 @@
+@import "./theme/tokens.css";
+
 body {
   margin: 0;
-  font-family:
-    -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
-    "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #181818;
+  color: var(--ink);
+  background: var(--ground);
 }
 
 code {
@@ -17,18 +18,21 @@ code {
   box-sizing: border-box;
 }
 
-.red {
-  color: #ff7777;
-}
-
-.orange {
-  color: #eec22f;
+/**
+ * Every money value uses this so columns align down the page. Without it,
+ * proportional digits make totals wander and a figure jitters as it updates.
+ */
+.tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
 }
 
 :root {
-  --toastify-color-success: #3bceb1 !important;
-  --toastify-text-color-success: #000 !important;
+  /* Toastify reads its own variables; point them at the money palette so a
+     success toast is income-green and a failure is error-red. */
+  --toastify-color-success: var(--money-positive) !important;
+  --toastify-text-color-success: var(--accent-contrast) !important;
 
-  --toastify-color-error: #ff7777 !important;
-  --toastify-text-color-error: #000 !important;
+  --toastify-color-error: var(--money-error) !important;
+  --toastify-text-color-error: var(--accent-contrast) !important;
 }

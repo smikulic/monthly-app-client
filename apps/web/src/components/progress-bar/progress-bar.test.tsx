@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen } from "@/test-utils";
 import { ProgressBar } from "./progress-bar";
 import { describe, expect, it } from "vitest";
 

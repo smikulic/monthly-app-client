@@ -45,9 +45,9 @@
   padding: 10px 12px;
   width: 100%;
   font-size: 16px;
-  color: black;
-  background-color: #3bceb1;
-  border: 1px solid black;
+  color: var(--accent-contrast);
+  background-color: var(--accent);
+  border: 1px solid var(--accent);
   border-radius: 5px;
   cursor: pointer;
 }
@@ -56,8 +56,8 @@
 }
 
 .loginPage .link {
-  color: #f199c0;
-  border-bottom: 1px solid #f199c0;
+  color: var(--accent);
+  border-bottom: 1px solid var(--accent);
   cursor: pointer;
 }
 

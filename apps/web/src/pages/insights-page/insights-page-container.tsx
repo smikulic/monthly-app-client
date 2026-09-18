@@ -15,6 +15,7 @@ import { SharedSpendSplit } from "@/components/shared-spend-split/shared-spend-s
 import { ChartPie } from "@/components/chart-pie/chart-pie";
 import { useScope, scopeVariables } from "@/features/groups/scope-context";
 import { GET_CHART_EXPENSES_LIST } from "@/pages/expenses-page/expenses-page-queries";
+import { tokens } from "@/theme/tokens";
 import { GET_INSIGHTS } from "./insights-page-queries";
 import {
   InsightsWrapperStyled,
@@ -32,8 +33,10 @@ import {
   EmptyTextStyled,
 } from "./insights-page-style";
 
-const TEAL = "#3bceb1";
-const RED = "#ff7777";
+// Over a self-set budget is bad news; on track is good news. Both are money
+// values, so they take money tokens.
+const OVER = tokens.money.negative;
+const UNDER = tokens.money.positive;
 
 interface Props {
   pageDate: Date;
@@ -104,7 +107,7 @@ export const InsightsPageContainer = ({
         <Box
           sx={{
             paddingTop: "12px",
-            border: "1px solid #d6d7e0",
+            border: `1px solid ${tokens.hairline}`,
             borderRadius: "12px",
           }}
         >
@@ -182,8 +185,8 @@ export const InsightsPageContainer = ({
                   style={{
                     color:
                       insights.totalProjected > insights.totalBudget
-                        ? RED
-                        : TEAL,
+                        ? OVER
+                        : UNDER,
                     fontWeight: 600,
                   }}
                 >
@@ -322,7 +325,7 @@ export const InsightsPageContainer = ({
                             {fmt(p.spent)} / {fmt(p.budget)}
                           </span>
                           <SubtleTextStyled
-                            style={{ color: over ? RED : undefined }}
+                            style={{ color: over ? OVER : undefined }}
                           >
                             proj. {fmt(p.projected)}
                           </SubtleTextStyled>
@@ -333,7 +336,7 @@ export const InsightsPageContainer = ({
                           style={{
                             height: "100%",
                             width: `${Math.min(100, Math.round(p.percentUsed))}%`,
-                            background: over ? RED : TEAL,
+                            background: over ? OVER : UNDER,
                           }}
                         />
                       </BarTrackStyled>

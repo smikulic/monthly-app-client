@@ -5,11 +5,11 @@ export const ListItemHeaderStyled = styled("div")({
   cursor: "pointer",
 });
 
-export const IconStyled = styled("div")({
+export const IconStyled = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
 
   "& svg": {
-    color: "#181818",
+    color: theme.palette.text.primary,
   },
-});
+}));

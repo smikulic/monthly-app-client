@@ -59,16 +59,18 @@ export const MonthPaginationStyled = styled("div")(({ theme }) => ({
   gap: theme.spacing(1),
   fontSize: "17px",
   whiteSpace: "nowrap",
-  color: theme.palette.primary.contrastText,
+  // Sits on the page ground, so it takes ink. `primary.contrastText` means
+  // "text on the accent fill" and is light.
+  color: theme.palette.text.primary,
 
   "& svg": {
     fontSize: "26px",
-    color: theme.palette.primary.contrastText,
+    color: theme.palette.text.primary,
     borderRadius: "5px",
     cursor: "pointer",
   },
   "& svg:hover": {
-    color: theme.palette.secondary.main,
+    color: theme.palette.primary.main,
   },
 
   [theme.breakpoints.down("sm")]: {

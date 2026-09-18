@@ -81,27 +81,29 @@ export const BarTrackStyled = styled("div")(({ theme }) => ({
 
 export const DeltaStyled = styled("div", {
   shouldForwardProp: (prop) => prop !== "up",
-})<{ up?: boolean }>(({ up }) => ({
+})<{ up?: boolean }>(({ theme, up }) => ({
   display: "flex",
   alignItems: "center",
   gap: 2,
   fontSize: 15,
   fontWeight: 600,
-  color: up ? "#ff7777" : "#7fb77e",
+  // Spending trending up is bad news in a budget; trending down is good.
+  color: up ? theme.palette.money.negative : theme.palette.money.positive,
 
   "& svg": {
     fontSize: 18,
   },
 }));
 
-export const StreakBadgeStyled = styled("span")({
+export const StreakBadgeStyled = styled("span")(({ theme }) => ({
   display: "inline-flex",
   alignItems: "center",
   gap: 4,
   fontSize: 14,
   fontWeight: 600,
-  color: "#3bceb1",
-});
+  // A streak is chrome, not an amount, so it takes the accent.
+  color: theme.palette.primary.main,
+}));
 
 export const EmptyTextStyled = styled("div")(({ theme }) => ({
   fontSize: 14,

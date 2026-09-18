@@ -2,7 +2,7 @@ import {
   render as rtlRender,
   screen,
   fireEvent,
-} from "@testing-library/react";
+} from "@/test-utils";
 import { MockedProvider } from "@apollo/client/testing";
 import "@testing-library/jest-dom";
 import {

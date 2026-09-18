@@ -1,16 +1,17 @@
 import { styled } from "@mui/material/styles";
 
-export const FooterStyled = styled("div")({
+export const FooterStyled = styled("div")(({ theme }) => ({
   position: "fixed",
   bottom: "0",
   padding: "10px",
   width: "100%",
   textAlign: "center",
-  background: "white",
+  background: theme.palette.ground,
+  borderTop: `1px solid ${theme.palette.divider}`,
 
   a: {
-    color: "#f199c0",
+    color: theme.palette.primary.main,
     fontSize: "13px",
     textDecoration: "none",
   },
-});
+}));

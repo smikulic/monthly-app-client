@@ -130,7 +130,7 @@ export const WarningTextStyled = styled("span")(({ theme }) => ({
 }));
 export const UnderlineTextStyled = styled("span")(({ theme }) => ({
   fontWeight: "500",
-  borderBottom: `1px dotted ${theme.palette.primary.contrastText}`,
+  borderBottom: `1px dotted ${theme.palette.text.primary}`,
 }));
 
 // ---- Shared page layout primitives (Reports, Settings, ...) ----
@@ -190,11 +190,10 @@ export const TabStyled = styled((props: TabProps) => (
   fontWeight: "normal",
   borderRadius: "10px",
   marginRight: theme.spacing(2),
-  // unselected
+  // Unselected sits on the page ground, so it takes ink — `primary.contrastText`
+  // means "text on the accent fill" and is light.
   background: "transparent",
-  color: theme.palette.primary.contrastText,
-  // color: theme.palette.text.secondary,
-  // border: `1px solid ${theme.palette.primary.contrastText}`,
+  color: theme.palette.text.secondary,
 
   "&.Mui-selected": {
     background: theme.palette.primary.main,

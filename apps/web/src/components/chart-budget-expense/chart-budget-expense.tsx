@@ -65,7 +65,10 @@ export const ChartBudgetExpense = ({
 }) => {
   try {
     // Immediate safety check - bail out completely if data is invalid
-    if (!isTwelveNumbers(chartExpensesData) || !isTwelveNumbers(monthlyBudgets)) {
+    if (
+      !isTwelveNumbers(chartExpensesData) ||
+      !isTwelveNumbers(monthlyBudgets)
+    ) {
       return (
         <Box sx={{ p: 2, textAlign: "center" }}>
           <Typography variant="subtitle1" color="textSecondary">
@@ -85,8 +88,8 @@ export const ChartBudgetExpense = ({
     // Only set chart ready when data is absolutely valid
     useEffect(() => {
       const isValidMonthsData = Array.isArray(months) && months.length === 12;
-      const allFinite = [...safeExpensesData, ...safeBudgetsData].every(
-        (val) => isFinite(val),
+      const allFinite = [...safeExpensesData, ...safeBudgetsData].every((val) =>
+        isFinite(val),
       );
 
       if (allFinite && isValidMonthsData) {
@@ -105,7 +108,11 @@ export const ChartBudgetExpense = ({
     const userCurrency = useContext(UserContext);
     const selectedYear = pageDate.getFullYear();
     const personColors = useMemo(
-      () => getPersonColors(sharedByUser.map((u) => u.userId), theme.palette),
+      () =>
+        getPersonColors(
+          sharedByUser.map((u) => u.userId),
+          theme.palette,
+        ),
       [sharedByUser, theme.palette],
     );
 
@@ -131,8 +138,7 @@ export const ChartBudgetExpense = ({
           formatter: (params: { seriesName: string; data: number }[]) =>
             params
               .map(
-                (p) =>
-                  `${p.seriesName}: ${formatAmount(p.data, userCurrency)}`,
+                (p) => `${p.seriesName}: ${formatAmount(p.data, userCurrency)}`,
               )
               .join("<br/>"),
           textStyle: { fontSize: 12 },
@@ -166,7 +172,8 @@ export const ChartBudgetExpense = ({
             data: safeExpensesData,
             smooth: true,
             areaStyle: {},
-            itemStyle: { color: "#ff7777" },
+            // Spending is the normal state, so the main series is ink, not red.
+            itemStyle: { color: theme.palette.money.neutral },
           },
           {
             name: "Budget",
@@ -177,7 +184,8 @@ export const ChartBudgetExpense = ({
             smooth: false,
             step: "middle",
             showSymbol: false,
-            itemStyle: { color: "#eec22f" },
+            // The budget is a reference line, so it takes the accent.
+            itemStyle: { color: theme.palette.primary.main },
           },
           /*
            * One thin line per person, covering shared categories only. Kept
@@ -196,7 +204,14 @@ export const ChartBudgetExpense = ({
           })),
         ],
       }),
-      [safeExpensesData, safeBudgetsData, sharedByUser, personColors, userCurrency, theme],
+      [
+        safeExpensesData,
+        safeBudgetsData,
+        sharedByUser,
+        personColors,
+        userCurrency,
+        theme,
+      ],
     );
 
     return (
@@ -205,7 +220,7 @@ export const ChartBudgetExpense = ({
           <Typography
             variant="body1"
             fontSize="16px"
-            color="primary.contrastText"
+            color="text.primary"
             component="div"
           >
             <HomeChartTotalValueStyled>

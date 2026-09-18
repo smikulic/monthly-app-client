@@ -10,12 +10,12 @@ export const ExpenseListItemStyled = styled(ListItemStyled)(({ theme }) => ({
   borderTop: `1px solid ${theme.palette.divider}`,
 }));
 
-export const ExpenseFieldStyled = styled("div")({
-  color: "#878BAC",
+export const ExpenseFieldStyled = styled("div")(({ theme }) => ({
+  color: theme.palette.text.secondary,
   fontSize: "14px",
   whiteSpace: "nowrap",
   overflow: "hidden",
   textOverflow: "ellipsis",
   minWidth: 0,
   flex: 1,
-});
+}));

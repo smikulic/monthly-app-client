@@ -1,4 +1,4 @@
-import { render, fireEvent, waitFor, screen } from "@testing-library/react";
+import { render, fireEvent, waitFor, screen } from "@/test-utils";
 import "@testing-library/jest-dom";
 import { MockedProvider } from "@apollo/client/testing";
 import { toast } from "react-toastify";

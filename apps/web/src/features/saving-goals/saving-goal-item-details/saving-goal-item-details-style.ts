@@ -11,18 +11,18 @@ type SavingGoalExpenseAmountStyledProps = {
 
 export const SavingGoalBudgetAmountStyled = styled(
   "div"
-)<SavingGoalBudgetAmountStyledProps>(({ positive }) => ({
+)<SavingGoalBudgetAmountStyledProps>(({ theme, positive }) => ({
   position: "relative",
   fontSize: "14px",
-  color: positive ? "#7fb77e" : "#ff7777",
+  color: positive ? theme.palette.money.positive : theme.palette.money.negative,
 }));
 
 export const SavingGoalExpenseAmountStyled = styled(
   "div"
-)<SavingGoalExpenseAmountStyledProps>(({ prominent }) => ({
+)<SavingGoalExpenseAmountStyledProps>(({ theme, prominent }) => ({
   position: "relative",
   fontSize: prominent ? "16px" : "14px",
-  color: "#181818",
+  color: theme.palette.text.primary,
 }));
 
 export const SavingGoalItemDetailsContainerStyled = styled(Box)({

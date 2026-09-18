@@ -21,15 +21,17 @@ export const AmountColumnStyled = styled("div")({
 });
 
 export const BudgetAmountStyled = styled("div")<BudgetAmountStyledProps>(
-  ({ positive }) => ({
+  ({ theme, positive }) => ({
     fontSize: "14px",
-    color: positive ? "#7fb77e" : "#ff7777",
+    color: positive
+      ? theme.palette.money.positive
+      : theme.palette.money.negative,
   }),
 );
 
 export const ExpenseAmountStyled = styled("div")<ExpenseAmountStyledProps>(
-  ({ prominent }) => ({
+  ({ theme, prominent }) => ({
     fontSize: prominent ? "16px" : "14px",
-    color: "#878BAC",
+    color: theme.palette.text.secondary,
   }),
 );
