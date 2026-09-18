@@ -30,8 +30,11 @@ const useSubcategoryForm = (
     formData?.categoryId || presetCategoryId,
   );
   const [subcategoryName, setSubcategoryName] = useState(formData?.name || "");
-  const [subcategoryBudget, setSubcategoryBudget] = useState(
-    formData?.budgetAmount,
+  // "" rather than null/undefined: the field is controlled, so it needs a
+  // string or a number at every render. `budgetAmount` is nullable when
+  // editing and absent when creating.
+  const [subcategoryBudget, setSubcategoryBudget] = useState<number | "">(
+    formData?.budgetAmount ?? "",
   );
   // Only asked for on create, where it opens the schedule.
   const [subcategoryValidFrom, setSubcategoryValidFrom] = useState(new Date());
@@ -102,7 +105,7 @@ const useSubcategoryForm = (
         variables: {
           categoryId,
           name: subcategoryName,
-          budgetAmount: subcategoryBudget as number,
+          budgetAmount: Number(subcategoryBudget),
           validFrom: dayjs(subcategoryValidFrom).format("YYYY-MM-DD"),
         },
       });
@@ -224,7 +227,11 @@ export const SubcategoryFormFactory = ({
             margin="none"
             autoComplete="off"
             value={subcategoryBudget}
-            onChange={(e) => setSubcategoryBudget(Number(e.target.value))}
+            onChange={(e) =>
+              setSubcategoryBudget(
+                e.target.value === "" ? "" : Number(e.target.value),
+              )
+            }
             data-testid="subcategory-budget-input"
           />
 

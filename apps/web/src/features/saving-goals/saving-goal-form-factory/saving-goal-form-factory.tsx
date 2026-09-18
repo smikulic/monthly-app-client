@@ -157,7 +157,11 @@ export const SavingGoalFormFactory = ({
         margin="none"
         autoComplete="off"
         value={savingGoalAmount}
-        onChange={(e) => setSavingGoalAmount(Number(e.target.value))}
+        onChange={(e) =>
+          setSavingGoalAmount(
+            e.target.value === "" ? "" : Number(e.target.value),
+          )
+        }
       />
       <TextFieldStyled
         id="savingGoalInitialAmount"
@@ -166,7 +170,11 @@ export const SavingGoalFormFactory = ({
         margin="none"
         autoComplete="off"
         value={savingGoalInitialAmount}
-        onChange={(e) => setSavingGoalInitialAmount(Number(e.target.value))}
+        onChange={(e) =>
+          setSavingGoalInitialAmount(
+            e.target.value === "" ? "" : Number(e.target.value),
+          )
+        }
       />
       <DatePickerStyled
         label="Goal date"

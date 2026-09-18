@@ -1,10 +1,19 @@
 import { styled } from "@mui/material/styles";
 import { tokens } from "@/theme/tokens";
 
-// Compact dropdown trigger sized to sit on the same baseline as the toolbar's
-// month navigation and rollover switch (rather than a tall form-style Select).
-export const ScopeTriggerStyled = styled("div")(({ theme }) => ({
+/**
+ * Compact dropdown trigger, sized to sit on the toolbar baseline rather than
+ * being a tall form-style Select.
+ *
+ * A `button`, not a `div`. As a div it could not be tabbed to or opened from
+ * the keyboard at all, and — because MUI returns focus to the anchor when a
+ * Menu closes — focus had nowhere to go, so it stayed on the MenuItem while
+ * the closing popover was marked aria-hidden.
+ */
+export const ScopeTriggerStyled = styled("button")(({ theme }) => ({
   display: "flex",
+  font: "inherit",
+  color: "inherit",
   alignItems: "center",
   gap: theme.spacing(0.75),
   height: tokens.controlHeight,
@@ -20,6 +29,11 @@ export const ScopeTriggerStyled = styled("div")(({ theme }) => ({
 
   "&:hover": {
     borderColor: theme.palette.primary.main,
+  },
+
+  "&:focus-visible": {
+    outline: `2px solid ${theme.palette.primary.main}`,
+    outlineOffset: "2px",
   },
 
   [theme.breakpoints.down("sm")]: {

@@ -47,6 +47,7 @@ export const ScopeFilter = () => {
     <>
       <ScopeTriggerStyled
         onClick={handleOpen}
+        type="button"
         aria-haspopup="true"
         aria-expanded={open}
         data-testid="scope-filter"

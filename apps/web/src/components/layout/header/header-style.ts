@@ -22,7 +22,13 @@ export const HeaderLeftStyled = styled("div")({
   alignItems: "center",
 });
 
-export const BrandStyled = styled("div")(({ theme }) => ({
+// Buttons, not divs: these navigate, so they must be reachable and
+// activatable from the keyboard like any other control.
+export const BrandStyled = styled("button")(({ theme }) => ({
+  border: "none",
+  background: "transparent",
+  padding: 0,
+  font: "inherit",
   fontSize: tokens.fontSize.xl,
   fontWeight: 700,
   letterSpacing: "-0.02em",
@@ -30,7 +36,11 @@ export const BrandStyled = styled("div")(({ theme }) => ({
   cursor: "pointer",
 }));
 
-export const BackButtonStyled = styled("div")(({ theme }) => ({
+export const BackButtonStyled = styled("button")(({ theme }) => ({
+  border: "none",
+  background: "transparent",
+  padding: 0,
+  font: "inherit",
   display: "flex",
   alignItems: "center",
   height: "40px",
@@ -43,16 +53,30 @@ export const BackButtonStyled = styled("div")(({ theme }) => ({
   },
 }));
 
-export const AccountTriggerStyled = styled("div")(({ theme }) => ({
+/**
+ * A `button`, not a `div` — see ScopeTriggerStyled. Without it the account
+ * menu could not be opened from the keyboard, and MUI had no focusable anchor
+ * to restore focus to when the menu closed.
+ */
+export const AccountTriggerStyled = styled("button")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   gap: theme.spacing(1),
   padding: "4px 8px",
+  border: "none",
   borderRadius: "10px",
+  background: "transparent",
+  font: "inherit",
+  color: "inherit",
   cursor: "pointer",
 
   "&:hover": {
     background: theme.palette.action.hover,
+  },
+
+  "&:focus-visible": {
+    outline: `2px solid ${theme.palette.primary.main}`,
+    outlineOffset: "2px",
   },
 }));
 

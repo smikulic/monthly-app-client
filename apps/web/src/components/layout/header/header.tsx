@@ -58,9 +58,12 @@ export const Header = ({
     <HeaderStyled>
       <HeaderLeftStyled>
         {isHome ? (
-          <BrandStyled onClick={() => navigate("/")}>Monthly</BrandStyled>
+          <BrandStyled type="button" onClick={() => navigate("/")}>
+            Monthly
+          </BrandStyled>
         ) : (
           <BackButtonStyled
+            type="button"
             onClick={() => navigate("/")}
             data-testid="back-button"
           >
@@ -72,6 +75,7 @@ export const Header = ({
 
       <AccountTriggerStyled
         onClick={handleMenuClick}
+        type="button"
         aria-haspopup="true"
         aria-expanded={openMenu}
         data-testid="account-menu-trigger"
