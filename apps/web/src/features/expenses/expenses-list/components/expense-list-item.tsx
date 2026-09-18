@@ -27,12 +27,18 @@ interface Props {
   setCreateModalExpense: (open: boolean) => void;
   setUpdateModalExpense: (expense: Expense | null) => void;
   refetchExpenses: () => Promise<unknown>;
+  /**
+   * Set on the first row only, so the first-run tour has one stable thing to
+   * point at on a list whose contents are entirely the user's own.
+   */
+  dataTour?: string;
 }
 
 export const ExpenseListItem: FC<Props> = ({
   pageDate,
   showRolloverBudget,
   category,
+  dataTour,
   openCategory,
   setOpenCategory,
   setCreateModalExpense,
@@ -55,10 +61,11 @@ export const ExpenseListItem: FC<Props> = ({
   const isActive = showSubcategories && subcategoriesExist;
 
   return (
-    <GroupCardStyled active={isActive}>
+    <GroupCardStyled active={isActive} data-tour={dataTour}>
       <GroupHeaderRowStyled>
         <ListItemHeader
           title={category.name}
+          dataTour={dataTour ? "expense-category-header" : undefined}
           showExpand={!showSubcategories && subcategoriesExist}
           showCollapse={isActive}
           onToggleExpand={() => {
@@ -114,7 +121,10 @@ export const ExpenseListItem: FC<Props> = ({
               },
             )}
 
-          <GroupAddRowStyled onClick={() => setCreateModalExpense(true)}>
+          <GroupAddRowStyled
+            onClick={() => setCreateModalExpense(true)}
+            data-tour={dataTour ? "add-expense" : undefined}
+          >
             <AddIcon />
             Add expense
           </GroupAddRowStyled>
