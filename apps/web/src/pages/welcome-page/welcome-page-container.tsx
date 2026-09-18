@@ -1,6 +1,6 @@
 import CookieConsent from "react-cookie-consent";
 import { handleAnalyticsConsent, COOKIE_CONSENT_KEY } from "@/utils/mixpanel";
-import { FeatureGrid } from "./feature-grid";
+// import { FeatureGrid } from "./feature-grid";
 import ProductDemoImg from "../../assets/product-demo.png";
 import { tokens } from "@/theme/tokens";
 import "./welcome-page-container.css";

@@ -47,6 +47,64 @@ code {
   font-feature-settings: "tnum";
 }
 
+/**
+ * The first-run tour's popover, brought onto the app's own paper.
+ *
+ * driver.js ships a cold white card with blue buttons. Left alone it reads as
+ * a third-party widget bolted onto the page, which is a poor first impression
+ * when its entire job is to introduce the product.
+ *
+ * Scoped to `popoverClass`, so nothing here loads or applies until a tour runs.
+ */
+.driver-popover.monthly-tour {
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--hairline);
+  border-radius: 14px;
+  box-shadow: 0 8px 28px rgba(20, 18, 15, 0.14);
+  max-width: 340px;
+  font-family: var(--font-sans);
+}
+
+.driver-popover.monthly-tour .driver-popover-title {
+  font-family: var(--font-serif);
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.driver-popover.monthly-tour .driver-popover-description {
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
+  color: var(--ink-secondary);
+}
+
+.driver-popover.monthly-tour .driver-popover-progress-text {
+  font-size: var(--font-size-xs);
+  color: var(--ink-secondary);
+}
+
+.driver-popover.monthly-tour .driver-popover-arrow {
+  border-color: var(--surface);
+}
+
+.driver-popover.monthly-tour button {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-sm);
+  text-shadow: none;
+  border-radius: 8px;
+  padding: 6px 14px;
+  border: 1px solid var(--hairline);
+  background: transparent;
+  color: var(--ink-secondary);
+}
+
+.driver-popover.monthly-tour .driver-popover-next-btn {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-contrast);
+}
+
 :root {
   /* Toastify reads its own variables; point them at the money palette so a
      success toast is income-green and a failure is error-red. */

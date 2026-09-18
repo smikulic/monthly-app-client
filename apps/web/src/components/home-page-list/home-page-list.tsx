@@ -42,6 +42,7 @@ export const HomePageList = ({
         <HomeListItemLink
           linkTo="/expenses"
           title="Expenses"
+          dataTour="home-expenses"
           loading={loading}
           value={totalExpensesAmount}
           valueColor={expenses}
@@ -49,6 +50,7 @@ export const HomePageList = ({
         <HomeListItemLink
           linkTo="/budget"
           title="Budget"
+          dataTour="home-budget"
           loading={loading}
           value={totalBudgetAmount}
           valueColor={budget}
@@ -72,6 +74,7 @@ export const HomePageList = ({
         <HomeListItemLink
           linkTo="/insights"
           title="Insights"
+          dataTour="home-insights"
           loading={loading}
           value={insightsValue}
           caption={insightsCaption}

@@ -44,7 +44,7 @@ export const ActionsBar = ({
   }
 
   const monthNav = showMonth && (
-    <MonthPaginationStyled>
+    <MonthPaginationStyled data-tour="month-nav">
       <MonthNavButtonStyled
         type="button"
         onClick={onClickPrevious}
@@ -78,6 +78,7 @@ export const ActionsBar = ({
             onClick={toggleRollover}
             aria-pressed={showRollover}
             data-testid="rollover-toggle"
+            data-tour="rollover-toggle"
           >
             {showRollover && <CheckIcon />}
             Rollover

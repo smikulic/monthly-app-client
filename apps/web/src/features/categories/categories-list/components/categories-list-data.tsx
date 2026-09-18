@@ -58,7 +58,7 @@ export const CategoriesListData: FC<Props> = ({
 
   return (
     <>
-      {categories.map((category: Category) => {
+      {categories.map((category: Category, index: number) => {
         const categoryId = category.id;
         const categoryName = category.name;
         const expanded = openCategory === categoryId;
@@ -73,7 +73,11 @@ export const CategoriesListData: FC<Props> = ({
         );
 
         return (
-          <GroupCardStyled key={categoryId} active={expanded}>
+          <GroupCardStyled
+            key={categoryId}
+            active={expanded}
+            data-tour={index === 0 ? "budget-category" : undefined}
+          >
             <GroupHeaderRowStyled>
               <ListItemHeader
                 title={categoryName}

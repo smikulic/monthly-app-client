@@ -11,6 +11,8 @@ interface Props {
   onToggleExpand?: () => void;
   // Optional marker rendered next to the title (e.g. a shared-group badge).
   badge?: ReactNode;
+  /** Anchor for the first-run tour, which needs to open a row to point inside it. */
+  dataTour?: string;
 }
 
 export const ListItemHeader: FC<Props> = ({
@@ -19,11 +21,12 @@ export const ListItemHeader: FC<Props> = ({
   showCollapse,
   onToggleExpand,
   badge,
+  dataTour,
 }) => {
   return (
     <>
       {onToggleExpand && (
-        <ListItemHeaderStyled onClick={onToggleExpand}>
+        <ListItemHeaderStyled onClick={onToggleExpand} data-tour={dataTour}>
           <IconStyled>
             {showExpand && <ExpandMoreIcon />}
             {showCollapse && <ChevronRightIcon />}

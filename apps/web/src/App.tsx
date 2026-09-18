@@ -27,6 +27,8 @@ import { GroupsPageContainer } from "./pages/groups-page/groups-page-container";
 import { AcceptInvitePageContainer } from "./pages/accept-invite-page/accept-invite-page-container";
 import { PendingInviteResume } from "./pages/accept-invite-page/pending-invite-resume";
 import { ScopeProvider } from "./features/groups/scope-context";
+import { OnboardingProvider } from "./features/demo/onboarding";
+import { DemoBanner } from "./features/demo/demo-banner";
 import { analytics } from "./utils/mixpanel";
 import { theme } from "./theme";
 
@@ -40,6 +42,9 @@ export const GET_USER_ME = gql`
       name
       picture
       provider
+      # NULL until the first-run tour has been finished or dismissed. On the
+      # user rather than in localStorage, so it does not replay per device.
+      onboardingSeenAt
     }
   }
 `;
@@ -167,16 +172,25 @@ function App() {
                     <Route
                       element={
                         <UserContext.Provider value={userData?.me.currency}>
-                          <Header
-                            onLogout={handleLogout}
-                            userData={userData?.me}
-                          />
-                          <PendingInviteResume />
-                          <ScopeProvider>
-                            <ContentWrapperStyled>
-                              <Outlet />
-                            </ContentWrapperStyled>
-                          </ScopeProvider>
+                          <OnboardingProvider
+                            user={userData?.me}
+                            onUserChanged={refetchUserData}
+                          >
+                            <Header
+                              onLogout={handleLogout}
+                              userData={userData?.me}
+                            />
+                            {/* Below the header so it never displaces the
+                                brand, above everything else so there is no
+                                screen from which the demo cannot be left. */}
+                            <DemoBanner />
+                            <PendingInviteResume />
+                            <ScopeProvider>
+                              <ContentWrapperStyled>
+                                <Outlet />
+                              </ContentWrapperStyled>
+                            </ScopeProvider>
+                          </OnboardingProvider>
                         </UserContext.Provider>
                       }
                     >

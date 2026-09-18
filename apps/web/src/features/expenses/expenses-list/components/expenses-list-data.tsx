@@ -33,13 +33,14 @@ export const ExpensesListData: FC<Props> = ({
   return (
     <>
       {categoriesDecoratedWithExpenses.map(
-        (category: CategoryDecoratedWithExpenses) => {
+        (category: CategoryDecoratedWithExpenses, index: number) => {
           const categoryId = category.id;
           const expanded = openCategory === categoryId;
 
           return (
             <Fragment key={categoryId}>
               <ExpenseListItem
+                dataTour={index === 0 ? "expense-category" : undefined}
                 pageDate={pageDate}
                 showRolloverBudget={showRolloverBudget}
                 category={category}

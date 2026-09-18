@@ -179,7 +179,7 @@ export const InsightsPageContainer = ({
             {/* One card, not two: safe-to-spend and the month-over-month
                 comparison answer the same question, and the second used to
                 restate a figure the first already showed. */}
-            <SectionStyled>
+            <SectionStyled data-tour="insights-this-month">
               <SectionTitleStyled>This month</SectionTitleStyled>
 
               <SummaryHeadStyled>
@@ -296,7 +296,7 @@ export const InsightsPageContainer = ({
             {/* Who paid, in shared categories. Hidden entirely when nothing is
                 shared, since there is then nobody to compare against. */}
             {insights.sharedTotalsByUser.length > 0 && (
-              <SectionStyled>
+              <SectionStyled data-tour="insights-shared">
                 <SectionTitleStyled>Shared spend by person</SectionTitleStyled>
                 {insights.sharedSplits.length === 0 ? (
                   <EmptyTextStyled>
@@ -312,7 +312,7 @@ export const InsightsPageContainer = ({
             )}
 
             {/* Pace by category */}
-            <SectionStyled>
+            <SectionStyled data-tour="insights-pace">
               <SectionTitleStyled>Pace by category</SectionTitleStyled>
               {insights.pace.filter((p: any) => p.budget > 0).length === 0 && (
                 <EmptyTextStyled>No budgets set for this view.</EmptyTextStyled>

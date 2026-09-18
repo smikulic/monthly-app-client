@@ -17,6 +17,7 @@ export const HomeListItemLink = ({
   valueColor,
   caption,
   tone = "neutral",
+  dataTour,
 }: {
   linkTo: string;
   title: string;
@@ -33,13 +34,24 @@ export const HomeListItemLink = ({
    * coloured figure on the screen, and therefore actually means something.
    */
   tone?: "neutral" | "positive" | "negative";
+  /**
+   * Anchor for the first-run tour, set on the outer link. A `data-` attribute
+   * rather than a class name: Emotion's class names are hashed and rewritten by
+   * any style change, whereas this shows up in a grep when someone edits the
+   * component.
+   */
+  dataTour?: string;
 }) => {
   const userCurrency = useContext(UserContext);
   const isFigure = typeof value === "number";
   const displayValue = isFigure ? formatAmount(value, userCurrency) : value;
 
   return (
-    <Link to={linkTo}>
+    // The anchor goes on the link, not on the card inside it. The tour blocks
+    // interaction by setting `pointer-events: none` on whatever it highlights,
+    // and a card marked that way simply hands the click to the link wrapping
+    // it — so the reader ends up on another page mid-step.
+    <Link to={linkTo} data-tour={dataTour}>
       <MainListItemStyled>
         <Box sx={{ display: "flex" }}>
           <Box

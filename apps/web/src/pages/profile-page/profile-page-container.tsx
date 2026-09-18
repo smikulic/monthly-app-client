@@ -17,6 +17,7 @@ import { FormControlLabel } from "@/components/ui/FormControl";
 import { SectionCard } from "@/components/section-card/section-card";
 import { CurrencySelect } from "@/components/currency-select/currency-select";
 import { ConfirmDialog } from "@/components/confirm-dialog/confirm-dialog";
+import { useOnboarding } from "@/features/demo/onboarding";
 import {
   ProminentButtonStyled,
   SelectStyled,
@@ -33,6 +34,7 @@ export const ProfilePageContainer = ({
   refetchUserData: () => void;
 }) => {
   const navigate = useNavigate();
+  const { startShowcase } = useOnboarding();
   const [currency, setCurrency] = useState(userData.currency || "EUR");
   const [weeklyReminder, setWeeklyReminder] = useState(
     userData.weeklyReminder || false,
@@ -103,6 +105,21 @@ export const ProfilePageContainer = ({
                 textCenter
               >
                 Save
+              </ProminentButtonStyled>
+            </ButtonGroupStyled>
+          </SectionCard>
+
+          <SectionCard
+            title="Show me around"
+            description="Replays the guided tour over a sample household. Your own budget is left exactly as it is."
+          >
+            <ButtonGroupStyled>
+              <ProminentButtonStyled
+                onClick={() => void startShowcase()}
+                textCenter
+                outline
+              >
+                Take the tour
               </ProminentButtonStyled>
             </ButtonGroupStyled>
           </SectionCard>

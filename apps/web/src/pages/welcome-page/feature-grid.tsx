@@ -1,7 +1,6 @@
 import React from "react";
 import useEmblaCarousel from "embla-carousel-react";
 
-import NetWorthImg from "../../assets/monthly-demo-net-worth.png";
 import SavingGoalsImg from "../../assets/monthly-demo-saving-goals.png";
 import SpendingChartImg from "../../assets/monthly-demo-chart.png";
 import RolloverImg from "../../assets/monthly-demo-rollover.png";
@@ -18,6 +17,13 @@ export const FeatureGrid: React.FC = () => {
     onNextButtonClick,
   } = usePrevNextButtons(emblaApi);
 
+  /*
+   * Net worth was removed here as well as from the live copy: there is no
+   * accounts model, so totalling "your accounts and investments" was a claim
+   * the product could not keep. This component is currently unrendered — the
+   * welcome page imports it behind a comment — and the claim would have come
+   * back with it.
+   */
   const features = [
     {
       image: RolloverImg,
@@ -39,13 +45,6 @@ export const FeatureGrid: React.FC = () => {
       title: "Saving Goals",
       description:
         "Plan bigger purchases with confidence. Set a target and Monthly calculates how much you need to save each month, then tracks your progress until you hit your goal.",
-    },
-    {
-      image: NetWorthImg,
-      alt: "Net worth screenshot",
-      title: "Net Worth Tracking",
-      description:
-        "See your entire financial picture at a glance. Monthly adds up your accounts and investments so you always know your total net worth and how your money is distributed.",
     },
   ];
 

@@ -2,6 +2,7 @@ import ReactDOM from "react-dom/client";
 import { setContext } from "@apollo/client/link/context";
 import {
   ApolloClient,
+  ApolloLink,
   ApolloProvider,
   createHttpLink,
   InMemoryCache,
@@ -12,6 +13,8 @@ import "react-toastify/dist/ReactToastify.min.css";
 import App from "./App";
 import { API_PRODUCTION, AUTH_TOKEN, SENTRY_DSN } from "./constants";
 import { analytics } from "./utils/mixpanel";
+import { demoLink } from "./features/demo/demo-link";
+import { setDemoClient } from "./features/demo/demo-session";
 // Self-hosted rather than the Google Fonts CDN, which transmits the visitor's
 // IP to a third party — avoided deliberately for an EU-facing finance app.
 //
@@ -63,9 +66,16 @@ const authLink = setContext((_, { headers }) => {
 });
 
 const client = new ApolloClient({
-  link: authLink.concat(httpLink),
+  // The demo link sits in front of everything: while a demo is running it
+  // answers operations from the local dataset, so no component, page or route
+  // needs to know a demo exists. See `features/demo/demo-link.ts`.
+  link: ApolloLink.from([demoLink, authLink, httpLink]),
   cache: new InMemoryCache(),
 });
+
+// Entering and leaving the demo swaps every figure in the app, so the cache
+// cannot be allowed to carry answers across that boundary.
+setDemoClient(client);
 
 // Initialize Mixpanel
 analytics.init();
