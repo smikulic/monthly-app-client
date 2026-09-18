@@ -60,7 +60,7 @@ export const HomeListItemLink = ({
               component="div"
               color="text.secondary"
               sx={{
-                fontSize: "12px",
+                fontSize: tokens.fontSize.xs,
                 fontWeight: 600,
                 letterSpacing: "0.08em",
                 lineHeight: 1.6,
@@ -84,14 +84,17 @@ export const HomeListItemLink = ({
                       ? {
                           // Hero figure: the one place the serif earns its bytes.
                           fontFamily: tokens.font.serif,
-                          fontSize: "30px",
+                          fontSize: tokens.fontSize.hero,
                           lineHeight: 1.15,
                           color: tokens.money[tone],
                           ...tabularNums,
                         }
                       : // A sentence, not a figure — 30px serif would wrap
                         // badly and read as a headline.
-                        { fontSize: "15px", color: tokens.ink.secondary }
+                        {
+                          fontSize: tokens.fontSize.md,
+                          color: tokens.ink.secondary,
+                        }
                   }
                 >
                   {displayValue}
@@ -100,7 +103,7 @@ export const HomeListItemLink = ({
                   <Typography
                     component="div"
                     color="text.secondary"
-                    sx={{ fontSize: "13px", lineHeight: 1.5 }}
+                    sx={{ fontSize: tokens.fontSize.sm, lineHeight: 1.5 }}
                   >
                     {caption}
                   </Typography>

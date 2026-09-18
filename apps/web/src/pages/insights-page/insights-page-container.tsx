@@ -75,7 +75,8 @@ export const InsightsPageContainer = ({
     chartData?.chartExpenses?.categoryExpenseTotals || [];
   // Per-month, from the schedule. `insights.totalBudget` is the viewed month
   // only and would flatten a year that contains a budget change.
-  const monthlyBudgets: number[] = chartData?.chartExpenses?.monthlyBudgets || [];
+  const monthlyBudgets: number[] =
+    chartData?.chartExpenses?.monthlyBudgets || [];
   const [tabIndex, setTabIndex] = useState(0);
   const handleTabChange = (_: SyntheticEvent, next: number) =>
     setTabIndex(next);

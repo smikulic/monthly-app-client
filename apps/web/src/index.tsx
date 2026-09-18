@@ -71,12 +71,12 @@ const client = new ApolloClient({
 analytics.init();
 
 const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
+  document.getElementById("root") as HTMLElement,
 );
 root.render(
   <ApolloProvider client={client}>
     <App />
-  </ApolloProvider>
+  </ApolloProvider>,
 );
 
 // Web vitals are not reported anywhere. `reportWebVitals` is still here if that

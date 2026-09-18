@@ -35,20 +35,20 @@ export const getDecoratedCategoriesWithExpenses = ({
           totalSubcategories += 1;
 
           const foundExpenses = expenses.filter(
-            (expense: Expense) => expense.subcategoryId === subcategory.id
+            (expense: Expense) => expense.subcategoryId === subcategory.id,
           );
 
           totalExpenseAmount = foundExpenses?.reduce(
             (accumulator: number, currentValue: Expense) =>
               accumulator + currentValue.amount,
-            totalExpenseAmount
+            totalExpenseAmount,
           );
 
           return {
             ...(subcategory as Subcategory),
             expenses: foundExpenses,
           };
-        }
+        },
       );
 
       return {

@@ -7,7 +7,7 @@ describe("<ActionsBar />", () => {
     render(
       <ActionsBar>
         <div>Test Children</div>
-      </ActionsBar>
+      </ActionsBar>,
     );
     expect(screen.getByText("Test Children")).toBeInTheDocument();
   });
@@ -22,7 +22,7 @@ describe("<ActionsBar />", () => {
         pageDate={mockDate}
         onClickPrevious={mockPrev}
         onClickNext={mockNext}
-      />
+      />,
     );
     expect(screen.getByText("Jul 2023")).toBeInTheDocument();
     expect(screen.getByTestId("ChevronLeftIcon")).toBeInTheDocument();
@@ -38,7 +38,7 @@ describe("<ActionsBar />", () => {
         pageDate={new Date()}
         onClickPrevious={mockPrev}
         onClickNext={mockNext}
-      />
+      />,
     );
     fireEvent.click(screen.getByTestId("ChevronLeftIcon"));
     fireEvent.click(screen.getByTestId("ChevronRightIcon"));
@@ -50,7 +50,7 @@ describe("<ActionsBar />", () => {
   it("toggles rollover when the chip is clicked", () => {
     const mockToggleRollover = vi.fn();
     render(
-      <ActionsBar toggleRollover={mockToggleRollover} showRollover={false} />
+      <ActionsBar toggleRollover={mockToggleRollover} showRollover={false} />,
     );
 
     fireEvent.click(screen.getByTestId("rollover-toggle"));
@@ -62,18 +62,18 @@ describe("<ActionsBar />", () => {
   // rather than a checkbox's checked state.
   it("reports rollover state through aria-pressed", () => {
     const { unmount } = render(
-      <ActionsBar toggleRollover={vi.fn()} showRollover={false} />
+      <ActionsBar toggleRollover={vi.fn()} showRollover={false} />,
     );
     expect(screen.getByTestId("rollover-toggle")).toHaveAttribute(
       "aria-pressed",
-      "false"
+      "false",
     );
     unmount();
 
     render(<ActionsBar toggleRollover={vi.fn()} showRollover />);
     expect(screen.getByTestId("rollover-toggle")).toHaveAttribute(
       "aria-pressed",
-      "true"
+      "true",
     );
   });
 });

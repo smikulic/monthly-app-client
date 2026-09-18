@@ -1,4 +1,5 @@
 import { styled } from "@mui/material/styles";
+import { tokens } from "@/theme/tokens";
 import { ListItemStyled } from "../../shared";
 
 // Expense leaf row (level 2): borderless, indented deepest, divided by a
@@ -6,13 +7,13 @@ import { ListItemStyled } from "../../shared";
 export const ExpenseListItemStyled = styled(ListItemStyled)(({ theme }) => ({
   minHeight: "40px",
   padding: "8px 16px 8px 50px",
-  fontSize: "14px",
+  fontSize: tokens.fontSize.sm,
   borderTop: `1px solid ${theme.palette.divider}`,
 }));
 
 export const ExpenseFieldStyled = styled("div")(({ theme }) => ({
   color: theme.palette.text.secondary,
-  fontSize: "14px",
+  fontSize: tokens.fontSize.sm,
   whiteSpace: "nowrap",
   overflow: "hidden",
   textOverflow: "ellipsis",

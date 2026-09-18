@@ -276,8 +276,8 @@ export const ReportsPageContainer = ({ userData }: { userData: User }) => {
           onConfirm={confirmReplace}
           onCancel={() => setConfirmReplaceOpen(false)}
         >
-          This permanently deletes all your current categories, expenses,
-          saving goals and investments, then imports the file. This{" "}
+          This permanently deletes all your current categories, expenses, saving
+          goals and investments, then imports the file. This{" "}
           <strong>cannot</strong> be undone.
         </ConfirmDialog>
       </PageWrapperStyled>

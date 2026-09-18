@@ -28,14 +28,14 @@ export const GroupHeaderStyled = styled("div")(({ theme }) => ({
 }));
 
 export const GroupNameStyled = styled("div")({
-  fontSize: "16px",
+  fontSize: tokens.fontSize.lg,
   fontWeight: 600,
 });
 
 /** "2 members · 3 shared categories" — what the group actually is and does. */
 export const GroupMetaStyled = styled("div")(({ theme }) => ({
   marginTop: "2px",
-  fontSize: "13px",
+  fontSize: tokens.fontSize.sm,
   color: theme.palette.text.secondary,
 }));
 
@@ -57,7 +57,7 @@ export const MemberIdentityStyled = styled("div")({
 });
 
 export const MemberNameStyled = styled("div")(({ theme }) => ({
-  fontSize: "15px",
+  fontSize: tokens.fontSize.md,
   color: theme.palette.text.primary,
   overflow: "hidden",
   textOverflow: "ellipsis",
@@ -65,7 +65,7 @@ export const MemberNameStyled = styled("div")(({ theme }) => ({
 }));
 
 export const MemberEmailStyled = styled("div")(({ theme }) => ({
-  fontSize: "13px",
+  fontSize: tokens.fontSize.sm,
   color: theme.palette.text.secondary,
   overflow: "hidden",
   textOverflow: "ellipsis",
@@ -85,7 +85,7 @@ export const RoleChipStyled = styled("span", {
   flexShrink: 0,
   padding: "2px 8px",
   borderRadius: "6px",
-  fontSize: "11px",
+  fontSize: tokens.fontSize.xs,
   fontWeight: 600,
   letterSpacing: "0.03em",
   textTransform: "uppercase",
@@ -112,7 +112,7 @@ export const GroupFooterActionStyled = styled("button")(({ theme }) => ({
   background: alpha(theme.palette.primary.main, 0.06),
   color: theme.palette.primary.main,
   fontFamily: "inherit",
-  fontSize: "15px",
+  fontSize: tokens.fontSize.md,
   fontWeight: 500,
   cursor: "pointer",
 

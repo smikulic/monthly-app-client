@@ -21,7 +21,7 @@ const DateFieldStyled = styled(TextField)(({ theme }) => ({
 
 export function DatePickerStyled<
   TDate = unknown,
-  TView extends "year" | "month" | "day" = "day"
+  TView extends "year" | "month" | "day" = "day",
 >(props: {
   value: Date | null;
   onChange: (date: Date | null) => void;

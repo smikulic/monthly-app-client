@@ -8,7 +8,7 @@ export const useActionDropdown = () => {
 
   const handleActionsDropdownClick = (
     event: React.MouseEvent<HTMLElement>,
-    anchorIndex: string
+    anchorIndex: string,
   ) => {
     setAnchorActionDropdownEl({
       ...anchorActionDropdownEl,

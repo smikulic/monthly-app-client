@@ -22,16 +22,16 @@ const useSubcategoryForm = (
   presetCategoryId: string,
   categories: Category[],
   closeForm: () => void,
-  formData?: Subcategory
+  formData?: Subcategory,
 ) => {
   const isCreateMode = type === "create";
   const [formInvalid, setFormInvalid] = useState(true);
   const [categoryId, setCategoryId] = useState(
-    formData?.categoryId || presetCategoryId
+    formData?.categoryId || presetCategoryId,
   );
   const [subcategoryName, setSubcategoryName] = useState(formData?.name || "");
   const [subcategoryBudget, setSubcategoryBudget] = useState(
-    formData?.budgetAmount
+    formData?.budgetAmount,
   );
   // Only asked for on create, where it opens the schedule.
   const [subcategoryValidFrom, setSubcategoryValidFrom] = useState(new Date());
@@ -45,15 +45,15 @@ const useSubcategoryForm = (
       analytics.trackSubcategoryCreated(
         createSubcategory.name,
         selectedCategory?.name || "Unknown",
-        createSubcategory?.budgetAmount || 0
+        createSubcategory?.budgetAmount || 0,
       );
 
       closeForm();
       toast.success(
         TOAST_MESSAGES.SUCCESS.CREATE(
           ENTITY_NAMES.SUBCATEGORY,
-          createSubcategory.name
-        )
+          createSubcategory.name,
+        ),
       );
     },
     onError: (error) => {
@@ -72,8 +72,8 @@ const useSubcategoryForm = (
       toast.success(
         TOAST_MESSAGES.SUCCESS.UPDATE(
           ENTITY_NAMES.SUBCATEGORY,
-          updateSubcategory.name
-        )
+          updateSubcategory.name,
+        ),
       );
     },
     onError: (error) => {
@@ -84,7 +84,7 @@ const useSubcategoryForm = (
         error.message.includes("A subcategory with this name already exists")
       ) {
         toast.error(
-          TOAST_MESSAGES.ERROR.DUPLICATE_NAME(ENTITY_NAMES.SUBCATEGORY)
+          TOAST_MESSAGES.ERROR.DUPLICATE_NAME(ENTITY_NAMES.SUBCATEGORY),
         );
       } else {
         toast.error(TOAST_MESSAGES.ERROR.UPDATE(ENTITY_NAMES.SUBCATEGORY));
@@ -165,7 +165,7 @@ export const SubcategoryFormFactory = ({
     presetCategoryId,
     categories,
     closeForm,
-    formData
+    formData,
   );
 
   const handleCategoryChange = (event: SelectChangeEvent) => {

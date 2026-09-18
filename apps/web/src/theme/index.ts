@@ -88,6 +88,13 @@ export const theme = createTheme({
 
   typography: {
     fontFamily: tokens.font.sans,
+    // MUI defaults to 14. Anything not sized explicitly now inherits the base
+    // of the scale instead, which is also the threshold below which iOS
+    // Safari zooms the page on input focus.
+    fontSize: tokens.fontSize.md,
+    body1: { fontSize: tokens.fontSize.md },
+    body2: { fontSize: tokens.fontSize.sm },
+    h5: { fontSize: tokens.fontSize.xl, fontWeight: 600 },
   },
 
   components: {
@@ -113,7 +120,7 @@ export const theme = createTheme({
         root: ({ theme }) => ({
           borderRadius: tokens.radius.sm,
           padding: "8px 12px",
-          fontSize: 14,
+          fontSize: tokens.fontSize.md,
           "&:hover": {
             backgroundColor: theme.palette.action.hover,
           },

@@ -1,4 +1,5 @@
 import { styled } from "@mui/material/styles";
+import { tokens } from "@/theme/tokens";
 
 type BudgetAmountStyledProps = {
   positive: boolean;
@@ -30,7 +31,7 @@ export const AmountColumnStyled = styled("div")({
 // green and left nothing to mark the row that actually needs attention.
 export const BudgetAmountStyled = styled("div")<BudgetAmountStyledProps>(
   ({ theme, positive }) => ({
-    fontSize: "13px",
+    fontSize: tokens.fontSize.sm,
     color: positive
       ? theme.palette.text.secondary
       : theme.palette.money.negative,
@@ -42,7 +43,7 @@ export const BudgetAmountStyled = styled("div")<BudgetAmountStyledProps>(
 // left no way to tell which number was the subject.
 export const ExpenseAmountStyled = styled("div")<ExpenseAmountStyledProps>(
   ({ theme, prominent }) => ({
-    fontSize: prominent ? "16px" : "15px",
+    fontSize: prominent ? tokens.fontSize.lg : tokens.fontSize.md,
     fontWeight: 500,
     color: theme.palette.text.primary,
   }),

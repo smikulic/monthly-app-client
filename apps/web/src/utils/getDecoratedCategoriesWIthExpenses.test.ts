@@ -57,7 +57,7 @@ describe("getDecoratedCategoriesWithExpenses", () => {
     });
 
     expect(result.categoriesDecoratedWithExpenses[0].totalExpenseAmount).toBe(
-      200
+      200,
     );
     expect(result.totalSubcategories).toBe(2);
   });

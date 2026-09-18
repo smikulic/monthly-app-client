@@ -80,7 +80,7 @@ export const ExpensesListData: FC<Props> = ({
               )}
             </Fragment>
           );
-        }
+        },
       )}
     </>
   );

@@ -9,7 +9,7 @@ export const ActionsBarStyled = styled("div")({
   alignItems: "center",
   margin: "0 12px",
   height: "56px",
-  fontSize: "18px",
+  fontSize: tokens.fontSize.lg,
 });
 
 // Toolbar: the control row for scope, month and rollover.
@@ -127,7 +127,7 @@ export const MonthLabelStyled = styled("span")(({ theme }) => ({
   minWidth: "92px",
   textAlign: "center",
   padding: "0 4px",
-  fontSize: "15px",
+  fontSize: tokens.fontSize.md,
   fontWeight: 500,
   color: theme.palette.text.primary,
   // So the label does not change width as the month name does, which would
@@ -191,7 +191,7 @@ export const RolloverToggleStyled = styled("button", {
     active ? theme.palette.primary.main : theme.palette.divider
   }`,
   color: active ? theme.palette.primary.main : theme.palette.text.secondary,
-  fontSize: 15,
+  fontSize: tokens.fontSize.md,
   fontWeight: active ? 600 : 400,
   fontFamily: "inherit",
   whiteSpace: "nowrap",

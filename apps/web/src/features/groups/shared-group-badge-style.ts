@@ -1,4 +1,5 @@
 import { alpha, styled } from "@mui/material/styles";
+import { tokens } from "@/theme/tokens";
 
 /**
  * Marks an item as shared with the household.
@@ -12,7 +13,7 @@ export const SharedGroupBadgeStyled = styled("span")(({ theme }) => ({
   marginLeft: theme.spacing(1),
   padding: "2px 8px",
   borderRadius: "6px",
-  fontSize: "11px",
+  fontSize: tokens.fontSize.xs,
   letterSpacing: "0.02em",
   whiteSpace: "nowrap",
   color: theme.palette.primary.main,

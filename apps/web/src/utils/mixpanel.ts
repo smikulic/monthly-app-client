@@ -71,7 +71,7 @@ export const analytics = {
 
   // Set user properties
   setUserProperties: (
-    properties: Record<string, string | number | boolean>
+    properties: Record<string, string | number | boolean>,
   ) => {
     if (import.meta.env.VITE_MIXPANEL_TOKEN && hasAnalyticsConsent()) {
       mixpanel.people.set(properties);
@@ -81,7 +81,7 @@ export const analytics = {
   // Track events
   track: (
     eventName: string,
-    properties?: Record<string, string | number | boolean>
+    properties?: Record<string, string | number | boolean>,
   ) => {
     if (import.meta.env.VITE_MIXPANEL_TOKEN && hasAnalyticsConsent()) {
       mixpanel.track(eventName, {
@@ -95,7 +95,7 @@ export const analytics = {
   // Track page views
   trackPageView: (
     pageName: string,
-    properties?: Record<string, string | number | boolean>
+    properties?: Record<string, string | number | boolean>,
   ) => {
     analytics.track("Page View", {
       page_name: pageName,
@@ -113,7 +113,7 @@ export const analytics = {
   trackSubcategoryCreated: (
     subcategoryName: string,
     categoryName: string,
-    budgetAmount: number
+    budgetAmount: number,
   ) => {
     analytics.track("Subcategory Created", {
       subcategory_name: subcategoryName,
@@ -125,7 +125,7 @@ export const analytics = {
   trackExpenseCreated: (
     amount: number,
     categoryName: string,
-    subcategoryName: string
+    subcategoryName: string,
   ) => {
     analytics.track("Expense Created", {
       amount,
@@ -137,7 +137,7 @@ export const analytics = {
   trackSavingGoalCreated: (
     goalName: string,
     goalAmount: number,
-    targetDate: string
+    targetDate: string,
   ) => {
     analytics.track("Saving Goal Created", {
       goal_name: goalName,
@@ -149,7 +149,7 @@ export const analytics = {
   trackInvestmentCreated: (
     investmentName: string,
     initialAmount: number,
-    currency: string
+    currency: string,
   ) => {
     analytics.track("Investment Created", {
       investment_name: investmentName,

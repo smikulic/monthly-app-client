@@ -1,4 +1,5 @@
 import { styled } from "@mui/material/styles";
+import { tokens } from "@/theme/tokens";
 
 export const CategoryShareTriggerStyled = styled("button")(({ theme }) => ({
   border: "none",
@@ -6,7 +7,7 @@ export const CategoryShareTriggerStyled = styled("button")(({ theme }) => ({
   padding: 0,
   marginRight: theme.spacing(1),
   cursor: "pointer",
-  fontSize: "12px",
+  fontSize: tokens.fontSize.xs,
   whiteSpace: "nowrap",
   color: theme.palette.secondary.main,
 

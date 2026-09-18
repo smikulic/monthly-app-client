@@ -199,7 +199,7 @@ export const PageWrapperStyled = styled("div")(({ theme }) => ({
 export const HelperTextStyled = styled("p")(({ theme }) => ({
   margin: 0,
   color: theme.palette.text.secondary,
-  fontSize: "0.875rem",
+  fontSize: tokens.fontSize.sm,
 }));
 
 // Stacked + full-width on mobile; inline on larger screens with a consistent
@@ -234,7 +234,7 @@ export const TabStyled = styled((props: TabProps) => (
   textTransform: "none",
   minHeight: theme.spacing(4),
   padding: "8px 16px",
-  fontSize: "14px",
+  fontSize: tokens.fontSize.md,
   fontWeight: "normal",
   borderRadius: "10px",
   marginRight: theme.spacing(2),

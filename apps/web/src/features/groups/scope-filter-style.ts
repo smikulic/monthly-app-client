@@ -35,7 +35,7 @@ export const ScopeTriggerStyled = styled("div")(({ theme }) => ({
 
 export const ScopeTriggerLabelStyled = styled("span")(({ theme }) => ({
   flexShrink: 0,
-  fontSize: 15,
+  fontSize: tokens.fontSize.md,
   lineHeight: 1,
   whiteSpace: "nowrap",
   color: theme.palette.text.secondary,
@@ -44,7 +44,7 @@ export const ScopeTriggerLabelStyled = styled("span")(({ theme }) => ({
 export const ScopeTriggerValueStyled = styled("span")(({ theme }) => ({
   minWidth: 0,
   maxWidth: 160,
-  fontSize: 15,
+  fontSize: tokens.fontSize.md,
   lineHeight: 1,
   color: theme.palette.text.primary,
   overflow: "hidden",
@@ -52,6 +52,6 @@ export const ScopeTriggerValueStyled = styled("span")(({ theme }) => ({
   whiteSpace: "nowrap",
 
   [theme.breakpoints.down("sm")]: {
-    fontSize: 14,
+    fontSize: tokens.fontSize.sm,
   },
 }));

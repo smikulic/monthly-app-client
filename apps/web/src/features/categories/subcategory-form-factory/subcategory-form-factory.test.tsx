@@ -1,8 +1,4 @@
-import {
-  render as rtlRender,
-  screen,
-  fireEvent,
-} from "@/test-utils";
+import { render as rtlRender, screen, fireEvent } from "@/test-utils";
 import { MockedProvider } from "@apollo/client/testing";
 import "@testing-library/jest-dom";
 import {
@@ -85,7 +81,7 @@ describe("<SubcategoryFormFactory />", () => {
         closeForm={closeForm}
         presetCategoryId={presetCategoryId}
         categories={categories}
-      />
+      />,
     );
 
     const createBtn = screen.getByTestId("create-button");
@@ -135,7 +131,7 @@ describe("<SubcategoryFormFactory />", () => {
         presetCategoryId={presetCategoryId}
         categories={categories}
         formData={existing}
-      />
+      />,
     );
 
     const saveBtn = screen.getByTestId("create-button");
@@ -194,7 +190,7 @@ describe("<SubcategoryFormFactory />", () => {
         presetCategoryId={presetCategoryId}
         categories={categories}
         formData={existing}
-      />
+      />,
     );
 
     expect(screen.getByText("Budget history")).toBeInTheDocument();

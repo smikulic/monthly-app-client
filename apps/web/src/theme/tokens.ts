@@ -134,6 +134,31 @@ export const tokens = {
   controlHeightMobile: 40,
 
   /**
+   * Type scale. The app had thirteen distinct hardcoded sizes and no scale, so
+   * every new screen invented its own.
+   *
+   * `md` is the base and is deliberately 16: below that, iOS Safari zooms the
+   * page when a form input takes focus, which is a real annoyance in the
+   * Android wrapper's sibling on iOS and on mobile web.
+   *
+   * `hero` is for the Literata figures only — one per card, never body text.
+   */
+  fontSize: {
+    /** Chips and role labels. */
+    xs: 12,
+    /** Captions and second lines under a figure. */
+    sm: 14,
+    /** Body, list rows, controls. */
+    md: 16,
+    /** Card and section titles. */
+    lg: 18,
+    /** Page headings. */
+    xl: 22,
+    /** Hero figures, set in the serif. */
+    hero: 32,
+  },
+
+  /**
    * Personality lives in the display face, neutrality in the text face. The
    * sans does the dense-table work at 13-14px where character is a liability;
    * Literata appears a handful of times per screen at large sizes, which is
@@ -200,6 +225,13 @@ export const cssVariables: Record<string, string> = {
   "--card-inset": `${tokens.cardInset}px`,
   "--control-height": `${tokens.controlHeight}px`,
   "--control-height-mobile": `${tokens.controlHeightMobile}px`,
+
+  ...Object.fromEntries(
+    Object.entries(tokens.fontSize).map(([k, v]) => [
+      `--font-size-${k}`,
+      `${v}px`,
+    ]),
+  ),
 
   "--radius-sm": `${tokens.radius.sm}px`,
   "--radius-md": `${tokens.radius.md}px`,

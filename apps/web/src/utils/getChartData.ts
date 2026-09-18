@@ -17,13 +17,13 @@ export const getChartData = ({
   const totalExpensesAmount = expenses.reduce(
     (accumulator: number, currentValue: Expense) =>
       accumulator + currentValue.amount,
-    0
+    0,
   );
 
   const totalBudgetAmount = categories.reduce((acc, category) => {
     const subcategoryTotal = (category.subcategories || []).reduce(
       (subAcc, subcategory) => subAcc + (subcategory?.budgetAmount || 0),
-      0
+      0,
     );
     return acc + subcategoryTotal;
   }, 0);

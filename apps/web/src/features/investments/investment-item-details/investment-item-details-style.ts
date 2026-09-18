@@ -1,5 +1,6 @@
 import { Box } from "@/components/ui/Box";
 import { styled } from "@mui/material/styles";
+import { tokens } from "@/theme/tokens";
 
 type InvestmentCurrentValueStyledProps = {
   positive: boolean;
@@ -7,15 +8,15 @@ type InvestmentCurrentValueStyledProps = {
 
 export const InvestmentInitialAmountStyled = styled("div")({
   position: "relative",
-  fontSize: "13px",
+  fontSize: tokens.fontSize.sm,
   color: "#666666",
 });
 
 export const InvestmentCurrentValueStyled = styled(
-  "div"
+  "div",
 )<InvestmentCurrentValueStyledProps>(({ theme, positive }) => ({
   position: "relative",
-  fontSize: "12px",
+  fontSize: tokens.fontSize.xs,
   color: positive ? theme.palette.money.positive : theme.palette.money.negative,
   fontWeight: 500,
 }));

@@ -6,7 +6,7 @@ import { TOAST_MESSAGES, ENTITY_NAMES } from "@/constants/forms";
 import dayjs from "dayjs";
 
 export const useSavingGoalsActions = (
-  refetchSavingGoals: () => Promise<unknown>
+  refetchSavingGoals: () => Promise<unknown>,
 ) => {
   const {
     anchorActionDropdownEl,
@@ -26,8 +26,8 @@ export const useSavingGoalsActions = (
       toast.success(
         TOAST_MESSAGES.SUCCESS.DELETE(
           ENTITY_NAMES.SAVING_GOAL,
-          deleteSavingGoal.name
-        )
+          deleteSavingGoal.name,
+        ),
       );
     },
   });
@@ -50,13 +50,13 @@ export const useSavingGoalsActions = (
     // Calculate total months from start to goal date
     const totalSavingMonths = dayjs(goalEndDate).diff(
       dayjs(goalStartDate),
-      "month"
+      "month",
     );
 
     // Calculate months elapsed since start
     const monthsElapsed = Math.max(
       0,
-      dayjs(currentDate).diff(dayjs(goalStartDate), "month")
+      dayjs(currentDate).diff(dayjs(goalStartDate), "month"),
     );
 
     // Calculate months remaining (can't be negative)

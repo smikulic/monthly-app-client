@@ -22,19 +22,19 @@ interface FormProps {
 const useSavingGoalForm = (
   type: "create" | "update",
   closeForm: () => void,
-  formData?: SavingGoal
+  formData?: SavingGoal,
 ) => {
   const isCreateMode = type === "create";
   const [formInvalid, setFormInvalid] = useState(true);
   const [savingGoalName, setSavingGoalName] = useState(formData?.name || "");
   const [savingGoalAmount, setSavingGoalAmount] = useState(
-    formData?.goalAmount || ""
+    formData?.goalAmount || "",
   );
   const [savingGoalInitialAmount, setSavingGoalInitialAmount] = useState(
-    formData?.initialSaveAmount || ""
+    formData?.initialSaveAmount || "",
   );
   const [savingGoalDate, setSavingGoalDate] = useState(
-    formData?.goalDate ? new Date(parseInt(formData.goalDate, 10)) : new Date()
+    formData?.goalDate ? new Date(parseInt(formData.goalDate, 10)) : new Date(),
   );
 
   const [createSavingGoal] = useCreateSavingGoalMutation({
@@ -43,15 +43,15 @@ const useSavingGoalForm = (
       analytics.trackSavingGoalCreated(
         createSavingGoal.name,
         createSavingGoal.goalAmount,
-        createSavingGoal.goalDate
+        createSavingGoal.goalDate,
       );
 
       closeForm();
       toast.success(
         TOAST_MESSAGES.SUCCESS.CREATE(
           ENTITY_NAMES.SAVING_GOAL,
-          createSavingGoal.name
-        )
+          createSavingGoal.name,
+        ),
       );
     },
   });
@@ -62,8 +62,8 @@ const useSavingGoalForm = (
       toast.success(
         TOAST_MESSAGES.SUCCESS.UPDATE(
           ENTITY_NAMES.SAVING_GOAL,
-          updateSavingGoal.name
-        )
+          updateSavingGoal.name,
+        ),
       );
     },
   });

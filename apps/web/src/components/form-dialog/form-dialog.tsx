@@ -8,6 +8,7 @@ import { AppBar } from "@/components/ui/AppBar";
 import { Toolbar } from "@/components/ui/Toolbar";
 import { Typography } from "@/components/ui/Typography";
 import { ProminentButtonStyled } from "@/shared";
+import { tokens } from "@/theme/tokens";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -86,7 +87,12 @@ export const FormDialog: React.FC<Props> = ({
         onClick={formAction}
         disabled={disabled}
         data-testid="create-button"
-        sx={{ width: "100%", height: 52, borderRadius: 0, fontSize: "16px" }}
+        sx={{
+          width: "100%",
+          height: 52,
+          borderRadius: 0,
+          fontSize: tokens.fontSize.md,
+        }}
       >
         {formActionText}
       </ProminentButtonStyled>

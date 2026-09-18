@@ -20,7 +20,7 @@ interface FormProps {
 const useCategoryForm = (
   type: "create" | "update",
   closeForm: () => void,
-  formData?: Category
+  formData?: Category,
 ) => {
   const isCreateMode = type === "create";
   const [formInvalid, setFormInvalid] = useState(true);
@@ -33,8 +33,8 @@ const useCategoryForm = (
       toast.success(
         TOAST_MESSAGES.SUCCESS.CREATE(
           ENTITY_NAMES.CATEGORY,
-          createCategory.name
-        )
+          createCategory.name,
+        ),
       );
     },
     onError: (error) => {
@@ -53,8 +53,8 @@ const useCategoryForm = (
       toast.success(
         TOAST_MESSAGES.SUCCESS.UPDATE(
           ENTITY_NAMES.CATEGORY,
-          updateCategory.name
-        )
+          updateCategory.name,
+        ),
       );
     },
     onError: (error) => {

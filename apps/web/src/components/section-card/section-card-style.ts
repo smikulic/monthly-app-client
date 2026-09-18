@@ -33,14 +33,14 @@ export const SectionCardHeaderStyled = styled("div")(({ theme }) => ({
 export const SectionCardTitleStyled = styled("div", {
   shouldForwardProp: (prop) => prop !== "danger",
 })<DangerProps>(({ theme, danger }) => ({
-  fontSize: "16px",
+  fontSize: tokens.fontSize.lg,
   fontWeight: 600,
   color: danger ? theme.palette.money.error : theme.palette.text.primary,
 }));
 
 export const SectionCardDescriptionStyled = styled("div")(({ theme }) => ({
   marginTop: "4px",
-  fontSize: "13px",
+  fontSize: tokens.fontSize.sm,
   color: theme.palette.text.secondary,
 }));
 

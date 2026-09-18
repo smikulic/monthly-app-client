@@ -18,7 +18,7 @@ interface Props {
   onRemoveSavingGoal: (savingGoalId: string) => void;
   onActionsDropdownClick: (
     event: MouseEvent<HTMLElement>,
-    anchorIndex: string
+    anchorIndex: string,
   ) => void;
   onActionsDropdownClose: (anchorIndex: string) => void;
   calculateSavingGoalData: (savingGoal: SavingGoal) => {

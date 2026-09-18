@@ -67,6 +67,15 @@
   --control-height: 36px;
   --control-height-mobile: 40px;
 
+  /* Type scale. --font-size-md is the base and is 16 deliberately: below that,
+     iOS Safari zooms the page when an input takes focus. */
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-md: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 22px;
+  --font-size-hero: 32px;
+
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;

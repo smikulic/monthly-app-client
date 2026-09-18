@@ -1,4 +1,5 @@
 import { styled } from "@mui/material/styles";
+import { tokens } from "@/theme/tokens";
 
 export const InsightsWrapperStyled = styled("div")(({ theme }) => ({
   display: "flex",
@@ -16,7 +17,7 @@ export const SectionStyled = styled("div")(({ theme }) => ({
 export const SectionTitleStyled = styled("h3")(({ theme }) => ({
   margin: 0,
   marginBottom: theme.spacing(1.5),
-  fontSize: 13,
+  fontSize: tokens.fontSize.sm,
   fontWeight: 600,
   color: theme.palette.text.secondary,
   textTransform: "uppercase",
@@ -26,15 +27,14 @@ export const SectionTitleStyled = styled("h3")(({ theme }) => ({
 export const HeroAmountStyled = styled("div", {
   shouldForwardProp: (prop) => prop !== "negative",
 })<{ negative?: boolean }>(({ theme, negative }) => ({
-    fontSize: 32,
-    fontWeight: 700,
-    fontVariantNumeric: "tabular-nums",
-    color: negative ? theme.palette.error.main : theme.palette.text.primary,
-  }),
-);
+  fontSize: 32,
+  fontWeight: 700,
+  fontVariantNumeric: "tabular-nums",
+  color: negative ? theme.palette.error.main : theme.palette.text.primary,
+}));
 
 export const SubtleTextStyled = styled("div")(({ theme }) => ({
-  fontSize: 13,
+  fontSize: tokens.fontSize.sm,
   color: theme.palette.text.secondary,
 }));
 
@@ -57,7 +57,7 @@ export const RowMainStyled = styled("div")({
 });
 
 export const RowTitleStyled = styled("div")({
-  fontSize: 15,
+  fontSize: tokens.fontSize.md,
   whiteSpace: "nowrap",
   overflow: "hidden",
   textOverflow: "ellipsis",
@@ -85,7 +85,7 @@ export const DeltaStyled = styled("div", {
   display: "flex",
   alignItems: "center",
   gap: 2,
-  fontSize: 15,
+  fontSize: tokens.fontSize.md,
   fontWeight: 600,
   // Spending trending up is bad news in a budget; trending down is good.
   color: up ? theme.palette.money.negative : theme.palette.money.positive,
@@ -99,13 +99,13 @@ export const StreakBadgeStyled = styled("span")(({ theme }) => ({
   display: "inline-flex",
   alignItems: "center",
   gap: 4,
-  fontSize: 14,
+  fontSize: tokens.fontSize.sm,
   fontWeight: 600,
   // A streak is chrome, not an amount, so it takes the accent.
   color: theme.palette.primary.main,
 }));
 
 export const EmptyTextStyled = styled("div")(({ theme }) => ({
-  fontSize: 14,
+  fontSize: tokens.fontSize.sm,
   color: theme.palette.text.secondary,
 }));

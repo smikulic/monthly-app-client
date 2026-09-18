@@ -37,11 +37,11 @@ export const UpdateExpenseForm: React.FC<Props> = ({
   const [formInvalid, setFormInvalid] = useState(true);
   const [expenseAmount, setExpenseAmount] = useState(formData.amount);
   const [expenseDescription, setExpenseDescription] = useState(
-    formData.description
+    formData.description,
   );
   const [expenseDate, setExpenseDate] = useState(formExpenseDate);
   const [expenseSubcategoryId, setExpenseSubcategoryId] = useState(
-    formData.subcategoryId
+    formData.subcategoryId,
   );
   const [paidByUserId, setPaidByUserId] = useState(formData.paidBy?.id ?? "");
 

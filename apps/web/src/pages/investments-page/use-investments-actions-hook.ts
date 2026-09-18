@@ -5,7 +5,7 @@ import { useActionDropdown } from "@/hooks/useActionDropdown";
 import { TOAST_MESSAGES, ENTITY_NAMES } from "@/constants/forms";
 
 export const useInvestmentsActions = (
-  refetchInvestments: () => Promise<unknown>
+  refetchInvestments: () => Promise<unknown>,
 ) => {
   const {
     anchorActionDropdownEl,

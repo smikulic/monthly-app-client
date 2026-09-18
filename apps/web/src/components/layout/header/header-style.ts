@@ -23,7 +23,7 @@ export const HeaderLeftStyled = styled("div")({
 });
 
 export const BrandStyled = styled("div")(({ theme }) => ({
-  fontSize: "20px",
+  fontSize: tokens.fontSize.xl,
   fontWeight: 700,
   letterSpacing: "-0.02em",
   color: theme.palette.primary.main,
@@ -34,7 +34,7 @@ export const BackButtonStyled = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   height: "40px",
-  fontSize: "16px",
+  fontSize: tokens.fontSize.md,
   color: theme.palette.text.primary,
   cursor: "pointer",
 
@@ -71,13 +71,13 @@ export const MenuHeaderStyled = styled("div")(({ theme }) => ({
 }));
 
 export const MenuHeaderNameStyled = styled("span")(({ theme }) => ({
-  fontSize: "14px",
+  fontSize: tokens.fontSize.sm,
   fontWeight: 600,
   color: theme.palette.text.primary,
 }));
 
 export const MenuHeaderEmailStyled = styled("span")(({ theme }) => ({
-  fontSize: "12px",
+  fontSize: tokens.fontSize.xs,
   color: theme.palette.text.secondary,
 }));
 

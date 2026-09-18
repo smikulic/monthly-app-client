@@ -1,7 +1,10 @@
 import type { ReactElement, ReactNode } from "react";
 import { ThemeProvider } from "@mui/material/styles";
 import { MemoryRouter } from "react-router";
-import { render as rtlRender, type RenderOptions } from "@testing-library/react";
+import {
+  render as rtlRender,
+  type RenderOptions,
+} from "@testing-library/react";
 import { theme } from "@/theme";
 
 /**

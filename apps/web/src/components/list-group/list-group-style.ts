@@ -1,4 +1,5 @@
 import { styled } from "@mui/material/styles";
+import { tokens } from "@/theme/tokens";
 import { ListItemStyled } from "@/shared";
 
 type ActiveProps = { active?: boolean };
@@ -58,7 +59,7 @@ export const GroupAddRowStyled = styled("div")(({ theme }) => ({
   borderTop: `1px solid ${theme.palette.divider}`,
   background: theme.palette.primary.main,
   color: theme.palette.primary.contrastText,
-  fontSize: "15px",
+  fontSize: tokens.fontSize.md,
   cursor: "pointer",
 
   "& svg": {

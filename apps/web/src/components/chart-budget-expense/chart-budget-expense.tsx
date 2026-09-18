@@ -17,6 +17,7 @@ import { CanvasRenderer } from "echarts/renderers";
 
 import { alpha, lighten } from "@mui/material/styles";
 import { useTheme } from "@/hooks/useTheme";
+import { tokens } from "@/theme/tokens";
 import { UserContext } from "@/App";
 import { months } from "@/constants";
 import { formatAmount } from "@/utils/format";
@@ -231,7 +232,7 @@ export const ChartBudgetExpense = ({
         <Box sx={{ p: 2 }}>
           <Typography
             variant="body1"
-            fontSize="16px"
+            fontSize={tokens.fontSize.md}
             color="text.primary"
             component="div"
           >
