@@ -9,25 +9,18 @@ import {
   useUpdateUserMutation,
 } from "@/generated/graphql";
 import { Container } from "@/components/ui/Container";
-import {
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-} from "@/components/ui/Dialog";
 import { MenuItem } from "@/components/ui/MenuItem";
 import { Typography } from "@/components/ui/Typography";
 import { Switch } from "@/components/ui/Switch";
 import { FormGroup } from "@/components/ui/FormGroup";
 import { FormControlLabel } from "@/components/ui/FormControl";
+import { SectionCard } from "@/components/section-card/section-card";
+import { ConfirmDialog } from "@/components/confirm-dialog/confirm-dialog";
 import {
   ProminentButtonStyled,
   SelectStyled,
   TextFieldStyled,
   PageWrapperStyled,
-  SectionDividerStyled,
-  HelperTextStyled,
   ButtonGroupStyled,
 } from "@/shared";
 import { CURRENCY_OPTIONS } from "@/constants/forms";
@@ -72,97 +65,87 @@ export const ProfilePageContainer = ({
     <>
       <Container>
         <PageWrapperStyled>
-          <Typography variant="h5">Account</Typography>
-          <TextFieldStyled
-            label="Email"
-            defaultValue={userData.email}
-            disabled
-          />
-          <SelectStyled
-            id="userCurrency"
-            label="Currency"
-            value={currency}
-            onChange={(e) => setCurrency(e.target.value as string)}
+          <Typography variant="h5">Settings</Typography>
+
+          <SectionCard
+            title="Account"
+            description="Your sign-in email and how amounts are shown."
           >
-            {CURRENCY_OPTIONS.map((opt) => (
-              <MenuItem key={opt.value} value={opt.value}>
-                {opt.value} ({opt.label})
-              </MenuItem>
-            ))}
-          </SelectStyled>
-          <FormGroup>
-            <FormControlLabel
-              control={
-                <Switch
-                  aria-describedby="weekly-help"
-                  checked={weeklyReminder}
-                  onChange={() => setWeeklyReminder(!weeklyReminder)}
-                />
-              }
-              label="Weekly expense email (Saturday recap: total spent & budget left)"
+            <TextFieldStyled
+              label="Email"
+              defaultValue={userData.email}
+              disabled
             />
-          </FormGroup>
-          <ButtonGroupStyled>
-            <ProminentButtonStyled
-              onClick={() =>
-                updateUser({
-                  variables: { id: userData.id, currency, weeklyReminder },
-                })
-              }
-              disabled={
-                currency === userData.currency &&
-                weeklyReminder === userData.weeklyReminder
-              }
-              textCenter
+            <SelectStyled
+              id="userCurrency"
+              label="Currency"
+              value={currency}
+              onChange={(e) => setCurrency(e.target.value as string)}
             >
-              Save
-            </ProminentButtonStyled>
-          </ButtonGroupStyled>
-
-          <SectionDividerStyled />
-
-          <Typography variant="h5" color="error">
-            Danger Zone
-          </Typography>
-          <HelperTextStyled>
-            Permanently delete your account and all data.
-          </HelperTextStyled>
-          <ButtonGroupStyled>
-            <ProminentButtonStyled
-              onClick={() => setOpenDialog(true)}
-              color="error"
-              textCenter
-              outline
-            >
-              Delete my account
-            </ProminentButtonStyled>
-          </ButtonGroupStyled>
-
-          <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
-            <DialogTitle>Confirm account deletion</DialogTitle>
-            <DialogContent>
-              <DialogContentText>
-                Are you sure? This action <strong>cannot</strong> be undone.
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
+              {CURRENCY_OPTIONS.map((opt) => (
+                <MenuItem key={opt.value} value={opt.value}>
+                  {opt.value} ({opt.label})
+                </MenuItem>
+              ))}
+            </SelectStyled>
+            <FormGroup>
+              <FormControlLabel
+                control={
+                  <Switch
+                    aria-describedby="weekly-help"
+                    checked={weeklyReminder}
+                    onChange={() => setWeeklyReminder(!weeklyReminder)}
+                  />
+                }
+                label="Weekly expense email (Saturday recap: total spent & budget left)"
+              />
+            </FormGroup>
+            <ButtonGroupStyled>
               <ProminentButtonStyled
-                onClick={() => setOpenDialog(false)}
+                onClick={() =>
+                  updateUser({
+                    variables: { id: userData.id, currency, weeklyReminder },
+                  })
+                }
+                disabled={
+                  currency === userData.currency &&
+                  weeklyReminder === userData.weeklyReminder
+                }
+                textCenter
+              >
+                Save
+              </ProminentButtonStyled>
+            </ButtonGroupStyled>
+          </SectionCard>
+
+          <SectionCard
+            danger
+            title="Danger zone"
+            description="Permanently delete your account and all data."
+          >
+            <ButtonGroupStyled>
+              <ProminentButtonStyled
+                onClick={() => setOpenDialog(true)}
+                color="error"
                 textCenter
                 outline
               >
-                Cancel
+                Delete my account
               </ProminentButtonStyled>
-              <ProminentButtonStyled
-                onClick={() => deleteAccount()}
-                disabled={deleting}
-                color="error"
-                textCenter
-              >
-                {deleting ? "Deleting…" : "Delete my account"}
-              </ProminentButtonStyled>
-            </DialogActions>
-          </Dialog>
+            </ButtonGroupStyled>
+          </SectionCard>
+
+          <ConfirmDialog
+            open={openDialog}
+            title="Delete account"
+            confirmLabel="Delete my account"
+            busy={deleting}
+            onConfirm={() => deleteAccount()}
+            onCancel={() => setOpenDialog(false)}
+          >
+            This deletes your account and every category, expense, saving goal
+            and investment in it. This <strong>cannot</strong> be undone.
+          </ConfirmDialog>
         </PageWrapperStyled>
       </Container>
     </>

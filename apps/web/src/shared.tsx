@@ -196,13 +196,6 @@ export const PageWrapperStyled = styled("div")(({ theme }) => ({
   gap: theme.spacing(2),
 }));
 
-export const SectionDividerStyled = styled("hr")(({ theme }) => ({
-  width: "100%",
-  margin: 0,
-  border: "none",
-  borderTop: `1px solid ${theme.palette.divider}`,
-}));
-
 export const HelperTextStyled = styled("p")(({ theme }) => ({
   margin: 0,
   color: theme.palette.text.secondary,

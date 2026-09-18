@@ -11,20 +11,13 @@ import { User } from "@/generated/graphql";
 import { Container } from "@/components/ui/Container";
 import { Typography } from "@/components/ui/Typography";
 import { MenuItem } from "@/components/ui/MenuItem";
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-} from "@/components/ui/Dialog";
+import { SectionCard } from "@/components/section-card/section-card";
+import { ConfirmDialog } from "@/components/confirm-dialog/confirm-dialog";
 import {
   ProminentButtonStyled,
   SelectStyled,
   PageWrapperStyled,
   ButtonGroupStyled,
-  SectionDividerStyled,
-  HelperTextStyled,
 } from "@/shared";
 import {
   YearSelectStyled,
@@ -179,132 +172,114 @@ export const ReportsPageContainer = ({ userData }: { userData: User }) => {
   return (
     <Container>
       <PageWrapperStyled>
-        <Typography variant="h5">Generate Report</Typography>
+        <Typography variant="h5">Reports &amp; Data</Typography>
 
-        <YearSelectStyled>
-          <SelectStyled
-            id="year-select"
-            label="Year"
-            value={String(year)}
-            onChange={(e) => setYear(Number(e.target.value))}
-          >
-            {years.map((y) => (
-              <MenuItem key={y} value={String(y)}>
-                {y}
-              </MenuItem>
-            ))}
-          </SelectStyled>
-        </YearSelectStyled>
-
-        <ButtonGroupStyled>
-          <ProminentButtonStyled
-            onClick={() => loadReport({ variables: { year } })}
-            textCenter
-            outline
-          >
-            {loading ? "Generating…" : "Download PDF"}
-          </ProminentButtonStyled>
-
-          <ProminentButtonStyled
-            onClick={() => loadCsv({ variables: { year } })}
-            textCenter
-            outline
-          >
-            {loadingCsv ? "Generating…" : "Download CSV"}
-          </ProminentButtonStyled>
-        </ButtonGroupStyled>
-
-        <SectionDividerStyled />
-
-        <Typography variant="h5">Export all data</Typography>
-        <HelperTextStyled>
-          A complete, re-importable copy of all your data (categories, expenses,
-          saving goals, investments) as JSON.
-        </HelperTextStyled>
-        <ButtonGroupStyled>
-          <ProminentButtonStyled
-            onClick={() => loadDataExport()}
-            textCenter
-            outline
-          >
-            {loadingDataExport ? "Exporting…" : "Download full data (JSON)"}
-          </ProminentButtonStyled>
-        </ButtonGroupStyled>
-
-        <SectionDividerStyled />
-
-        <Typography variant="h5">Import data</Typography>
-        <HelperTextStyled>
-          Restore from a JSON export. Merge adds new records and updates
-          matching ones while keeping everything else. Replace all permanently
-          deletes your current data first, then imports the file. Both run
-          all-or-nothing.
-        </HelperTextStyled>
-        <FileRowStyled>
-          <ProminentButtonStyled
-            onClick={() => fileInputRef.current?.click()}
-            textCenter
-            outline
-          >
-            Choose file
-          </ProminentButtonStyled>
-          <FileNameStyled>{fileName ?? "No file chosen"}</FileNameStyled>
-          <HiddenFileInputStyled
-            type="file"
-            accept="application/json,.json"
-            ref={fileInputRef}
-            onChange={(e) => setFileName(e.target.files?.[0]?.name ?? null)}
-          />
-        </FileRowStyled>
-        <ButtonGroupStyled>
-          <ProminentButtonStyled
-            onClick={() => requestImport("MERGE")}
-            textCenter
-            outline
-            disabled={!fileName || importing}
-          >
-            {importingMode === "MERGE" ? "Importing…" : "Merge import"}
-          </ProminentButtonStyled>
-          <ProminentButtonStyled
-            onClick={() => requestImport("REPLACE")}
-            textCenter
-            outline
-            color="error"
-            disabled={!fileName || importing}
-          >
-            {importingMode === "REPLACE" ? "Importing…" : "Replace all"}
-          </ProminentButtonStyled>
-        </ButtonGroupStyled>
-
-        <Dialog
-          open={confirmReplaceOpen}
-          onClose={() => setConfirmReplaceOpen(false)}
+        <SectionCard
+          title="Generate report"
+          description="A summary of one year, as a PDF or a spreadsheet."
         >
-          <DialogTitle>Replace all data?</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              This permanently deletes all your current categories, expenses,
-              saving goals and investments, then imports the file. This cannot
-              be undone.
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
+          <YearSelectStyled>
+            <SelectStyled
+              id="year-select"
+              label="Year"
+              value={String(year)}
+              onChange={(e) => setYear(Number(e.target.value))}
+            >
+              {years.map((y) => (
+                <MenuItem key={y} value={String(y)}>
+                  {y}
+                </MenuItem>
+              ))}
+            </SelectStyled>
+          </YearSelectStyled>
+
+          <ButtonGroupStyled>
             <ProminentButtonStyled
-              onClick={() => setConfirmReplaceOpen(false)}
+              onClick={() => loadReport({ variables: { year } })}
               textCenter
               outline
             >
-              Cancel
+              {loading ? "Generating…" : "Download PDF"}
+            </ProminentButtonStyled>
+
+            <ProminentButtonStyled
+              onClick={() => loadCsv({ variables: { year } })}
+              textCenter
+              outline
+            >
+              {loadingCsv ? "Generating…" : "Download CSV"}
+            </ProminentButtonStyled>
+          </ButtonGroupStyled>
+        </SectionCard>
+
+        <SectionCard
+          title="Export all data"
+          description="A complete, re-importable copy of all your data (categories, expenses, saving goals, investments) as JSON."
+        >
+          <ButtonGroupStyled>
+            <ProminentButtonStyled
+              onClick={() => loadDataExport()}
+              textCenter
+              outline
+            >
+              {loadingDataExport ? "Exporting…" : "Download full data (JSON)"}
+            </ProminentButtonStyled>
+          </ButtonGroupStyled>
+        </SectionCard>
+
+        <SectionCard
+          danger
+          title="Import data"
+          description="Restore from a JSON export. Merge adds new records and updates matching ones while keeping everything else. Replace all permanently deletes your current data first, then imports the file. Both run all-or-nothing."
+        >
+          <FileRowStyled>
+            <ProminentButtonStyled
+              onClick={() => fileInputRef.current?.click()}
+              textCenter
+              outline
+            >
+              Choose file
+            </ProminentButtonStyled>
+            <FileNameStyled>{fileName ?? "No file chosen"}</FileNameStyled>
+            <HiddenFileInputStyled
+              type="file"
+              accept="application/json,.json"
+              ref={fileInputRef}
+              onChange={(e) => setFileName(e.target.files?.[0]?.name ?? null)}
+            />
+          </FileRowStyled>
+          <ButtonGroupStyled>
+            <ProminentButtonStyled
+              onClick={() => requestImport("MERGE")}
+              textCenter
+              outline
+              disabled={!fileName || importing}
+            >
+              {importingMode === "MERGE" ? "Importing…" : "Merge import"}
             </ProminentButtonStyled>
             <ProminentButtonStyled
-              onClick={confirmReplace}
+              onClick={() => requestImport("REPLACE")}
               textCenter
+              outline
               color="error"
+              disabled={!fileName || importing}
             >
-              Replace all
+              {importingMode === "REPLACE" ? "Importing…" : "Replace all"}
             </ProminentButtonStyled>
-          </DialogActions>
-        </Dialog>
+          </ButtonGroupStyled>
+        </SectionCard>
+
+        <ConfirmDialog
+          open={confirmReplaceOpen}
+          title="Replace all data?"
+          confirmLabel="Replace all"
+          onConfirm={confirmReplace}
+          onCancel={() => setConfirmReplaceOpen(false)}
+        >
+          This permanently deletes all your current categories, expenses,
+          saving goals and investments, then imports the file. This{" "}
+          <strong>cannot</strong> be undone.
+        </ConfirmDialog>
       </PageWrapperStyled>
     </Container>
   );
