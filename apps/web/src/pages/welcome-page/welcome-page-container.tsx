@@ -2,6 +2,7 @@ import CookieConsent from "react-cookie-consent";
 import { handleAnalyticsConsent, COOKIE_CONSENT_KEY } from "@/utils/mixpanel";
 // import { FeatureGrid } from "./feature-grid";
 import ProductDemoImg from "../../assets/product-demo.png";
+import { InstallGuide } from "@/features/pwa/install-guide";
 import { tokens } from "@/theme/tokens";
 import "./welcome-page-container.css";
 
@@ -93,6 +94,11 @@ export const WelcomePageContainer = () => {
             enter whenever you want.
           </p>
         </div>
+
+        {/* After the pitch, not before it: someone who has not yet decided
+            what this is has no reason to put it on their home screen. Renders
+            nothing on a desktop, or once installed. */}
+        <InstallGuide />
       </div>
 
       {/* new feature presentation grid */}

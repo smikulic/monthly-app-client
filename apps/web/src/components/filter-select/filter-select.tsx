@@ -1,10 +1,11 @@
-import { useState, MouseEvent } from "react";
+import { useState, MouseEvent, ReactNode } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CheckIcon from "@mui/icons-material/Check";
 import { Menu, ListItemIcon } from "@/components/ui/Menu";
 import { MenuItem } from "@/components/ui/MenuItem";
 import {
   FilterTriggerStyled,
+  FilterTriggerIconStyled,
   FilterTriggerLabelStyled,
   FilterTriggerValueStyled,
 } from "./filter-select-style";
@@ -29,9 +30,12 @@ export const FilterSelect = ({
   onSelect,
   menuId,
   testId,
+  icon,
 }: {
   /** Static word before the value, e.g. "View". */
   label: string;
+  /** Replaces `label` below `sm`, where the word does not fit. */
+  icon?: ReactNode;
   value: string;
   options: FilterOption[];
   onSelect: (id: string) => void;
@@ -54,7 +58,10 @@ export const FilterSelect = ({
         aria-expanded={open}
         data-testid={testId}
       >
-        <FilterTriggerLabelStyled>{label}</FilterTriggerLabelStyled>
+        {icon && <FilterTriggerIconStyled>{icon}</FilterTriggerIconStyled>}
+        <FilterTriggerLabelStyled hasIcon={Boolean(icon)}>
+          {label}
+        </FilterTriggerLabelStyled>
         <FilterTriggerValueStyled>{value}</FilterTriggerValueStyled>
         <ExpandMoreIcon />
       </FilterTriggerStyled>

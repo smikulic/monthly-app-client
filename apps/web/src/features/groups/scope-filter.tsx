@@ -1,3 +1,4 @@
+import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
 import { FilterSelect } from "@/components/filter-select/filter-select";
 import { useMyGroupsQuery } from "@/generated/graphql";
 import { useScope } from "./scope-context";
@@ -25,6 +26,9 @@ export const ScopeFilter = () => {
   return (
     <FilterSelect
       label="View"
+      // Whose money is being shown is what this filter is for, so the icon
+      // that replaces the word on a phone says people rather than "filter".
+      icon={<PeopleOutlineIcon />}
       value={activeLabel}
       menuId="scope-menu"
       testId="scope-filter"
