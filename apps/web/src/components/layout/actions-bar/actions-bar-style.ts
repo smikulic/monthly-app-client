@@ -45,6 +45,11 @@ export const ToolbarStyled = styled("div")(({ theme }) => ({
     right: 0,
     bottom: 0,
     zIndex: 10,
+    // Every pixel here is spent on the controls. At 393px — an iPhone 15 Pro —
+    // the three of them wanted about 452px between them, so the bar's own
+    // padding and gaps are the first thing to give.
+    padding: "8px 12px",
+    gap: theme.spacing(1),
     // Ground, not surface. The topbar and page are both on ground, so a
     // white bar was brighter than everything around it — and the controls
     // inside it are surface white, so they vanished into their own bar.
@@ -64,14 +69,27 @@ export const ToolbarLeftStyled = styled("div")(({ theme }) => ({
   minWidth: 0,
   flex: "0 0 auto",
 
-  // Phones spread the three zones instead, which puts the month nav in the
-  // middle of the bar — the easiest spot for either thumb.
+  /*
+   * Equal share with the right zone, which is what actually centres the month
+   * navigation between them.
+   *
+   * `1 1 0` and not `1 1 auto`: with an `auto` basis each side starts at its
+   * own content width, so the wider chip pushes the middle off-centre. A zero
+   * basis makes both sides the same width whatever is in them.
+   *
+   * This only works because the rollover chip below now fits inside half the
+   * remaining space. It did not before, and being `nowrap` it overflowed into
+   * the month navigation rather than wrapping — the overlap this all started
+   * with.
+   */
   [theme.breakpoints.down("sm")]: {
-    flex: 1,
+    flex: "1 1 0",
   },
 }));
 
 export const ToolbarCenterStyled = styled("div")({
+  // Never shrinks: the month is the whole point of these pages, and a
+  // half-width month picker is worse than an off-centre one.
   flex: "0 0 auto",
   display: "flex",
   alignItems: "center",
@@ -88,7 +106,11 @@ export const ToolbarRightStyled = styled("div")(({ theme }) => ({
   marginLeft: "auto",
 
   [theme.breakpoints.down("sm")]: {
-    flex: 1,
+    flex: "1 1 0",
+    // The auto margin is what holds this zone against the right edge on
+    // desktop; with equal flex basis on both sides there is no free space for
+    // it to absorb, and leaving it in would fight the centring.
+    marginLeft: 0,
   },
 
   // MUI gives a switch's FormControlLabel a negative left margin; reset it so
@@ -134,8 +156,10 @@ export const MonthLabelStyled = styled("span")(({ theme }) => ({
   // shuffle the arrows under the user's thumb.
   fontVariantNumeric: "tabular-nums",
 
+  // "Sep 2026" measures about 68px at this size, so 76 still holds the widest
+  // month without the arrows shifting under a thumb.
   [theme.breakpoints.down("sm")]: {
-    minWidth: "84px",
+    minWidth: "76px",
   },
 }));
 
@@ -206,5 +230,20 @@ export const RolloverToggleStyled = styled("button", {
   [theme.breakpoints.down("sm")]: {
     height: tokens.controlHeightMobile,
     padding: "0 10px",
+    fontSize: tokens.fontSize.sm,
+
+    /*
+     * The tick goes, the word stays.
+     *
+     * The chip has to fit in half the space left over after the month
+     * navigation, or the two side zones cannot be equal and the month sits
+     * off-centre. Dropping the 24px tick gets it there; shortening "Rollover"
+     * would have saved the same width by making the one control whose entire
+     * job is naming a mode stop naming it.
+     *
+     * Active state still reads through four channels — tinted fill, pine
+     * border, pine text and a heavier weight — two of which are not colour.
+     */
+    "& svg": { display: "none" },
   },
 }));

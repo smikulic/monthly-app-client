@@ -18,6 +18,7 @@ import { SectionCard } from "@/components/section-card/section-card";
 import { CurrencySelect } from "@/components/currency-select/currency-select";
 import { ConfirmDialog } from "@/components/confirm-dialog/confirm-dialog";
 import { useOnboarding } from "@/features/demo/onboarding";
+import { InstallSection } from "@/features/pwa/install-guide";
 import {
   ProminentButtonStyled,
   SelectStyled,
@@ -108,6 +109,9 @@ export const ProfilePageContainer = ({
               </ProminentButtonStyled>
             </ButtonGroupStyled>
           </SectionCard>
+
+          {/* Only on a phone, and only while it is not already installed. */}
+          <InstallSection />
 
           <SectionCard
             title="Show me around"

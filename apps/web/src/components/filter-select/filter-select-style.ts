@@ -47,12 +47,36 @@ export const FilterTriggerStyled = styled("button")(({ theme }) => ({
   },
 }));
 
-export const FilterTriggerLabelStyled = styled("span")(({ theme }) => ({
+/**
+ * Stands in for the label on a phone, where the word does not fit.
+ *
+ * Only below `sm`, and only when the caller supplies one — a trigger reading
+ * just "All ▾" next to a month picker does not say what it filters.
+ */
+export const FilterTriggerIconStyled = styled("span")(({ theme }) => ({
+  display: "none",
+  alignItems: "center",
+
+  [theme.breakpoints.down("sm")]: {
+    display: "inline-flex",
+  },
+}));
+
+export const FilterTriggerLabelStyled = styled("span", {
+  shouldForwardProp: (prop) => prop !== "hasIcon",
+})<{ hasIcon?: boolean }>(({ theme, hasIcon }) => ({
   flexShrink: 0,
   fontSize: tokens.fontSize.md,
   lineHeight: 1,
   whiteSpace: "nowrap",
   color: theme.palette.text.secondary,
+
+  // The icon replaces it rather than joining it: at 393px the three toolbar
+  // controls want about 452px between them, and this word is the least
+  // load-bearing of what is on screen.
+  [theme.breakpoints.down("sm")]: {
+    display: hasIcon ? "none" : "inline",
+  },
 }));
 
 export const FilterTriggerValueStyled = styled("span")(({ theme }) => ({
@@ -67,5 +91,8 @@ export const FilterTriggerValueStyled = styled("span")(({ theme }) => ({
 
   [theme.breakpoints.down("sm")]: {
     fontSize: tokens.fontSize.sm,
+    // A long household name truncates here instead of pushing the month
+    // navigation into the rollover chip.
+    maxWidth: 88,
   },
 }));

@@ -15,6 +15,7 @@ import { API_PRODUCTION, AUTH_TOKEN, SENTRY_DSN } from "./constants";
 import { analytics } from "./utils/mixpanel";
 import { demoLink } from "./features/demo/demo-link";
 import { setDemoClient } from "./features/demo/demo-session";
+import { registerServiceWorker } from "./features/pwa/register-service-worker";
 // Self-hosted rather than the Google Fonts CDN, which transmits the visitor's
 // IP to a third party — avoided deliberately for an EU-facing finance app.
 //
@@ -79,6 +80,10 @@ setDemoClient(client);
 
 // Initialize Mixpanel
 analytics.init();
+
+// Caches nothing and answers no request. It exists only so Chrome treats the
+// app as installable — see `public/sw.js`.
+registerServiceWorker();
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement,
