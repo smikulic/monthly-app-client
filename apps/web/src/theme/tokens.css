@@ -63,6 +63,9 @@
   /* Horizontal inset of a card inside that column. Full-bleed bars align to
      the cards' edge, not the column's. */
   --card-inset: 12px;
+  /* Shared height for toolbar controls, so they sit on one baseline. */
+  --control-height: 36px;
+  --control-height-mobile: 40px;
 
   --radius-sm: 8px;
   --radius-md: 12px;

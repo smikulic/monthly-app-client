@@ -15,15 +15,16 @@ import {
 // renderer
 import { CanvasRenderer } from "echarts/renderers";
 
+import { alpha, lighten } from "@mui/material/styles";
 import { useTheme } from "@/hooks/useTheme";
 import { UserContext } from "@/App";
 import { months } from "@/constants";
 import { formatAmount } from "@/utils/format";
 import { getPersonColors } from "@/utils/personColors";
 import {
-  ErrorTextStyled,
+  NegativeAmountStyled,
+  PositiveAmountStyled,
   UnderlineTextStyled,
-  WarningTextStyled,
 } from "@/shared";
 import { HomeChartTotalValueStyled } from "@/components/home-page-list/home-page-list-style";
 import { Typography } from "@/components/ui/Typography";
@@ -171,8 +172,13 @@ export const ChartBudgetExpense = ({
             type: "line",
             data: safeExpensesData,
             smooth: true,
-            areaStyle: {},
+            // An explicit, very light fill. Left empty, echarts fills the area
+            // with the series colour — which is ink, so it rendered as a near
+            // black blob dominating the chart.
+            areaStyle: { color: alpha(theme.palette.money.neutral, 0.07) },
             // Spending is the normal state, so the main series is ink, not red.
+            // The actual: solid, heaviest, and the only series with a fill.
+            lineStyle: { width: 2 },
             itemStyle: { color: theme.palette.money.neutral },
           },
           {
@@ -184,8 +190,14 @@ export const ChartBudgetExpense = ({
             smooth: false,
             step: "middle",
             showSymbol: false,
-            // The budget is a reference line, so it takes the accent.
-            itemStyle: { color: theme.palette.primary.main },
+            // A lightened accent, not the accent itself: pine and ink are both
+            // simply "dark" at line weight, so the two most important series
+            // were near-indistinguishable — worst of all in the legend swatch.
+            //
+            // Weight and fill carry the distinction as well as tone, so the
+            // chart still reads without relying on colour discrimination.
+            lineStyle: { width: 2.5 },
+            itemStyle: { color: lighten(theme.palette.primary.main, 0.4) },
           },
           /*
            * One thin line per person, covering shared categories only. Kept
@@ -232,9 +244,9 @@ export const ChartBudgetExpense = ({
                 you spent{" "}
                 <UnderlineTextStyled>
                   {spentOver ? (
-                    <ErrorTextStyled>{formattedDiff}</ErrorTextStyled>
+                    <NegativeAmountStyled>{formattedDiff}</NegativeAmountStyled>
                   ) : (
-                    <WarningTextStyled>{formattedDiff}</WarningTextStyled>
+                    <PositiveAmountStyled>{formattedDiff}</PositiveAmountStyled>
                   )}{" "}
                 </UnderlineTextStyled>
                 {spentOver ? "over" : "under"} budget.

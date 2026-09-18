@@ -14,10 +14,10 @@ import { CategoriesPageContainer } from "./pages/categories-page/categories-page
 import { SavingGoalsPageContainer } from "./pages/saving-goals-page/saving-goals-page-container";
 import { InvestmentsPageContainer } from "./pages/investments-page/investments-page-container";
 import { ConfirmEmailPageContainer } from "./pages/confirm-email-page/confirm-email-page-container";
-import { Header, Footer } from "./components/layout";
+import { Header } from "./components/layout";
 import { AUTH_TOKEN, AUTH_TOKEN_USER } from "./constants";
 import { handleLogout } from "./utils/handleLogout";
-import { FooterPaddingStyled } from "./shared";
+import { ContentWrapperStyled } from "./shared";
 import { PrivacyPageContainer } from "./pages/privacy-page/privacy-page-container";
 import { TermsPageContainer } from "./pages/terms-page/terms-page-container";
 import { AboutPageContainer } from "./pages/about-page/about-page-container";
@@ -173,11 +173,10 @@ function App() {
                           />
                           <PendingInviteResume />
                           <ScopeProvider>
-                            <FooterPaddingStyled>
+                            <ContentWrapperStyled>
                               <Outlet />
-                            </FooterPaddingStyled>
+                            </ContentWrapperStyled>
                           </ScopeProvider>
-                          <Footer />
                         </UserContext.Provider>
                       }
                     >

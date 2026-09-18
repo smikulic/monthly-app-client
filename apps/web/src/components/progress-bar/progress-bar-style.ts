@@ -32,7 +32,10 @@ export const ProgressBarStyled = styled("div", {
     ? "transparent"
     : alpha(theme.palette.primary.main, 0.04),
   overflow: "hidden",
-  zIndex: "-1",
+  // Above the card's own background, below the row's text. It used to sit at
+  // -1 and show through to the page, which forced the card to stay unfilled —
+  // and left the whole list flat beige against a beige ground.
+  zIndex: 0,
 }));
 
 export const ProgressBarInnerStyled = styled("div", {

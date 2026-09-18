@@ -1,4 +1,5 @@
 import { styled } from "@mui/material/styles";
+import { tokens } from "@/theme/tokens";
 
 // Compact dropdown trigger sized to sit on the same baseline as the toolbar's
 // month navigation and rollover switch (rather than a tall form-style Select).
@@ -6,16 +7,23 @@ export const ScopeTriggerStyled = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   gap: theme.spacing(0.75),
-  height: 36,
+  height: tokens.controlHeight,
   maxWidth: "100%",
   padding: "0 10px",
-  borderRadius: 8,
+  borderRadius: tokens.radius.sm,
+  // Surface, matching the month segment and rollover chip. It was transparent,
+  // so it read as a different kind of thing from the controls beside it.
+  background: theme.palette.surface,
   border: `1px solid ${theme.palette.divider}`,
   cursor: "pointer",
   overflow: "hidden",
 
   "&:hover": {
-    background: theme.palette.action.hover,
+    borderColor: theme.palette.primary.main,
+  },
+
+  [theme.breakpoints.down("sm")]: {
+    height: tokens.controlHeightMobile,
   },
 
   "& svg": {

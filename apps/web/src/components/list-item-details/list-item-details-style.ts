@@ -18,6 +18,9 @@ export const AmountColumnStyled = styled("div")({
   justifyContent: "center",
   lineHeight: 1.25,
   fontVariantNumeric: "tabular-nums",
+  // Above the progress wash, which is absolutely positioned across the row.
+  position: "relative",
+  zIndex: 1,
 });
 
 // The budget line: either the month's budget or what is left of it, depending

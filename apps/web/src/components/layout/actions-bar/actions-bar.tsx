@@ -2,9 +2,7 @@ import { ReactNode } from "react";
 import dayjs from "dayjs";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import { Switch } from "@/components/ui/Switch";
-import { FormGroup } from "@/components/ui/FormGroup";
-import { FormControlLabel } from "@/components/ui/FormControl";
+import CheckIcon from "@mui/icons-material/Check";
 import { ScopeFilter } from "@/features/groups/scope-filter";
 import {
   ActionsBarStyled,
@@ -13,6 +11,9 @@ import {
   ToolbarCenterStyled,
   ToolbarRightStyled,
   MonthPaginationStyled,
+  MonthLabelStyled,
+  MonthNavButtonStyled,
+  RolloverToggleStyled,
 } from "./actions-bar-style";
 
 export const ActionsBar = ({
@@ -42,31 +43,45 @@ export const ActionsBar = ({
     return <ActionsBarStyled>{children}</ActionsBarStyled>;
   }
 
+  const monthNav = showMonth && (
+    <MonthPaginationStyled>
+      <MonthNavButtonStyled
+        type="button"
+        onClick={onClickPrevious}
+        aria-label="Previous month"
+      >
+        <ChevronLeftIcon />
+      </MonthNavButtonStyled>
+      <MonthLabelStyled>{dayjs(pageDate).format("MMM YYYY")}</MonthLabelStyled>
+      <MonthNavButtonStyled
+        type="button"
+        onClick={onClickNext}
+        aria-label="Next month"
+      >
+        <ChevronRightIcon />
+      </MonthNavButtonStyled>
+    </MonthPaginationStyled>
+  );
+
   return (
     <ToolbarStyled>
       <ToolbarLeftStyled>{showScope && <ScopeFilter />}</ToolbarLeftStyled>
 
-      <ToolbarCenterStyled>
-        {showMonth && (
-          <MonthPaginationStyled>
-            <ChevronLeftIcon onClick={onClickPrevious} />
-            {dayjs(pageDate).format("MMM YYYY")}
-            <ChevronRightIcon onClick={onClickNext} />
-          </MonthPaginationStyled>
-        )}
-      </ToolbarCenterStyled>
+      <ToolbarCenterStyled>{monthNav}</ToolbarCenterStyled>
 
       <ToolbarRightStyled>
         {children}
         {toggleRollover && (
-          <FormGroup>
-            <FormControlLabel
-              control={
-                <Switch checked={showRollover} onChange={toggleRollover} />
-              }
-              label="rollover"
-            />
-          </FormGroup>
+          <RolloverToggleStyled
+            type="button"
+            active={showRollover}
+            onClick={toggleRollover}
+            aria-pressed={showRollover}
+            data-testid="rollover-toggle"
+          >
+            {showRollover && <CheckIcon />}
+            Rollover
+          </RolloverToggleStyled>
         )}
       </ToolbarRightStyled>
     </ToolbarStyled>

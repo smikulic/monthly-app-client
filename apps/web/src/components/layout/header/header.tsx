@@ -1,6 +1,6 @@
 import { useState, MouseEvent } from "react";
 import { useNavigate, useLocation } from "react-router";
-import { AUTH_TOKEN_USER } from "@/constants";
+import { AUTH_TOKEN_USER, FEEDBACK_FORM_URL } from "@/constants";
 import { ListItemIcon, Menu } from "@/components/ui/Menu";
 import { MenuItem } from "@/components/ui/MenuItem";
 import {
@@ -8,6 +8,7 @@ import {
   AccountCircle,
   AssessmentOutlined,
   GroupOutlined,
+  FeedbackOutlined,
 } from "@mui/icons-material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -73,6 +74,7 @@ export const Header = ({
         onClick={handleMenuClick}
         aria-haspopup="true"
         aria-expanded={openMenu}
+        data-testid="account-menu-trigger"
       >
         <AccountAvatarStyled src={userPicture || undefined} alt={userName}>
           {!userPicture && initial}
@@ -113,6 +115,20 @@ export const Header = ({
             <AssessmentOutlined fontSize="small" />
           </ListItemIcon>
           Reports & Data
+        </MenuItem>
+        {/* An anchor rather than a navigate(), so it opens in a new tab and
+            still honours middle-click and copy-link-address. */}
+        <MenuItem
+          component="a"
+          href={FEEDBACK_FORM_URL}
+          target="_blank"
+          rel="noreferrer"
+          data-testid="feedback-link"
+        >
+          <ListItemIcon>
+            <FeedbackOutlined fontSize="small" />
+          </ListItemIcon>
+          Send feedback
         </MenuItem>
 
         <MenuDividerStyled />

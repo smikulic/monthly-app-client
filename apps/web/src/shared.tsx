@@ -47,13 +47,15 @@ export const SubcategoryListItemStyled = styled(ListItemStyled, {
   height: "48px",
   margin: "6px 12px",
   padding: "8px 20px 8px 36px",
-  border: `1px solid ${theme.palette.text.disabled}`,
+  // `divider` rather than `text.disabled`: a border is a hairline, not
+  // disabled text, and the two diverged once the palette gained real tokens.
+  border: `1px solid ${theme.palette.divider}`,
   borderRadius: "12px",
 
   "&:hover": {
     borderColor: actionable
-      ? theme.palette.text.secondary
-      : theme.palette.text.disabled,
+      ? theme.palette.primary.main
+      : theme.palette.divider,
   },
 }));
 
@@ -127,12 +129,25 @@ export const ProminentButtonStyled = styled("div")<ProminentButtonProps>(({
  * The main content column. Also caps the width: rows are `space-between`, so
  * on a wide monitor the label sat against one edge of the viewport and its
  * amount against the other, with a metre of empty paper between them.
+ *
+ * The bottom margin used to reserve 68px for a fixed footer holding only the
+ * feedback link. That link now lives in the account menu, so on desktop this
+ * is just breathing room at the end of a list.
+ *
+ * On phones it clears the fixed bottom toolbar. The reservation belongs here
+ * rather than in the toolbar itself: `ActionsBar` renders at the top of every
+ * page, so a spacer inside it held the space at the top of the scroll — the
+ * one place it was not needed.
  */
-export const FooterPaddingStyled = styled("div")({
-  marginBottom: "68px",
+export const ContentWrapperStyled = styled("div")(({ theme }) => ({
+  marginBottom: "32px",
   maxWidth: `${tokens.contentMaxWidth}px`,
   marginInline: "auto",
-});
+
+  [theme.breakpoints.down("sm")]: {
+    marginBottom: "calc(72px + env(safe-area-inset-bottom, 0px))",
+  },
+}));
 
 /**
  * Holds the previous month on screen while the next one loads, dimmed just
@@ -153,11 +168,20 @@ export const RefreshingStyled = styled("div", {
   pointerEvents: refreshing ? "none" : "auto",
 }));
 
-export const ErrorTextStyled = styled("span")(({ theme }) => ({
-  color: theme.palette.error.main,
+/** An amount that is good news: under budget, a gain. */
+export const PositiveAmountStyled = styled("span")(({ theme }) => ({
+  color: theme.palette.money.positive,
 }));
-export const WarningTextStyled = styled("span")(({ theme }) => ({
-  color: theme.palette.warning.main,
+
+/**
+ * An amount that is bad news: over budget, a loss.
+ *
+ * Named for what it means rather than for a severity level. These were
+ * `ErrorTextStyled` and `WarningTextStyled`, and under-budget — unambiguously
+ * good news — was rendered with the warning one.
+ */
+export const NegativeAmountStyled = styled("span")(({ theme }) => ({
+  color: theme.palette.money.negative,
 }));
 export const UnderlineTextStyled = styled("span")(({ theme }) => ({
   fontWeight: "500",

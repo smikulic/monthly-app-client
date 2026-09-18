@@ -126,6 +126,14 @@ export const tokens = {
   cardInset: 12,
 
   /**
+   * Shared height for toolbar controls, so the scope filter, month navigation
+   * and rollover toggle sit on one baseline instead of each picking its own.
+   * Taller on phones, where they are thumb targets.
+   */
+  controlHeight: 36,
+  controlHeightMobile: 40,
+
+  /**
    * Personality lives in the display face, neutrality in the text face. The
    * sans does the dense-table work at 13-14px where character is a liability;
    * Literata appears a handful of times per screen at large sizes, which is
@@ -190,6 +198,8 @@ export const cssVariables: Record<string, string> = {
 
   "--content-max-width": `${tokens.contentMaxWidth}px`,
   "--card-inset": `${tokens.cardInset}px`,
+  "--control-height": `${tokens.controlHeight}px`,
+  "--control-height-mobile": `${tokens.controlHeightMobile}px`,
 
   "--radius-sm": `${tokens.radius.sm}px`,
   "--radius-md": `${tokens.radius.md}px`,
