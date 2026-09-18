@@ -1,4 +1,6 @@
 import React from "react";
+import { alpha } from "@mui/material/styles";
+import { tokens } from "@/theme/tokens";
 
 export const AboutPageContainer = () => {
   return (
@@ -21,7 +23,7 @@ export const AboutPageContainer = () => {
           left: 0,
           right: 0,
           height: "200px",
-          background: "linear-gradient(135deg, #3bceb1 0%, #96fcd2 100%)",
+          background: `linear-gradient(135deg, ${alpha(tokens.accent.main, 0.18)} 0%, ${alpha(tokens.accent.main, 0.06)} 100%)`,
           opacity: 0.03,
           zIndex: -1,
         }}
@@ -44,7 +46,7 @@ export const AboutPageContainer = () => {
           fontSize: "26px",
           marginBottom: "16px",
           fontWeight: "500",
-          borderBottom: "2px solid #3bceb1",
+          borderBottom: `2px solid ${tokens.accent.main}`,
           paddingBottom: "8px",
           display: "inline-block",
         }}
@@ -64,7 +66,7 @@ export const AboutPageContainer = () => {
           fontSize: "26px",
           marginBottom: "16px",
           fontWeight: "500",
-          borderBottom: "2px solid #3bceb1",
+          borderBottom: `2px solid ${tokens.accent.main}`,
           paddingBottom: "8px",
           display: "inline-block",
         }}
@@ -95,7 +97,7 @@ export const AboutPageContainer = () => {
           fontSize: "26px",
           marginBottom: "16px",
           fontWeight: "500",
-          borderBottom: "2px solid #3bceb1",
+          borderBottom: `2px solid ${tokens.accent.main}`,
           paddingBottom: "8px",
           display: "inline-block",
         }}
@@ -145,7 +147,7 @@ export const AboutPageContainer = () => {
           fontSize: "26px",
           marginBottom: "16px",
           fontWeight: "500",
-          borderBottom: "2px solid #3bceb1",
+          borderBottom: `2px solid ${tokens.accent.main}`,
           paddingBottom: "8px",
           display: "inline-block",
         }}
@@ -168,7 +170,7 @@ export const AboutPageContainer = () => {
           fontSize: "26px",
           marginBottom: "16px",
           fontWeight: "500",
-          borderBottom: "2px solid #3bceb1",
+          borderBottom: `2px solid ${tokens.accent.main}`,
           paddingBottom: "8px",
           display: "inline-block",
         }}
@@ -197,7 +199,7 @@ export const AboutPageContainer = () => {
             transition: "color 0.2s ease",
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.color = "#3bceb1";
+            e.currentTarget.style.color = tokens.accent.main;
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.color = "#2c5530";

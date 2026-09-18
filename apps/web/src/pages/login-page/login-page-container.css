@@ -26,12 +26,12 @@
 .loginPage .form label {
   display: block;
   padding-bottom: 6px;
-  font-size: 13px;
+  font-size: var(--font-size-sm);
 }
 .loginPage .form input {
   padding: 10px 12px;
   width: 100%;
-  border: 1px solid #000;
+  border: 1px solid var(--hairline);
   border-radius: 5px;
 }
 
@@ -72,13 +72,13 @@
   content: "";
   flex: 1;
   height: 1px;
-  background: #e0e0e0;
+  background: var(--hairline);
 }
 
 .loginPage .divider span {
   padding: 0 16px;
-  color: #666;
-  font-size: 14px;
+  color: var(--ink-secondary);
+  font-size: var(--font-size-sm);
 }
 
 .loginPage .google-signin-button {

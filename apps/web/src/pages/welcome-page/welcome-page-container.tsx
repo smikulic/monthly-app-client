@@ -2,6 +2,7 @@ import CookieConsent from "react-cookie-consent";
 import { handleAnalyticsConsent, COOKIE_CONSENT_KEY } from "@/utils/mixpanel";
 import { FeatureGrid } from "./feature-grid";
 import ProductDemoImg from "../../assets/product-demo.png";
+import { tokens } from "@/theme/tokens";
 import "./welcome-page-container.css";
 
 export const WelcomePageContainer = () => {
@@ -16,11 +17,11 @@ export const WelcomePageContainer = () => {
         <svg viewBox="400 0 500 500" preserveAspectRatio="xMinYMin meet">
           <path
             d="M0,290 C170,240 900,0 1000,140 L1000,00 L0,0 Z"
-            style={{ stroke: "none", fill: "#46eaa6", opacity: "0.7" }}
+            style={{ stroke: "none", fill: tokens.accent.main, opacity: 0.18 }}
           />
           <path
             d="M0,220 C170,220 750,0 1000,140 L1000,00 L0,0 Z"
-            style={{ stroke: "none", fill: "#96fcd2", opacity: "0.6" }}
+            style={{ stroke: "none", fill: tokens.accent.main, opacity: 0.1 }}
           />
         </svg>
       </div>
@@ -95,9 +96,9 @@ export const WelcomePageContainer = () => {
       </div>
 
       {/* new feature presentation grid */}
-      <FeatureGrid />
+      {/* <FeatureGrid /> */}
 
-      <div className="welcome-content">
+      {/* <div className="welcome-content">
         <div
           style={{
             marginTop: "20px",
@@ -107,8 +108,8 @@ export const WelcomePageContainer = () => {
         >
           <h2
             style={{
-              fontSize: "32px",
-              color: "#333",
+              fontSize: tokens.fontSize.hero,
+              color: tokens.ink.primary,
               marginBottom: "20px",
               fontWeight: "500",
             }}
@@ -117,8 +118,8 @@ export const WelcomePageContainer = () => {
           </h2>
           <p
             style={{
-              fontSize: "18px",
-              color: "#666",
+              fontSize: tokens.fontSize.lg,
+              color: tokens.ink.secondary,
               marginBottom: "30px",
               maxWidth: "600px",
               margin: "0 auto 30px auto",
@@ -136,9 +137,9 @@ export const WelcomePageContainer = () => {
               overflow: "hidden",
               maxWidth: "800px",
               margin: "0 auto",
-              backgroundColor: "#f0f0f0",
-              borderRadius: "8px",
-              boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+              backgroundColor: tokens.hairline,
+              borderRadius: `${tokens.radius.md}px`,
+              boxShadow: "0 8px 32px rgba(20, 18, 15, 0.08)",
             }}
           >
             <iframe
@@ -165,7 +166,7 @@ export const WelcomePageContainer = () => {
         </a>
         <br />
         <br />
-      </div>
+      </div> */}
 
       <footer
         style={{
@@ -174,11 +175,13 @@ export const WelcomePageContainer = () => {
           marginTop: "40px",
         }}
       >
-        <div style={{ fontSize: "14px", color: "#666" }}>
+        <div
+          style={{ fontSize: tokens.fontSize.sm, color: tokens.ink.secondary }}
+        >
           <a
             href="/about"
             style={{
-              color: "#666",
+              color: tokens.ink.secondary,
               textDecoration: "none",
               marginRight: "20px",
             }}
@@ -195,7 +198,7 @@ export const WelcomePageContainer = () => {
           <a
             href="/privacy"
             style={{
-              color: "#666",
+              color: tokens.ink.secondary,
               textDecoration: "none",
               marginRight: "20px",
             }}
@@ -212,7 +215,7 @@ export const WelcomePageContainer = () => {
           <a
             href="/terms"
             style={{
-              color: "#666",
+              color: tokens.ink.secondary,
               textDecoration: "none",
             }}
             onMouseEnter={(e) =>
@@ -234,25 +237,25 @@ export const WelcomePageContainer = () => {
         enableDeclineButton
         cookieName={COOKIE_CONSENT_KEY}
         style={{
-          background: "rgba(43, 55, 59, 0.9)",
-          fontSize: "14px",
+          background: tokens.ink.primary,
+          fontSize: tokens.fontSize.sm,
           padding: "5px",
         }}
         buttonStyle={{
-          backgroundColor: "#46eaa6",
-          color: "#2B373B",
-          fontSize: "14px",
+          backgroundColor: tokens.accent.main,
+          color: tokens.accent.contrastText,
+          fontSize: tokens.fontSize.sm,
           padding: "8px 18px",
           borderRadius: "4px",
           fontWeight: "500",
         }}
         declineButtonStyle={{
           backgroundColor: "transparent",
-          color: "#fff",
-          fontSize: "14px",
+          color: tokens.ground,
+          fontSize: tokens.fontSize.sm,
           padding: "8px 18px",
           borderRadius: "4px",
-          border: "1px solid #fff",
+          border: `1px solid ${tokens.ground}`,
           fontWeight: "500",
         }}
         expires={365}
@@ -268,14 +271,14 @@ export const WelcomePageContainer = () => {
         analytics purposes. View our{" "}
         <a
           href="/privacy"
-          style={{ color: "#46eaa6", textDecoration: "underline" }}
+          style={{ color: tokens.section[4], textDecoration: "underline" }}
         >
           Privacy Policy
         </a>{" "}
         and{" "}
         <a
           href="/terms"
-          style={{ color: "#46eaa6", textDecoration: "underline" }}
+          style={{ color: tokens.section[4], textDecoration: "underline" }}
         >
           Terms & Conditions
         </a>{" "}
