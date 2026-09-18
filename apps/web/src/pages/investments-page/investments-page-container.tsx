@@ -35,14 +35,14 @@ export const InvestmentsPageContainer = () => {
   const totalInitialAmount =
     investments?.reduce(
       (sum, investment) => sum + investment.initialAmount,
-      0
+      0,
     ) || 0;
 
   const totalCurrentValue =
     investments?.reduce(
       (sum, investment) =>
         sum + (investment.amount || investment.initialAmount),
-      0
+      0,
     ) || 0;
 
   const totalGainLoss = totalCurrentValue - totalInitialAmount;

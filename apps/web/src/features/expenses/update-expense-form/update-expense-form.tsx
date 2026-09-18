@@ -35,13 +35,20 @@ export const UpdateExpenseForm: React.FC<Props> = ({
   const formExpenseDate = new Date(parseInt(formData.date, 10));
 
   const [formInvalid, setFormInvalid] = useState(true);
-  const [expenseAmount, setExpenseAmount] = useState(formData.amount);
+  // `number | ""` so the field can be cleared. `Number("")` is 0, which
+  // meant emptying the box silently rewrote the amount as zero.
+  const [expenseAmount, setExpenseAmount] = useState<number | "">(
+    formData.amount,
+  );
+  // `description` is nullable, and an expense saved without one arrives as
+  // null — which React rejects as the value of a controlled input. The create
+  // form starts it at "" for the same reason.
   const [expenseDescription, setExpenseDescription] = useState(
-    formData.description
+    formData.description ?? "",
   );
   const [expenseDate, setExpenseDate] = useState(formExpenseDate);
   const [expenseSubcategoryId, setExpenseSubcategoryId] = useState(
-    formData.subcategoryId
+    formData.subcategoryId,
   );
   const [paidByUserId, setPaidByUserId] = useState(formData.paidBy?.id ?? "");
 
@@ -81,8 +88,10 @@ export const UpdateExpenseForm: React.FC<Props> = ({
         updateExpense({
           variables: {
             id: formData.id,
-            amount: expenseAmount,
-            description: expenseDescription,
+            amount: Number(expenseAmount),
+            // Empty means "no description", so clear it rather than
+            // storing an empty string.
+            description: expenseDescription || null,
             date: dayjs(expenseDate).format("YYYY-MM-DD"),
             subcategoryId: expenseSubcategoryId,
             paidByUserId: categoryGroupId ? paidByUserId : undefined,
@@ -98,7 +107,9 @@ export const UpdateExpenseForm: React.FC<Props> = ({
         margin="none"
         autoComplete="off"
         value={expenseAmount}
-        onChange={(e) => setExpenseAmount(Number(e.target.value))}
+        onChange={(e) =>
+          setExpenseAmount(e.target.value === "" ? "" : Number(e.target.value))
+        }
       />
       <TextFieldStyled
         id="description"

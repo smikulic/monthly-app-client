@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent } from "@/test-utils";
 import "@testing-library/jest-dom";
 import {
   afterAll,
@@ -63,7 +63,7 @@ describe("<SavingGoalFormFactory />", () => {
 
     // Grab the Goal Amount field
     const amountInput = screen.getByLabelText(
-      /How much do you estimate you goal costs\?/i
+      /How much do you estimate you goal costs\?/i,
     );
     fireEvent.change(amountInput, { target: { value: "5000" } });
     expect(createBtn).toBeEnabled();
@@ -97,7 +97,7 @@ describe("<SavingGoalFormFactory />", () => {
         open={true}
         closeForm={closeForm}
         formData={existing}
-      />
+      />,
     );
 
     // No info alerts in update mode
@@ -112,7 +112,7 @@ describe("<SavingGoalFormFactory />", () => {
 
     // Update Goal Amount
     const amountInput = screen.getByLabelText(
-      /How much do you estimate you goal costs\?/i
+      /How much do you estimate you goal costs\?/i,
     );
     fireEvent.change(amountInput, { target: { value: "1500" } });
 

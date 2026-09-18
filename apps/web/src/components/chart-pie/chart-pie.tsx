@@ -75,7 +75,7 @@ export const ChartPie = ({
         value: categoryTotals[cat],
         itemStyle: { color: categoryColorMap[cat] },
       })),
-    [categories, categoryTotals, categoryColorMap, userCurrency]
+    [categories, categoryTotals, categoryColorMap, userCurrency],
   );
 
   // outer data: grouped by category so siblings sit next to each other
@@ -88,20 +88,20 @@ export const ChartPie = ({
           name: `${subcategoryName} (${formatAmount(total, userCurrency)})`,
           value: total,
           itemStyle: { color: categoryColorMap[cat] },
-        }))
+        })),
     );
   }, [data, categories, categoryColorMap, userCurrency]);
 
   const sortedCategories = useMemo(
     () => [...categories].sort((a, b) => categoryTotals[b] - categoryTotals[a]),
-    [categories, categoryTotals]
+    [categories, categoryTotals],
   );
 
   const legendData = useMemo(() => {
     return sortedCategories.flatMap((cat) => {
       // find the exact innerData name (with formatted amount)
       const catName = innerData.find((d) =>
-        d.name.startsWith(cat + " (")
+        d.name.startsWith(cat + " ("),
       )!.name;
 
       // then all its subcategory names
@@ -136,7 +136,7 @@ export const ChartPie = ({
           avoidLabelOverlap: true,
           padAngle: padWidth,
           itemStyle: {
-            borderColor: "#fff",
+            borderColor: palette.ground,
             borderWidth: padWidth,
             borderRadius: 4,
           },
@@ -166,7 +166,7 @@ export const ChartPie = ({
           avoidLabelOverlap: true,
           padAngle: 1,
           itemStyle: {
-            borderColor: "#fff",
+            borderColor: palette.ground,
             borderWidth: padWidth,
             borderRadius: 4,
           },
@@ -212,7 +212,7 @@ export const ChartPie = ({
       innerFontSize,
       lineLength,
       tooltipFont,
-    ]
+    ],
   );
 
   // Don't render chart if data is invalid

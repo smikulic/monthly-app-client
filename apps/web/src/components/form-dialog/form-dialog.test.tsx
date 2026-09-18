@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent } from "@/test-utils";
 import { FormDialog } from "./form-dialog";
 import { describe, expect, it, vi } from "vitest";
 
@@ -14,7 +14,7 @@ describe("<FormDialog />", () => {
         closeForm={vi.fn()}
       >
         test child
-      </FormDialog>
+      </FormDialog>,
     );
     expect(screen.getByText("Test Title")).toBeInTheDocument();
   });
@@ -30,7 +30,7 @@ describe("<FormDialog />", () => {
         closeForm={vi.fn()}
       >
         test child
-      </FormDialog>
+      </FormDialog>,
     );
     expect(screen.getByText("Save")).toBeInTheDocument();
   });
@@ -47,7 +47,7 @@ describe("<FormDialog />", () => {
         closeForm={closeForm}
       >
         test child
-      </FormDialog>
+      </FormDialog>,
     );
 
     fireEvent.click(screen.getByLabelText("close"));
@@ -66,7 +66,7 @@ describe("<FormDialog />", () => {
         closeForm={vi.fn()}
       >
         test child
-      </FormDialog>
+      </FormDialog>,
     );
 
     fireEvent.click(screen.getByText("Save"));

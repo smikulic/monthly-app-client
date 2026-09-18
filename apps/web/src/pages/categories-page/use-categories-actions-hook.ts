@@ -10,7 +10,7 @@ import { useActionDropdown } from "@/hooks/useActionDropdown";
 import { TOAST_MESSAGES, ENTITY_NAMES } from "@/constants/forms";
 
 export const useCategoriesActions = (
-  refetchCategories: () => Promise<unknown>
+  refetchCategories: () => Promise<unknown>,
 ) => {
   const {
     anchorActionDropdownEl,
@@ -36,8 +36,8 @@ export const useCategoriesActions = (
       toast.success(
         TOAST_MESSAGES.SUCCESS.DELETE(
           ENTITY_NAMES.CATEGORY,
-          deleteCategory.name
-        )
+          deleteCategory.name,
+        ),
       );
     },
   });
@@ -51,8 +51,8 @@ export const useCategoriesActions = (
       toast.success(
         TOAST_MESSAGES.SUCCESS.DELETE(
           ENTITY_NAMES.SUBCATEGORY,
-          deleteSubcategory.name
-        )
+          deleteSubcategory.name,
+        ),
       );
     },
   });

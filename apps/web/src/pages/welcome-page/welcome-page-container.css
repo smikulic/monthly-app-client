@@ -31,21 +31,21 @@
 
 .button-start {
   margin: 24px;
-  padding: 16px 24px;
-  font-size: 18px;
+  padding: 12px 36px;
+  font-size: var(--font-size-lg);
   text-decoration: none;
-  color: #fff;
-  background: #03d17c;
-  border: 1px solid #3bceb1;
-  border-radius: 25px;
+  color: var(--accent-contrast);
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 20px;
   transition: all 0.2s ease-in-out;
   cursor: pointer;
 }
 .button-start:hover,
 .button-start:active,
 .button-start:focus {
-  color: #3bceb1;
-  background: white;
+  color: var(--accent-contrast);
+  background: var(--accent-hover);
   text-decoration: none;
 }
 
@@ -65,19 +65,31 @@
 
 .product-demo-image {
   width: 45%;
-  box-shadow: 1px 1px 20px 0px #eee;
-  border: 10px solid white;
+  box-shadow: 0 8px 32px rgba(20, 18, 15, 0.08);
+  border: 10px solid var(--surface);
+  border-radius: var(--radius-md);
 }
 
 .welcome-content .title {
-  margin: 0 0 4rem 0;
-  line-height: 58px;
-  font-size: 60px;
+  margin: 0 0 1.5rem 0;
+  line-height: 1.05;
+  font-size: 52px;
+  letter-spacing: -0.02em;
   text-align: left;
 }
 
+/* Carries the promise the headline cannot fit, and the reason to trust it. */
+.welcome-content .subhead {
+  margin: 0 0 3rem 0;
+  max-width: 34rem;
+  font-size: var(--font-size-xl);
+  line-height: 1.45;
+  color: var(--ink-secondary);
+  text-align: center;
+}
+
 .welcome-content .title span:nth-child(3) {
-  color: #f199c0;
+  color: var(--accent);
 }
 
 .feature-box {
@@ -89,11 +101,11 @@
 .feature-box-title {
   margin: 0;
   margin-bottom: 14px;
-  font-size: 22px;
+  font-size: var(--font-size-xl);
 }
 .feature-box-description {
   margin: 0;
-  font-size: 18px;
+  font-size: var(--font-size-lg);
 }
 
 .embla {
@@ -177,7 +189,7 @@
   }
   .product-demo-image {
     width: 80%;
-    border: 5px solid white;
+    border: 5px solid var(--surface);
   }
 }
 
@@ -186,19 +198,23 @@
     width: 82%;
   }
   .welcome-content .title {
-    margin: 0 0 3rem 0;
-    line-height: 50px;
-    font-size: 52px;
+    margin: 0 0 1.25rem 0;
+    line-height: 1.1;
+    font-size: 38px;
+  }
+  .welcome-content .subhead {
+    margin: 0 0 2rem 0;
+    font-size: var(--font-size-lg);
   }
   .feature-box {
     padding: 1.5rem 8px;
   }
   .feature-box-title {
     margin-bottom: 8px;
-    font-size: 20px;
+    font-size: var(--font-size-xl);
   }
   .feature-box-description {
-    font-size: 16px;
+    font-size: var(--font-size-md);
   }
   .product-demo-image {
     width: 60%;

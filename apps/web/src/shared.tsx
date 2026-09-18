@@ -2,6 +2,7 @@ import { styled } from "@mui/material/styles";
 import { Tab, TabProps, Tabs, TabsProps } from "./components/ui/Tabs";
 import { SelectField } from "./components/ui/Select";
 import { TextField } from "./components/ui/TextField";
+import { tokens } from "./theme/tokens";
 
 export const ListItemStyled = styled("div")({
   display: "flex",
@@ -18,16 +19,24 @@ export const MainListItemStyled = styled(ListItemStyled, {
   // Configure which props should be forwarded on DOM
   shouldForwardProp: (prop) => prop !== "active",
 })<MainListItemStyledProps>(({ theme, active }) => ({
-  margin: "8px 12px",
+  margin: "6px 12px",
   padding: "14px 18px",
   border: active
-    ? `1px solid ${theme.palette.text.secondary}`
-    : `1px solid ${theme.palette.text.disabled}`,
+    ? `1px solid ${theme.palette.primary.main}`
+    : `1px solid ${theme.palette.divider}`,
   borderRadius: "12px",
-  background: active ? "rgba(59, 206, 177, 0.08)" : "transparent",
+  // Clips the progress wash to the rounded corners. The wash is absolutely
+  // positioned with square corners, so without this it escapes the curve and
+  // leaves a hard edge at each end of the row.
+  overflow: "hidden",
+  // Surface, not transparent: on a warm ground an unfilled row is just an
+  // outline on beige, so nothing reads as a card.
+  background: theme.palette.surface,
+  boxShadow: active ? "none" : "0 1px 2px rgba(20, 18, 15, 0.04)",
 
   "&:hover": {
-    borderColor: theme.palette.text.secondary,
+    borderColor: theme.palette.primary.main,
+    boxShadow: "0 2px 8px rgba(20, 18, 15, 0.06)",
   },
 }));
 
@@ -42,13 +51,15 @@ export const SubcategoryListItemStyled = styled(ListItemStyled, {
   height: "48px",
   margin: "6px 12px",
   padding: "8px 20px 8px 36px",
-  border: `1px solid ${theme.palette.text.disabled}`,
+  // `divider` rather than `text.disabled`: a border is a hairline, not
+  // disabled text, and the two diverged once the palette gained real tokens.
+  border: `1px solid ${theme.palette.divider}`,
   borderRadius: "12px",
 
   "&:hover": {
     borderColor: actionable
-      ? theme.palette.text.secondary
-      : theme.palette.text.disabled,
+      ? theme.palette.primary.main
+      : theme.palette.divider,
   },
 }));
 
@@ -76,10 +87,17 @@ export const ProminentButtonStyled = styled("div")<ProminentButtonProps>(({
   let borderColor: string;
 
   if (disabled) {
-    // disabled state overrides outline
-    textColor = theme.palette.action.disabled;
-    bgColor = theme.palette.action.disabledBackground;
-    borderColor = theme.palette.action.disabled;
+    // Disabled overrides outline. This is the state a user sees every time a
+    // form dialog opens, so it has to read as a button waiting for input
+    // rather than as empty space.
+    //
+    // `text.secondary` on `divider` is about 4.5:1 — muted but unmistakably a
+    // label. MUI's own `action.disabled` on `action.disabledBackground` is
+    // grey on grey, and `text.disabled` on `divider` is worse still at roughly
+    // 1.5:1, because both are near-identical warm greys.
+    textColor = theme.palette.text.secondary;
+    bgColor = theme.palette.divider;
+    borderColor = theme.palette.divider;
   } else if (outline) {
     // outline variant
     textColor = palette.main;
@@ -108,7 +126,10 @@ export const ProminentButtonStyled = styled("div")<ProminentButtonProps>(({
 
     cursor: disabled ? "not-allowed" : "pointer",
     pointerEvents: disabled ? "none" : "auto",
-    opacity: disabled ? 0.5 : 1,
+    // No blanket fade when disabled. The colours above already say "off", and
+    // halving their opacity on top of that was what made the label vanish
+    // into its own fill.
+    opacity: 1,
 
     "&:hover": disabled
       ? {}
@@ -118,19 +139,67 @@ export const ProminentButtonStyled = styled("div")<ProminentButtonProps>(({
   };
 });
 
-export const FooterPaddingStyled = styled("div")({
-  marginBottom: "68px",
-});
+/**
+ * The main content column. Also caps the width: rows are `space-between`, so
+ * on a wide monitor the label sat against one edge of the viewport and its
+ * amount against the other, with a metre of empty paper between them.
+ *
+ * The bottom margin used to reserve 68px for a fixed footer holding only the
+ * feedback link. That link now lives in the account menu, so on desktop this
+ * is just breathing room at the end of a list.
+ *
+ * On phones it clears the fixed bottom toolbar. The reservation belongs here
+ * rather than in the toolbar itself: `ActionsBar` renders at the top of every
+ * page, so a spacer inside it held the space at the top of the scroll — the
+ * one place it was not needed.
+ */
+export const ContentWrapperStyled = styled("div")(({ theme }) => ({
+  marginBottom: "32px",
+  maxWidth: `${tokens.contentMaxWidth}px`,
+  marginInline: "auto",
 
-export const ErrorTextStyled = styled("span")(({ theme }) => ({
-  color: theme.palette.error.main,
+  [theme.breakpoints.down("sm")]: {
+    marginBottom: "calc(72px + env(safe-area-inset-bottom, 0px))",
+  },
 }));
-export const WarningTextStyled = styled("span")(({ theme }) => ({
-  color: theme.palette.warning.main,
+
+/**
+ * Holds the previous month on screen while the next one loads, dimmed just
+ * enough to read as pending.
+ *
+ * Changing month changes the query variables, so Apollo has no data for them
+ * and the list used to collapse to three skeleton rows before re-expanding to
+ * a dozen. That height collapse was the jumpiness — a transition would only
+ * have animated the jump.
+ */
+export const RefreshingStyled = styled("div", {
+  shouldForwardProp: (prop) => prop !== "refreshing",
+})<{ refreshing?: boolean }>(({ refreshing }) => ({
+  opacity: refreshing ? 0.55 : 1,
+  transition: "opacity 150ms ease",
+  // The old month is still painted, so it must not accept clicks that would
+  // act on the month being navigated away from.
+  pointerEvents: refreshing ? "none" : "auto",
+}));
+
+/** An amount that is good news: under budget, a gain. */
+export const PositiveAmountStyled = styled("span")(({ theme }) => ({
+  color: theme.palette.money.positive,
+}));
+
+/**
+ * An amount that is bad news: over budget, a loss.
+ *
+ * Named for what it means rather than for a severity level. These were
+ * `ErrorTextStyled` and `WarningTextStyled`, and under-budget — unambiguously
+ * good news — was rendered with the warning one.
+ */
+export const NegativeAmountStyled = styled("span")(({ theme }) => ({
+  color: theme.palette.money.negative,
 }));
 export const UnderlineTextStyled = styled("span")(({ theme }) => ({
   fontWeight: "500",
-  borderBottom: `1px dotted ${theme.palette.primary.contrastText}`,
+  borderBottom: `1px dotted ${theme.palette.text.primary}`,
 }));
 
 // ---- Shared page layout primitives (Reports, Settings, ...) ----
@@ -141,17 +210,10 @@ export const PageWrapperStyled = styled("div")(({ theme }) => ({
   gap: theme.spacing(2),
 }));
 
-export const SectionDividerStyled = styled("hr")(({ theme }) => ({
-  width: "100%",
-  margin: 0,
-  border: "none",
-  borderTop: `1px solid ${theme.palette.divider}`,
-}));
-
 export const HelperTextStyled = styled("p")(({ theme }) => ({
   margin: 0,
   color: theme.palette.text.secondary,
-  fontSize: "0.875rem",
+  fontSize: tokens.fontSize.sm,
 }));
 
 // Stacked + full-width on mobile; inline on larger screens with a consistent
@@ -186,15 +248,14 @@ export const TabStyled = styled((props: TabProps) => (
   textTransform: "none",
   minHeight: theme.spacing(4),
   padding: "8px 16px",
-  fontSize: "14px",
+  fontSize: tokens.fontSize.md,
   fontWeight: "normal",
   borderRadius: "10px",
   marginRight: theme.spacing(2),
-  // unselected
+  // Unselected sits on the page ground, so it takes ink — `primary.contrastText`
+  // means "text on the accent fill" and is light.
   background: "transparent",
-  color: theme.palette.primary.contrastText,
-  // color: theme.palette.text.secondary,
-  // border: `1px solid ${theme.palette.primary.contrastText}`,
+  color: theme.palette.text.secondary,
 
   "&.Mui-selected": {
     background: theme.palette.primary.main,

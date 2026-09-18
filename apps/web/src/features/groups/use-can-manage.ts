@@ -14,7 +14,7 @@ export const useCanManage = () => {
 
   return (
     ownerUserId?: string | null,
-    categoryGroupId?: string | null
+    categoryGroupId?: string | null,
   ): boolean => {
     if (!myId) return false;
     if (ownerUserId && ownerUserId === myId) return true;

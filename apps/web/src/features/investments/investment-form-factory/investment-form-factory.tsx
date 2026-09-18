@@ -5,12 +5,7 @@ import {
   useCreateInvestmentMutation,
   useUpdateInvestmentMutation,
 } from "@/generated/graphql";
-import {
-  CURRENCY_OPTIONS,
-  FORM_ACTIONS,
-  TOAST_MESSAGES,
-  ENTITY_NAMES,
-} from "@/constants/forms";
+import { FORM_ACTIONS, TOAST_MESSAGES, ENTITY_NAMES } from "@/constants/forms";
 import { analytics } from "@/utils/mixpanel";
 import { TextFieldStyled } from "@/shared";
 import { FormControl } from "@/components/ui/FormControl";
@@ -22,6 +17,7 @@ import { Alert } from "@/components/ui/Alert";
 import { UserContext } from "@/App";
 import { FormDialog } from "@/components/form-dialog/form-dialog";
 import dayjs from "dayjs";
+import { CurrencySelect } from "@/components/currency-select/currency-select";
 
 interface FormProps {
   open: boolean;
@@ -32,7 +28,7 @@ interface FormProps {
 const useInvestmentForm = (
   type: "create" | "update",
   closeForm: () => void,
-  formData?: Investment
+  formData?: Investment,
 ) => {
   const userCurrency = useContext(UserContext);
 
@@ -43,12 +39,12 @@ const useInvestmentForm = (
   const [amount, setAmount] = useState(formData?.amount || "");
   const [currency, setCurrency] = useState(formData?.currency || userCurrency);
   const [initialAmount, setInitialAmount] = useState(
-    formData?.initialAmount || ""
+    formData?.initialAmount || "",
   );
   const [startDate, setStartDate] = useState(
     formData?.startDate
       ? new Date(parseInt(formData.startDate, 10))
-      : new Date()
+      : new Date(),
   );
 
   const [createInvestment] = useCreateInvestmentMutation({
@@ -56,14 +52,14 @@ const useInvestmentForm = (
       analytics.trackInvestmentCreated(
         createInvestment.name,
         createInvestment.initialAmount,
-        createInvestment.currency
+        createInvestment.currency,
       );
       closeForm();
       toast.success(
         TOAST_MESSAGES.SUCCESS.CREATE(
           ENTITY_NAMES.INVESTMENT,
-          createInvestment.name
-        )
+          createInvestment.name,
+        ),
       );
     },
   });
@@ -74,15 +70,15 @@ const useInvestmentForm = (
       toast.success(
         TOAST_MESSAGES.SUCCESS.UPDATE(
           ENTITY_NAMES.INVESTMENT,
-          updateInvestment.name
-        )
+          updateInvestment.name,
+        ),
       );
     },
   });
 
   useEffect(() => {
     setFormInvalid(
-      !investmentName || !quantity || !currency || !initialAmount || !startDate
+      !investmentName || !quantity || !currency || !initialAmount || !startDate,
     );
   }, [investmentName, quantity, currency, initialAmount, startDate]);
 
@@ -215,19 +211,7 @@ export const InvestmentFormFactory = ({
 
       <FormControl size="small" required sx={{ minWidth: 120 }}>
         <InputLabel id="currency-label">Currency</InputLabel>
-        <Select
-          labelId="currency-label"
-          id="currency"
-          value={currency}
-          label="Currency"
-          onChange={(e) => setCurrency(e.target.value)}
-        >
-          {CURRENCY_OPTIONS.map((currency) => (
-            <MenuItem key={currency.value} value={currency.value}>
-              {currency.label}
-            </MenuItem>
-          ))}
-        </Select>
+        <CurrencySelect value={currency} onChange={setCurrency} />
       </FormControl>
 
       <DatePickerStyled

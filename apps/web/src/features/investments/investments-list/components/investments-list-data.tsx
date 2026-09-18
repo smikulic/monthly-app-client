@@ -16,7 +16,7 @@ interface Props {
   onRemoveInvestment: (investmentId: string) => void;
   onActionsDropdownClick: (
     event: MouseEvent<HTMLElement>,
-    anchorIndex: string
+    anchorIndex: string,
   ) => void;
   onActionsDropdownClose: (anchorIndex: string) => void;
   calculatePercentageChange: (initial: number, current: number) => number;
@@ -38,7 +38,7 @@ export const InvestmentsListData: FC<Props> = ({
         const currentValue = investment.amount || investment.initialAmount;
         const percentageChange = calculatePercentageChange(
           investment.initialAmount,
-          currentValue
+          currentValue,
         );
         const isPositive = percentageChange >= 0;
 

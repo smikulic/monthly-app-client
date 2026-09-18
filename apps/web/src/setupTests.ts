@@ -23,7 +23,7 @@ const storagePrototype = {
   },
   clear: function () {
     Object.keys(localStorageMock).forEach(
-      (key) => delete localStorageMock[key]
+      (key) => delete localStorageMock[key],
     );
     this.length = 0;
   },

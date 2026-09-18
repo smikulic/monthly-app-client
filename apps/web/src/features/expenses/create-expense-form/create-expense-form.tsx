@@ -41,7 +41,7 @@ export const CreateExpenseForm: React.FC<Props> = ({
   const [expenseDescription, setExpenseDescription] = useState("");
   const [expenseDate, setExpenseDate] = useState(currentDate);
   const [expenseSubcategoryId, setExpenseSubcategoryId] = useState(
-    subcategories[0].id
+    subcategories[0].id,
   );
   const [paidByUserId, setPaidByUserId] = useState("");
 
@@ -54,14 +54,14 @@ export const CreateExpenseForm: React.FC<Props> = ({
     onCompleted: ({ createExpense }) => {
       // Find the selected subcategory to get category and subcategory names
       const selectedSubcategory = subcategories.find(
-        (sub) => sub.id === expenseSubcategoryId
+        (sub) => sub.id === expenseSubcategoryId,
       );
 
       // Track expense creation
       analytics.trackExpenseCreated(
         Number(expenseAmount),
         selectedSubcategory?.categoryId || "Unknown",
-        selectedSubcategory?.name || "Unknown"
+        selectedSubcategory?.name || "Unknown",
       );
 
       closeForm();

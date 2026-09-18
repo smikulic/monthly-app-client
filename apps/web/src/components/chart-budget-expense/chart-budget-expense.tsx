@@ -15,15 +15,17 @@ import {
 // renderer
 import { CanvasRenderer } from "echarts/renderers";
 
+import { alpha, lighten } from "@mui/material/styles";
 import { useTheme } from "@/hooks/useTheme";
+import { tokens } from "@/theme/tokens";
 import { UserContext } from "@/App";
 import { months } from "@/constants";
 import { formatAmount } from "@/utils/format";
 import { getPersonColors } from "@/utils/personColors";
 import {
-  ErrorTextStyled,
+  NegativeAmountStyled,
+  PositiveAmountStyled,
   UnderlineTextStyled,
-  WarningTextStyled,
 } from "@/shared";
 import { HomeChartTotalValueStyled } from "@/components/home-page-list/home-page-list-style";
 import { Typography } from "@/components/ui/Typography";
@@ -65,7 +67,10 @@ export const ChartBudgetExpense = ({
 }) => {
   try {
     // Immediate safety check - bail out completely if data is invalid
-    if (!isTwelveNumbers(chartExpensesData) || !isTwelveNumbers(monthlyBudgets)) {
+    if (
+      !isTwelveNumbers(chartExpensesData) ||
+      !isTwelveNumbers(monthlyBudgets)
+    ) {
       return (
         <Box sx={{ p: 2, textAlign: "center" }}>
           <Typography variant="subtitle1" color="textSecondary">
@@ -85,8 +90,8 @@ export const ChartBudgetExpense = ({
     // Only set chart ready when data is absolutely valid
     useEffect(() => {
       const isValidMonthsData = Array.isArray(months) && months.length === 12;
-      const allFinite = [...safeExpensesData, ...safeBudgetsData].every(
-        (val) => isFinite(val),
+      const allFinite = [...safeExpensesData, ...safeBudgetsData].every((val) =>
+        isFinite(val),
       );
 
       if (allFinite && isValidMonthsData) {
@@ -105,7 +110,11 @@ export const ChartBudgetExpense = ({
     const userCurrency = useContext(UserContext);
     const selectedYear = pageDate.getFullYear();
     const personColors = useMemo(
-      () => getPersonColors(sharedByUser.map((u) => u.userId), theme.palette),
+      () =>
+        getPersonColors(
+          sharedByUser.map((u) => u.userId),
+          theme.palette,
+        ),
       [sharedByUser, theme.palette],
     );
 
@@ -131,8 +140,7 @@ export const ChartBudgetExpense = ({
           formatter: (params: { seriesName: string; data: number }[]) =>
             params
               .map(
-                (p) =>
-                  `${p.seriesName}: ${formatAmount(p.data, userCurrency)}`,
+                (p) => `${p.seriesName}: ${formatAmount(p.data, userCurrency)}`,
               )
               .join("<br/>"),
           textStyle: { fontSize: 12 },
@@ -165,8 +173,14 @@ export const ChartBudgetExpense = ({
             type: "line",
             data: safeExpensesData,
             smooth: true,
-            areaStyle: {},
-            itemStyle: { color: "#ff7777" },
+            // An explicit, very light fill. Left empty, echarts fills the area
+            // with the series colour — which is ink, so it rendered as a near
+            // black blob dominating the chart.
+            areaStyle: { color: alpha(theme.palette.money.neutral, 0.07) },
+            // Spending is the normal state, so the main series is ink, not red.
+            // The actual: solid, heaviest, and the only series with a fill.
+            lineStyle: { width: 2 },
+            itemStyle: { color: theme.palette.money.neutral },
           },
           {
             name: "Budget",
@@ -177,7 +191,14 @@ export const ChartBudgetExpense = ({
             smooth: false,
             step: "middle",
             showSymbol: false,
-            itemStyle: { color: "#eec22f" },
+            // A lightened accent, not the accent itself: pine and ink are both
+            // simply "dark" at line weight, so the two most important series
+            // were near-indistinguishable — worst of all in the legend swatch.
+            //
+            // Weight and fill carry the distinction as well as tone, so the
+            // chart still reads without relying on colour discrimination.
+            lineStyle: { width: 2.5 },
+            itemStyle: { color: lighten(theme.palette.primary.main, 0.4) },
           },
           /*
            * One thin line per person, covering shared categories only. Kept
@@ -196,7 +217,14 @@ export const ChartBudgetExpense = ({
           })),
         ],
       }),
-      [safeExpensesData, safeBudgetsData, sharedByUser, personColors, userCurrency, theme],
+      [
+        safeExpensesData,
+        safeBudgetsData,
+        sharedByUser,
+        personColors,
+        userCurrency,
+        theme,
+      ],
     );
 
     return (
@@ -204,8 +232,8 @@ export const ChartBudgetExpense = ({
         <Box sx={{ p: 2 }}>
           <Typography
             variant="body1"
-            fontSize="16px"
-            color="primary.contrastText"
+            fontSize={tokens.fontSize.md}
+            color="text.primary"
             component="div"
           >
             <HomeChartTotalValueStyled>
@@ -217,9 +245,9 @@ export const ChartBudgetExpense = ({
                 you spent{" "}
                 <UnderlineTextStyled>
                   {spentOver ? (
-                    <ErrorTextStyled>{formattedDiff}</ErrorTextStyled>
+                    <NegativeAmountStyled>{formattedDiff}</NegativeAmountStyled>
                   ) : (
-                    <WarningTextStyled>{formattedDiff}</WarningTextStyled>
+                    <PositiveAmountStyled>{formattedDiff}</PositiveAmountStyled>
                   )}{" "}
                 </UnderlineTextStyled>
                 {spentOver ? "over" : "under"} budget.

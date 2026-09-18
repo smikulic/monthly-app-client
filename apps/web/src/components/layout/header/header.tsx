@@ -1,6 +1,6 @@
 import { useState, MouseEvent } from "react";
 import { useNavigate, useLocation } from "react-router";
-import { AUTH_TOKEN_USER } from "@/constants";
+import { AUTH_TOKEN_USER, FEEDBACK_FORM_URL } from "@/constants";
 import { ListItemIcon, Menu } from "@/components/ui/Menu";
 import { MenuItem } from "@/components/ui/MenuItem";
 import {
@@ -8,9 +8,11 @@ import {
   AccountCircle,
   AssessmentOutlined,
   GroupOutlined,
+  FeedbackOutlined,
 } from "@mui/icons-material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import {
   BackButtonStyled,
   HeaderStyled,
@@ -19,6 +21,7 @@ import {
   AccountTriggerStyled,
   AccountAvatarStyled,
   MenuHeaderStyled,
+  MenuHeaderTextStyled,
   MenuHeaderNameStyled,
   MenuHeaderEmailStyled,
   MenuDividerStyled,
@@ -49,6 +52,10 @@ export const Header = ({
   const email = userData?.email || localStorage.getItem(AUTH_TOKEN_USER) || "";
   const emailPrefix = email ? email.split("@")[0] : null;
   const userName = userData?.name || emailPrefix || "Account";
+  // Only a real name earns its own line. Otherwise `userName` is just the
+  // email's local part, and showing it above the full address prints the same
+  // string twice.
+  const hasRealName = Boolean(userData?.name);
   const userPicture = userData?.picture;
   const initial = userName.charAt(0).toUpperCase();
   const isHome = location.pathname === "/";
@@ -57,9 +64,12 @@ export const Header = ({
     <HeaderStyled>
       <HeaderLeftStyled>
         {isHome ? (
-          <BrandStyled onClick={() => navigate("/")}>Monthly</BrandStyled>
+          <BrandStyled type="button" onClick={() => navigate("/")}>
+            Monthly
+          </BrandStyled>
         ) : (
           <BackButtonStyled
+            type="button"
             onClick={() => navigate("/")}
             data-testid="back-button"
           >
@@ -71,8 +81,10 @@ export const Header = ({
 
       <AccountTriggerStyled
         onClick={handleMenuClick}
+        type="button"
         aria-haspopup="true"
         aria-expanded={openMenu}
+        data-testid="account-menu-trigger"
       >
         <AccountAvatarStyled src={userPicture || undefined} alt={userName}>
           {!userPicture && initial}
@@ -90,8 +102,19 @@ export const Header = ({
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
         <MenuHeaderStyled>
-          <MenuHeaderNameStyled>{userName}</MenuHeaderNameStyled>
-          {email && <MenuHeaderEmailStyled>{email}</MenuHeaderEmailStyled>}
+          <AccountAvatarStyled src={userPicture || undefined} alt={userName}>
+            {!userPicture && initial}
+          </AccountAvatarStyled>
+          <MenuHeaderTextStyled>
+            {hasRealName && (
+              <MenuHeaderNameStyled>{userName}</MenuHeaderNameStyled>
+            )}
+            {email ? (
+              <MenuHeaderEmailStyled>{email}</MenuHeaderEmailStyled>
+            ) : (
+              <MenuHeaderNameStyled>{userName}</MenuHeaderNameStyled>
+            )}
+          </MenuHeaderTextStyled>
         </MenuHeaderStyled>
 
         <MenuDividerStyled />
@@ -113,6 +136,26 @@ export const Header = ({
             <AssessmentOutlined fontSize="small" />
           </ListItemIcon>
           Reports & Data
+        </MenuItem>
+        {/* An anchor rather than a navigate(), so it opens in a new tab and
+            still honours middle-click and copy-link-address. */}
+
+        <MenuDividerStyled />
+
+        {/* Separated from the destinations above: this one leaves the app, and
+            the trailing icon is the convention that says so. */}
+        <MenuItem
+          component="a"
+          href={FEEDBACK_FORM_URL}
+          target="_blank"
+          rel="noreferrer"
+          data-testid="feedback-link"
+        >
+          <ListItemIcon>
+            <FeedbackOutlined fontSize="small" />
+          </ListItemIcon>
+          <span style={{ flex: 1 }}>Send feedback</span>
+          <OpenInNewIcon fontSize="small" sx={{ ml: 1, opacity: 0.6 }} />
         </MenuItem>
 
         <MenuDividerStyled />

@@ -1,6 +1,21 @@
 import { HomeListItemLink } from "../home-list-item-link/home-list-item-link";
 import { Box } from "@/components/ui/Box";
+import { tokens } from "@/theme/tokens";
 import { HomeContainerStyled } from "./home-page-list-style";
+
+// Wayfinding markers, in row order. Categorical hues, none of which is a money
+// colour — a permanently red Expenses row would say spending is a failure, and
+// would blunt the red that marks an actually over-budget category.
+const [expenses, budget, savingGoals, investments, insights] = tokens.section;
+
+/**
+ * Investments is hidden from the dashboard for now. The feature and its page
+ * are untouched and still reachable — this only removes the row.
+ *
+ * Flip to `true` to bring it back; the row below is left intact so that is a
+ * one-line change rather than a rewrite.
+ */
+const SHOW_INVESTMENTS = false;
 
 export const HomePageList = ({
   loading,
@@ -8,14 +23,18 @@ export const HomePageList = ({
   totalBudgetAmount,
   totalSavingGoalsAmount,
   totalInvestmentsValue,
-  insightsSummary,
+  insightsValue,
+  insightsCaption,
+  insightsTone = "neutral",
 }: {
   loading: boolean;
   totalExpensesAmount: number;
   totalBudgetAmount: number;
   totalSavingGoalsAmount: number;
   totalInvestmentsValue: number;
-  insightsSummary?: string;
+  insightsValue: number | string;
+  insightsCaption?: string;
+  insightsTone?: "neutral" | "negative";
 }) => {
   return (
     <HomeContainerStyled>
@@ -25,35 +44,39 @@ export const HomePageList = ({
           title="Expenses"
           loading={loading}
           value={totalExpensesAmount}
-          valueColor="#ff7777"
+          valueColor={expenses}
         />
         <HomeListItemLink
           linkTo="/budget"
           title="Budget"
           loading={loading}
           value={totalBudgetAmount}
-          valueColor="#eec22f"
+          valueColor={budget}
         />
         <HomeListItemLink
           linkTo="/saving-goals"
           title="Saving Goals"
           loading={loading}
           value={totalSavingGoalsAmount}
-          valueColor="#6a1fde"
+          valueColor={savingGoals}
         />
-        <HomeListItemLink
-          linkTo="/investments"
-          title="Investments"
-          loading={loading}
-          value={totalInvestmentsValue}
-          valueColor="#7fb77e"
-        />
+        {SHOW_INVESTMENTS && (
+          <HomeListItemLink
+            linkTo="/investments"
+            title="Investments"
+            loading={loading}
+            value={totalInvestmentsValue}
+            valueColor={investments}
+          />
+        )}
         <HomeListItemLink
           linkTo="/insights"
           title="Insights"
           loading={loading}
-          value={insightsSummary || "Spending pace, trends & streaks"}
-          valueColor="#3bceb1"
+          value={insightsValue}
+          caption={insightsCaption}
+          tone={insightsTone}
+          valueColor={insights}
         />
       </Box>
     </HomeContainerStyled>

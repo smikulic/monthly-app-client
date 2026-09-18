@@ -12,14 +12,10 @@ export const getPersonColors = (
   userIds: string[],
   palette: Theme["palette"],
 ): Record<string, string> => {
-  const colors = [
-    palette.primary.main,
-    palette.secondary.main,
-    palette.warning.main,
-    palette.info.main,
-    palette.success.main,
-    palette.error.main,
-  ];
+  // `palette.person`, never the semantic slots. Those carry money meaning, so
+  // drawing people from them made a person render in the same green as income
+  // and quietly reassigned everyone's colour whenever the palette changed.
+  const colors = palette.person;
 
   const map: Record<string, string> = {};
   [...userIds].sort().forEach((id, i) => {

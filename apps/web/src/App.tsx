@@ -2,7 +2,7 @@ import { createContext, useState } from "react";
 import { Slide, ToastContainer } from "react-toastify";
 import { BrowserRouter as Router, Routes, Route, Outlet } from "react-router";
 import { gql, ServerError, useQuery } from "@apollo/client";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { ThemeProvider } from "@mui/material/styles";
 import { WelcomePageContainer } from "./pages/welcome-page/welcome-page-container";
 import { LoginPageContainer } from "./pages/login-page/login-page-container";
 import { ResetPasswordPageContainer } from "./pages/reset-password-page/reset-password-page-container";
@@ -14,10 +14,10 @@ import { CategoriesPageContainer } from "./pages/categories-page/categories-page
 import { SavingGoalsPageContainer } from "./pages/saving-goals-page/saving-goals-page-container";
 import { InvestmentsPageContainer } from "./pages/investments-page/investments-page-container";
 import { ConfirmEmailPageContainer } from "./pages/confirm-email-page/confirm-email-page-container";
-import { Header, Footer } from "./components/layout";
+import { Header } from "./components/layout";
 import { AUTH_TOKEN, AUTH_TOKEN_USER } from "./constants";
 import { handleLogout } from "./utils/handleLogout";
-import { FooterPaddingStyled } from "./shared";
+import { ContentWrapperStyled } from "./shared";
 import { PrivacyPageContainer } from "./pages/privacy-page/privacy-page-container";
 import { TermsPageContainer } from "./pages/terms-page/terms-page-container";
 import { AboutPageContainer } from "./pages/about-page/about-page-container";
@@ -28,73 +28,7 @@ import { AcceptInvitePageContainer } from "./pages/accept-invite-page/accept-inv
 import { PendingInviteResume } from "./pages/accept-invite-page/pending-invite-resume";
 import { ScopeProvider } from "./features/groups/scope-context";
 import { analytics } from "./utils/mixpanel";
-
-const muiTheme = createTheme({
-  palette: {
-    // light: will be calculated from palette.primary.main,
-    // dark: will be calculated from palette.primary.main,
-    // contrastText: will be calculated to contrast with palette.primary.main
-    primary: {
-      main: "#3bceb1",
-      contrastText: "#181818",
-    },
-    secondary: {
-      main: "#f199c0",
-      contrastText: "#6a1fde",
-    },
-    warning: {
-      main: "#eec22f",
-    },
-    error: {
-      main: "#ff7777",
-    },
-    text: {
-      secondary: "#878BAC",
-      disabled: "#d6d7e0",
-    },
-  },
-  components: {
-    // Modern dropdown menus: rounded paper, soft shadow, padded list, and
-    // rounded item highlights. Applies to every Menu (account, row actions,
-    // scope filter, ...).
-    MuiMenu: {
-      styleOverrides: {
-        paper: ({ theme }) => ({
-          borderRadius: 12,
-          marginTop: 6,
-          minWidth: 184,
-          border: `1px solid ${theme.palette.divider}`,
-          boxShadow: "0 8px 28px rgba(24, 24, 24, 0.12)",
-        }),
-        list: {
-          padding: 6,
-        },
-      },
-    },
-    MuiMenuItem: {
-      styleOverrides: {
-        root: ({ theme }) => ({
-          borderRadius: 8,
-          padding: "8px 12px",
-          fontSize: 14,
-          "&:hover": {
-            backgroundColor: theme.palette.action.hover,
-          },
-          "&.Mui-selected": {
-            backgroundColor: theme.palette.action.selected,
-          },
-        }),
-      },
-    },
-    MuiListItemIcon: {
-      styleOverrides: {
-        root: {
-          minWidth: 32,
-        },
-      },
-    },
-  },
-});
+import { theme } from "./theme";
 
 export const GET_USER_ME = gql`
   query Me {
@@ -180,7 +114,7 @@ function App() {
 
   return (
     <div className="App">
-      <ThemeProvider theme={muiTheme}>
+      <ThemeProvider theme={theme}>
         <Router>
           <Routes>
             {/* this is website domain */}
@@ -239,11 +173,10 @@ function App() {
                           />
                           <PendingInviteResume />
                           <ScopeProvider>
-                            <FooterPaddingStyled>
+                            <ContentWrapperStyled>
                               <Outlet />
-                            </FooterPaddingStyled>
+                            </ContentWrapperStyled>
                           </ScopeProvider>
-                          <Footer />
                         </UserContext.Provider>
                       }
                     >

@@ -6,6 +6,7 @@ import SavingGoalsImg from "../../assets/monthly-demo-saving-goals.png";
 import SpendingChartImg from "../../assets/monthly-demo-chart.png";
 import RolloverImg from "../../assets/monthly-demo-rollover.png";
 import { PrevButton, NextButton, usePrevNextButtons } from "./arrow-buttons";
+import { tokens } from "@/theme/tokens";
 
 export const FeatureGrid: React.FC = () => {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false });
@@ -108,7 +109,7 @@ export const FeatureGrid: React.FC = () => {
                         fontStyle: "italic",
                         fontWeight: "400",
                         marginTop: "8px",
-                        color: "#767676",
+                        color: tokens.ink.secondary,
                       }}
                     >
                       {feature.description}

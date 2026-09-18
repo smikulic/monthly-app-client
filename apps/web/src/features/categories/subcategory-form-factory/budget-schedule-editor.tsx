@@ -51,11 +51,11 @@ export const BudgetScheduleEditor = ({
   const [rows, setRows] = useState<SubcategoryBudget[]>(periods);
   const [amount, setAmount] = useState("");
   const [validFrom, setValidFrom] = useState<Date>(
-    dayjs().startOf("month").toDate()
+    dayjs().startOf("month").toDate(),
   );
 
   const sorted = [...rows].sort(
-    (a, b) => toDate(a.validFrom).getTime() - toDate(b.validFrom).getTime()
+    (a, b) => toDate(a.validFrom).getTime() - toDate(b.validFrom).getTime(),
   );
   const thisMonth = dayjs().startOf("month");
   const activeId = sorted
@@ -99,7 +99,11 @@ export const BudgetScheduleEditor = ({
     }
 
     setBudget({
-      variables: { subcategoryId, amount: value, validFrom: apiMonth(validFrom) },
+      variables: {
+        subcategoryId,
+        amount: value,
+        validFrom: apiMonth(validFrom),
+      },
     });
   };
 

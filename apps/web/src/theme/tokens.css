@@ -1,0 +1,89 @@
+/**
+ * Design tokens — "kitchen table".
+ *
+ * Mirror of `tokens.ts`, which is the source of truth. `tokens.test.ts` fails
+ * if the two drift.
+ *
+ * This file exists so the design identity is framework-independent: plain CSS
+ * reads it today, and a future Tailwind `@theme` would read it unchanged. MUI
+ * cannot consume `var(--accent)` in its palette (it runs `alpha()` and
+ * `lighten()` over those values and needs something parseable), so JS reads
+ * `tokens.ts` instead.
+ *
+ * Two rules:
+ *   --money-*  applies only to numeric values
+ *   --accent   applies only to interactive chrome
+ * They never take the same role, which is why a pine button does not read as
+ * income. --person-* is a third, orthogonal axis and never borrows from money.
+ */
+
+:root {
+  --ground: #faf8f5;
+  --surface: #ffffff;
+  --hairline: #e8e3db;
+
+  --ink: #14120f;
+  --ink-secondary: #6b665e;
+  --ink-disabled: #b8b2a8;
+
+  --accent: #2f5d50;
+  --accent-hover: #24483e;
+  --accent-contrast: #faf8f5;
+
+  /* Numeric values only. --money-neutral is ink on purpose: spending is the
+     normal state of a budgeting app, and painting it red makes an ordinary
+     month look like failure. */
+  --money-positive: #3f7d55;
+  --money-neutral: #14120f;
+  --money-negative: #b4552d;
+  --money-error: #8f2e26;
+
+  /* Deliberately avoids every money hue, so an avatar can never be misread as
+     a value. Always paired with an avatar or initial — colour is never the
+     only channel. */
+  --person-1: #6b5b95;
+  --person-2: #3e6e8e;
+  --person-3: #8e5572;
+  --person-4: #c08a2e;
+  --person-5: #4a7c87;
+  --person-6: #7d6b58;
+
+  /* Wayfinding only, in dashboard row order. Categorical and clear of every
+     money hue: red for Expenses or green for Saving Goals would claim that
+     spending is a failure and saving a success, and would compete with
+     --money-negative where red actually means something. */
+  --section-1: #4a6fa5;
+  --section-2: #c08a2e;
+  --section-3: #4a7c87;
+  --section-4: #6b5b95;
+  --section-5: #8e5572;
+
+  /* Width of the app's content column. Full-bleed bars keep an edge-to-edge
+     border and centre their contents on this, so chrome spans the window
+     while everything inside lines up with the cards. */
+  --content-max-width: 960px;
+  /* Horizontal inset of a card inside that column. Full-bleed bars align to
+     the cards' edge, not the column's. */
+  --card-inset: 12px;
+  /* Shared height for toolbar controls, so they sit on one baseline. */
+  --control-height: 36px;
+  --control-height-mobile: 40px;
+
+  /* Type scale. --font-size-md is the base and is 16 deliberately: below that,
+     iOS Safari zooms the page when an input takes focus. */
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-md: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 22px;
+  --font-size-hero: 32px;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+
+  --font-sans:
+    "Source Sans 3 Variable", system-ui, -apple-system, "Segoe UI", Roboto,
+    sans-serif;
+  --font-serif: "Literata Variable", Georgia, "Times New Roman", serif;
+}

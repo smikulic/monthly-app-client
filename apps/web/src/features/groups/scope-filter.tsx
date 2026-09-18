@@ -1,15 +1,10 @@
-import { useState, MouseEvent } from "react";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import CheckIcon from "@mui/icons-material/Check";
-import { Menu, ListItemIcon } from "@/components/ui/Menu";
-import { MenuItem } from "@/components/ui/MenuItem";
+import { FilterSelect } from "@/components/filter-select/filter-select";
 import { useMyGroupsQuery } from "@/generated/graphql";
 import { useScope } from "./scope-context";
-import {
-  ScopeTriggerStyled,
-  ScopeTriggerLabelStyled,
-  ScopeTriggerValueStyled,
-} from "./scope-filter-style";
+
+const ALL = "ALL";
+const MINE = "MINE";
+const GROUP_PREFIX = "group:";
 
 // Lets the user view All (personal + groups), Personal only, or a specific
 // group. Hidden entirely when the user belongs to no groups.
@@ -17,9 +12,6 @@ export const ScopeFilter = () => {
   const { mode, groupId, setScope } = useScope();
   const { data } = useMyGroupsQuery({ fetchPolicy: "cache-and-network" });
   const groups = data?.myGroups ?? [];
-
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
 
   if (groups.length === 0) return null;
 
@@ -30,68 +22,22 @@ export const ScopeFilter = () => {
         ? (groups.find((g) => g.id === groupId)?.name ?? "All")
         : "All";
 
-  const handleOpen = (event: MouseEvent<HTMLElement>) =>
-    setAnchorEl(event.currentTarget);
-  const handleClose = () => setAnchorEl(null);
-
-  const select = (next: () => void) => {
-    next();
-    handleClose();
-  };
-
-  const check = (active: boolean) => (
-    <ListItemIcon>{active && <CheckIcon fontSize="small" />}</ListItemIcon>
-  );
-
   return (
-    <>
-      <ScopeTriggerStyled
-        onClick={handleOpen}
-        aria-haspopup="true"
-        aria-expanded={open}
-        data-testid="scope-filter"
-      >
-        <ScopeTriggerLabelStyled>View</ScopeTriggerLabelStyled>
-        <ScopeTriggerValueStyled>{activeLabel}</ScopeTriggerValueStyled>
-        <ExpandMoreIcon />
-      </ScopeTriggerStyled>
-
-      <Menu
-        anchorEl={anchorEl}
-        id="scope-menu"
-        open={open}
-        onClose={handleClose}
-        transformOrigin={{ horizontal: "left", vertical: "top" }}
-        anchorOrigin={{ horizontal: "left", vertical: "bottom" }}
-      >
-        <MenuItem
-          selected={mode === "ALL"}
-          onClick={() => select(() => setScope("ALL"))}
-        >
-          {check(mode === "ALL")}
-          All
-        </MenuItem>
-        <MenuItem
-          selected={mode === "MINE"}
-          onClick={() => select(() => setScope("MINE"))}
-        >
-          {check(mode === "MINE")}
-          Personal
-        </MenuItem>
-        {groups.map((g) => {
-          const active = mode === "GROUP" && groupId === g.id;
-          return (
-            <MenuItem
-              key={g.id}
-              selected={active}
-              onClick={() => select(() => setScope("GROUP", g.id))}
-            >
-              {check(active)}
-              {g.name}
-            </MenuItem>
-          );
-        })}
-      </Menu>
-    </>
+    <FilterSelect
+      label="View"
+      value={activeLabel}
+      menuId="scope-menu"
+      testId="scope-filter"
+      options={[
+        { id: ALL, label: "All" },
+        { id: MINE, label: "Personal" },
+        ...groups.map((g) => ({ id: `${GROUP_PREFIX}${g.id}`, label: g.name })),
+      ]}
+      onSelect={(id) => {
+        if (id === ALL) return setScope("ALL");
+        if (id === MINE) return setScope("MINE");
+        setScope("GROUP", id.slice(GROUP_PREFIX.length));
+      }}
+    />
   );
 };

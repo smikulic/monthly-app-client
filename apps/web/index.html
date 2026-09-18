@@ -1,18 +1,53 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#000000" />
-    <meta name="description" content="Monthly - Budgeting app" />
-    <link rel="apple-touch-icon" href="/logo192.png" />
+    <!-- Matches the app's warm paper ground, not the CRA template default. -->
+    <meta name="theme-color" content="#FAF8F5" />
+
+    <title>Monthly — the budget your whole household shares</title>
+    <meta
+      name="description"
+      content="Share the budget with your partner, family or flatmates — choosing exactly which categories they see. No bank connection, free to start."
+    />
+    <link rel="canonical" href="https://yourmonthly.app/" />
+
     <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+      Open Graph and Twitter cards. Without these a link shared on WhatsApp or
+      Messenger renders as a bare URL with no title, description or image —
+      which matters when word of mouth is the cheapest channel you have.
+
+      og:image should be a purpose-made 1200x630 file. logo192.png is a
+      placeholder: it is square and small, so it will render as a thumbnail
+      rather than a full-width card.
     -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Monthly" />
+    <meta property="og:url" content="https://yourmonthly.app/" />
+    <meta
+      property="og:title"
+      content="Monthly — the budget your whole household shares"
+    />
+    <meta
+      property="og:description"
+      content="Share the budget with your partner, family or flatmates — choosing exactly which categories they see. No bank connection, free to start."
+    />
+    <meta property="og:image" content="https://yourmonthly.app/logo192.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Monthly — the budget your whole household shares"
+    />
+    <meta
+      name="twitter:description"
+      content="Share the budget with your partner, family or flatmates — choosing exactly which categories they see. No bank connection, free to start."
+    />
+    <meta name="twitter:image" content="https://yourmonthly.app/logo192.png" />
+
+    <link rel="apple-touch-icon" href="/logo192.png" />
     <link rel="manifest" href="/manifest.json" />
-    <title>Monthly - Budgeting app</title>
 
     <!-- Google tag (gtag.js) -->
     <script

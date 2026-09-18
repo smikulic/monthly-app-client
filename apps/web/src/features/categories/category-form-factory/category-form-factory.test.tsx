@@ -1,4 +1,4 @@
-import { render, fireEvent, waitFor, screen } from "@testing-library/react";
+import { render, fireEvent, waitFor, screen } from "@/test-utils";
 import "@testing-library/jest-dom";
 import { MockedProvider } from "@apollo/client/testing";
 import { toast } from "react-toastify";
@@ -72,7 +72,7 @@ describe("CategoryFormFactory", () => {
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <CategoryFormFactory open={true} closeForm={vi.fn()} />
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     expect(screen.getByLabelText(/name/i)).toBeInTheDocument();
@@ -87,7 +87,7 @@ describe("CategoryFormFactory", () => {
           closeForm={vi.fn()}
           formData={categoryData}
         />
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     expect(screen.getByLabelText(/name/i)).toHaveValue(categoryData.name);
@@ -98,7 +98,7 @@ describe("CategoryFormFactory", () => {
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <CategoryFormFactory open={true} closeForm={vi.fn()} />
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     fireEvent.change(screen.getByLabelText(/name/i), {
@@ -110,7 +110,7 @@ describe("CategoryFormFactory", () => {
       expect(createCategoryMock.request.variables.name).toBe("New Category");
       // eslint-disable-next-line testing-library/no-wait-for-multiple-assertions
       expect(toast.success).toHaveBeenCalledWith(
-        expect.stringContaining("successfully created")
+        expect.stringContaining("successfully created"),
       );
     });
   });
@@ -123,7 +123,7 @@ describe("CategoryFormFactory", () => {
           closeForm={vi.fn()}
           formData={categoryData}
         />
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     // Find the input, change its value, and simulate form submission
@@ -135,11 +135,11 @@ describe("CategoryFormFactory", () => {
     await waitFor(() => {
       // Check if the mutation was called with the correct variables
       expect(updateCategoryMock.request.variables.name).toBe(
-        "Updated Category"
+        "Updated Category",
       );
       // eslint-disable-next-line testing-library/no-wait-for-multiple-assertions
       expect(toast.success).toHaveBeenCalledWith(
-        expect.stringContaining("successfully updated")
+        expect.stringContaining("successfully updated"),
       );
     });
   });

@@ -1,4 +1,5 @@
 import { styled } from "@mui/material/styles";
+import { tokens } from "@/theme/tokens";
 
 export const YearSelectStyled = styled("div")({
   width: 140,
@@ -20,5 +21,5 @@ export const FileNameStyled = styled("span")(({ theme }) => ({
   textOverflow: "ellipsis",
   whiteSpace: "nowrap",
   color: theme.palette.text.secondary,
-  fontSize: "0.875rem",
+  fontSize: tokens.fontSize.sm,
 }));

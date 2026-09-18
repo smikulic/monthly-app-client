@@ -1,4 +1,5 @@
 import { styled } from "@mui/material/styles";
+import { tokens } from "@/theme/tokens";
 import { ListItemStyled } from "@/shared";
 
 type ActiveProps = { active?: boolean };
@@ -6,22 +7,28 @@ type RowProps = { actionable?: boolean };
 
 // One connected card per category. When expanded, its children (subcategories,
 // expenses) live inside this same card as indented rows separated by hairline
-// dividers, instead of separate floating pills. No background fill: a row's
-// budget ProgressBar wash sits at z-index -1 and must show through to the
-// (white) page behind the card.
+// dividers, instead of separate floating pills.
+//
+// Filled, matching the dashboard cards. It was previously unfilled so the
+// budget wash could show through from z-index -1; the wash now stacks inside
+// the row instead, which leaves the card free to lift off the paper rather
+// than leaving the whole list flat beige on a beige ground.
 export const GroupCardStyled = styled("div", {
   shouldForwardProp: (prop) => prop !== "active",
 })<ActiveProps>(({ theme, active }) => ({
   margin: "8px 12px",
+  background: theme.palette.surface,
   border: `1px solid ${
-    active ? theme.palette.text.secondary : theme.palette.text.disabled
+    active ? theme.palette.primary.main : theme.palette.divider
   }`,
   borderRadius: "12px",
   overflow: "hidden",
-  transition: "border-color 0.15s ease",
+  boxShadow: active ? "none" : "0 1px 2px rgba(20, 18, 15, 0.04)",
+  transition: "border-color 0.15s ease, box-shadow 0.15s ease",
 
   "&:hover": {
-    borderColor: theme.palette.text.secondary,
+    borderColor: theme.palette.primary.main,
+    boxShadow: "0 2px 8px rgba(20, 18, 15, 0.06)",
   },
 }));
 
@@ -40,7 +47,9 @@ export const GroupRowStyled = styled(ListItemStyled, {
   cursor: actionable ? "pointer" : "default",
 }));
 
-// Bottom "add" action, rendered as a solid teal footer row inside the group.
+// Bottom "add" action inside the group. Matches the filled variant of
+// ProminentButtonStyled — the same treatment as Create in the dialogs — so a
+// primary action looks the same wherever it appears.
 export const GroupAddRowStyled = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
@@ -50,7 +59,7 @@ export const GroupAddRowStyled = styled("div")(({ theme }) => ({
   borderTop: `1px solid ${theme.palette.divider}`,
   background: theme.palette.primary.main,
   color: theme.palette.primary.contrastText,
-  fontSize: "15px",
+  fontSize: tokens.fontSize.md,
   cursor: "pointer",
 
   "& svg": {
@@ -59,6 +68,6 @@ export const GroupAddRowStyled = styled("div")(({ theme }) => ({
   },
 
   "&:hover": {
-    opacity: 0.9,
+    opacity: 0.7,
   },
 }));

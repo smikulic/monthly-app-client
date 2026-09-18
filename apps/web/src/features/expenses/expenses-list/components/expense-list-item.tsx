@@ -6,6 +6,8 @@ import { SharedGroupBadge } from "@/features/groups/shared-group-badge";
 import { useScope } from "@/features/groups/scope-context";
 import { ListItemDetails } from "@/components/list-item-details/list-item-details";
 import { SubcategoryListItem } from "@/components/subcategory-list-item/subcategory-list-item";
+import { Collapse } from "@/components/ui/Collapse";
+import { getBudgetStatus } from "@/utils/budgetStatus";
 import {
   CategoryDecoratedWithExpenses,
   SubcategoryDecoratedWithExpenses,
@@ -40,6 +42,15 @@ export const ExpenseListItem: FC<Props> = ({
   const { mode } = useScope();
   const categoryId = category.id;
   const showSubcategories = openCategory === categoryId;
+
+  // Same rule as the subcategory rows beneath, so a category cannot read as
+  // under budget while a child of it reads as over.
+  const { budgetValue, hasStarted, over, label } = getBudgetStatus({
+    showRollover: showRolloverBudget,
+    budgetForMonth: category.totalBudgetForMonth,
+    rolloverRemaining: category.totalRolloverRemaining,
+    spent: category.totalExpenseAmount,
+  });
   const subcategoriesExist = category.subcategories.length > 0;
   const isActive = showSubcategories && subcategoriesExist;
 
@@ -61,12 +72,19 @@ export const ExpenseListItem: FC<Props> = ({
             ) : undefined
           }
         />
-        {category.totalExpenseAmount > 0 && (
-          <ListItemDetails expenseValue={category.totalExpenseAmount} />
-        )}
+        {/* Always rendered, and with a budget. Gated on spend > 0 and given
+            no budgetValue, a category with nothing spent yet showed nothing at
+            all — and no category row ever showed its budget or its progress
+            wash, which is most of what this page is for. */}
+        <ListItemDetails
+          expenseValue={category.totalExpenseAmount}
+          budgetValue={hasStarted ? budgetValue : undefined}
+          budgetLabel={label}
+          over={over}
+        />
       </GroupHeaderRowStyled>
 
-      {showSubcategories && (
+      <Collapse in={showSubcategories}>
         <>
           {subcategoriesExist &&
             category.subcategories.map(
@@ -101,7 +119,7 @@ export const ExpenseListItem: FC<Props> = ({
             Add expense
           </GroupAddRowStyled>
         </>
-      )}
+      </Collapse>
     </GroupCardStyled>
   );
 };

@@ -1,4 +1,4 @@
-import { styled } from "@mui/material/styles";
+import { alpha, styled } from "@mui/material/styles";
 
 type ListAddFieldStyledProps = {
   indent?: boolean;
@@ -16,7 +16,9 @@ export const ListAddFieldStyled = styled("div")<ListAddFieldStyledProps>(
     padding: "8px 16px",
     fontWeight: 500,
 
-    color: theme.palette.primary.contrastText,
+    // Outlined on the page ground, so the label takes the accent itself.
+    // `primary.contrastText` means "text on the accent fill" and is light.
+    color: theme.palette.primary.main,
     border: `1px solid ${theme.palette.primary.main}`,
     background: "transparent",
     borderRadius: "12px",
@@ -29,7 +31,7 @@ export const ListAddFieldStyled = styled("div")<ListAddFieldStyledProps>(
 
     "&:hover": {
       borderColor: theme.palette.primary.main,
-      background: "rgba(59, 206, 177, 0.08)",
+      background: alpha(theme.palette.primary.main, 0.08),
     },
   }),
 );

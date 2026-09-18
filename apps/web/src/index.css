@@ -1,11 +1,12 @@
+@import "./theme/tokens.css";
+
 body {
   margin: 0;
-  font-family:
-    -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
-    "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #181818;
+  color: var(--ink);
+  background: var(--ground);
 }
 
 code {
@@ -17,18 +18,41 @@ code {
   box-sizing: border-box;
 }
 
-.red {
-  color: #ff7777;
+/**
+ * Motion is a real accessibility concern, not a preference: for people with
+ * vestibular disorders it can cause nausea. Applied globally rather than per
+ * component so it also covers the dialog and toast slides, which shipped long
+ * before this rule existed.
+ *
+ * Near-zero rather than `none`, so transitionend and animationend listeners
+ * still fire and nothing waits forever on a callback that never arrives.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
-.orange {
-  color: #eec22f;
+/**
+ * Every money value uses this so columns align down the page. Without it,
+ * proportional digits make totals wander and a figure jitters as it updates.
+ */
+.tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
 }
 
 :root {
-  --toastify-color-success: #3bceb1 !important;
-  --toastify-text-color-success: #000 !important;
+  /* Toastify reads its own variables; point them at the money palette so a
+     success toast is income-green and a failure is error-red. */
+  --toastify-color-success: var(--money-positive) !important;
+  --toastify-text-color-success: var(--accent-contrast) !important;
 
-  --toastify-color-error: #ff7777 !important;
-  --toastify-text-color-error: #000 !important;
+  --toastify-color-error: var(--money-error) !important;
+  --toastify-text-color-error: var(--accent-contrast) !important;
 }

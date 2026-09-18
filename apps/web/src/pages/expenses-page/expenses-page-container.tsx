@@ -6,6 +6,7 @@ import { ExpensesList } from "@/features/expenses";
 import { GET_EXPENSES_LIST } from "@/pages/expenses-page/expenses-page-queries";
 import { GET_CATEGORIES_LIST } from "@/pages/categories-page/categories-page-queries";
 import { ActionsBar } from "@/components/layout";
+import { RefreshingStyled } from "@/shared";
 import { useScope, scopeVariables } from "@/features/groups/scope-context";
 import { invalidateBudgetFigures } from "@/utils/invalidateBudgetFigures";
 import { useExpensesActions } from "./use-expenses-actions-hook";
@@ -26,15 +27,20 @@ export const ExpensesPageContainer = ({
 
   const client = useApolloClient();
 
-  const { data: expensesData, loading: loadingExpenses } = useQuery(
-    GET_EXPENSES_LIST,
-    {
-      variables: {
-        date: formattedDate,
-        ...scopeVariables(scope),
-      },
+  const {
+    data: expensesDataCurrent,
+    previousData: expensesDataPrevious,
+    loading: loadingExpenses,
+  } = useQuery(GET_EXPENSES_LIST, {
+    variables: {
+      date: formattedDate,
+      ...scopeVariables(scope),
     },
-  );
+  });
+
+  // Fall back to the last month's result while the new one is in flight, so
+  // the list keeps its height instead of collapsing to skeletons and back.
+  const expensesData = expensesDataCurrent ?? expensesDataPrevious;
 
   /*
    * The rollover figure comes back on the categories query now, so a write has
@@ -49,12 +55,21 @@ export const ExpensesPageContainer = ({
     });
   }, [client]);
 
-  const { data: categoriesData, loading: loadingCategories } = useQuery(
-    GET_CATEGORIES_LIST,
-    {
-      variables: { date: formattedDate, ...scopeVariables(scope) },
-    },
-  );
+  const {
+    data: categoriesDataCurrent,
+    previousData: categoriesDataPrevious,
+    loading: loadingCategories,
+  } = useQuery(GET_CATEGORIES_LIST, {
+    variables: { date: formattedDate, ...scopeVariables(scope) },
+  });
+
+  const categoriesData = categoriesDataCurrent ?? categoriesDataPrevious;
+
+  const isRefetching =
+    (loadingExpenses || loadingCategories) && Boolean(expensesData);
+  // Skeletons are for the genuine first load only — when there is nothing to
+  // hold on screen yet.
+  const isFirstLoad = (loadingExpenses || loadingCategories) && !expensesData;
 
   const {
     openCategory,
@@ -81,20 +96,22 @@ export const ExpensesPageContainer = ({
         showRollover={showRolloverBudget}
         toggleRollover={() => setShowRolloverBudget(!showRolloverBudget)}
       />
-      <ExpensesList
-        loading={loadingExpenses || loadingCategories}
-        pageDate={pageDate}
-        showRolloverBudget={showRolloverBudget}
-        categoriesDecoratedWithExpenses={categoriesDecoratedWithExpenses}
-        totalSubcategories={totalSubcategories}
-        openCategory={openCategory}
-        createModalExpense={createModalExpense}
-        updateModalExpense={updateModalExpense}
-        onSetOpenCategory={setOpenCategory}
-        onSetCreateModalExpense={setCreateModalExpense}
-        onSetUpdateModalExpense={setUpdateModalExpense}
-        refetchExpenses={refetchExpenses}
-      />
+      <RefreshingStyled refreshing={isRefetching}>
+        <ExpensesList
+          loading={isFirstLoad}
+          pageDate={pageDate}
+          showRolloverBudget={showRolloverBudget}
+          categoriesDecoratedWithExpenses={categoriesDecoratedWithExpenses}
+          totalSubcategories={totalSubcategories}
+          openCategory={openCategory}
+          createModalExpense={createModalExpense}
+          updateModalExpense={updateModalExpense}
+          onSetOpenCategory={setOpenCategory}
+          onSetCreateModalExpense={setCreateModalExpense}
+          onSetUpdateModalExpense={setUpdateModalExpense}
+          refetchExpenses={refetchExpenses}
+        />
+      </RefreshingStyled>
     </>
   );
 };

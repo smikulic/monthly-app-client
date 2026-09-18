@@ -22,16 +22,19 @@ const useSubcategoryForm = (
   presetCategoryId: string,
   categories: Category[],
   closeForm: () => void,
-  formData?: Subcategory
+  formData?: Subcategory,
 ) => {
   const isCreateMode = type === "create";
   const [formInvalid, setFormInvalid] = useState(true);
   const [categoryId, setCategoryId] = useState(
-    formData?.categoryId || presetCategoryId
+    formData?.categoryId || presetCategoryId,
   );
   const [subcategoryName, setSubcategoryName] = useState(formData?.name || "");
-  const [subcategoryBudget, setSubcategoryBudget] = useState(
-    formData?.budgetAmount
+  // "" rather than null/undefined: the field is controlled, so it needs a
+  // string or a number at every render. `budgetAmount` is nullable when
+  // editing and absent when creating.
+  const [subcategoryBudget, setSubcategoryBudget] = useState<number | "">(
+    formData?.budgetAmount ?? "",
   );
   // Only asked for on create, where it opens the schedule.
   const [subcategoryValidFrom, setSubcategoryValidFrom] = useState(new Date());
@@ -45,15 +48,15 @@ const useSubcategoryForm = (
       analytics.trackSubcategoryCreated(
         createSubcategory.name,
         selectedCategory?.name || "Unknown",
-        createSubcategory?.budgetAmount || 0
+        createSubcategory?.budgetAmount || 0,
       );
 
       closeForm();
       toast.success(
         TOAST_MESSAGES.SUCCESS.CREATE(
           ENTITY_NAMES.SUBCATEGORY,
-          createSubcategory.name
-        )
+          createSubcategory.name,
+        ),
       );
     },
     onError: (error) => {
@@ -72,8 +75,8 @@ const useSubcategoryForm = (
       toast.success(
         TOAST_MESSAGES.SUCCESS.UPDATE(
           ENTITY_NAMES.SUBCATEGORY,
-          updateSubcategory.name
-        )
+          updateSubcategory.name,
+        ),
       );
     },
     onError: (error) => {
@@ -84,7 +87,7 @@ const useSubcategoryForm = (
         error.message.includes("A subcategory with this name already exists")
       ) {
         toast.error(
-          TOAST_MESSAGES.ERROR.DUPLICATE_NAME(ENTITY_NAMES.SUBCATEGORY)
+          TOAST_MESSAGES.ERROR.DUPLICATE_NAME(ENTITY_NAMES.SUBCATEGORY),
         );
       } else {
         toast.error(TOAST_MESSAGES.ERROR.UPDATE(ENTITY_NAMES.SUBCATEGORY));
@@ -102,7 +105,7 @@ const useSubcategoryForm = (
         variables: {
           categoryId,
           name: subcategoryName,
-          budgetAmount: subcategoryBudget as number,
+          budgetAmount: Number(subcategoryBudget),
           validFrom: dayjs(subcategoryValidFrom).format("YYYY-MM-DD"),
         },
       });
@@ -165,7 +168,7 @@ export const SubcategoryFormFactory = ({
     presetCategoryId,
     categories,
     closeForm,
-    formData
+    formData,
   );
 
   const handleCategoryChange = (event: SelectChangeEvent) => {
@@ -224,7 +227,11 @@ export const SubcategoryFormFactory = ({
             margin="none"
             autoComplete="off"
             value={subcategoryBudget}
-            onChange={(e) => setSubcategoryBudget(Number(e.target.value))}
+            onChange={(e) =>
+              setSubcategoryBudget(
+                e.target.value === "" ? "" : Number(e.target.value),
+              )
+            }
             data-testid="subcategory-budget-input"
           />
 
