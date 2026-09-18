@@ -1,6 +1,7 @@
 {
   "short_name": "Monthly",
-  "name": "Monthly App",
+  "name": "Monthly — household budget",
+  "description": "Share the budget with your partner, family or flatmates, choosing exactly which categories they see.",
   "icons": [
     {
       "src": "favicon.ico",
@@ -20,6 +21,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#FAF8F5",
+  "background_color": "#FAF8F5"
 }

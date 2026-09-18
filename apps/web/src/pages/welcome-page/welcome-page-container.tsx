@@ -33,9 +33,9 @@ export const WelcomePageContainer = () => {
       <div className="welcome-content">
         <div className="headline">
           <h1 className="title">
-            <span>An easier way to </span>
+            <span>The budget your </span>
             <br />
-            <span>track your personal finances!</span>
+            <span>whole household shares</span>
           </h1>
           <img
             className="product-demo-image"
@@ -44,53 +44,53 @@ export const WelcomePageContainer = () => {
           />
         </div>
 
+        {/* <p className="subhead">
+          Shared envelopes for everyone under one roof - without handing anyone
+          your bank login.
+        </p> */}
+
         <div className="feature-box">
-          <span>
-            <h3 className="feature-box-title">
-              Not sure how much to spend this month?
-            </h3>
-            <p className="feature-box-description">
-              Stop guessing. Monthly shows you where your money can go and why.
-            </p>
-          </span>
-        </div>
-        <div className="feature-box">
-          <span>
-            <h3 className="feature-box-title">Quick, intuitive budgeting</h3>
-            <p className="feature-box-description">
-              Add expenses in seconds, organize categories, and get an
-              at-a-glance view of your month’s spending.
-            </p>
-          </span>
-        </div>
-        <div className="feature-box">
-          <span>
-            <h3 className="feature-box-title">
-              Free to start - no bank details
-            </h3>
-            <p className="feature-box-description">
-              Just a simple calculator to lighten your planning load; optional
-              premium features may arrive later to help cover server and
-              maintenance costs.
-            </p>
-          </span>
-        </div>
-        <div className="feature-box">
-          <h3 className="feature-box-title">All your finances in one place</h3>
+          <h3 className="feature-box-title">Share only what you choose</h3>
           <p className="feature-box-description">
-            Track spending patterns, savings goals and overall net worth,
-            without ever connecting an account.
+            Pick which categories your partner, family or flatmates can see.
+            Every shared expense records who paid, and switching between All,
+            Personal and each group takes one tap. Your personal budget stays
+            private.
           </p>
         </div>
         <div className="feature-box">
           <h3 className="feature-box-title">
-            Budget together, stay in control
+            Budgets that change without rewriting history
           </h3>
           <p className="feature-box-description">
-            Share just the categories you choose with your partner, family, or
-            roommates, and switch any view between All, Personal, and each
-            group. Every shared expense records who paid, while your personal
-            budget stays private.
+            Raise groceries when someone moves in, and last year stays exactly
+            as it was. Most apps make you overwrite the old figure or start a
+            new category and lose the history.
+          </p>
+        </div>
+        <div className="feature-box">
+          <h3 className="feature-box-title">Rollover, or just this month</h3>
+          <p className="feature-box-description">
+            Unspent budget carries into next month, so an underspent January
+            covers a heavy February. One toggle switches between what is left
+            overall and what this month alone allows.
+          </p>
+        </div>
+        <div className="feature-box">
+          <h3 className="feature-box-title">Know what is safe to spend</h3>
+          <p className="feature-box-description">
+            Not sure how much is left this month? See what is safe to spend
+            today, where each category is pacing, and where the month is
+            projected to land - before it lands there.
+          </p>
+        </div>
+        <div className="feature-box">
+          <h3 className="feature-box-title">
+            Free to start, no bank connection
+          </h3>
+          <p className="feature-box-description">
+            No account linking and no bank details, ever. Export everything you
+            enter whenever you want.
           </p>
         </div>
       </div>
