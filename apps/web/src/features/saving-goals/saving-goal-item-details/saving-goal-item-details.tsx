@@ -20,13 +20,15 @@ export const SavingGoalItemDetails: React.FC<Props> = ({
 
   return (
     <SavingGoalItemDetailsContainerStyled>
-      <SavingGoalBudgetAmountStyled positive={true}>
-        {formatAmount(savedTillNow, userCurrency)}
-      </SavingGoalBudgetAmountStyled>
-
-      <SavingGoalExpenseAmountStyled prominent={false}>
-        {formatAmount(goalAmount, userCurrency)}
+      {/* Labelled. Two bare amounts stacked gave no way to tell which was
+          saved and which was the target. */}
+      <SavingGoalExpenseAmountStyled prominent={true}>
+        {formatAmount(savedTillNow, userCurrency)} saved
       </SavingGoalExpenseAmountStyled>
+
+      <SavingGoalBudgetAmountStyled positive={true}>
+        of {formatAmount(goalAmount, userCurrency)}
+      </SavingGoalBudgetAmountStyled>
     </SavingGoalItemDetailsContainerStyled>
   );
 };

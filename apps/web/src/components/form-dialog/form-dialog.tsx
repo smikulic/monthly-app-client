@@ -45,21 +45,50 @@ export const FormDialog: React.FC<Props> = ({
       fullWidth
       maxWidth="xs"
       TransitionComponent={Transition}
-      PaperProps={{
-        sx: {
-          borderRadius: "16px",
-          overflow: "hidden",
-          // Tighter margins + more width on small screens; comfortable on desktop.
-          m: { xs: 1.5, sm: 4 },
-          width: { xs: "calc(100% - 24px)", sm: "100%" },
+      sx={{
+        // Bottom sheet on phones, centred dialog on desktop.
+        //
+        // Every one of these forms is text entry, and a vertically centred
+        // dialog gets squeezed into whatever strip the soft keyboard leaves.
+        // Anchored to the bottom it sits directly above the keyboard, its
+        // actions land in thumb reach, and it finally matches the slide-up
+        // transition — which used to rise from the bottom edge and then stop
+        // in the middle.
+        "& .MuiDialog-container": {
+          alignItems: { xs: "flex-end", sm: "center" },
         },
+      }}
+      PaperProps={{
+        // Desktop is the base, mobile overrides it — not the other way round.
+        // MUI breakpoints are min-width, so an `xs` value applies at *every*
+        // width: `maxWidth: { xs: "100%", sm: undefined }` emitted nothing at
+        // `sm`, leaving 100% in force on desktop where it silently beat the
+        // `maxWidth="xs"` prop and stretched the dialog across the viewport.
+        sx: (theme) => ({
+          overflow: "hidden",
+          borderRadius: "16px",
+          margin: theme.spacing(4),
+
+          [theme.breakpoints.down("sm")]: {
+            // Rounded at the top only where it is flush with the bottom edge:
+            // rounding corners that sit off-screen just clips the content.
+            borderRadius: "16px 16px 0 0",
+            margin: 0,
+            width: "100%",
+            maxWidth: "100%",
+            // Clears the Android gesture bar, as the fixed toolbar does.
+            paddingBottom: "env(safe-area-inset-bottom, 0px)",
+          },
+        }),
       }}
     >
       <AppBar
         sx={{
           position: "relative",
           boxShadow: "none",
-          borderBottom: "1px solid rgb(223, 223, 223)",
+          // `divider`, not a hardcoded grey. This one survived the palette
+          // migration because it was written as rgb() rather than a hex.
+          borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
         }}
         color="transparent"
       >

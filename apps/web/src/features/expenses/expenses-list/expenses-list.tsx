@@ -11,6 +11,9 @@ export interface SubcategoryDecoratedWithExpenses extends Subcategory {
 export interface CategoryDecoratedWithExpenses extends Category {
   subcategories: SubcategoryDecoratedWithExpenses[];
   totalExpenseAmount: number;
+  /** Summed from the subcategories; the server has no per-category totals. */
+  totalBudgetForMonth: number;
+  totalRolloverRemaining: number;
 }
 
 interface Props {

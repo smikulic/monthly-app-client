@@ -78,8 +78,8 @@ export const WelcomePageContainer = () => {
         <div className="feature-box">
           <h3 className="feature-box-title">All your finances in one place</h3>
           <p className="feature-box-description">
-            Track spending patterns, savings goals, investments, and overall net
-            worth, without ever connecting an account.
+            Track spending patterns, savings goals and overall net worth,
+            without ever connecting an account.
           </p>
         </div>
         <div className="feature-box">

@@ -43,9 +43,33 @@ describe("getDecoratedCategoriesWithExpenses", () => {
             },
           ],
           totalExpenseAmount: 0,
+          totalBudgetForMonth: 300,
+          totalRolloverRemaining: 300,
         },
       ],
     });
+  });
+
+  // The category row shows spent against budget, and neither figure exists on
+  // the server — both are summed from the subcategories here.
+  it("sums the subcategories' budget and rollover onto the category", () => {
+    const result = getDecoratedCategoriesWithExpenses({
+      categories: [categoryMock1],
+      expenses: [],
+    });
+    const [category] = result.categoriesDecoratedWithExpenses;
+
+    const expectedBudget = categoryMock1.subcategories.reduce(
+      (total, sub) => total + sub.budgetForMonth,
+      0,
+    );
+    const expectedRollover = categoryMock1.subcategories.reduce(
+      (total, sub) => total + sub.rolloverRemaining,
+      0,
+    );
+
+    expect(category.totalBudgetForMonth).toBe(expectedBudget);
+    expect(category.totalRolloverRemaining).toBe(expectedRollover);
   });
 
   it("should correctly calculate totalExpenseAmount for categories with expenses", () => {

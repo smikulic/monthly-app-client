@@ -46,18 +46,20 @@ export const SavingGoalsListData: FC<Props> = ({
         const { monthsLeftToSave, savePerMonth, savedTillNow } =
           calculateSavingGoalData(savingGoal);
 
+        // Three distinct outcomes, not two. "You have reached your goal date!"
+        // fired purely on the date, so a goal that ran out of time while still
+        // short was congratulated in the same words as one that was funded.
+        const funded = savedTillNow >= savingGoal.goalAmount;
+        const overdue = !funded && monthsLeftToSave <= 0;
+        const shortfall = savingGoal.goalAmount - savedTillNow;
+
         return (
           <Fragment key={savingGoalId}>
             <MainListItemStyled>
               <Box sx={{ display: "flex", flexDirection: "column" }}>
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    width: "210px",
-                  }}
-                >
+                {/* No fixed width: a long goal name truncated while the row
+                    had hundreds of pixels to spare. */}
+                <Box sx={{ display: "flex", alignItems: "center" }}>
                   <Typography variant="body1" color="text.primary">
                     {savingGoal.name}
                   </Typography>
@@ -69,10 +71,14 @@ export const SavingGoalsListData: FC<Props> = ({
                   }}
                 >
                   <Typography variant="body2" color="secondary">
-                    {monthsLeftToSave <= 0 && (
-                      <>You have reached your goal date!</>
+                    {funded && <>Goal reached</>}
+                    {overdue && (
+                      <>
+                        Goal date passed &middot;{" "}
+                        {formatAmount(shortfall, userCurrency)} short
+                      </>
                     )}
-                    {monthsLeftToSave > 0 && (
+                    {!funded && !overdue && (
                       <>
                         {formatAmount(savePerMonth, userCurrency)}/month,{" "}
                         {monthsLeftToSave} months left
@@ -82,10 +88,12 @@ export const SavingGoalsListData: FC<Props> = ({
                 </Box>
               </Box>
 
+              {/* Positive: saving toward a goal is good news, so a funded
+                  goal reads as achieved rather than greyed out. */}
               <ProgressBar
                 value={savedTillNow}
                 maxValue={savingGoal.goalAmount}
-                reverse
+                tone="positive"
               />
 
               <Box sx={{ display: "flex" }}>

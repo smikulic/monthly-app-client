@@ -65,7 +65,9 @@ export const SharedSpendSplit = ({
           height,
           borderRadius: height / 2,
           overflow: "hidden",
-          backgroundColor: palette.action.hover,
+          // `divider`, not `action.hover`. The latter is MUI's black alpha, so
+          // it rendered as a cold grey track on a warm card.
+          backgroundColor: palette.divider,
         }}
       >
         {total > 0 &&

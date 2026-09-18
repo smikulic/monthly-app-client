@@ -5,12 +5,7 @@ import {
   useCreateInvestmentMutation,
   useUpdateInvestmentMutation,
 } from "@/generated/graphql";
-import {
-  CURRENCY_OPTIONS,
-  FORM_ACTIONS,
-  TOAST_MESSAGES,
-  ENTITY_NAMES,
-} from "@/constants/forms";
+import { FORM_ACTIONS, TOAST_MESSAGES, ENTITY_NAMES } from "@/constants/forms";
 import { analytics } from "@/utils/mixpanel";
 import { TextFieldStyled } from "@/shared";
 import { FormControl } from "@/components/ui/FormControl";
@@ -22,6 +17,7 @@ import { Alert } from "@/components/ui/Alert";
 import { UserContext } from "@/App";
 import { FormDialog } from "@/components/form-dialog/form-dialog";
 import dayjs from "dayjs";
+import { CurrencySelect } from "@/components/currency-select/currency-select";
 
 interface FormProps {
   open: boolean;
@@ -215,19 +211,7 @@ export const InvestmentFormFactory = ({
 
       <FormControl size="small" required sx={{ minWidth: 120 }}>
         <InputLabel id="currency-label">Currency</InputLabel>
-        <Select
-          labelId="currency-label"
-          id="currency"
-          value={currency}
-          label="Currency"
-          onChange={(e) => setCurrency(e.target.value)}
-        >
-          {CURRENCY_OPTIONS.map((currency) => (
-            <MenuItem key={currency.value} value={currency.value}>
-              {currency.label}
-            </MenuItem>
-          ))}
-        </Select>
+        <CurrencySelect value={currency} onChange={setCurrency} />
       </FormControl>
 
       <DatePickerStyled

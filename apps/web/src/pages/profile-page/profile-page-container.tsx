@@ -15,6 +15,7 @@ import { Switch } from "@/components/ui/Switch";
 import { FormGroup } from "@/components/ui/FormGroup";
 import { FormControlLabel } from "@/components/ui/FormControl";
 import { SectionCard } from "@/components/section-card/section-card";
+import { CurrencySelect } from "@/components/currency-select/currency-select";
 import { ConfirmDialog } from "@/components/confirm-dialog/confirm-dialog";
 import {
   ProminentButtonStyled,
@@ -23,7 +24,6 @@ import {
   PageWrapperStyled,
   ButtonGroupStyled,
 } from "@/shared";
-import { CURRENCY_OPTIONS } from "@/constants/forms";
 
 export const ProfilePageContainer = ({
   userData,
@@ -76,18 +76,7 @@ export const ProfilePageContainer = ({
               defaultValue={userData.email}
               disabled
             />
-            <SelectStyled
-              id="userCurrency"
-              label="Currency"
-              value={currency}
-              onChange={(e) => setCurrency(e.target.value as string)}
-            >
-              {CURRENCY_OPTIONS.map((opt) => (
-                <MenuItem key={opt.value} value={opt.value}>
-                  {opt.value} ({opt.label})
-                </MenuItem>
-              ))}
-            </SelectStyled>
+            <CurrencySelect value={currency} onChange={setCurrency} />
             <FormGroup>
               <FormControlLabel
                 control={

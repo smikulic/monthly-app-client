@@ -88,19 +88,33 @@ export const AccountAvatarStyled = styled(Avatar)(({ theme }) => ({
   color: theme.palette.primary.contrastText,
 }));
 
+/** Avatar beside the identity, so the menu connects to the trigger clicked. */
 export const MenuHeaderStyled = styled("div")(({ theme }) => ({
   display: "flex",
-  flexDirection: "column",
-  padding: theme.spacing(1, 2),
+  alignItems: "center",
+  gap: theme.spacing(1.5),
+  padding: theme.spacing(1.5, 2),
 }));
 
+export const MenuHeaderTextStyled = styled("div")({
+  display: "flex",
+  flexDirection: "column",
+  minWidth: 0,
+});
+
 export const MenuHeaderNameStyled = styled("span")(({ theme }) => ({
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  whiteSpace: "nowrap",
   fontSize: tokens.fontSize.sm,
   fontWeight: 600,
   color: theme.palette.text.primary,
 }));
 
 export const MenuHeaderEmailStyled = styled("span")(({ theme }) => ({
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  whiteSpace: "nowrap",
   fontSize: tokens.fontSize.xs,
   color: theme.palette.text.secondary,
 }));

@@ -90,16 +90,29 @@ export const tokens = {
   ],
 
   /**
-   * Wayfinding only — the marker bars on the dashboard rows. One hue in five
-   * lightness steps, so the rows read as a set without introducing a third
-   * colour axis that would compete with `money` or `person`.
+   * Wayfinding only — the marker bars on the dashboard rows, in row order:
+   * expenses, budget, saving goals, investments, insights.
    *
-   * These deliberately carry no meaning about amounts. The previous five
-   * arbitrary hues gave Expenses red and Investments green, which said
-   * "spending is bad, investing is good" — the judgement this palette exists
-   * to avoid.
+   * Categorical, and deliberately clear of every money hue. Red for Expenses
+   * or green for Saving Goals would make a standing claim that spending is a
+   * failure and saving a success — and would compete with `money.negative` on
+   * the one row where red actually means something.
+   *
+   * This was briefly a single hue in five lightness steps, which was safe and
+   * useless: at 6px wide the steps are imperceptible, so the rows had no
+   * wayfinding at all.
+   *
+   * The hues overlap the `person` family. That is harmless rather than
+   * accidental — person colours appear in the Insights chart and on the Groups
+   * page, these only on the dashboard, so the two never share a screen.
    */
-  section: ["#2F5D50", "#3E7263", "#4E8777", "#629C8B", "#7BB1A1"],
+  section: [
+    "#4A6FA5", // slate blue — expenses
+    "#C08A2E", // ochre — budget
+    "#4A7C87", // teal — saving goals
+    "#6B5B95", // plum — investments
+    "#8E5572", // mauve — insights
+  ],
 
   radius: {
     sm: 8,

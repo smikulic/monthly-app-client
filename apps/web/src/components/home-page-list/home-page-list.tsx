@@ -3,10 +3,19 @@ import { Box } from "@/components/ui/Box";
 import { tokens } from "@/theme/tokens";
 import { HomeContainerStyled } from "./home-page-list-style";
 
-// Wayfinding markers, in row order. Deliberately one hue in five steps rather
-// than five arbitrary colours: the old set gave Expenses red and Investments
-// green, which told the user spending was a failure and investing a success.
+// Wayfinding markers, in row order. Categorical hues, none of which is a money
+// colour — a permanently red Expenses row would say spending is a failure, and
+// would blunt the red that marks an actually over-budget category.
 const [expenses, budget, savingGoals, investments, insights] = tokens.section;
+
+/**
+ * Investments is hidden from the dashboard for now. The feature and its page
+ * are untouched and still reachable — this only removes the row.
+ *
+ * Flip to `true` to bring it back; the row below is left intact so that is a
+ * one-line change rather than a rewrite.
+ */
+const SHOW_INVESTMENTS = false;
 
 export const HomePageList = ({
   loading,
@@ -51,13 +60,15 @@ export const HomePageList = ({
           value={totalSavingGoalsAmount}
           valueColor={savingGoals}
         />
-        <HomeListItemLink
-          linkTo="/investments"
-          title="Investments"
-          loading={loading}
-          value={totalInvestmentsValue}
-          valueColor={investments}
-        />
+        {SHOW_INVESTMENTS && (
+          <HomeListItemLink
+            linkTo="/investments"
+            title="Investments"
+            loading={loading}
+            value={totalInvestmentsValue}
+            valueColor={investments}
+          />
+        )}
         <HomeListItemLink
           linkTo="/insights"
           title="Insights"

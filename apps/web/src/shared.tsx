@@ -19,12 +19,16 @@ export const MainListItemStyled = styled(ListItemStyled, {
   // Configure which props should be forwarded on DOM
   shouldForwardProp: (prop) => prop !== "active",
 })<MainListItemStyledProps>(({ theme, active }) => ({
-  margin: "8px 12px",
+  margin: "6px 12px",
   padding: "14px 18px",
   border: active
     ? `1px solid ${theme.palette.primary.main}`
     : `1px solid ${theme.palette.divider}`,
   borderRadius: "12px",
+  // Clips the progress wash to the rounded corners. The wash is absolutely
+  // positioned with square corners, so without this it escapes the curve and
+  // leaves a hard edge at each end of the row.
+  overflow: "hidden",
   // Surface, not transparent: on a warm ground an unfilled row is just an
   // outline on beige, so nothing reads as a card.
   background: theme.palette.surface,
@@ -83,10 +87,17 @@ export const ProminentButtonStyled = styled("div")<ProminentButtonProps>(({
   let borderColor: string;
 
   if (disabled) {
-    // disabled state overrides outline
-    textColor = theme.palette.action.disabled;
-    bgColor = theme.palette.action.disabledBackground;
-    borderColor = theme.palette.action.disabled;
+    // Disabled overrides outline. This is the state a user sees every time a
+    // form dialog opens, so it has to read as a button waiting for input
+    // rather than as empty space.
+    //
+    // `text.secondary` on `divider` is about 4.5:1 — muted but unmistakably a
+    // label. MUI's own `action.disabled` on `action.disabledBackground` is
+    // grey on grey, and `text.disabled` on `divider` is worse still at roughly
+    // 1.5:1, because both are near-identical warm greys.
+    textColor = theme.palette.text.secondary;
+    bgColor = theme.palette.divider;
+    borderColor = theme.palette.divider;
   } else if (outline) {
     // outline variant
     textColor = palette.main;
@@ -115,7 +126,10 @@ export const ProminentButtonStyled = styled("div")<ProminentButtonProps>(({
 
     cursor: disabled ? "not-allowed" : "pointer",
     pointerEvents: disabled ? "none" : "auto",
-    opacity: disabled ? 0.5 : 1,
+    // No blanket fade when disabled. The colours above already say "off", and
+    // halving their opacity on top of that was what made the label vanish
+    // into its own fill.
+    opacity: 1,
 
     "&:hover": disabled
       ? {}

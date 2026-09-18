@@ -48,13 +48,15 @@
   --person-5: #4a7c87;
   --person-6: #7d6b58;
 
-  /* Wayfinding only — one hue in five lightness steps. Carries no meaning
-     about amounts, so it cannot say "spending is bad, investing is good". */
-  --section-1: #2f5d50;
-  --section-2: #3e7263;
-  --section-3: #4e8777;
-  --section-4: #629c8b;
-  --section-5: #7bb1a1;
+  /* Wayfinding only, in dashboard row order. Categorical and clear of every
+     money hue: red for Expenses or green for Saving Goals would claim that
+     spending is a failure and saving a success, and would compete with
+     --money-negative where red actually means something. */
+  --section-1: #4a6fa5;
+  --section-2: #c08a2e;
+  --section-3: #4a7c87;
+  --section-4: #6b5b95;
+  --section-5: #8e5572;
 
   /* Width of the app's content column. Full-bleed bars keep an edge-to-edge
      border and centre their contents on this, so chrome spans the window

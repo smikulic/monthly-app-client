@@ -3,14 +3,14 @@ import { tokens } from "@/theme/tokens";
 
 /**
  * Compact dropdown trigger, sized to sit on the toolbar baseline rather than
- * being a tall form-style Select.
+ * being a tall form-style Select. Shared by every toolbar filter.
  *
  * A `button`, not a `div`. As a div it could not be tabbed to or opened from
  * the keyboard at all, and — because MUI returns focus to the anchor when a
  * Menu closes — focus had nowhere to go, so it stayed on the MenuItem while
  * the closing popover was marked aria-hidden.
  */
-export const ScopeTriggerStyled = styled("button")(({ theme }) => ({
+export const FilterTriggerStyled = styled("button")(({ theme }) => ({
   display: "flex",
   font: "inherit",
   color: "inherit",
@@ -47,7 +47,7 @@ export const ScopeTriggerStyled = styled("button")(({ theme }) => ({
   },
 }));
 
-export const ScopeTriggerLabelStyled = styled("span")(({ theme }) => ({
+export const FilterTriggerLabelStyled = styled("span")(({ theme }) => ({
   flexShrink: 0,
   fontSize: tokens.fontSize.md,
   lineHeight: 1,
@@ -55,7 +55,7 @@ export const ScopeTriggerLabelStyled = styled("span")(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-export const ScopeTriggerValueStyled = styled("span")(({ theme }) => ({
+export const FilterTriggerValueStyled = styled("span")(({ theme }) => ({
   minWidth: 0,
   maxWidth: 160,
   fontSize: tokens.fontSize.md,

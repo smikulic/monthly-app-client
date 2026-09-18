@@ -27,6 +27,9 @@ import {
   RowMainStyled,
   RowTitleStyled,
   RowRightStyled,
+  SummaryHeadStyled,
+  SummaryCompareStyled,
+  PaceRowStyled,
   BarTrackStyled,
   DeltaStyled,
   StreakBadgeStyled,
@@ -105,11 +108,15 @@ export const InsightsPageContainer = ({
 
       <InsightsWrapperStyled>
         {/* Overview charts */}
+        {/* The chart lives in its own Box rather than a SectionStyled, so it
+            needs the same card treatment explicitly or it stays unfilled. */}
         <Box
           sx={{
             paddingTop: "12px",
+            background: tokens.surface,
             border: `1px solid ${tokens.hairline}`,
-            borderRadius: "12px",
+            borderRadius: `${tokens.radius.md}px`,
+            boxShadow: "0 1px 2px rgba(20, 18, 15, 0.04)",
           }}
         >
           <TabsStyled
@@ -169,18 +176,37 @@ export const InsightsPageContainer = ({
 
         {insights && (
           <>
-            {/* Safe to spend / pace */}
+            {/* One card, not two: safe-to-spend and the month-over-month
+                comparison answer the same question, and the second used to
+                restate a figure the first already showed. */}
             <SectionStyled>
-              <SectionTitleStyled>Safe to spend</SectionTitleStyled>
-              <HeroAmountStyled negative={insights.totalSafeToSpend < 0}>
-                {fmt(insights.totalSafeToSpend)}
-              </HeroAmountStyled>
-              <SubtleTextStyled>
+              <SectionTitleStyled>This month</SectionTitleStyled>
+
+              <SummaryHeadStyled>
+                <div>
+                  <HeroAmountStyled negative={insights.totalSafeToSpend < 0}>
+                    {fmt(insights.totalSafeToSpend)}
+                  </HeroAmountStyled>
+                  <SubtleTextStyled>safe to spend</SubtleTextStyled>
+                </div>
+
+                <SummaryCompareStyled>
+                  {renderDelta(
+                    insights.monthOverMonthDelta,
+                    insights.monthOverMonthPercent,
+                  )}
+                  <SubtleTextStyled>
+                    vs {fmt(insights.previousMonthTotal)} last month
+                  </SubtleTextStyled>
+                </SummaryCompareStyled>
+              </SummaryHeadStyled>
+
+              <SubtleTextStyled style={{ marginTop: 12 }}>
                 {fmt(insights.totalSpent)} spent of {fmt(insights.totalBudget)}{" "}
                 budget &middot; day {insights.daysElapsed} of{" "}
                 {insights.daysInMonth}
               </SubtleTextStyled>
-              <SubtleTextStyled style={{ marginTop: 6 }}>
+              <SubtleTextStyled style={{ marginTop: 4 }}>
                 Projected month end:{" "}
                 <span
                   style={{
@@ -197,25 +223,6 @@ export const InsightsPageContainer = ({
                   insights.totalBudget > 0 &&
                   ` (over by ${fmt(insights.totalProjected - insights.totalBudget)})`}
               </SubtleTextStyled>
-            </SectionStyled>
-
-            {/* Month over month */}
-            <SectionStyled>
-              <SectionTitleStyled>This month vs last</SectionTitleStyled>
-              <RowStyled>
-                <RowMainStyled>
-                  <RowTitleStyled>
-                    {fmt(insights.currentMonthTotal)}
-                  </RowTitleStyled>
-                  <SubtleTextStyled>
-                    vs {fmt(insights.previousMonthTotal)} last month
-                  </SubtleTextStyled>
-                </RowMainStyled>
-                {renderDelta(
-                  insights.monthOverMonthDelta,
-                  insights.monthOverMonthPercent,
-                )}
-              </RowStyled>
             </SectionStyled>
 
             {/* Biggest movers */}
@@ -316,22 +323,10 @@ export const InsightsPageContainer = ({
                 .map((p: any) => {
                   const over = p.projected > p.budget;
                   return (
-                    <div key={p.categoryId} style={{ padding: "8px 0" }}>
-                      <RowStyled style={{ padding: 0, borderTop: "none" }}>
-                        <RowMainStyled>
-                          <RowTitleStyled>{p.categoryName}</RowTitleStyled>
-                        </RowMainStyled>
-                        <RowRightStyled>
-                          <span>
-                            {fmt(p.spent)} / {fmt(p.budget)}
-                          </span>
-                          <SubtleTextStyled
-                            style={{ color: over ? OVER : undefined }}
-                          >
-                            proj. {fmt(p.projected)}
-                          </SubtleTextStyled>
-                        </RowRightStyled>
-                      </RowStyled>
+                    <PaceRowStyled key={p.categoryId}>
+                      <RowMainStyled>
+                        <RowTitleStyled>{p.categoryName}</RowTitleStyled>
+                      </RowMainStyled>
                       <BarTrackStyled>
                         <div
                           style={{
@@ -341,7 +336,17 @@ export const InsightsPageContainer = ({
                           }}
                         />
                       </BarTrackStyled>
-                    </div>
+                      <RowRightStyled>
+                        <span>
+                          {fmt(p.spent)} / {fmt(p.budget)}
+                        </span>
+                        <SubtleTextStyled
+                          style={{ color: over ? OVER : undefined }}
+                        >
+                          proj. {fmt(p.projected)}
+                        </SubtleTextStyled>
+                      </RowRightStyled>
+                    </PaceRowStyled>
                   );
                 })}
             </SectionStyled>

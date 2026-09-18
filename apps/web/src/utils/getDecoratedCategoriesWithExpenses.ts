@@ -1,4 +1,4 @@
-import { CategoryDecoratedWithExpenses } from "../components/expenses-list/expenses-list";
+import { CategoryDecoratedWithExpenses } from "@/features/expenses/expenses-list/expenses-list";
 import { Category, Expense, Subcategory } from "../generated/graphql";
 
 export const getDecoratedCategoriesWithExpenses = ({
@@ -20,6 +20,12 @@ export const getDecoratedCategoriesWithExpenses = ({
   const categoriesDecoratedWithExpenses: CategoryDecoratedWithExpenses[] =
     categories.map((category: Category) => {
       let totalExpenseAmount = 0;
+      // Summed here rather than on the server, which exposes these per
+      // subcategory only. `budgetForMonth`, never `budgetAmount`: the latter is
+      // the amount in force *today*, so it would report the wrong figure for
+      // any month the user navigates to.
+      let totalBudgetForMonth = 0;
+      let totalRolloverRemaining = 0;
       const subcategories = category.subcategories as Subcategory[];
 
       if (!subcategories) {
@@ -27,6 +33,8 @@ export const getDecoratedCategoriesWithExpenses = ({
           ...category,
           subcategories: [],
           totalExpenseAmount,
+          totalBudgetForMonth,
+          totalRolloverRemaining,
         };
       }
 
@@ -44,6 +52,9 @@ export const getDecoratedCategoriesWithExpenses = ({
             totalExpenseAmount,
           );
 
+          totalBudgetForMonth += subcategory.budgetForMonth;
+          totalRolloverRemaining += subcategory.rolloverRemaining;
+
           return {
             ...(subcategory as Subcategory),
             expenses: foundExpenses,
@@ -55,6 +66,8 @@ export const getDecoratedCategoriesWithExpenses = ({
         ...category,
         subcategories: subcategoriesDecoratedWithExpense,
         totalExpenseAmount,
+        totalBudgetForMonth,
+        totalRolloverRemaining,
       };
     });
 
