@@ -67,7 +67,11 @@ export const GroupAddRowStyled = styled("div")(({ theme }) => ({
     color: theme.palette.primary.contrastText,
   },
 
-  "&:hover": {
-    opacity: 0.7,
+  // Same touch-sticky hover as `ProminentButtonStyled`: this row is a pine
+  // fill, and 70% of it reads as a disabled control rather than a hovered one.
+  "@media (hover: hover) and (pointer: fine)": {
+    "&:hover": {
+      opacity: 0.7,
+    },
   },
 }));

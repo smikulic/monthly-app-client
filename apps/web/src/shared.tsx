@@ -131,11 +131,23 @@ export const ProminentButtonStyled = styled("div")<ProminentButtonProps>(({
     // into its own fill.
     opacity: 1,
 
-    "&:hover": disabled
-      ? {}
-      : {
-          opacity: 0.7,
-        },
+    /*
+     * Guarded, because on a touch screen `:hover` sticks.
+     *
+     * A phone applies hover to whatever sits under the last tap and leaves it
+     * there until you tap elsewhere. The "Paid by" menu opens over the bottom
+     * of the expense sheet, so choosing an option leaves the pointer resting
+     * on the Create button underneath — and pine at 70% is a washed-out sage
+     * that reads as disabled. Nothing was disabled; the button was stuck in a
+     * state that device should never have entered.
+     */
+    "@media (hover: hover) and (pointer: fine)": {
+      "&:hover": disabled
+        ? {}
+        : {
+            opacity: 0.7,
+          },
+    },
   };
 });
 
@@ -262,11 +274,15 @@ export const TabStyled = styled((props: TabProps) => (
     color: theme.palette.primary.contrastText,
   },
 
-  "&:hover": {
-    opacity: 0.8,
-    background: theme.palette.action.hover,
-    "&.Mui-selected": {
-      background: theme.palette.primary.main,
+  // The background change is harmless on touch; the fade is not, so the whole
+  // rule is guarded rather than split in two.
+  "@media (hover: hover) and (pointer: fine)": {
+    "&:hover": {
+      opacity: 0.8,
+      background: theme.palette.action.hover,
+      "&.Mui-selected": {
+        background: theme.palette.primary.main,
+      },
     },
   },
 }));
