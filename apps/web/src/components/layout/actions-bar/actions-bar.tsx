@@ -18,6 +18,7 @@ import {
 
 export const ActionsBar = ({
   children,
+  toolbar: asToolbar,
   showScope,
   pageDate,
   showRollover,
@@ -26,6 +27,12 @@ export const ActionsBar = ({
   onClickNext,
 }: {
   children?: ReactNode;
+  /**
+   * Opts a page with no scope, month or rollover into the toolbar treatment,
+   * so its action is pinned to the bottom of the screen on a phone rather than
+   * stranded at the top of a scrolling list.
+   */
+  toolbar?: boolean;
   showScope?: boolean;
   pageDate?: Date;
   onClickPrevious?: () => void;
@@ -34,10 +41,10 @@ export const ActionsBar = ({
   toggleRollover?: () => void;
 }) => {
   const showMonth = Boolean(pageDate && onClickPrevious && onClickNext);
-  // Toolbar mode is the bordered, three-zone control row that sits under the
-  // topbar. Pages that only pass free-form children (investments, saving goals)
-  // keep the legacy space-between layout.
-  const toolbar = Boolean(showScope || showMonth || toggleRollover);
+  // Toolbar mode is the control row that sits under the topbar on a desktop
+  // and is fixed to the bottom edge on a phone. Pages that pass only free-form
+  // children keep the legacy space-between layout unless they ask for it.
+  const toolbar = Boolean(asToolbar || showScope || showMonth || toggleRollover);
 
   if (!toolbar) {
     return <ActionsBarStyled>{children}</ActionsBarStyled>;

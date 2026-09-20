@@ -271,35 +271,32 @@ export const TabStyled = styled((props: TabProps) => (
   },
 }));
 
-export const SelectStyled = styled(SelectField)(({ theme }) => ({
+/**
+ * A select, matching the text fields it sits beside in every form.
+ *
+ * It used to be a solid `primary.main` block with `primary.contrastText` text
+ * and border — written when the accent was a light mint, where that read as a
+ * tinted control. Once the accent became dark pine it became a near-black slab
+ * in the middle of a white dialog, and worse: the floating label lives in the
+ * notch cut out of the outline, and behind that notch is the field's own
+ * background. A dark label over a dark fill is what made "Paid by" and
+ * "Subcategory" look like the label was printed on top of the control.
+ *
+ * Same family as the `primary.contrastText`-used-as-ink bugs elsewhere in this
+ * palette migration: syntactically fine, semantically inverted.
+ *
+ * So it now inherits the theme's own outlined input — surface, hairline
+ * border, ink text — and only keeps the radius and height that put it on the
+ * same baseline as `TextFieldStyled`.
+ */
+export const SelectStyled = styled(SelectField)({
   height: "40px",
-  borderRadius: "10px",
-  // style the OutlinedInput root
+
   "& .MuiOutlinedInput-root": {
-    height: "100%",
+    height: "40px",
     borderRadius: "10px",
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.primary.contrastText,
-    border: `1px solid ${theme.palette.primary.contrastText}`,
-    // the outline itself
-    "& fieldset": {
-      borderColor: theme.palette.primary.contrastText,
-    },
-    "&:hover fieldset": {
-      opacity: 0.7,
-    },
-    // ensure the select arrow is also light
-    "& .MuiSelect-icon": {
-      color: theme.palette.primary.contrastText,
-    },
-    // pad the “display area” of the select to match your button
-    "& .MuiSelect-select": {
-      padding: "8px 16px",
-      display: "flex",
-      alignItems: "center",
-    },
   },
-}));
+});
 
 export const TextFieldStyled = styled(TextField)(({ theme }) => ({
   marginBottom: 0,

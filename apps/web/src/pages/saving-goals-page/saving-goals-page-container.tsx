@@ -32,21 +32,17 @@ export const SavingGoalsPageContainer = () => {
 
   return (
     <>
-      <ActionsBar>
-        {/* Empty span to push button to the right */}
-        <span></span>
-        <ProminentButtonStyled onClick={() => setCreateModalSavingGoal(true)}>
+      {/* `toolbar` with no scope or month of its own, so the action lands on
+          the same bottom bar as Add category and Add expense instead of at the
+          top of a scrolling list. */}
+      <ActionsBar toolbar>
+        <ProminentButtonStyled
+          small
+          onClick={() => setCreateModalSavingGoal(true)}
+          data-testid="add-saving-goal-button"
+        >
           Add saving goal
         </ProminentButtonStyled>
-        {createModalSavingGoal && (
-          <SavingGoalFormFactory
-            open={createModalSavingGoal}
-            closeForm={() => {
-              refetchSavingGoals();
-              setCreateModalSavingGoal(false);
-            }}
-          />
-        )}
       </ActionsBar>
       <SavingGoalsList
         loading={loadingSavingGoals}
@@ -59,6 +55,17 @@ export const SavingGoalsPageContainer = () => {
         calculateSavingGoalData={calculateSavingGoalData}
       />
 
+      {/* Dialogs are siblings of the toolbar, as on the categories page. They
+          were nested inside it, which only worked because they portal out. */}
+      {createModalSavingGoal && (
+        <SavingGoalFormFactory
+          open={createModalSavingGoal}
+          closeForm={() => {
+            refetchSavingGoals();
+            setCreateModalSavingGoal(false);
+          }}
+        />
+      )}
       {updateModalSavingGoal && (
         <SavingGoalFormFactory
           open={Boolean(updateModalSavingGoal)}

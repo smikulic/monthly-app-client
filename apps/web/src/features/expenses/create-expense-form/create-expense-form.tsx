@@ -107,6 +107,16 @@ export const CreateExpenseForm: React.FC<Props> = ({
         })
       }
     >
+      {/*
+        Controlled, as the update form already was.
+
+        Left uncontrolled these fields keep whatever the browser has in them
+        while `expenseAmount` says something else — and the validity check
+        below reads the state, not the field. Any path that resets the state
+        without recreating the input (`onCompleted` clears it, for one) leaves
+        a form that looks complete with Create greyed out, which is precisely
+        the reported symptom.
+      */}
       <TextFieldStyled
         required
         id="amount"
@@ -114,6 +124,7 @@ export const CreateExpenseForm: React.FC<Props> = ({
         size="small"
         margin="none"
         autoComplete="off"
+        value={expenseAmount}
         onChange={(e) => setExpenseAmount(e.target.value)}
         data-testid="expense-amount-input"
       />
@@ -123,6 +134,7 @@ export const CreateExpenseForm: React.FC<Props> = ({
         size="small"
         margin="none"
         autoComplete="off"
+        value={expenseDescription}
         onChange={(e) => setExpenseDescription(e.target.value)}
         data-testid="expense-description-input"
       />
