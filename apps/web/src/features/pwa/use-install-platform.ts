@@ -7,100 +7,119 @@
  * ritual with no feature to detect — iOS has no install API at all, and the
  * gesture differs between the two platforms.
  */
-import { useEffect, useState } from "react";
+import { useCallback, useSyncExternalStore } from "react";
+import {
+  consumeInstallPrompt,
+  getInstallPrompt,
+  subscribeToInstallPrompt,
+} from "./install-prompt";
 
 export type InstallPlatform =
-  | "ios-safari"
-  /** iOS, but in Chrome/Firefox/Edge, which cannot add to the home screen. */
-  | "ios-other-browser"
+  | "ios"
   | "android"
-  /** Already installed, or a desktop browser: nothing useful to say. */
+  /** Already installed, a desktop browser, or the marketing site. */
   | "none";
 
 /**
- * Chrome fires this when a site meets its installability bar, letting us offer
- * a real one-tap button instead of instructions.
+ * Whether this origin serves the app rather than the marketing site.
  *
- * It does not fire today: Chrome requires a service worker with a fetch
- * handler and this app has none (see `public/manifest.json` — there is no
- * `sw.js` beside it). The listener is here anyway so that adding one upgrades
- * Android to a single tap with no further work, rather than leaving a better
- * experience switched off behind a code change nobody remembers to make.
+ * A manifest's `start_url` must be same-origin, and ours resolves to whatever
+ * host served it — so an install from `yourmonthly.app` pins the *sales page*
+ * to someone's home screen, and there is no way to point it at the app from
+ * there. The offer therefore only belongs on the app origin.
+ *
+ * Localhost counts, so a production build can be previewed locally.
  */
-interface BeforeInstallPromptEvent extends Event {
-  prompt: () => Promise<void>;
-  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
+const servesApp = (hostname: string) =>
+  hostname.split(".").slice(0, -2).join(".") === "app" ||
+  ["localhost", "127.0.0.1", "[::1]", "0.0.0.0"].includes(hostname) ||
+  hostname.endsWith(".local");
+
+export interface InstallEnvironment {
+  hostname: string;
+  userAgent: string;
+  /** Already added to the home screen. */
+  standalone: boolean;
+  /** iPadOS 13+ reports itself as a Mac; touch points are the only tell. */
+  maxTouchPoints: number;
 }
 
-const detect = (): InstallPlatform => {
-  if (typeof window === "undefined") return "none";
+/**
+ * Pure, and takes its environment as an argument rather than reading globals.
+ *
+ * Partly so it can be tested at all — `setupTests.ts` replaces
+ * `window.location` wholesale and non-configurably, so a version that read
+ * `location.hostname` directly could never be exercised — and partly because
+ * every input here is a thing this function should be explicit about.
+ */
+export const detectInstallPlatform = ({
+  hostname,
+  userAgent,
+  standalone,
+  maxTouchPoints,
+}: InstallEnvironment): InstallPlatform => {
+  if (!servesApp(hostname)) return "none";
+  if (standalone) return "none";
 
-  const ua = window.navigator.userAgent;
+  const isIpadOS = /macintosh/i.test(userAgent) && maxTouchPoints > 1;
 
-  // Already installed: standalone display mode, or Safari's own legacy flag.
-  const installed =
-    window.matchMedia?.("(display-mode: standalone)").matches ||
-    (window.navigator as { standalone?: boolean }).standalone === true;
-  if (installed) return "none";
+  /*
+   * One branch for all of iOS, Safari or not.
+   *
+   * This used to send Chrome, Firefox and Edge users off to "open this in
+   * Safari", which has been wrong since iOS 16.4 opened Add to Home Screen to
+   * third-party browsers — Chrome has offered it since 2023. The gesture is
+   * identical everywhere (Share, then Add to Home Screen); only the Share
+   * button's position differs, which the copy covers.
+   */
+  if (/iphone|ipad|ipod/i.test(userAgent) || isIpadOS) return "ios";
 
-  // iPadOS 13+ reports itself as a Mac, so the touch count is the only way to
-  // tell an iPad from a laptop.
-  const isIpadOS =
-    /macintosh/i.test(ua) && (window.navigator.maxTouchPoints ?? 0) > 1;
-  const isIos = /iphone|ipad|ipod/i.test(ua) || isIpadOS;
-
-  if (isIos) {
-    // Add to Home Screen is a Safari feature. The other iOS browsers are
-    // Safari underneath but do not expose it, so sending someone to look for
-    // a Share sheet item that is not there is worse than saying nothing.
-    return /crios|fxios|edgios|opt\//i.test(ua)
-      ? "ios-other-browser"
-      : "ios-safari";
-  }
-
-  return /android/i.test(ua) ? "android" : "none";
+  return /android/i.test(userAgent) ? "android" : "none";
 };
 
+const readEnvironment = (): InstallEnvironment => ({
+  // Defensive: `location` is replaced in tests and can be a bare stub. An
+  // unknown host is treated as the marketing site, which shows nothing.
+  hostname: window.location?.hostname ?? "",
+  userAgent: window.navigator?.userAgent ?? "",
+  standalone:
+    window.matchMedia?.("(display-mode: standalone)").matches === true ||
+    (window.navigator as { standalone?: boolean })?.standalone === true,
+  maxTouchPoints: window.navigator?.maxTouchPoints ?? 0,
+});
+
 export const useInstallPlatform = () => {
-  // Resolved after mount rather than during render: `matchMedia` and
-  // `maxTouchPoints` are browser-only, and this page is the one that would be
-  // pre-rendered first if it ever moves off the SPA.
-  const [platform, setPlatform] = useState<InstallPlatform>("none");
-  const [promptEvent, setPromptEvent] =
-    useState<BeforeInstallPromptEvent | null>(null);
+  /*
+   * Read once, not in an effect. `detect()` is a pure read of `navigator` and
+   * `matchMedia`, and resolving it after mount meant the card rendered its
+   * "none" state first and then swapped — a flash of nothing on the one
+   * surface whose whole job is to be noticed.
+   */
+  const platform =
+    typeof window === "undefined"
+      ? "none"
+      : detectInstallPlatform(readEnvironment());
 
-  useEffect(() => {
-    setPlatform(detect());
+  // The prompt is caught at module scope by `install-prompt.ts`, long before
+  // this hook runs. See the note there.
+  const promptEvent = useSyncExternalStore(
+    subscribeToInstallPrompt,
+    getInstallPrompt,
+    () => null,
+  );
 
-    const onBeforeInstallPrompt = (event: Event) => {
-      // Suppresses Chrome's own mini-infobar so the page can offer the install
-      // at a moment that makes sense instead.
-      event.preventDefault();
-      setPromptEvent(event as BeforeInstallPromptEvent);
-    };
+  const install = useCallback(async () => {
+    const event = getInstallPrompt();
+    if (!event) return;
 
-    const onInstalled = () => {
-      setPlatform("none");
-      setPromptEvent(null);
-    };
-
-    window.addEventListener("beforeinstallprompt", onBeforeInstallPrompt);
-    window.addEventListener("appinstalled", onInstalled);
-
-    return () => {
-      window.removeEventListener("beforeinstallprompt", onBeforeInstallPrompt);
-      window.removeEventListener("appinstalled", onInstalled);
-    };
+    await event.prompt();
+    // Single use: Chrome rejects a second `prompt()` on the same event.
+    consumeInstallPrompt();
   }, []);
 
-  /** Present only when the browser offered a one-tap install. */
-  const install = promptEvent
-    ? async () => {
-        await promptEvent.prompt();
-        // Single use: Chrome will not let the same event be prompted twice.
-        setPromptEvent(null);
-      }
-    : null;
-
-  return { platform, install };
+  return {
+    platform,
+    /** Present only when the browser offered a one-tap install. */
+    install: promptEvent ? install : null,
+  };
 };

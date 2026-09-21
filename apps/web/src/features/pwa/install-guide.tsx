@@ -27,17 +27,7 @@ const LEAD = "Opens full screen, like any other app. Takes about ten seconds.";
 const InstallBody = () => {
   const { platform, install } = useInstallPlatform();
 
-  if (platform === "ios-other-browser") {
-    return (
-      <InstallLeadStyled>
-        On iPhone and iPad, adding an app to the home screen only works in
-        Safari. Open <strong>yourmonthly.app</strong> there and the option
-        appears in the Share menu.
-      </InstallLeadStyled>
-    );
-  }
-
-  if (platform === "ios-safari") {
+  if (platform === "ios") {
     return (
       <>
         <InstallLeadStyled>{LEAD}</InstallLeadStyled>
@@ -47,10 +37,10 @@ const InstallBody = () => {
             <InstallGlyphStyled aria-hidden="true">
               <IosShareIcon />
             </InstallGlyphStyled>
-            {/* Safari moved Share to the bottom bar in iOS 15 and it has
-                stayed there, but saying "bottom" outright would be wrong on
-                iPad, where it is still top-right. */}
-            in the Safari toolbar
+            {/* Safari keeps Share in the bottom bar on iPhone and top-right on
+                iPad; Chrome puts it beside the address bar. Naming the icon
+                rather than a position is the only wording true everywhere. */}
+            Share
           </InstallStepStyled>
           <InstallStepStyled>
             Scroll down and choose <strong>Add to Home Screen</strong>
@@ -112,15 +102,17 @@ const InstallBody = () => {
 };
 
 /**
- * "Put Monthly on your home screen", for the marketing page.
+ * "Put Monthly on your home screen", for the welcome page.
  *
  * A budgeting app is only used if opening it is as easy as opening anything
  * else on the phone, and a bookmark two taps into a browser is not. There is an
  * Android build in the Play Store but no iOS one — Apple's guideline 4.2
- * rejects repackaged websites — so for half of all visitors the home screen
- * icon *is* the app, and nothing told them it existed.
+ * rejects repackaged websites — so for iOS visitors the home screen icon *is*
+ * the app, and nothing told them it existed.
  *
- * Renders nothing on a desktop, and nothing once installed.
+ * Renders nothing on a desktop, nothing once installed, and nothing on the
+ * marketing domain, where an install would pin the sales page rather than the
+ * app. See `servesApp` in `use-install-platform.ts`.
  */
 export const InstallGuide = () => {
   const { platform } = useInstallPlatform();
@@ -128,9 +120,7 @@ export const InstallGuide = () => {
 
   return (
     <InstallCardStyled>
-      <InstallTitleStyled>
-        {platform === "ios-other-browser" ? "Keep Monthly one tap away" : TITLE}
-      </InstallTitleStyled>
+      <InstallTitleStyled>{TITLE}</InstallTitleStyled>
       <InstallBody />
     </InstallCardStyled>
   );

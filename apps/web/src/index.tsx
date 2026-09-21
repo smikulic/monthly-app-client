@@ -16,6 +16,10 @@ import { analytics } from "./utils/mixpanel";
 import { demoLink } from "./features/demo/demo-link";
 import { setDemoClient } from "./features/demo/demo-session";
 import { registerServiceWorker } from "./features/pwa/register-service-worker";
+// Side-effect import, and it must stay above `root.render`. Chrome fires
+// `beforeinstallprompt` before React mounts and the event never replays, so
+// the listener has to exist before the app does.
+import "./features/pwa/install-prompt";
 // Self-hosted rather than the Google Fonts CDN, which transmits the visitor's
 // IP to a third party — avoided deliberately for an EU-facing finance app.
 //
