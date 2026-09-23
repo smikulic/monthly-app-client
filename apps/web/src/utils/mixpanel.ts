@@ -158,6 +158,51 @@ export const analytics = {
     });
   },
 
+  /*
+   * The household funnel.
+   *
+   * None of this was tracked, which meant the one question the pricing rests
+   * on — what share of accounts ever become a household — could not be
+   * answered from analytics at all. These five events are that funnel, in
+   * order, and each step is where people drop out:
+   *
+   *   Group Created → Invite Sent → Invite Accepted → Category Shared
+   *                                                 → Partner Expense Created
+   *
+   * The last one is the only event that proves the household is *real* rather
+   * than merely set up, so it is the one worth optimising against.
+   *
+   * No email addresses here. The invite funnel is about counts, and the
+   * invitee has not consented to anything yet.
+   */
+  trackGroupCreated: (groupName: string) => {
+    analytics.track("Group Created", { group_name: groupName });
+  },
+
+  trackGroupInviteSent: (memberCount: number) => {
+    // How many people are already in the group when another is invited, which
+    // separates "setting up a couple" from "adding a third".
+    analytics.track("Invite Sent", { member_count: memberCount });
+  },
+
+  trackGroupInviteAccepted: () => {
+    analytics.track("Invite Accepted");
+  },
+
+  trackCategoryShared: (shared: boolean) => {
+    // Unsharing is the tell for a household that is quietly coming apart, so
+    // both directions land on one event rather than only the happy path.
+    analytics.track("Category Shared", { shared });
+  },
+
+  /**
+   * An expense entered by someone other than the person who owns the category.
+   * The moment a shared budget stops being one person's spreadsheet.
+   */
+  trackPartnerExpenseCreated: () => {
+    analytics.track("Partner Expense Created");
+  },
+
   trackUserSignup: (email: string) => {
     analytics.track("User Signup", {
       email,

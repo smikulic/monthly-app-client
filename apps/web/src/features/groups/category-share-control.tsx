@@ -3,6 +3,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import GroupAddOutlinedIcon from "@mui/icons-material/GroupAddOutlined";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { MenuItem } from "@/components/ui/MenuItem";
+import { analytics } from "@/utils/mixpanel";
 import {
   useMeIdQuery,
   useMyGroupsQuery,
@@ -39,8 +40,11 @@ export const CategoryShareMenuItems = ({
   // Sharing/unsharing is creator-only (matches the server), and needs a group.
   if (groups.length === 0 || !creatorId || creatorId !== myId) return null;
 
-  const run = (fn: () => void) => {
+  // Both directions are tracked. Unsharing is the tell for a household quietly
+  // coming apart, and counting only the happy path would hide it.
+  const run = (fn: () => void, shared: boolean) => {
     fn();
+    analytics.trackCategoryShared(shared);
     onDone?.();
   };
 
@@ -48,7 +52,7 @@ export const CategoryShareMenuItems = ({
     return (
       <MenuItem
         onClick={() =>
-          run(() => unshareCategory({ variables: { categoryId } }))
+          run(() => unshareCategory({ variables: { categoryId } }), false)
         }
       >
         <ListItemIcon>
@@ -65,8 +69,10 @@ export const CategoryShareMenuItems = ({
         <MenuItem
           key={g.id}
           onClick={() =>
-            run(() =>
-              shareCategory({ variables: { categoryId, groupId: g.id } }),
+            run(
+              () =>
+                shareCategory({ variables: { categoryId, groupId: g.id } }),
+              true,
             )
           }
         >

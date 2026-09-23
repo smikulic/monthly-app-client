@@ -9,6 +9,7 @@ import {
   HelperTextStyled,
 } from "@/shared";
 import { useAcceptGroupInviteMutation } from "@/generated/graphql";
+import { analytics } from "@/utils/mixpanel";
 
 // Where we stash an invite token while the user signs in / registers, so the
 // flow can resume once they're authenticated.
@@ -33,6 +34,9 @@ export const AcceptInvitePageContainer = () => {
       setMessage(e.message);
     },
     onCompleted: (data) => {
+      // The step that turns an invitation into a household. Everything before
+      // it is one person's intent; this is the other person agreeing.
+      analytics.trackGroupInviteAccepted();
       localStorage.removeItem(PENDING_INVITE_KEY);
       setStatus("done");
       setMessage(`You joined ${data?.acceptGroupInvite?.name ?? "the group"}.`);

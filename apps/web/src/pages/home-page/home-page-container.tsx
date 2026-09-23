@@ -15,6 +15,7 @@ import { RefreshingStyled } from "@/shared";
 import { GET_SAVING_GOALS_LIST } from "@/pages/saving-goals-page/saving-goals-page-queries";
 import { GET_INVESTMENTS_LIST } from "@/pages/investments-page/investments-page-queries";
 import { useScope, scopeVariables } from "@/features/groups/scope-context";
+import { HouseholdPrompt } from "@/features/groups/household-prompt";
 
 export const HomePageContainer = ({
   pageDate,
@@ -141,6 +142,10 @@ export const HomePageContainer = ({
           insightsTone={insightsTone}
         />
       </RefreshingStyled>
+
+      {/* Below the figures, and only for accounts with no household yet. The
+          invite was otherwise reachable only via the account dropdown. */}
+      <HouseholdPrompt />
     </Sentry.ErrorBoundary>
   );
 };
