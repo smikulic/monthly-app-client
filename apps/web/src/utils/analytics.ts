@@ -36,6 +36,32 @@ export const hasAnalyticsConsent = () => {
 const KEY = import.meta.env.VITE_POSTHOG_PROJECT_TOKEN;
 const HOST = import.meta.env.VITE_POSTHOG_HOST || "https://eu.i.posthog.com";
 
+const LOCAL_HOSTNAMES = ["localhost", "127.0.0.1", "[::1]", "0.0.0.0"];
+
+/**
+ * Nothing is recorded from a machine running the app locally.
+ *
+ * Keyed on the hostname rather than the build mode, because `vite preview`
+ * reports `MODE === "production"` — so a mode check would have let every local
+ * preview of a production build write into the real project.
+ *
+ * This matters disproportionately at a small user count: development traffic
+ * is not a rounding error against real usage, it is most of it. Every hot
+ * reload is a pageview and every throwaway test expense is an `Expense
+ * Created`, and the dataset ends up describing the person building the product
+ * rather than the people using it.
+ *
+ * Set `VITE_POSTHOG_DEBUG=true` to capture from localhost anyway, which is how
+ * to verify a new event actually fires before shipping it.
+ */
+const isLocal =
+  typeof window !== "undefined" &&
+  (LOCAL_HOSTNAMES.includes(window.location?.hostname) ||
+    (window.location?.hostname ?? "").endsWith(".local"));
+
+const ENABLED =
+  Boolean(KEY) && (!isLocal || import.meta.env.VITE_POSTHOG_DEBUG === "true");
+
 /**
  * Deliberately conservative for a product where every screen is someone's
  * money. The defaults are built for marketing sites, not finance apps.
@@ -64,8 +90,12 @@ const options = {
 };
 
 const initAnalytics = () => {
-  if (!KEY) {
-    console.warn("PostHog key not found. Analytics disabled.");
+  if (!ENABLED) {
+    console.info(
+      isLocal
+        ? "Analytics off on localhost. Set VITE_POSTHOG_DEBUG=true to capture."
+        : "PostHog key not found. Analytics disabled.",
+    );
     return;
   }
 
@@ -80,7 +110,7 @@ const initAnalytics = () => {
 
 // Handle consent changes
 export const handleAnalyticsConsent = (hasConsent: boolean) => {
-  if (!KEY) return;
+  if (!ENABLED) return;
 
   if (hasConsent) {
     posthog.opt_in_capturing();
@@ -90,7 +120,7 @@ export const handleAnalyticsConsent = (hasConsent: boolean) => {
 };
 
 /** Every method re-checks consent, so a stale opt-in cannot leak events. */
-const enabled = () => Boolean(KEY) && hasAnalyticsConsent();
+const enabled = () => ENABLED && hasAnalyticsConsent();
 
 export const analytics = {
   init: initAnalytics,
