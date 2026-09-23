@@ -14,6 +14,7 @@ import { Menu, ListItemIcon } from "@/components/ui/Menu";
 import { MenuItem } from "@/components/ui/MenuItem";
 import { ConfirmDialog } from "@/components/confirm-dialog/confirm-dialog";
 import { getPersonColors } from "@/utils/personColors";
+import { analytics } from "@/utils/analytics";
 import { useTheme } from "@/hooks/useTheme";
 import {
   ProminentButtonStyled,
@@ -106,9 +107,13 @@ export const GroupsManager = ({
   const refresh = () => refetch();
   const closeConfirm = () => setPending(null);
 
+  // Tracked on completion, not on submit: a failed mutation is not a step of
+  // the funnel, and counting it would inflate exactly the number the pricing
+  // decision rests on.
   const [createGroup, { loading: creating }] = useCreateGroupMutation({
     onError,
-    onCompleted: () => {
+    onCompleted: (data) => {
+      analytics.trackGroupCreated(data?.createGroup?.name ?? "");
       setNewGroupName("");
       setCreatingOpen(false);
       toast.success("Group created");
@@ -166,7 +171,15 @@ export const GroupsManager = ({
       toast.error("Enter an email to invite");
       return;
     }
-    inviteToGroup({ variables: { groupId, email } });
+    // Counted before the invite lands, so the property describes the household
+    // as it was when someone decided to grow it.
+    const memberCount =
+      groups.find((g) => g.id === groupId)?.members.length ?? 0;
+
+    inviteToGroup({ variables: { groupId, email } }).then((result) => {
+      // `onError` swallows failures, so data is the only success signal.
+      if (result.data) analytics.trackGroupInviteSent(memberCount);
+    });
     setInviteEmails((m) => ({ ...m, [groupId]: "" }));
   };
 

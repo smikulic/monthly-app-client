@@ -43,3 +43,28 @@ Object.defineProperty(window, "location", {
     replace: mockReplace,
   },
 });
+
+/*
+ * No analytics SDK in unit tests.
+ *
+ * `posthog-js` reads `window.location.href` when it loads, and the stub above
+ * replaces `location` wholesale with just `replace` — so merely importing a
+ * component that imports the analytics facade threw on `undefined.match(...)`.
+ *
+ * Widening the location stub would fix that one symptom, but the better answer
+ * is that a unit test should never reach a third-party analytics vendor at all:
+ * it is network, it is a singleton, and nothing here asserts on it. Everything
+ * the app calls goes through `utils/analytics`, so this mock is invisible to
+ * the tests themselves.
+ */
+vi.mock("posthog-js", () => ({
+  default: {
+    init: vi.fn(),
+    capture: vi.fn(),
+    identify: vi.fn(),
+    setPersonProperties: vi.fn(),
+    opt_in_capturing: vi.fn(),
+    opt_out_capturing: vi.fn(),
+    reset: vi.fn(),
+  },
+}));

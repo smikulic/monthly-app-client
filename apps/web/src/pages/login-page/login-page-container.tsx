@@ -8,7 +8,7 @@ import {
   useSignupMutation,
   useGoogleAuthUrlQuery,
 } from "../../generated/graphql";
-import { analytics } from "../../utils/mixpanel";
+import { analytics } from "../../utils/analytics";
 import "./login-page-container.css";
 
 export const SIGNUP_MUTATION = gql`

@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 import { mockReplace } from "../setupTests";
 import { handleLogout } from "./handleLogout";
 
-vi.mock("./mixpanel", () => ({
+vi.mock("./analytics", () => ({
   analytics: {
     trackUserLogout: vi.fn(),
     reset: vi.fn(),

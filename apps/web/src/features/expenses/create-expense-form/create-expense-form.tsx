@@ -7,7 +7,7 @@ import {
   useMeIdQuery,
 } from "@/generated/graphql";
 import { FORM_ACTIONS, TOAST_MESSAGES, ENTITY_NAMES } from "@/constants/forms";
-import { analytics } from "@/utils/mixpanel";
+import { analytics } from "@/utils/analytics";
 import { SelectStyled, TextFieldStyled } from "@/shared";
 import { SelectChangeEvent } from "@/components/ui/Select";
 import { FormDialog } from "@/components/form-dialog/form-dialog";
@@ -63,6 +63,19 @@ export const CreateExpenseForm: React.FC<Props> = ({
         selectedSubcategory?.categoryId || "Unknown",
         selectedSubcategory?.name || "Unknown",
       );
+
+      /*
+       * The one event that proves a household is real rather than merely set
+       * up: an expense in a shared category that somebody else paid for.
+       *
+       * Everything earlier in the funnel is one person's intent — they made a
+       * group, they sent an invite, the other person clicked a link. This is
+       * the first time the second person's money is in the budget, and it is
+       * the step worth optimising against.
+       */
+      if (categoryGroupId && paidByUserId && paidByUserId !== myId) {
+        analytics.trackPartnerExpenseCreated();
+      }
 
       closeForm();
       setExpenseAmount("");

@@ -6,7 +6,7 @@ import {
   useUpdateInvestmentMutation,
 } from "@/generated/graphql";
 import { FORM_ACTIONS, TOAST_MESSAGES, ENTITY_NAMES } from "@/constants/forms";
-import { analytics } from "@/utils/mixpanel";
+import { analytics } from "@/utils/analytics";
 import { TextFieldStyled } from "@/shared";
 import { FormControl } from "@/components/ui/FormControl";
 import { InputLabel } from "@/components/ui/InputLabel";

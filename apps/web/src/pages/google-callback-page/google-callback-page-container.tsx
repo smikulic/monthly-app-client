@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { gql } from "@apollo/client";
 import { AUTH_TOKEN, AUTH_TOKEN_USER } from "../../constants";
 import { useGoogleLoginMutation } from "../../generated/graphql";
-import { analytics } from "../../utils/mixpanel";
+import { analytics } from "../../utils/analytics";
 
 export const GOOGLE_LOGIN_MUTATION = gql`
   mutation GoogleLogin($code: String!) {

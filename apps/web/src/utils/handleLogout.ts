@@ -1,5 +1,5 @@
 import { AUTH_TOKEN, AUTH_TOKEN_USER } from "@/constants";
-import { analytics } from "./mixpanel";
+import { analytics } from "./analytics";
 
 export const handleLogout = () => {
   analytics.trackUserLogout();
