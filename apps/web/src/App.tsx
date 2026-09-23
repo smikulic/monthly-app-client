@@ -29,7 +29,8 @@ import { PendingInviteResume } from "./pages/accept-invite-page/pending-invite-r
 import { ScopeProvider } from "./features/groups/scope-context";
 import { OnboardingProvider } from "./features/demo/onboarding";
 import { DemoBanner } from "./features/demo/demo-banner";
-import { analytics } from "./utils/mixpanel";
+import { CookieConsentBanner } from "./components/cookie-consent/cookie-consent-banner";
+import { analytics } from "./utils/analytics";
 import { theme } from "./theme";
 
 export const GET_USER_ME = gql`
@@ -269,6 +270,10 @@ function App() {
             )}
           </Routes>
         </Router>
+
+        {/* Outside the router: every route on both the marketing site and the
+            app needs to be able to answer this, not just the landing page. */}
+        <CookieConsentBanner />
 
         <ToastContainer
           transition={Slide}

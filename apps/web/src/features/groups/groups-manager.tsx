@@ -14,7 +14,7 @@ import { Menu, ListItemIcon } from "@/components/ui/Menu";
 import { MenuItem } from "@/components/ui/MenuItem";
 import { ConfirmDialog } from "@/components/confirm-dialog/confirm-dialog";
 import { getPersonColors } from "@/utils/personColors";
-import { analytics } from "@/utils/mixpanel";
+import { analytics } from "@/utils/analytics";
 import { useTheme } from "@/hooks/useTheme";
 import {
   ProminentButtonStyled,

@@ -21,7 +21,7 @@ import { useApolloClient, useMutation } from "@apollo/client";
 import * as Sentry from "@sentry/react";
 import { useLocation, useNavigate } from "react-router";
 import dayjs from "dayjs";
-import { analytics } from "@/utils/mixpanel";
+import { analytics } from "@/utils/analytics";
 import { GET_CATEGORIES_LIST } from "@/pages/categories-page/categories-page-queries";
 import { PENDING_INVITE_KEY } from "@/pages/accept-invite-page/accept-invite-page-container";
 import { MARK_ONBOARDING_SEEN } from "./demo-queries";

@@ -56,7 +56,7 @@ vi.mock("react-toastify", () => ({
   },
 }));
 
-vi.mock("@/utils/mixpanel", () => ({
+vi.mock("@/utils/analytics", () => ({
   analytics: {
     trackCategoryCreated: vi.fn(),
   },

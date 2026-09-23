@@ -12,7 +12,7 @@ import "./index.css";
 import "react-toastify/dist/ReactToastify.min.css";
 import App from "./App";
 import { API_PRODUCTION, AUTH_TOKEN, SENTRY_DSN } from "./constants";
-import { analytics } from "./utils/mixpanel";
+import { analytics } from "./utils/analytics";
 import { demoLink } from "./features/demo/demo-link";
 import { setDemoClient } from "./features/demo/demo-session";
 import { registerServiceWorker } from "./features/pwa/register-service-worker";

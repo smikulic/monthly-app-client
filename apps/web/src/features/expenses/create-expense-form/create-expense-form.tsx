@@ -7,7 +7,7 @@ import {
   useMeIdQuery,
 } from "@/generated/graphql";
 import { FORM_ACTIONS, TOAST_MESSAGES, ENTITY_NAMES } from "@/constants/forms";
-import { analytics } from "@/utils/mixpanel";
+import { analytics } from "@/utils/analytics";
 import { SelectStyled, TextFieldStyled } from "@/shared";
 import { SelectChangeEvent } from "@/components/ui/Select";
 import { FormDialog } from "@/components/form-dialog/form-dialog";

@@ -6,7 +6,7 @@ import {
   Category,
 } from "@/generated/graphql";
 import { FORM_ACTIONS, TOAST_MESSAGES, ENTITY_NAMES } from "@/constants/forms";
-import { analytics } from "@/utils/mixpanel";
+import { analytics } from "@/utils/analytics";
 import { TextFieldStyled } from "@/shared";
 import { Alert } from "@/components/ui/Alert";
 import { FormDialog } from "@/components/form-dialog/form-dialog";

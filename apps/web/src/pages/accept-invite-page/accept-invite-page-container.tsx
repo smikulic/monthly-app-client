@@ -9,7 +9,7 @@ import {
   HelperTextStyled,
 } from "@/shared";
 import { useAcceptGroupInviteMutation } from "@/generated/graphql";
-import { analytics } from "@/utils/mixpanel";
+import { analytics } from "@/utils/analytics";
 
 // Where we stash an invite token while the user signs in / registers, so the
 // flow can resume once they're authenticated.

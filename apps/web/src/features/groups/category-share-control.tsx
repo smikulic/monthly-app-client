@@ -3,7 +3,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import GroupAddOutlinedIcon from "@mui/icons-material/GroupAddOutlined";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { MenuItem } from "@/components/ui/MenuItem";
-import { analytics } from "@/utils/mixpanel";
+import { analytics } from "@/utils/analytics";
 import {
   useMeIdQuery,
   useMyGroupsQuery,
