@@ -67,7 +67,7 @@
   --card-inset: 12px;
   /* Shared height for toolbar controls, so they sit on one baseline. */
   --control-height: 36px;
-  --control-height-mobile: 40px;
+  --control-height-mobile: 48px;
 
   /* Type scale. --font-size-md is the base and is 16 deliberately: below that,
      iOS Safari zooms the page when an input takes focus. */

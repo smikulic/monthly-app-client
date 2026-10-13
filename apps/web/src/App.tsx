@@ -1,7 +1,7 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { Slide, ToastContainer } from "react-toastify";
 import { BrowserRouter as Router, Routes, Route, Outlet } from "react-router";
-import { gql, ServerError, useQuery } from "@apollo/client";
+import { gql, useQuery } from "@apollo/client";
 import { ThemeProvider } from "@mui/material/styles";
 import { WelcomePageContainer } from "./pages/welcome-page/welcome-page-container";
 import { LoginPageContainer } from "./pages/login-page/login-page-container";
@@ -17,6 +17,7 @@ import { ConfirmEmailPageContainer } from "./pages/confirm-email-page/confirm-em
 import { Header } from "./components/layout";
 import { AUTH_TOKEN, AUTH_TOKEN_USER } from "./constants";
 import { handleLogout } from "./utils/handleLogout";
+import { isAuthFailure } from "./utils/session-state";
 import { ContentWrapperStyled } from "./shared";
 import { PrivacyPageContainer } from "./pages/privacy-page/privacy-page-container";
 import { TermsPageContainer } from "./pages/terms-page/terms-page-container";
@@ -27,6 +28,7 @@ import { GroupsPageContainer } from "./pages/groups-page/groups-page-container";
 import { AcceptInvitePageContainer } from "./pages/accept-invite-page/accept-invite-page-container";
 import { PendingInviteResume } from "./pages/accept-invite-page/pending-invite-resume";
 import { ScopeProvider } from "./features/groups/scope-context";
+import { SessionError } from "./components/session-error/session-error";
 import { OnboardingProvider } from "./features/demo/onboarding";
 import { DemoBanner } from "./features/demo/demo-banner";
 import { CookieConsentBanner } from "./components/cookie-consent/cookie-consent-banner";
@@ -79,21 +81,47 @@ function App() {
     },
   });
 
+  /*
+   * `me` is the gate for every authenticated route, because every one of them
+   * reads the user — `/groups` wants `userData.id`, `/settings` wants
+   * `userData.currency`. Rendering them without one is not a degraded
+   * experience, it is a `TypeError` and a white screen.
+   *
+   * This used to be checked only against `networkError` containing "invalid
+   * token". But an expired or rejected token makes the server throw
+   * `Unauthenticated!`, and Apollo Server returns that as **HTTP 200 with a
+   * `graphQLErrors` array** — so the check never fired, `userData` stayed
+   * undefined, and the app crashed on the first page that touched it. Tokens
+   * last 90 days, so that was every user eventually, with a timer on it.
+   */
+  const sessionUser = userData?.me;
+  const sessionUnusable = Boolean(token) && !userMeLoading && !sessionUser;
+
+  // Auth-shaped failures throw the session away; anything else is probably the
+  // server having a moment, and logging someone out over that is an
+  // overreaction they cannot undo without their password.
+  const looksLikeAuthFailure = isAuthFailure(userMeError);
+
+  useEffect(() => {
+    if (!token) return;
+    // A token with no stored user is a half-cleared session from an older
+    // logout; it can never resolve on its own.
+    if (!localStorage.getItem(AUTH_TOKEN_USER)) return handleLogout();
+    if (sessionUnusable && looksLikeAuthFailure) handleLogout();
+  }, [token, sessionUnusable, looksLikeAuthFailure]);
+
   if (userMeLoading) {
     return null;
   }
 
-  if (userMeError?.networkError) {
-    const serverError = userMeError?.networkError as ServerError;
-    const errorMessage = serverError.result;
-
-    if (errorMessage?.includes("invalid token")) {
-      handleLogout();
-    }
-  }
-
-  if (token && !localStorage.getItem(AUTH_TOKEN_USER)) {
-    handleLogout();
+  if (sessionUnusable) {
+    // Logging out navigates away; render nothing rather than flashing an error
+    // at someone who is already on their way to the login page.
+    return looksLikeAuthFailure ? null : (
+      <ThemeProvider theme={theme}>
+        <SessionError onRetry={() => refetchUserData()} />
+      </ThemeProvider>
+    );
   }
 
   const onClickNext = () => {
@@ -172,14 +200,14 @@ function App() {
                   <>
                     <Route
                       element={
-                        <UserContext.Provider value={userData?.me.currency}>
+                        <UserContext.Provider value={sessionUser.currency}>
                           <OnboardingProvider
-                            user={userData?.me}
+                            user={sessionUser}
                             onUserChanged={refetchUserData}
                           >
                             <Header
                               onLogout={handleLogout}
-                              userData={userData?.me}
+                              userData={sessionUser}
                             />
                             {/* Below the header so it never displaces the
                                 brand, above everything else so there is no
@@ -241,7 +269,7 @@ function App() {
                         path="/settings"
                         element={
                           <ProfilePageContainer
-                            userData={userData?.me}
+                            userData={sessionUser}
                             refetchUserData={refetchUserData}
                           />
                         }
@@ -249,13 +277,13 @@ function App() {
                       <Route
                         path="/reports"
                         element={
-                          <ReportsPageContainer userData={userData?.me} />
+                          <ReportsPageContainer userData={sessionUser} />
                         }
                       />
                       <Route
                         path="/groups"
                         element={
-                          <GroupsPageContainer userData={userData?.me} />
+                          <GroupsPageContainer userData={sessionUser} />
                         }
                       />
                     </Route>

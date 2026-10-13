@@ -3,7 +3,19 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--
+      `viewport-fit=cover` is not cosmetic here: without it `env(safe-area-inset-*)`
+      resolves to 0, so every safe-area allowance in the app — the fixed month
+      toolbar, the bottom-sheet dialogs, the cookie banner — has been inert.
+
+      `interactive-widget=resizes-content` makes the on-screen keyboard shrink
+      the layout instead of sliding a fixed-size page around underneath it,
+      which is most of the "jumping" when a form takes focus.
+    -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content"
+    />
     <!-- Matches the app's warm paper ground, not the CRA template default. -->
     <meta name="theme-color" content="#FAF8F5" />
 

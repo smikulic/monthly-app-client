@@ -144,7 +144,12 @@ export const tokens = {
    * Taller on phones, where they are thumb targets.
    */
   controlHeight: 36,
-  controlHeightMobile: 40,
+  /**
+   * 48, not 40. Apple's minimum comfortable target is 44pt and Material's is
+   * 48dp — a 40px control is below both, which is why the expense form felt
+   * like aiming at small fields rather than tapping them.
+   */
+  controlHeightMobile: 48,
 
   /**
    * Type scale. The app had thirteen distinct hardcoded sizes and no scale, so

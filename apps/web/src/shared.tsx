@@ -3,6 +3,7 @@ import { Tab, TabProps, Tabs, TabsProps } from "./components/ui/Tabs";
 import { SelectField } from "./components/ui/Select";
 import { TextField } from "./components/ui/TextField";
 import { tokens } from "./theme/tokens";
+import { formControlHeight } from "./theme/form-control-height";
 
 export const ListItemStyled = styled("div")({
   display: "flex",
@@ -305,21 +306,36 @@ export const TabStyled = styled((props: TabProps) => (
  * border, ink text — and only keeps the radius and height that put it on the
  * same baseline as `TextFieldStyled`.
  */
-export const SelectStyled = styled(SelectField)({
-  height: "40px",
-
-  "& .MuiOutlinedInput-root": {
-    height: "40px",
-    borderRadius: "10px",
-  },
-});
+export const SelectStyled = styled(SelectField)(({ theme }) =>
+  formControlHeight(theme),
+);
 
 export const TextFieldStyled = styled(TextField)(({ theme }) => ({
   marginBottom: 0,
-  height: "40px",
+  ...formControlHeight(theme),
+}));
 
-  "& .MuiOutlinedInput-root": {
-    height: "40px",
-    borderRadius: "10px",
+/**
+ * Two controls on one line, where neither needs the full width.
+ *
+ * A form of five stacked full-width rows pushes the action button under the
+ * keyboard and gives a date — which is almost always today — the same weight as
+ * the amount. Pairing by the room a value actually needs gets the whole form
+ * above the fold.
+ *
+ * `flex-basis` rather than a percentage, so a pair that cannot fit side by side
+ * stacks on its own instead of being squeezed. On a 320px phone the date and
+ * its calendar button need more than half the row, and they wrap.
+ */
+export const FormRowStyled = styled("div")(({ theme }) => ({
+  display: "flex",
+  flexWrap: "wrap",
+  gap: theme.spacing(2),
+
+  "& > *": {
+    flex: "1 1 150px",
+    // Without this a long subcategory name refuses to shrink and pushes its
+    // neighbour off the row.
+    minWidth: 0,
   },
 }));
