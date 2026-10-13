@@ -106,25 +106,48 @@ export const FormDialog: React.FC<Props> = ({
           </IconButton>
         </Toolbar>
       </AppBar>
-      <DialogContent>
-        <Stack spacing={2} sx={{ mt: 1 }}>
-          {children}
-        </Stack>
-      </DialogContent>
-      <ProminentButtonStyled
-        textCenter
-        onClick={formAction}
-        disabled={disabled}
-        data-testid="create-button"
-        sx={{
-          width: "100%",
-          height: 52,
-          borderRadius: 0,
-          fontSize: tokens.fontSize.md,
+      {/*
+        A real <form>, so the keyboard's Done/Go key submits.
+
+        On a phone the action button sits below the keyboard once a field takes
+        focus, so finishing an expense meant dismissing the keyboard, finding
+        the button and tapping it. Pressing the key already under your thumb is
+        the whole interaction instead.
+
+        `noValidate` because validity is `disabled` above, computed from state.
+        Letting the browser also enforce `required` would mean two sources of
+        truth and a native bubble the dialog cannot style.
+      */}
+      <form
+        noValidate
+        onSubmit={(event) => {
+          event.preventDefault();
+          if (!disabled) formAction();
         }}
       >
-        {formActionText}
-      </ProminentButtonStyled>
+        <DialogContent>
+          <Stack spacing={2} sx={{ mt: 1 }}>
+            {children}
+          </Stack>
+        </DialogContent>
+        {/* A hidden submit is what makes Enter work in browsers that only
+            submit a form carrying one. */}
+        <button type="submit" hidden aria-hidden="true" tabIndex={-1} />
+        <ProminentButtonStyled
+          textCenter
+          onClick={formAction}
+          disabled={disabled}
+          data-testid="create-button"
+          sx={{
+            width: "100%",
+            height: 56,
+            borderRadius: 0,
+            fontSize: tokens.fontSize.md,
+          }}
+        >
+          {formActionText}
+        </ProminentButtonStyled>
+      </form>
     </Dialog>
   );
 };

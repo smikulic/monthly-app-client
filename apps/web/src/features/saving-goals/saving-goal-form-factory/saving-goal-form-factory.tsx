@@ -156,6 +156,7 @@ export const SavingGoalFormFactory = ({
         size="small"
         margin="none"
         autoComplete="off"
+        slotProps={{ htmlInput: { inputMode: "decimal" } }}
         value={savingGoalAmount}
         onChange={(e) =>
           setSavingGoalAmount(
@@ -169,6 +170,7 @@ export const SavingGoalFormFactory = ({
         size="small"
         margin="none"
         autoComplete="off"
+        slotProps={{ htmlInput: { inputMode: "decimal" } }}
         value={savingGoalInitialAmount}
         onChange={(e) =>
           setSavingGoalInitialAmount(

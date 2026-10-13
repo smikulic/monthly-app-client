@@ -45,6 +45,16 @@ export const SelectField: React.FC<SelectFieldProps> = ({
    */
   size = "small",
   margin = "normal",
+  /*
+   * Pulled out of `...rest` and put on the FormControl.
+   *
+   * It used to ride along to the `<Select>`, which *is* the
+   * `MuiOutlinedInput-root` — so a wrapper styling `& .MuiOutlinedInput-root`
+   * was looking for a descendant that was really the element itself, and the
+   * rule silently matched nothing. A TextField puts its class on the root, so
+   * this makes the two wrap identically.
+   */
+  className,
   ...rest
 }) => {
   /*
@@ -61,7 +71,7 @@ export const SelectField: React.FC<SelectFieldProps> = ({
   return (
     // `size` goes on the FormControl as well as the Select: InputLabel takes
     // its own metrics from FormControl's context, not from the Select.
-    <FormControl fullWidth margin={margin} size={size}>
+    <FormControl fullWidth margin={margin} size={size} className={className}>
       <InputLabel id={labelId} htmlFor={id}>
         {label}
       </InputLabel>

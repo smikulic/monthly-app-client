@@ -226,6 +226,7 @@ export const SubcategoryFormFactory = ({
             size="small"
             margin="none"
             autoComplete="off"
+            slotProps={{ htmlInput: { inputMode: "decimal" } }}
             value={subcategoryBudget}
             onChange={(e) =>
               setSubcategoryBudget(

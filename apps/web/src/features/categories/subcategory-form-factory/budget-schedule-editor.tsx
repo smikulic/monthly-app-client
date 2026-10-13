@@ -175,6 +175,7 @@ export const BudgetScheduleEditor = ({
           size="small"
           margin="none"
           autoComplete="off"
+          slotProps={{ htmlInput: { inputMode: "decimal" } }}
           value={amount}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setAmount(e.target.value)

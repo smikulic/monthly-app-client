@@ -52,10 +52,13 @@ const chooseOption = (
 };
 
 describe("<CreateExpenseForm />", () => {
+  let createExpense: ReturnType<typeof vi.fn>;
+
   beforeEach(() => {
     vi.clearAllMocks();
 
-    (gql.useCreateExpenseMutation as any).mockReturnValue([vi.fn(), {}]);
+    createExpense = vi.fn();
+    (gql.useCreateExpenseMutation as any).mockReturnValue([createExpense, {}]);
     (gql.useMeIdQuery as any).mockReturnValue({
       data: { me: { id: "user-me" } },
     });
@@ -73,6 +76,30 @@ describe("<CreateExpenseForm />", () => {
         ],
       },
     });
+  });
+
+  /*
+   * On a phone the action button sits below the keyboard, so finishing an
+   * expense meant dismissing it, finding the button and tapping. The key
+   * already under your thumb should do it.
+   */
+  it("submits on Enter, and does nothing when the form is incomplete", () => {
+    render();
+    const description = within(
+      screen.getByTestId("expense-description-input"),
+    ).getByRole("textbox");
+
+    fireEvent.submit(description);
+    expect(createExpense).not.toHaveBeenCalled();
+
+    fireEvent.change(amountField(), { target: { value: "42" } });
+    fireEvent.submit(description);
+    expect(createExpense).toHaveBeenCalledTimes(1);
+  });
+
+  it("asks for a numeric keypad on the amount", () => {
+    render();
+    expect(amountField()).toHaveAttribute("inputmode", "decimal");
   });
 
   it("enables Create once an amount is entered", () => {

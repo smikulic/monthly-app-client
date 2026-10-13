@@ -6,7 +6,7 @@ import {
   Subcategory,
   useUpdateExpenseMutation,
 } from "@/generated/graphql";
-import { SelectStyled, TextFieldStyled } from "@/shared";
+import { FormRowStyled, SelectStyled, TextFieldStyled } from "@/shared";
 import { FORM_ACTIONS, TOAST_MESSAGES, ENTITY_NAMES } from "@/constants/forms";
 import { SelectChangeEvent } from "@/components/ui/Select";
 import { DatePickerStyled } from "@/components/ui/DatePickerStyled";
@@ -99,60 +99,76 @@ export const UpdateExpenseForm: React.FC<Props> = ({
         })
       }
     >
-      <TextFieldStyled
-        required
-        id="amount"
-        label="Amount"
-        size="small"
-        margin="none"
-        autoComplete="off"
-        value={expenseAmount}
-        onChange={(e) =>
-          setExpenseAmount(e.target.value === "" ? "" : Number(e.target.value))
-        }
-      />
+      {/* Same pairing as the create form: amount with the date beside it,
+          then description, then what-and-who. */}
+      <FormRowStyled>
+        <TextFieldStyled
+          required
+          id="amount"
+          label="Amount"
+          size="small"
+          margin="none"
+          autoComplete="off"
+          // Matches the create form: a numeric keypad for the one field that
+          // is always a number. See the note there on why this goes via
+          // slotProps rather than as a bare prop.
+          slotProps={{
+            htmlInput: { inputMode: "decimal", enterKeyHint: "next" },
+          }}
+          value={expenseAmount}
+          onChange={(e) =>
+            setExpenseAmount(e.target.value === "" ? "" : Number(e.target.value))
+          }
+        />
+
+        <DatePickerStyled
+          label="Date"
+          value={expenseDate}
+          onChange={(newValue: Date | null) =>
+            newValue ? setExpenseDate(newValue) : null
+          }
+        />
+      </FormRowStyled>
+
+      {/* Full width: free text is the one thing here that benefits from room. */}
       <TextFieldStyled
         id="description"
         label="Description"
         size="small"
         margin="none"
         autoComplete="off"
+        slotProps={{ htmlInput: { enterKeyHint: "done" } }}
         value={expenseDescription}
         onChange={(e) => setExpenseDescription(e.target.value)}
       />
-      <DatePickerStyled
-        label="Date"
-        value={expenseDate}
-        onChange={(newValue: Date | null) =>
-          newValue ? setExpenseDate(newValue) : null
-        }
-      />
 
-      <SelectStyled
-        required
-        id="subcategory"
-        label="Subcategory"
-        margin="none"
-        value={expenseSubcategoryId}
-        onChange={(e: SelectChangeEvent) => {
-          setExpenseSubcategoryId(e.target.value);
-        }}
-      >
-        {subcategories.map((subcategory: Subcategory) => {
-          const subcategoryId = subcategory.id;
-          return (
-            <MenuItem key={subcategoryId} value={subcategoryId}>
-              {subcategory.name}
-            </MenuItem>
-          );
-        })}
-      </SelectStyled>
+      <FormRowStyled>
+        <SelectStyled
+          required
+          id="subcategory"
+          label="Subcategory"
+          margin="none"
+          value={expenseSubcategoryId}
+          onChange={(e: SelectChangeEvent) => {
+            setExpenseSubcategoryId(e.target.value);
+          }}
+        >
+          {subcategories.map((subcategory: Subcategory) => {
+            const subcategoryId = subcategory.id;
+            return (
+              <MenuItem key={subcategoryId} value={subcategoryId}>
+                {subcategory.name}
+              </MenuItem>
+            );
+          })}
+        </SelectStyled>
 
-      <PaidBySelect
-        groupId={categoryGroupId}
-        value={paidByUserId}
-        onChange={setPaidByUserId}
-      />
+        <PaidBySelect
+          groupId={categoryGroupId}
+          value={paidByUserId}
+          onChange={setPaidByUserId}
+        />
+      </FormRowStyled>
     </FormDialog>
   );
 };

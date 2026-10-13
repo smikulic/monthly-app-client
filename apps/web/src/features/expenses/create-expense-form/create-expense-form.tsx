@@ -8,7 +8,7 @@ import {
 } from "@/generated/graphql";
 import { FORM_ACTIONS, TOAST_MESSAGES, ENTITY_NAMES } from "@/constants/forms";
 import { analytics } from "@/utils/analytics";
-import { SelectStyled, TextFieldStyled } from "@/shared";
+import { FormRowStyled, SelectStyled, TextFieldStyled } from "@/shared";
 import { SelectChangeEvent } from "@/components/ui/Select";
 import { FormDialog } from "@/components/form-dialog/form-dialog";
 import { DatePickerStyled } from "@/components/ui/DatePickerStyled";
@@ -121,70 +121,99 @@ export const CreateExpenseForm: React.FC<Props> = ({
       }
     >
       {/*
-        Controlled, as the update form already was.
+        Every field here is controlled. Left uncontrolled they keep whatever
+        the browser has in them while state says something else — and the
+        validity check reads the state, not the field, so any path that resets
+        one without recreating the input (`onCompleted` clears them) leaves a
+        form that looks complete with Create greyed out.
 
-        Left uncontrolled these fields keep whatever the browser has in them
-        while `expenseAmount` says something else — and the validity check
-        below reads the state, not the field. Any path that resets the state
-        without recreating the input (`onCompleted` clears it, for one) leaves
-        a form that looks complete with Create greyed out, which is precisely
-        the reported symptom.
+        Paired because the date is almost always today and needs correcting
+        perhaps once a week. It has no business taking a full row above the
+        things you actually type.
       */}
-      <TextFieldStyled
-        required
-        id="amount"
-        label="Amount"
-        size="small"
-        margin="none"
-        autoComplete="off"
-        value={expenseAmount}
-        onChange={(e) => setExpenseAmount(e.target.value)}
-        data-testid="expense-amount-input"
-      />
+      <FormRowStyled>
+        <TextFieldStyled
+          required
+          autoFocus
+          id="amount"
+          label="Amount"
+          size="small"
+          margin="none"
+          autoComplete="off"
+          /*
+           * `inputMode="decimal"` is the difference between a numeric keypad
+           * and the full QWERTY keyboard with a manual switch to the numbers
+           * pane, every time, for the one field that is always a number.
+           *
+           * It goes through `slotProps.htmlInput` because TextField forwards
+           * unrecognised props to its root FormControl — as a bare prop it
+           * landed on a div and the keypad never appeared. A test caught it.
+           *
+           * Not `type="number"`: that brings a spinner nobody wants, and
+           * Safari discards input it dislikes rather than letting the field
+           * hold a partial value like "12.".
+           */
+          slotProps={{
+            htmlInput: { inputMode: "decimal", enterKeyHint: "next" },
+          }}
+          value={expenseAmount}
+          onChange={(e) => setExpenseAmount(e.target.value)}
+          data-testid="expense-amount-input"
+        />
+
+        <DatePickerStyled
+          label="Date"
+          value={expenseDate}
+          onChange={(newValue: Date | null) =>
+            newValue ? setExpenseDate(newValue) : null
+          }
+        />
+      </FormRowStyled>
       <TextFieldStyled
         id="description"
         label="Description"
         size="small"
         margin="none"
         autoComplete="off"
+        // The keyboard's action key says "Done" and submits, so a one-line
+        // expense never needs anyone to reach past the keyboard for a button.
+        slotProps={{ htmlInput: { enterKeyHint: "done" } }}
         value={expenseDescription}
         onChange={(e) => setExpenseDescription(e.target.value)}
         data-testid="expense-description-input"
       />
-      <DatePickerStyled
-        label="Date"
-        value={expenseDate}
-        onChange={(newValue: Date | null) =>
-          newValue ? setExpenseDate(newValue) : null
-        }
-      />
+      {/* What it was and who paid, side by side — both are short values, both
+          are chosen on nearly every expense, and together they read as one
+          question rather than two rows of form. */}
+      <FormRowStyled>
+        <SelectStyled
+          required
+          id="subcategory"
+          label="Subcategory"
+          margin="none"
+          value={expenseSubcategoryId}
+          onChange={(e: SelectChangeEvent) => {
+            setExpenseSubcategoryId(e.target.value);
+          }}
+          data-testid="expense-subcategory-select"
+        >
+          {subcategories.map((subcategory: Subcategory) => {
+            const subcategoryId = subcategory.id;
+            return (
+              <MenuItem key={subcategoryId} value={subcategoryId}>
+                {subcategory.name}
+              </MenuItem>
+            );
+          })}
+        </SelectStyled>
 
-      <SelectStyled
-        required
-        id="subcategory"
-        label="Subcategory"
-        margin="none"
-        value={expenseSubcategoryId}
-        onChange={(e: SelectChangeEvent) => {
-          setExpenseSubcategoryId(e.target.value);
-        }}
-        data-testid="expense-subcategory-select"
-      >
-        {subcategories.map((subcategory: Subcategory) => {
-          const subcategoryId = subcategory.id;
-          return (
-            <MenuItem key={subcategoryId} value={subcategoryId}>
-              {subcategory.name}
-            </MenuItem>
-          );
-        })}
-      </SelectStyled>
+        <PaidBySelect
+          groupId={categoryGroupId}
+          value={paidByUserId}
+          onChange={setPaidByUserId}
+        />
+      </FormRowStyled>
 
-      <PaidBySelect
-        groupId={categoryGroupId}
-        value={paidByUserId}
-        onChange={setPaidByUserId}
-      />
     </FormDialog>
   );
 };
