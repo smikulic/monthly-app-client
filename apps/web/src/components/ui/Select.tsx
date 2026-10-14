@@ -5,9 +5,10 @@ import {
   SelectProps as MuiSelectProps,
   SelectChangeEvent,
 } from "@mui/material";
-import type { FormControlProps } from "@mui/material";
+import type { FormControlProps, PopoverActions } from "@mui/material";
 import { FormControl } from "./FormControl";
 import { InputLabel } from "./InputLabel";
+import { useViewportReposition } from "@/hooks/useViewportReposition";
 
 // Re-export types
 export type { SelectChangeEvent };
@@ -55,8 +56,18 @@ export const SelectField: React.FC<SelectFieldProps> = ({
    * this makes the two wrap identically.
    */
   className,
+  MenuProps,
   ...rest
 }) => {
+  /*
+   * The menu is a popover, and a popover measures its anchor once. On a phone
+   * the keyboard is nearly always up when you reach a select — you have just
+   * typed something — and it closes as the menu opens, which moves everything
+   * underneath it. See the hook for why nothing re-measures on its own.
+   */
+  const menuActions = React.useRef<PopoverActions | null>(null);
+  useViewportReposition(menuActions);
+
   /*
    * A Select is a div, not an input, so `htmlFor` alone does not name it —
    * MUI wires the label up through `labelId`, and without one it falls back to
@@ -75,7 +86,14 @@ export const SelectField: React.FC<SelectFieldProps> = ({
       <InputLabel id={labelId} htmlFor={id}>
         {label}
       </InputLabel>
-      <Select labelId={labelId} label={label} id={id} size={size} {...rest}>
+      <Select
+        labelId={labelId}
+        label={label}
+        id={id}
+        size={size}
+        MenuProps={{ ...MenuProps, action: menuActions }}
+        {...rest}
+      >
         {children}
       </Select>
     </FormControl>

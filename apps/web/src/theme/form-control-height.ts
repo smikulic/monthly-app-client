@@ -25,9 +25,28 @@ export const formControlHeight = (theme: Theme) => {
     "& .MuiOutlinedInput-root": { height, borderRadius: "10px" },
     // When it lands on the input itself, it *is* the root.
     "&.MuiOutlinedInput-root": { height, borderRadius: "10px" },
-    // The Select's display area has its own padding and will not fill a taller
-    // box on its own.
-    "& .MuiSelect-select": { display: "flex", alignItems: "center" },
+    /*
+     * The Select's display area has its own padding and will not fill a taller
+     * box on its own.
+     *
+     * Block, not flex. `text-overflow: ellipsis` only applies to inline content
+     * inside a block container, so making this a flex container silently
+     * disabled MUI's own truncation — a value too long for the field was cut
+     * off mid-character at the border instead of ellipsised, which is what an
+     * email address in "Paid by" looked like on a phone.
+     *
+     * `line-height` does the vertical centring that flex was there for, and the
+     * full height keeps the whole control tappable rather than just the strip
+     * of text in the middle of it.
+     */
+    "& .MuiSelect-select": {
+      display: "block",
+      boxSizing: "border-box",
+      height: "100%",
+      lineHeight: `${height}px`,
+      paddingTop: 0,
+      paddingBottom: 0,
+    },
   });
 
   return {
