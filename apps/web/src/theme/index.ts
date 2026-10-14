@@ -137,5 +137,37 @@ export const theme = createTheme({
         },
       },
     },
+    /*
+     * A floating label sits in a notch cut out of the field's outline. MUI
+     * builds that notch from a hidden `<legend>` holding the same text at
+     * `font-size: 0.75em`, while the label itself is the full size shrunk by
+     * `transform: scale(0.75)`. The gap only covers the text as long as those
+     * two measure the same, and a geometric scale and a real font size do not
+     * have to agree — fonts hint differently at different sizes. When they
+     * disagree by more than the legend's 5px of slack, the outline draws
+     * straight through the label.
+     *
+     * An opaque background takes the label out of that bargain entirely. Every
+     * field in the app sits on `surface`, so where the notch was already
+     * correct this changes nothing visible.
+     */
+    MuiInputLabel: {
+      styleOverrides: {
+        outlined: ({ theme }) => ({
+          "&.MuiInputLabel-shrink": {
+            backgroundColor: theme.palette.surface,
+            paddingLeft: 5,
+            paddingRight: 5,
+            /*
+             * `transform-origin` is the top left, so 5px of left padding moves
+             * the text 5 × 0.75 = 3.75px to the right. Take that back out of
+             * MUI's own 14px offset, or the label stops lining up with the
+             * value underneath it.
+             */
+            transform: "translate(10.25px, -9px) scale(0.75)",
+          },
+        }),
+      },
+    },
   },
 });
